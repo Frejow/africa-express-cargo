@@ -1,7 +1,4 @@
 <?php
-session_start();
-
-//include '..'.PROJECT."app/common/functions_folder/functions.php";
 
 $_SESSION["login_errors"] = [];
 
@@ -21,33 +18,55 @@ if (!isset($_POST["pass"]) || empty($_POST["pass"])) {
     $errors["pass"] = "Le champs du mot de passe est requis.";
 }
 
-if (isset($_POST["remember_me"]) && !empty($_POST["remember_me"])){
-        
-    setcookie(
-        "user_data",
-        json_encode($data),
-        [
-            'expires' => time() + 365 * 24 * 3600,
-            'path' => '/',
-            'secure' => true,
-            'httponly' => true,
-        ]
-    );
-
-}
-
 if (empty($errors)) {
 
     if (check_exist_userby_email_and_password($_POST["m_ps"], $_POST["pass"], 'CUSTOMER', 1) 
     || check_exist_userby_pseudo_and_password($_POST["m_ps"], $_POST["pass"], 'CUSTOMER', 1)) {
+
+        if (isset($_POST["remember_me"]) && !empty($_POST["remember_me"])){
         
-        header("location:".PROJECT."customer/dash/packages-listings?theme=light");
+            setcookie(
+                "connected_user_data",
+                json_encode($data),
+                [
+                    'expires' => time() + 365 * 24 * 3600,
+                    'path' => '/',
+                    'secure' => true,
+                    'httponly' => true,
+                ]
+            );
+        
+        }
+        
+        header("location:".PROJECT."customer/dash/packages-listings");
+
+        setcookie('user_data', '', time() - 3600, '/');
 
     }
     elseif (!check_exist_userby_email_and_password($_POST["m_ps"], $_POST["pass"], 'CUSTOMER', 1) 
     || !check_exist_userby_pseudo_and_password($_POST["m_ps"], $_POST["pass"], 'CUSTOMER', 1)) {
 
-        //
+        setcookie(
+            "error_msg",
+            "Vos accès sont incorrects. Réessayer",
+            [
+                'expires' => time() + 365 * 24 * 3600,
+                'path' => '/',
+                'secure' => true,
+                'httponly' => true,
+            ]
+        );
+
+        setcookie(
+            "user_data",
+            json_encode($data),
+            [
+                'expires' => time() + 365 * 24 * 3600,
+                'path' => '/',
+                'secure' => true,
+                'httponly' => true,
+            ]
+        );
 
         header("location:".PROJECT."customer/login");
         

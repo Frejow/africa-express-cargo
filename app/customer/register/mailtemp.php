@@ -1,6 +1,5 @@
 <?php
 
-
 if (isset($_SESSION['account_validation']) && !empty($_SESSION['account_validation'])){
     $user_id = $_SESSION['account_validation']['user_id'];
     $token = $_SESSION['account_validation']['token'];

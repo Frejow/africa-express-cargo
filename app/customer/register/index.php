@@ -1,7 +1,5 @@
 <?php
 
-session_start();
-
 $countries = [
     "<span>&#x1F1E6;&#x1F1EB;</span>&nbsp;&nbsp;&nbsp;Afghanistan",
     "<span>&#x1F1E6;&#x1F1F1;</span>&nbsp;&nbsp;&nbsp;Albanie",
@@ -229,7 +227,6 @@ $countries = [
     <link rel="stylesheet" type="text/css" href='<?= PROJECT ?>public/css/main.css'>
     <!--===============================================================================================-->
     <link rel="stylesheet" type="text/css" href='<?= PROJECT ?>public/sweetalert2-theme-bootstrap-4/bootstrap-4.min.css'>
-
 </head>
 
 <body>
@@ -461,6 +458,8 @@ $countries = [
 
     <?php
     session_destroy(); 
+    
+    setcookie('user_register_data', '', time() - 3600, '/');
     ?>
 
     <!--===============================================================================================-->

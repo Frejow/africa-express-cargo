@@ -1,10 +1,7 @@
 <?php
-//session_start();
 //die (var_dump($_GET['p']));
 //die (var_dump ('customer'));
 //die(var_dump($_POST['country']));
-
-//include '..'.PROJECT."app/common/functions_folder/functions.php";
 
 $_SESSION["register_errors"] = [];
 
@@ -99,17 +96,6 @@ if (isset($_POST["country"]) && !empty($_POST["country"])) {
 
 $data["profile"] = "CUSTOMER";
 
-setcookie(
-    "user_register_data",
-    json_encode($data),
-    [
-        'expires' => time() + 365 * 24 * 3600,
-        'path' => '/',
-        'secure' => true,
-        'httponly' => true,
-    ]
-);
-
 if (empty($errors)) {
 
     $database =  _database_login();
@@ -153,6 +139,8 @@ if (empty($errors)) {
 
             if (mailsendin($data['mail'], $subject, $mailcontent)){
                 header("location:".PROJECT."customer/register/true");
+
+                setcookie('user_register_data', '', time() - 3600, '/');
             }
 
         } else {
@@ -171,6 +159,17 @@ if (empty($errors)) {
 } else {
 
     $_SESSION["register_errors"] = $errors;
+
+    setcookie(
+        "user_register_data",
+        json_encode($data),
+        [
+            'expires' => time() + 365 * 24 * 3600,
+            'path' => '/',
+            'secure' => true,
+            'httponly' => true,
+        ]
+    );
 
     header("location:".PROJECT."customer/register");
 }
