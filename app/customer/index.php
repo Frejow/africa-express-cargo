@@ -1,4 +1,7 @@
 <?php
+session_start();
+
+include '..'.PROJECT."app/common/functions_folder/functions.php";
 
     $params = explode('/', $_GET['p']);
     $profile = "customer";
@@ -9,7 +12,33 @@
 
     if (isset($_GET['p']) && !empty($_GET['p'])) {
 
-        $resource = (isset($params[1]) && !empty($params[1])) ? $params[1] : $default_resource;
+        if (isset($params[1]) && !empty($params[1])) {
+
+            if (($params[1] == 'dash')) {
+
+                if (connected()){
+
+                    $resource = $params[1];
+
+                } else {
+
+                    $resource = $default_resource;
+
+                }
+                
+            } else {
+
+                $resource = $params[1];
+
+            }
+
+        } else {
+
+            $resource = $default_resource;
+            
+        }
+
+        //$resource = (isset($params[1]) && !empty($params[1])) ? $params[1] : $default_resource;
 
         $action = (isset($params[2]) && !empty($params[2])) ? $params[2] : $default_action;
 

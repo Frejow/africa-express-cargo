@@ -1,7 +1,7 @@
 <?php
 session_start();
 
-include '..'.PROJECT."app/common/functions_folder/functions.php";
+//include '..'.PROJECT."app/common/functions_folder/functions.php";
 
 $_SESSION["login_errors"] = [];
 

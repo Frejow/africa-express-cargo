@@ -1,10 +1,10 @@
 <?php
-session_start();
+//session_start();
 //die (var_dump($_GET['p']));
 //die (var_dump ('customer'));
 //die(var_dump($_POST['country']));
 
-include '..'.PROJECT."app/common/functions_folder/functions.php";
+//include '..'.PROJECT."app/common/functions_folder/functions.php";
 
 $_SESSION["register_errors"] = [];
 

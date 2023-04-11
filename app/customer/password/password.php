@@ -1,8 +1,8 @@
 <?php
-session_start();
+//session_start();
 //die (var_dump($_GET['p']));
 
-include '..'.PROJECT."app/common/functions_folder/functions.php";
+//include '..'.PROJECT."app/common/functions_folder/functions.php";
 
 $_SESSION["password_error"] = [];
 
