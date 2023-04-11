@@ -1,0 +1,14 @@
+{
+    "require": {
+        "phpmailer/phpmailer": "^6.8",
+        "mailgun/mailgun-php": "^3.5",
+        "symfony/http-client": "^6.2",
+        "nyholm/psr7": "^1.5",
+        "stephanecoinon/mailtrap": "^0.2.0"
+    },
+    "config": {
+        "allow-plugins": {
+            "php-http/discovery": true
+        }
+    }
+}

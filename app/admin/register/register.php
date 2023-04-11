@@ -1,0 +1,172 @@
+<?php
+
+session_start();
+//die (var_dump($_GET['p']));
+//die (var_dump ('admin'));
+//die(var_dump($_POST['country']));
+
+include '..'.PROJECT."app/common/functions_folder/functions.php";
+
+$_SESSION["register_errors"] = [];
+
+$errors = [];
+
+$data = [];
+
+if (!isset($_POST["nom"]) || empty($_POST["nom"])) {
+    $errors["nom"] = "Ce champs est vide";
+}
+
+if (!isset($_POST["prenom"]) || empty($_POST["prenom"])) {
+    $errors["prenom"] = "Ce champs est vide";
+}
+
+if (!isset($_POST["pseudo"]) || empty($_POST["pseudo"])) {
+    $errors["pseudo"] = "Ce champs est vide";
+}
+
+if (isset($_POST["country"]) && $_POST["country"] == "Pays") {
+    $errors["country"] = "Veuillez renseigner ce champs";
+}
+
+if (!isset($_POST["tel"]) || empty($_POST["tel"])) {
+    $errors["tel"] = "Veuillez renseigner ce champs";
+}
+
+if (!isset($_POST["mail"]) || empty($_POST["mail"])) {
+    $errors["mail"] = "Le champs d'adresse email est vide.";
+}
+
+if (isset($_POST["mail"]) && !empty($_POST["mail"]) && !filter_var($_POST["mail"], FILTER_VALIDATE_EMAIL)) {
+    $errors["mail"] = "Entrez une addresse email valide s'il vous plaît";
+}
+
+if (!isset($_POST["pass"]) || empty($_POST["pass"]) && !check_exist_userby_email($_POST["mail"])) {
+    $errors["pass"] = "Le champs du mot de passe est vide.";
+}
+
+if (isset($_POST["pass"]) && !empty($_POST["pass"]) && strlen(secure($_POST["pass"])) < 8) {
+    $errors["pass"] = "Le champs doit contenir minimum 8 caractères. Les espaces ne sont pas pris en compte.";
+}
+
+if (isset($_POST["pass"]) && !empty($_POST["pass"]) && strlen(secure($_POST["pass"])) >= 8 && empty($_POST["repass"])) {
+    $errors["repass"] = "Entrez votre mot de passe à nouveau.";
+}
+
+if ((isset($_POST["repass"]) && !empty($_POST["repass"]) && strlen(secure($_POST["pass"])) >= 8 && $_POST["repass"] != $_POST["pass"])) {
+    $errors["repass"] = "Mot de passe erroné. Entrez le mot de passe du précédent champs";
+}
+
+if (
+    isset($_POST["pass"]) && !empty($_POST["pass"]) && strlen(secure($_POST["pass"])) >= 8
+    && isset($_POST["repass"]) && !empty($_POST["repass"])
+    && $_POST["repass"] == $_POST["pass"]
+    && !isset($_POST["terms"]) && empty($_POST["terms"])
+) {
+    $errors["terms"] = "Veuillez cocher cette case s'il vous plaît.";
+}
+
+if (check_exist_userby_email($_POST["mail"])) {
+    $errors["mail"] = "[ " . $_POST["mail"] . " ] est déjà associé à un compte. Veuillez le changer.";
+}
+
+if (check_exist_userby_pseudo($_POST["pseudo"])) {
+    $errors["pseudo"] = "Le nom d'utilisateur [ " . $_POST["pseudo"] . " ] a déjà été pris. Veuillez le changer.";
+}
+
+if (isset($_POST["nom"]) && !empty($_POST["nom"])) {
+    $data["nom"] = secure($_POST["nom"]);
+}
+
+if (isset($_POST["prenom"]) && !empty($_POST["prenom"])) {
+    $data["prenom"] = secure($_POST["prenom"]);
+}
+
+if (isset($_POST["tel"]) && !empty($_POST["tel"])) {
+    $data["tel"] = $_POST["tel"];
+}
+
+if (isset($_POST["pseudo"]) && !empty($_POST["pseudo"])) {
+    $data["pseudo"] = secure($_POST["pseudo"]);
+}
+
+if (isset($_POST["mail"]) && !empty($_POST["mail"]) && (!filter_var($_POST["mail"], FILTER_VALIDATE_EMAIL) || filter_var($_POST["mail"], FILTER_VALIDATE_EMAIL))) {
+    $data["mail"] = secure($_POST["mail"]);
+}
+
+if (isset($_POST["country"]) && !empty($_POST["country"])) {
+    $data["country"] = $_POST["country"]; //die (var_dump($data["country"]));
+}
+
+$data["profile"] = "ADMINISTRATOR";
+
+setcookie(
+    "user_register_data",
+    json_encode($data),
+    [
+        'expires' => time() + 365 * 24 * 3600,
+        'path' => '/',
+        'secure' => true,
+        'httponly' => true,
+    ]
+);
+
+if (empty($errors)) {
+
+    $database =  _database_login();
+
+    if (is_object($database)) {
+
+        // Ecriture de la requête
+        $request_insertion = 'INSERT INTO user(name, first_names, phone_number, user_name, mail, country, password, profile, token) VALUES (:nom, :prenom, :tel, :pseudo, :mail, :country, :pass, :profile, :token)';
+
+        // Préparation
+        $request_insertion_prepare = $database->prepare($request_insertion);
+
+        // Exécution ! 
+        $result = $request_insertion_prepare->execute([
+            'nom' => $data["nom"],
+            'prenom' => $data["prenom"],
+            'tel' => $data["tel"],
+            'pseudo' => $data["pseudo"],
+            'mail' => $data["mail"],
+            'country' => ltrim(preg_replace('/[^\p{L}\p{N}\s]/u', " ", $_POST["country"])),
+            'pass' => sha1($_POST["pass"]),
+            'profile' => $data["profile"],
+            'token' => sha1($data["mail"]),
+        ]);
+
+        if ($result) {
+
+            setcookie(
+                "user_register_data",
+                "",
+                [
+                    'expires' => time() + 365 * 24 * 3600,
+                    'path' => '/',
+                    'secure' => true,
+                    'httponly' => true,
+                ]
+            );
+            
+            $_SESSION['success'] = 'Inscription effectuée avec succès.';
+
+            header("location:".PROJECT."admin/login");
+        } else {
+
+            $_SESSION['error'] = 'Oupss!!! Une erreur s\'est produite lors de l\'enregistrement de l\'utilisateur. Veuillez réessayer ou contacter l\'administrateur du site.';
+
+            header("location:".PROJECT."admin/register");
+        }
+    } else {
+
+        $_SESSION['error'] = $database;
+
+        header("location:".PROJECT."admin/register");
+    }
+} else {
+
+    $_SESSION["register_errors"] = $errors;
+
+    header("location:".PROJECT."admin/register");
+}
