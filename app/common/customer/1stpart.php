@@ -355,7 +355,17 @@
                             }
                             ?>
                             ' class="dropdown-item">Paramètres du compte</a>                            
-                            <a href="./sign-in.html" class="dropdown-item">Déconnexion</a>
+                            <a href='
+                            <?php 
+                            if (isset(explode('?', $_SERVER['REQUEST_URI'])[1]) && explode('?', $_SERVER['REQUEST_URI'])[1] == "theme=light"){
+                                echo PROJECT.'customer/logout'.'?theme=light';
+                            } elseif (isset(explode('?', $_SERVER['REQUEST_URI'])[1]) && explode('?', $_SERVER['REQUEST_URI'])[1] == "theme=dark"){
+                                echo PROJECT.'customer/logout'.'?theme=dark';
+                            } else {
+                                echo PROJECT.'customer/logout'.'?theme=light';
+                            }
+                            ?>
+                            ' class="dropdown-item">Déconnexion</a>
                         </div>
                     </div>
                 </div>

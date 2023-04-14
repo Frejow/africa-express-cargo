@@ -48,7 +48,7 @@ if (empty($errors)) {
 
         setcookie(
             "error_msg",
-            "Vos accès sont incorrects. Réessayer",
+            "Accès refusé. Aucune correspondance trouvée pour cet utilisateur. Réessayer",
             [
                 'expires' => time() + 365 * 24 * 3600,
                 'path' => '/',
