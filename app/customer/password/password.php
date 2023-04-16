@@ -28,7 +28,7 @@ if (isset($_POST['mail']) && !empty($_POST['mail'])){
         $subject = 'Réinitialisation de mot de passe';
         $mailcontent = buffer_html_file('..'.PROJECT.'app/customer/password/mailtemp.php');
 
-        if (mailsendin($_POST['mail'], $subject, $mailcontent)){
+        if (mailsendin($_POST['mail'], $username, $subject, $mailcontent)){
             header("location:".PROJECT."customer/password/true");
         }
 

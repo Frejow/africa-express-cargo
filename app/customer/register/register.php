@@ -137,7 +137,7 @@ if (empty($errors)) {
             $subject = 'Confirmation de compte';
             $mailcontent = buffer_html_file('..'.PROJECT.'app/customer/register/mailtemp.php');
 
-            if (mailsendin($data['mail'], $subject, $mailcontent)){
+            if (mailsendin($data['mail'], $data["pseudo"], $subject, $mailcontent)){
                 header("location:".PROJECT."customer/register/true");
 
                 setcookie('user_register_data', '', time() - 3600, '/');

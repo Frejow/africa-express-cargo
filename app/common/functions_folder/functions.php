@@ -10,7 +10,7 @@ use PHPMailer\PHPMailer\Exception;
  * @param string $body The body.
  * @return bool The result.
  */
-function mailsendin(string $destination, string $subject, string $body): bool
+function mailsendin(string $destination, string $recipient, string $subject, string $body): bool
 {
     // passing true in constructor enables exceptions in PHPMailer
     $mail = new PHPMailer(true);
@@ -33,7 +33,7 @@ function mailsendin(string $destination, string $subject, string $body): bool
 
         // Sender and recipient settings
         $mail->setFrom('express.cargo.africa@gmail.com', htmlspecialchars_decode('Africa Express Cargo'));
-        $mail->addAddress($destination, 'UTILISATEUR');
+        $mail->addAddress($destination, $recipient);
         $mail->addReplyTo('express.cargo.africa@gmail.com', htmlspecialchars_decode('Africa Express Cargo'));
 
         // Setting the email content
