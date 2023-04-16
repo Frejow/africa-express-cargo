@@ -36,6 +36,8 @@ if (empty($errors)) {
                 ]
             );
         
+        } else {
+            setcookie('connected_user_data', '', time() - 3600, '/');
         }
         
         header("location:".PROJECT."customer/dash/packages-listings");
