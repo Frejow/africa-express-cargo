@@ -257,6 +257,8 @@ $countries = [
 
                         if (isset($_SESSION["register_errors"]) && !empty($_SESSION["register_errors"])) {
                             $errors = $_SESSION["register_errors"];
+                        } else {
+                            setcookie('user_register_data', '', time() - 3600, '/');
                         }
 
                         $data = [];
@@ -458,8 +460,6 @@ $countries = [
 
     <?php
     session_destroy(); 
-    
-    setcookie('user_register_data', '', time() - 3600, '/');
     ?>
 
     <!--===============================================================================================-->
