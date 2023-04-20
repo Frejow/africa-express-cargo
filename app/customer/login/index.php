@@ -72,7 +72,14 @@
                 <form action="<?= PROJECT ?>customer/login/login" method="post" class="login100-form validate-form">
                     <span class="login100-form-title">
                         <i class="fa fa-sign-in"></i>
-                        Connexion
+                        <?php
+                        if (isset($_COOKIE['pass_up']) && !empty($_COOKIE['pass_up'])){
+                            echo 'Reconnectez-vous';
+                        } else {
+                            echo 'Connexion';
+                        }
+                        setcookie('pass_up', '', time() - 3600, '/');
+                        ?>
                     </span>
 
                     <?php
@@ -97,7 +104,7 @@
 
                     <!--<label for="m_ps" class="ml-3">Email ou Nom d'Utilisateur<span class="text-danger">*</span></label>-->
                     <div class="wrap-input100 validate-input" data-validate="Champs requis">
-                        <input class="input100" type="text" id="m_ps" name="m_ps" placeholder="Email ou Nom d'Utilisateur" value="<?php echo (isset($data["m_ps"]) && !empty($data["m_ps"])) ? $data["m_ps"] : "" ?>">
+                        <input class="input100" type="text" id="m_ps" name="m_ps" placeholder="Adresse email" value="<?php echo (isset($data["m_ps"]) && !empty($data["m_ps"])) ? $data["m_ps"] : "" ?>">
                         <span class="focus-input100"></span>
                         <span class="symbol-input100">
                             <i class="fa fa-envelope <?= isset($errors["m_ps"])? 'text-danger' : ''?>" aria-hidden="true"></i>

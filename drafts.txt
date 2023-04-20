@@ -1,3 +1,89 @@
+    <div class="modal modal-blur fade" id="modal-warning1" tabindex="-1" role="dialog" aria-hidden="true">
+                                <div class="modal-dialog modal-sm modal-dialog-centered" role="document">
+                                    <div class="modal-content">
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                        <div class="modal-status bg-warning"></div>
+                                        <div class="modal-body text-center py-4">
+                                            <!-- Download SVG icon from http://tabler-icons.io/i/alert-triangle -->
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="icon mb-2 text-warning icon-lg" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                                <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                                                <path d="M12 9v2m0 4v.01" />
+                                                <path d="M5 19h14a2 2 0 0 0 1.84 -2.75l-7.1 -12.25a2 2 0 0 0 -3.5 0l-7.1 12.25a2 2 0 0 0 1.75 2.75" />
+                                            </svg>
+                                            <h3>Êtes-vous sûr ?</h3>
+                                            <div class="text-muted">En changeant votre mot de passe, vous allez être déconnecté. Vous n'aurez qu'à vous reconnecter avec votre nouveau mot de passe pour continuer votre session.</div>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <div class="w-100">
+                                                <div class="row">
+                                                    <div class="col"><a href="#" class="btn w-100" data-bs-dismiss="modal">
+                                                            Annuler
+                                                        </a></div>
+                                                    <div class="col"><button type="submit" class="btn btn-warning w-100" data-bs-dismiss="modal">
+                                                            Oui, je change
+                                                        </button></div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+    
+    
+    <script>
+        // Sélectionner les éléments du DOM nécessaires
+        const inputFields = document.querySelectorAll(".focon");
+        const submitButton = document.querySelector("#submit-button-update");
+
+        // Stocker les valeurs par défaut des champs d'entrée
+        const defaultValues = Array.from(inputFields).map(input => input.defaultValue);
+
+        // Récupérer les dernières valeurs stockées localement
+        const storedValues = JSON.parse(localStorage.getItem('formValues'));
+
+        // Restaurer les dernières valeurs entrées par l'utilisateur si elles existent
+        if (storedValues) {
+            for (let i = 0; i < inputFields.length; i++) {
+                if (storedValues[i] !== undefined) {
+                    inputFields[i].value = storedValues[i];
+                }
+            }
+        }
+
+        // Activer/désactiver le bouton de soumission en fonction des changements dans les champs d'entrée
+        function updateSubmitButton() {
+            const currentValues = Array.from(inputFields).map(input => input.value);
+            if (currentValues.every((value, index) => value === defaultValues[index])) {
+                submitButton.disabled = true;
+            } else {
+                submitButton.disabled = false;
+            }
+            localStorage.setItem('formValues', JSON.stringify(currentValues));
+        }
+
+        // Désactiver le bouton de soumission au chargement de la page si les champs sont à leur valeur par défaut
+        if (storedValues) {
+            updateSubmitButton();
+        } else {
+            submitButton.disabled = true;
+        }
+
+        for (let input of inputFields) {
+            input.addEventListener("input", updateSubmitButton);
+        }
+    </script>
+
+<?php 
+                                    if (isset(explode('?', $_SERVER['REQUEST_URI'])[1]) && explode('?', $_SERVER['REQUEST_URI'])[1] == "theme=light"){
+                                        echo PROJECT.'customer/dash/profile-settings'.'?theme=light';
+                                    } elseif (isset(explode('?', $_SERVER['REQUEST_URI'])[1]) && explode('?', $_SERVER['REQUEST_URI'])[1] == "theme=dark"){
+                                        echo PROJECT.'customer/dash/profile-settings'.'?theme=dark';
+                                    } else {
+                                        echo PROJECT.'customer/dash/profile-settings'.'?theme=light';
+                                    }
+                                    ?>
+________________________________________________
+
 <div class="modal modal-blur fade" id="modal-update-password" tabindex="-1" role="dialog" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
             <div class="modal-content">

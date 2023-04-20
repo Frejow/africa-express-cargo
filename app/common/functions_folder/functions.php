@@ -98,18 +98,21 @@ function _database_login()
     return $database;
 }
 
-function check_exist_userby_email(string $mail)
+function check_exist_userby_email(string $mail, int $is_deleted)
 {
 
     $exist_mail = false;
 
     $database = _database_login();
 
-    $request = "SELECT * FROM user WHERE mail=:mail";
+    $request = "SELECT * FROM user WHERE mail=:mail and is_deleted = :is_deleted";
 
     $request_prepare = $database->prepare($request);
 
-    $request_execution = $request_prepare->execute(['mail' => $mail]);
+    $request_execution = $request_prepare->execute([
+        'mail' => $mail,
+        'is_deleted' => $is_deleted
+    ]);
 
     if ($request_execution) {
 
@@ -124,18 +127,21 @@ function check_exist_userby_email(string $mail)
     return $exist_mail;
 }
 
-function check_exist_userby_pseudo(string $pseudo)
+function check_exist_userby_pseudo(string $pseudo, int $is_deleted)
 {
 
     $exist_pseudo = false;
 
     $database = _database_login();
 
-    $request = "SELECT * FROM user WHERE user_name=:pseudo";
+    $request = "SELECT * FROM user WHERE user_name=:pseudo and is_deleted = :is_deleted";
 
     $request_prepare = $database->prepare($request);
 
-    $request_execution = $request_prepare->execute(['pseudo' => $pseudo]);
+    $request_execution = $request_prepare->execute([
+        'pseudo' => $pseudo,
+        'is_deleted' => $is_deleted
+    ]);
 
     if ($request_execution) {
 
@@ -367,7 +373,7 @@ function update_password(string $mail, string $password): bool
 
     $database = _database_login();
 
-    $request = "UPDATE user SET password = :password, updated_on= :updated_on WHERE mail = :mail";
+    $request = "UPDATE user SET password = :password, is_active = :is_active, updated_on= :updated_on WHERE mail = :mail";
 
     $request_prepare = $database->prepare($request);
 
@@ -375,6 +381,7 @@ function update_password(string $mail, string $password): bool
         [
             'mail'  => $mail,
             'password' => $password,
+            'is_active' => 1,
             'updated_on' => date('Y-m-d H:i:s')
         ]
     );
@@ -387,14 +394,14 @@ function update_password(string $mail, string $password): bool
     return $update_password;
 }
 
-function check_exist_userby_email_and_password(string $mail, string $password, string $profile, int $is_active): bool
+function check_exist_userby_email_and_password(string $mail, string $password, string $profile, int $is_valid_account, int $is_active, int $is_deleted): bool
 {
 
     $exist_user = false;
 
     $database = _database_login();
 
-    $request = "SELECT id, name, first_names, user_name, mail, country, avatar FROM user WHERE mail=:mail and password=:password and profile=:profile and is_active=:is_active";
+    $request = "SELECT id, name, first_names, phone_number, user_name, mail, country, avatar FROM user WHERE mail=:mail and password=:password and profile=:profile and is_valid_account=:is_valid_account and is_active=:is_active and is_deleted=:is_deleted";
 
     $request_prepare = $database->prepare($request);
 
@@ -402,7 +409,9 @@ function check_exist_userby_email_and_password(string $mail, string $password, s
         'mail' => $mail,
         'password' => sha1($password),
         'profile' => $profile,
-        'is_active' => $is_active
+        'is_valid_account' => $is_valid_account,
+        'is_active' => $is_active,
+        'is_deleted' => $is_deleted
     ]);
 
     if ($request_execution) {
@@ -429,14 +438,14 @@ function check_exist_userby_email_and_password(string $mail, string $password, s
     return $exist_user;
 }
 
-function check_exist_userby_pseudo_and_password(string $pseudo, string $password, string $profile, int $is_active): bool
+function check_exist_userby_pseudo_and_password(string $pseudo, string $password, string $profile, int $is_valid_account, int $is_active, int $is_deleted): bool
 {
 
     $exist_user = false;
 
     $database = _database_login();
 
-    $request = "SELECT id, name, first_names, user_name, mail, country, avatar FROM user WHERE user_name=:pseudo and password=:password and profile=:profile and is_active=:is_active";
+    $request = "SELECT id, name, first_names, phone_number, user_name, mail, country, avatar FROM user WHERE user_name=:pseudo and password=:password and profile=:profile and is_valid_account=:is_valid_account and is_active=:is_active and is_deleted=:is_deleted";
 
     $request_prepare = $database->prepare($request);
 
@@ -444,7 +453,9 @@ function check_exist_userby_pseudo_and_password(string $pseudo, string $password
         'pseudo' => $pseudo,
         'password' => sha1($password),
         'profile' => $profile,
-        'is_active' => $is_active
+        'is_valid_account' => $is_valid_account,
+        'is_active' => $is_active,
+        'is_deleted' => $is_deleted
     ]);
 
     if ($request_execution) {
@@ -469,4 +480,189 @@ function check_exist_userby_pseudo_and_password(string $pseudo, string $password
     }
 
     return $exist_user;
+}
+
+function update_personal_info(int $id, string $name, string $first_names, string $user_name, string $country, string $mail, string $phone_number,): bool
+{
+    date_default_timezone_set("Africa/Lagos");
+
+    $updating = false;
+
+    $database = _database_login();
+
+    $request = "UPDATE user SET name = :name, first_names = :first_names, user_name = :user_name, country = :country, mail = :mail, phone_number = :phone_number, updated_on= :updated_on WHERE id = :id";
+
+    $request_prepare = $database->prepare($request);
+
+    $request_execution = $request_prepare->execute(
+        [
+            'id'  => $id,
+            'name'  => $name,
+            'first_names'  => $first_names,
+            'user_name'  => $user_name,
+            'country'  => $country,
+            'mail'  => $mail,
+            'phone_number'  => $phone_number,
+            'updated_on' => date('Y-m-d H:i:s')
+        ]
+    );
+
+    if ($request_execution) {
+
+        $updating = true;
+    }
+
+    return $updating;
+}
+
+function select_user_updated_info(int $id): bool
+{
+
+    $selected = false;
+
+    $database = _database_login();
+
+    $request = "SELECT id, name, first_names, phone_number, user_name, mail, country, avatar FROM user WHERE id=:id";
+
+    $request_prepare = $database->prepare($request);
+
+    $request_execution = $request_prepare->execute([
+        'id' => $id
+    ]);
+
+    if ($request_execution) {
+
+        $data = $request_prepare->fetchAll(PDO::FETCH_ASSOC);
+
+        if (isset($data) && !empty($data) && is_array($data)) {
+
+            setcookie(
+                "connected_user",
+                json_encode($data),
+                [
+                    'expires' => time() + 365 * 24 * 3600,
+                    'path' => '/',
+                    'secure' => true,
+                    'httponly' => true,
+                ]
+            );
+
+            $selected = true;
+        }
+    }
+
+    return $selected;
+}
+
+function check_password(int $id, string $password): bool
+{
+
+    $password_found = false;
+
+    $database = _database_login();
+
+    $request = "SELECT password FROM user WHERE id=:id and password = :password";
+
+    $request_prepare = $database->prepare($request);
+
+    $request_execution = $request_prepare->execute([
+        'id' => $id,
+        'password' => sha1($password)
+    ]);
+
+    if ($request_execution) {
+
+        $data = $request_prepare->fetchAll(PDO::FETCH_ASSOC);
+
+        if (isset($data) && !empty($data) && is_array($data)) {
+            $password_found = true;
+        }
+    }
+
+    return $password_found;
+}
+
+function update_avatar(int $id, string $avatar): bool
+{
+    date_default_timezone_set("Africa/Lagos");
+
+    $update_avatar = false;
+
+    $database = _database_login();
+
+    $request = "UPDATE user SET avatar = :avatar, updated_on= :updated_on WHERE id = :id";
+
+    $request_prepare = $database->prepare($request);
+
+    $request_execution = $request_prepare->execute(
+        [
+            'id'  => $id,
+            'avatar' => $avatar,
+            'updated_on' => date('Y-m-d H:i:s')
+        ]
+    );
+
+    if ($request_execution) {
+
+        $update_avatar = true;
+    }
+
+    return $update_avatar;
+}
+
+function deactivated_account(int $id): bool
+{
+    date_default_timezone_set("Africa/Lagos");
+
+    $update_is_active_field = false;
+
+    $database = _database_login();
+
+    $request = "UPDATE user SET is_active = :is_active, updated_on= :updated_on WHERE id = :id";
+
+    $request_prepare = $database->prepare($request);
+
+    $request_execution = $request_prepare->execute(
+        [
+            'id'  => $id,
+            'is_active' => 0,
+            'updated_on' => date('Y-m-d H:i:s')
+        ]
+    );
+
+    if ($request_execution) {
+
+        $update_is_active_field = true;
+    }
+
+    return $update_is_active_field;
+}
+
+function deleted_account(int $id): bool
+{
+    date_default_timezone_set("Africa/Lagos");
+
+    $update_is_deleted_field = false;
+
+    $database = _database_login();
+
+    $request = "UPDATE user SET is_active = :is_active, is_deleted = :is_deleted, updated_on = :updated_on WHERE id = :id";
+
+    $request_prepare = $database->prepare($request);
+
+    $request_execution = $request_prepare->execute(
+        [
+            'id'  => $id,
+            'is_active' => 0,
+            'is_deleted' => 1,
+            'updated_on' => date('Y-m-d H:i:s')
+        ]
+    );
+
+    if ($request_execution) {
+
+        $update_is_deleted_field = true;
+    }
+
+    return $update_is_deleted_field;
 }

@@ -303,6 +303,32 @@
     <!-- Core -->
     <script src="<?= PROJECT ?>public/js/tabler.js?202302251230" defer></script>
     <script src="<?= PROJECT ?>public/js/demo.js?202302251230" defer></script>
+    <script src='<?= PROJECT ?>public/sweetalert2/sweetalert2.min.js'></script>
+
+    <script>
+        $(function() {
+            var Toast = Swal.mixin({
+                toast: true,
+                position: 'top',
+                showConfirmButton: false,
+                timer: 8000
+            });
+
+            if($('.swalDefaultSuccess').length) {
+                Toast.fire({
+                    icon: 'success',
+                    title: '<?= $msg ?>'
+                });
+            }
+            
+            if($('.swalDefaultError').length) {
+                Toast.fire({
+                    icon: 'error',
+                    title: '<?= $msg ?>'
+                });
+            }
+        });
+    </script>
 
     <script>
         window.onload = function() {
@@ -414,48 +440,7 @@
         });
     </script>
 
-    <script>
-        // Sélectionner les éléments du DOM nécessaires
-        const inputFields = document.querySelectorAll(".focon");
-        const submitButton = document.querySelector("#submit-button-update");
-
-        // Stocker les valeurs par défaut des champs d'entrée
-        const defaultValues = Array.from(inputFields).map(input => input.defaultValue);
-
-        // Récupérer les dernières valeurs stockées localement
-        const storedValues = JSON.parse(localStorage.getItem('formValues'));
-
-        // Restaurer les dernières valeurs entrées par l'utilisateur si elles existent
-        if (storedValues) {
-            for (let i = 0; i < inputFields.length; i++) {
-                if (storedValues[i] !== undefined) {
-                    inputFields[i].value = storedValues[i];
-                }
-            }
-        }
-
-        // Activer/désactiver le bouton de soumission en fonction des changements dans les champs d'entrée
-        function updateSubmitButton() {
-            const currentValues = Array.from(inputFields).map(input => input.value);
-            if (currentValues.every((value, index) => value === defaultValues[index])) {
-                submitButton.disabled = true;
-            } else {
-                submitButton.disabled = false;
-            }
-            localStorage.setItem('formValues', JSON.stringify(currentValues));
-        }
-
-        // Désactiver le bouton de soumission au chargement de la page si les champs sont à leur valeur par défaut
-        if (storedValues) {
-            updateSubmitButton();
-        } else {
-            submitButton.disabled = true;
-        }
-
-        for (let input of inputFields) {
-            input.addEventListener("input", updateSubmitButton);
-        }
-    </script>
+    
 
     <script>
         const clicktoChange = document.getElementById("clicktoChange");
@@ -469,6 +454,24 @@
         });
     </script>
 
+    <script>
+        const click = document.getElementById("click");
+        const formAppear = document.getElementById("form_appear");
+        const divNone = document.getElementById("div_none");
+        const abort = document.getElementById("abort");
+
+        click.addEventListener("click", function() {
+            click.style.display = "none";
+            formAppear.style.display = "flex";
+            divNone.style.display = "none";
+        });
+        abort.addEventListener("click", function() {
+            abort.style.display = "none";
+            formAppear.style.display = "none";
+            divNone.style.display = "flex";
+        });
+    </script>
+    
     <script>
         // @formatter:off
         document.addEventListener("DOMContentLoaded", function() {
@@ -589,6 +592,15 @@
             myDropzone.removeAllFiles(true)
         }
         // DropzoneJS Demo Code End
+    </script>
+
+    <script>
+        function updateButtonLabel() {
+            var fileInput = document.getElementById('fileToUpload');
+            var fileName = fileInput.value.split('\\').pop();
+            var importButton = document.getElementById('importButton');
+            importButton.value = fileName;
+        }
     </script>
 
 </body>

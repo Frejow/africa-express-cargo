@@ -116,6 +116,7 @@
     <link href='<?= PROJECT ?>public/select2/css/select2.css' rel="stylesheet">
     <link href='<?= PROJECT ?>public/select2-bootstrap4-theme/select2-bootstrap4.css' rel="stylesheet">
     <link href='<?= PROJECT ?>public/datatables-bs4/css/dataTables.bootstrap4.css' rel="stylesheet">
+    <link href='<?= PROJECT ?>public/sweetalert2-theme-bootstrap-4/bootstrap-4.min.css' rel="stylesheet" type="text/css" >
     <script src='<?= PROJECT ?>public/js/jquery/jquery-3.6.3.min.js'></script>
 
     <style>
@@ -314,10 +315,10 @@
                     </div>
                     <div class="nav-item dropdown">
                         <a href="#" class="nav-link d-flex lh-1 text-reset p-0" data-bs-toggle="dropdown" aria-label="Open user menu">
-                            <span class="avatar avatar-sm" style="background-image: url(<?= PROJECT ?>public/images/jow-p.jpg)"></span>
+                            <span class="avatar avatar-sm" style="background-image: url(<?= $data[0]['avatar'] == 'null' ? PROJECT.'public/images/default-user-profile.jpg' : $data[0]['avatar'] ?>)"></span>
                             <div class="d-none d-xl-block ps-2">
-                                <div>Jow Doe</div>
-                                <div class="mt-1 small text-muted">Dev</div>
+                                <div><?= $data[0]['first_names'].' '.$data[0]['name'] ?></div>
+                                <div class="mt-1 small text-muted"><?= '@'.$data[0]['user_name'] ?></div>
                             </div>
                         </a>
                         <div class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">

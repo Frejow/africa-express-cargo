@@ -29,6 +29,20 @@ if (isset($_POST['mail']) && !empty($_POST['mail'])){
         $mailcontent = buffer_html_file('..'.PROJECT.'app/customer/password/mailtemp.php');
 
         if (mailsendin($_POST['mail'], $username, $subject, $mailcontent)){
+
+            $data = secure($_POST["mail"]);
+
+            setcookie(
+                "passdata",
+                $data,
+                [
+                    'expires' => time() + 365 * 24 * 3600,
+                    'path' => '/',
+                    'secure' => true,
+                    'httponly' => true,
+                ]
+            );
+
             header("location:".PROJECT."customer/password/true");
         }
 
@@ -43,7 +57,9 @@ if (isset($_POST['mail']) && !empty($_POST['mail'])){
 
 }
 
-setcookie(
+if (!empty($error)){
+
+    setcookie(
     "user_passdata",
     $data,
     [
@@ -52,9 +68,8 @@ setcookie(
         'secure' => true,
         'httponly' => true,
     ]
-);
+    );
 
-if (!empty($error)){
     $_SESSION["password_error"] = $error;
 
     header("location:".PROJECT."customer/password");

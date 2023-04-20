@@ -3,6 +3,12 @@ session_start();
 
 include '..'.PROJECT."app/common/functions_folder/functions.php";
 
+$data = [];
+
+if (isset($_COOKIE["connected_user"]) && !empty($_COOKIE["connected_user"])) {
+    $data = json_decode($_COOKIE["connected_user"], true);
+}          
+
     $params = explode('/', $_GET['p']);
     $profile = "customer";
     $default_resource = "login";
@@ -25,7 +31,7 @@ include '..'.PROJECT."app/common/functions_folder/functions.php";
                     $resource = $default_resource;
 
                 }
-                
+
             } else {
 
                 $resource = $params[1];

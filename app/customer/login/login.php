@@ -20,8 +20,8 @@ if (!isset($_POST["pass"]) || empty($_POST["pass"])) {
 
 if (empty($errors)) {
 
-    if (check_exist_userby_email_and_password($_POST["m_ps"], $_POST["pass"], 'CUSTOMER', 1) 
-    || check_exist_userby_pseudo_and_password($_POST["m_ps"], $_POST["pass"], 'CUSTOMER', 1)) {
+    if (check_exist_userby_email_and_password($_POST["m_ps"], $_POST["pass"], 'CUSTOMER', 1, 1, 0) 
+    || check_exist_userby_pseudo_and_password($_POST["m_ps"], $_POST["pass"], 'CUSTOMER', 1, 1, 0)) {
 
         if (isset($_POST["remember_me"]) && !empty($_POST["remember_me"])){
         
@@ -45,8 +45,8 @@ if (empty($errors)) {
         setcookie('user_data', '', time() - 3600, '/');
 
     }
-    elseif (!check_exist_userby_email_and_password($_POST["m_ps"], $_POST["pass"], 'CUSTOMER', 1) 
-    || !check_exist_userby_pseudo_and_password($_POST["m_ps"], $_POST["pass"], 'CUSTOMER', 1)) {
+    elseif (!check_exist_userby_email_and_password($_POST["m_ps"], $_POST["pass"], 'CUSTOMER', 1, 1, 0) 
+    || !check_exist_userby_pseudo_and_password($_POST["m_ps"], $_POST["pass"], 'CUSTOMER', 1, 1, 0)) {
 
         setcookie(
             "error_msg",

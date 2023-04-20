@@ -62,11 +62,11 @@ if (
     $errors["terms"] = "Veuillez cocher cette case s'il vous plaît.";
 }
 
-if (check_exist_userby_email($_POST["mail"])) {
+if (check_exist_userby_email($_POST["mail"], 0)) {
     $errors["mail"] = "[ " . $_POST["mail"] . " ] est déjà associé à un compte. Veuillez le changer.";
 }
 
-if (check_exist_userby_pseudo($_POST["pseudo"])) {
+if (check_exist_userby_pseudo($_POST["pseudo"], 0)) {
     $errors["pseudo"] = "Le nom d'utilisateur [ " . $_POST["pseudo"] . " ] a déjà été pris. Veuillez le changer.";
 }
 
