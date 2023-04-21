@@ -73,7 +73,17 @@ include '..' . PROJECT . 'app/common/customer/1stpart.php';  ?>
                         }
                         ?>
 
-                        <form action="<?= PROJECT ?>customer/dash-treatment/profile-settings" class="text-center" method="post" enctype="multipart/form-data">
+                        <form action="
+                        <?php
+                        if (isset(explode('?', $_SERVER['REQUEST_URI'])[1]) && explode('?', $_SERVER['REQUEST_URI'])[1] == "theme=light"){
+                            echo PROJECT.'customer/dash-treatment/profile-settings'.'?theme=light';
+                        } elseif (isset(explode('?', $_SERVER['REQUEST_URI'])[1]) && explode('?', $_SERVER['REQUEST_URI'])[1] == "theme=dark"){
+                            echo PROJECT.'customer/dash-treatment/profile-settings'.'?theme=dark';
+                        } else {
+                            echo PROJECT.'customer/dash-treatment/profile-settings'.'?theme=light';
+                        }
+                        ?>
+                        " class="text-center" method="post" enctype="multipart/form-data">
 
                             <div class="col mt-3">
                                 <input type="file" name="fileToUpload" id="fileToUpload" style="display: none;" onchange="updateButtonLabel()">
@@ -105,12 +115,12 @@ include '..' . PROJECT . 'app/common/customer/1stpart.php';  ?>
                             ?>
                                 <div class="row mt-3 text-center">
                                     <div class="col-auto">
-                                        <a href="#" class="btn link-warning" data-bs-toggle="modal" data-bs-target="#modal-warning1" style="text-decoration: none;" name="submit">Mettre à jour</a>
+                                        <a href="#" class="btn link-warning" data-bs-toggle="modal" data-bs-target="#modal-warning1" style="text-decoration: none;">Mettre à jour</a>
                                     </div>
 
-                                    <div class="col-auto"><a href="<?= PROJECT ?>customer/dash-treatment/profile-settings" class="btn link-danger" style="text-decoration: none;">
+                                    <div class="col-auto"><button type="submit" name="avatar_deletion" class="btn link-danger" style="text-decoration: none;">
                                             Retirer Avatar
-                                        </a></div>
+                                </button></div>
                                 </div>
                             <?php
                             }
@@ -252,7 +262,17 @@ include '..' . PROJECT . 'app/common/customer/1stpart.php';  ?>
                             </div>
                         </div>
 
-                        <form class="col-lg-11" action="<?= PROJECT ?>customer/dash-treatment/profile-settings" method="post" id="form_appear" style="display: flex; flex-direction: column; display: none;">
+                        <form class="col-lg-11" action="
+                        <?php
+                        if (isset(explode('?', $_SERVER['REQUEST_URI'])[1]) && explode('?', $_SERVER['REQUEST_URI'])[1] == "theme=light"){
+                            echo PROJECT.'customer/dash-treatment/profile-settings'.'?theme=light';
+                        } elseif (isset(explode('?', $_SERVER['REQUEST_URI'])[1]) && explode('?', $_SERVER['REQUEST_URI'])[1] == "theme=dark"){
+                            echo PROJECT.'customer/dash-treatment/profile-settings'.'?theme=dark';
+                        } else {
+                            echo PROJECT.'customer/dash-treatment/profile-settings'.'?theme=light';
+                        }
+                        ?>
+                        " method="post" id="form_appear" style="display: flex; flex-direction: column; display: none;">
                             <h3 class="mt-4 text-center">Mise à jour - Informations Personnelles</h3>
                             <div class="row g-3">
                                 <div class="col-md">
@@ -377,7 +397,17 @@ include '..' . PROJECT . 'app/common/customer/1stpart.php';  ?>
 
                         </form>
 
-                        <form action="<?= PROJECT ?>customer/dash-treatment/profile-settings" method="post" style="display: flex;flex-direction: column;align-items:center;">
+                        <form action="
+                        <?php
+                        if (isset(explode('?', $_SERVER['REQUEST_URI'])[1]) && explode('?', $_SERVER['REQUEST_URI'])[1] == "theme=light"){
+                            echo PROJECT.'customer/dash-treatment/profile-settings'.'?theme=light';
+                        } elseif (isset(explode('?', $_SERVER['REQUEST_URI'])[1]) && explode('?', $_SERVER['REQUEST_URI'])[1] == "theme=dark"){
+                            echo PROJECT.'customer/dash-treatment/profile-settings'.'?theme=dark';
+                        } else {
+                            echo PROJECT.'customer/dash-treatment/profile-settings'.'?theme=light';
+                        }
+                        ?>
+                        " method="post" style="display: flex;flex-direction: column;align-items:center;">
 
                             <?php
 
@@ -462,7 +492,17 @@ include '..' . PROJECT . 'app/common/customer/1stpart.php';  ?>
                         </form>
 
                         <div class="row mt-4">
-                            <form  action="<?= PROJECT ?>customer/dash-treatment/profile-settings" method="post">
+                            <form  action="
+                            <?php
+                            if (isset(explode('?', $_SERVER['REQUEST_URI'])[1]) && explode('?', $_SERVER['REQUEST_URI'])[1] == "theme=light"){
+                                echo PROJECT.'customer/dash-treatment/profile-settings'.'?theme=light';
+                            } elseif (isset(explode('?', $_SERVER['REQUEST_URI'])[1]) && explode('?', $_SERVER['REQUEST_URI'])[1] == "theme=dark"){
+                                echo PROJECT.'customer/dash-treatment/profile-settings'.'?theme=dark';
+                            } else {
+                                echo PROJECT.'customer/dash-treatment/profile-settings'.'?theme=light';
+                            }
+                            ?>
+                            " method="post">
 
                                 <div class="col-md text-center">
                                     <a href="#" data-bs-toggle="modal" data-bs-target="#modal-danger" class="btn btn-ghost-danger">

@@ -12,14 +12,22 @@ $_SESSION['data'] = [];
 
 //Avatar Updating
 
-if (!isset($_POST) || empty($_POST)) {
+if (isset($_POST['avatar_deletion'])) {
 
     if (update_avatar($data[0]['id'], 'null')) {
 
         if (select_user_updated_info($data[0]['id'])) {
 
-            header("location:".PROJECT."customer/dash/profile-settings");
+            if (isset(explode('?', $_SERVER['REQUEST_URI'])[1]) && explode('?', $_SERVER['REQUEST_URI'])[1] == "theme=light"){
+                header("location:".PROJECT."customer/dash/profile-settings?theme=light");
+            } elseif (isset(explode('?', $_SERVER['REQUEST_URI'])[1]) && explode('?', $_SERVER['REQUEST_URI'])[1] == "theme=dark"){
+                header("location:".PROJECT."customer/dash/profile-settings?theme=dark");
+            } else {
+                header("location:".PROJECT."customer/dash/profile-settings?theme=light");
+            }
 
+            //header("location:".PROJECT."customer/dash/profile-settings");
+            
         }
 
     }
@@ -84,7 +92,15 @@ if (isset($_POST['pass_w']) && !empty($_POST['pass_w']) && check_password($data[
 
             if (select_user_updated_info($data[0]['id'])) {
 
-                header("location:".PROJECT."customer/dash/profile-settings");
+                if (isset(explode('?', $_SERVER['REQUEST_URI'])[1]) && explode('?', $_SERVER['REQUEST_URI'])[1] == "theme=light"){
+                    header("location:".PROJECT."customer/dash/profile-settings?theme=light");
+                } elseif (isset(explode('?', $_SERVER['REQUEST_URI'])[1]) && explode('?', $_SERVER['REQUEST_URI'])[1] == "theme=dark"){
+                    header("location:".PROJECT."customer/dash/profile-settings?theme=dark");
+                } else {
+                    header("location:".PROJECT."customer/dash/profile-settings?theme=light");
+                }
+
+                //header("location:".PROJECT."customer/dash/profile-settings");
 
             }
 
@@ -106,7 +122,15 @@ if (!empty($error)){
 
     $_SESSION['avatar_error'] = $error;
 
-    header("location:".PROJECT."customer/dash/profile-settings");
+    if (isset(explode('?', $_SERVER['REQUEST_URI'])[1]) && explode('?', $_SERVER['REQUEST_URI'])[1] == "theme=light"){
+        header("location:".PROJECT."customer/dash/profile-settings?theme=light");
+    } elseif (isset(explode('?', $_SERVER['REQUEST_URI'])[1]) && explode('?', $_SERVER['REQUEST_URI'])[1] == "theme=dark"){
+        header("location:".PROJECT."customer/dash/profile-settings?theme=dark");
+    } else {
+        header("location:".PROJECT."customer/dash/profile-settings?theme=light");
+    }
+
+    //header("location:".PROJECT."customer/dash/profile-settings");
 
 }
 
@@ -159,7 +183,15 @@ if (isset($_POST['pass']) && !empty($_POST['pass']) && check_password($data[0]['
     if (update_personal_info($data[0]['id'], $newdata ['nom'], $newdata ['prenoms'], $newdata ['pseudo'], $newdata ['pays'], $newdata ['mail'], $newdata ['tel'])) {
         if (select_user_updated_info($data[0]['id'])){
 
-            header("location:".PROJECT."customer/dash/profile-settings");
+            if (isset(explode('?', $_SERVER['REQUEST_URI'])[1]) && explode('?', $_SERVER['REQUEST_URI'])[1] == "theme=light"){
+                header("location:".PROJECT."customer/dash/profile-settings?theme=light");
+            } elseif (isset(explode('?', $_SERVER['REQUEST_URI'])[1]) && explode('?', $_SERVER['REQUEST_URI'])[1] == "theme=dark"){
+                header("location:".PROJECT."customer/dash/profile-settings?theme=dark");
+            } else {
+                header("location:".PROJECT."customer/dash/profile-settings?theme=light");
+            }
+
+            //header("location:".PROJECT."customer/dash/profile-settings");
 
         }
     }
@@ -168,7 +200,15 @@ if (isset($_POST['pass']) && !empty($_POST['pass']) && check_password($data[0]['
 
     $_SESSION['personal_error'] = 'La tentative de mise à jour a échoué. Mot de passe erroné. Réessayer !';
 
-    header("location:".PROJECT."customer/dash/profile-settings");
+    if (isset(explode('?', $_SERVER['REQUEST_URI'])[1]) && explode('?', $_SERVER['REQUEST_URI'])[1] == "theme=light"){
+        header("location:".PROJECT."customer/dash/profile-settings?theme=light");
+    } elseif (isset(explode('?', $_SERVER['REQUEST_URI'])[1]) && explode('?', $_SERVER['REQUEST_URI'])[1] == "theme=dark"){
+        header("location:".PROJECT."customer/dash/profile-settings?theme=dark");
+    } else {
+        header("location:".PROJECT."customer/dash/profile-settings?theme=light");
+    }
+    
+    //header("location:".PROJECT."customer/dash/profile-settings");
 
 }
 
@@ -229,7 +269,15 @@ if (!empty($error)){
 
     $_SESSION['password_error'] = $error;
 
-    header("location:".PROJECT."customer/dash/profile-settings");
+    if (isset(explode('?', $_SERVER['REQUEST_URI'])[1]) && explode('?', $_SERVER['REQUEST_URI'])[1] == "theme=light"){
+        header("location:".PROJECT."customer/dash/profile-settings?theme=light");
+    } elseif (isset(explode('?', $_SERVER['REQUEST_URI'])[1]) && explode('?', $_SERVER['REQUEST_URI'])[1] == "theme=dark"){
+        header("location:".PROJECT."customer/dash/profile-settings?theme=dark");
+    } else {
+        header("location:".PROJECT."customer/dash/profile-settings?theme=light");
+    }
+
+    //header("location:".PROJECT."customer/dash/profile-settings");
 
 }
 
@@ -261,7 +309,15 @@ if (!empty($error)){
 
     //$_SESSION['deactivation_error'] = $error;
 
-    header("location:".PROJECT."customer/dash/profile-settings");
+    if (isset(explode('?', $_SERVER['REQUEST_URI'])[1]) && explode('?', $_SERVER['REQUEST_URI'])[1] == "theme=light"){
+        header("location:".PROJECT."customer/dash/profile-settings?theme=light");
+    } elseif (isset(explode('?', $_SERVER['REQUEST_URI'])[1]) && explode('?', $_SERVER['REQUEST_URI'])[1] == "theme=dark"){
+        header("location:".PROJECT."customer/dash/profile-settings?theme=dark");
+    } else {
+        header("location:".PROJECT."customer/dash/profile-settings?theme=light");
+    }
+
+    //header("location:".PROJECT."customer/dash/profile-settings");
 
 }
 
@@ -293,7 +349,15 @@ if (!empty($error)){
 
     //$_SESSION['deletion_error'] = $error;
 
-    header("location:".PROJECT."customer/dash/profile-settings");
+    if (isset(explode('?', $_SERVER['REQUEST_URI'])[1]) && explode('?', $_SERVER['REQUEST_URI'])[1] == "theme=light"){
+        header("location:".PROJECT."customer/dash/profile-settings?theme=light");
+    } elseif (isset(explode('?', $_SERVER['REQUEST_URI'])[1]) && explode('?', $_SERVER['REQUEST_URI'])[1] == "theme=dark"){
+        header("location:".PROJECT."customer/dash/profile-settings?theme=dark");
+    } else {
+        header("location:".PROJECT."customer/dash/profile-settings?theme=light");
+    }
+
+    //header("location:".PROJECT."customer/dash/profile-settings");
 
 }
 
