@@ -1,4 +1,5 @@
-<?php include '..'.PROJECT.'app/common/customer/1stpart.php' ?>
+<?php //die (session_id());
+include '..'.PROJECT.'app/common/customer/1stpart.php'; ?>
 
     <form action="" method="post">
         <div class="page-header d-print-none">

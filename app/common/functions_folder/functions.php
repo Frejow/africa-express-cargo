@@ -63,26 +63,26 @@ function connected(): bool
 {
     $is_connected = false;
 
-    if (isset($_COOKIE["connected_user"]) && !empty($_COOKIE["connected_user"])) {
+    if (isset($_SESSION["connected"]) && !empty($_SESSION["connected"])) {
         $is_connected = true;
     }
 
     return $is_connected;
 }
 
-function disconnected()
+function disconnected(): bool
 {
-    setcookie(
-        "connected_user",
-        "",
-        [
-            'expires' => time(),
-            'path' => '/',
-            'secure' => true,
-            'httponly' => true,
-        ]
-    );
+    $is_disconnected = false;
+
+    unset($_SESSION['connected']);
+
+    if (!isset($_SESSION["connected"]) || empty($_SESSION["connected"])) {
+        $is_disconnected = true;
+    }
+
+    return $is_disconnected;
 }
+
 
 function _database_login()
 {
@@ -420,7 +420,9 @@ function check_exist_userby_email_and_password(string $mail, string $password, s
 
         if (isset($data) && !empty($data) && is_array($data)) {
 
-            setcookie(
+            $_SESSION ['connected'] = json_encode($data);
+
+            /*setcookie(
                 "connected_user",
                 json_encode($data),
                 [
@@ -429,7 +431,7 @@ function check_exist_userby_email_and_password(string $mail, string $password, s
                     'secure' => true,
                     'httponly' => true,
                 ]
-            );
+            );*/
 
             $exist_user = true;
         }
@@ -464,7 +466,9 @@ function check_exist_userby_pseudo_and_password(string $pseudo, string $password
 
         if (isset($data) && !empty($data) && is_array($data)) {
 
-            setcookie(
+            $_SESSION ['connected'] = json_encode($data);
+
+            /*setcookie(
                 "connected_user",
                 json_encode($data),
                 [
@@ -473,7 +477,7 @@ function check_exist_userby_pseudo_and_password(string $pseudo, string $password
                     'secure' => true,
                     'httponly' => true,
                 ]
-            );
+            );*/
 
             $exist_user = true;
         }
@@ -536,7 +540,9 @@ function select_user_updated_info(int $id): bool
 
         if (isset($data) && !empty($data) && is_array($data)) {
 
-            setcookie(
+            $_SESSION ['connected'] = json_encode($data);
+
+            /*setcookie(
                 "connected_user",
                 json_encode($data),
                 [
@@ -545,7 +551,7 @@ function select_user_updated_info(int $id): bool
                     'secure' => true,
                     'httponly' => true,
                 ]
-            );
+            );*/
 
             $selected = true;
         }

@@ -5,8 +5,8 @@ include '..'.PROJECT."app/common/functions_folder/functions.php";
 
 $data = [];
 
-if (isset($_COOKIE["connected_user"]) && !empty($_COOKIE["connected_user"])) {
-    $data = json_decode($_COOKIE["connected_user"], true);
+if (isset($_SESSION["connected"]) && !empty($_SESSION["connected"])) {
+    $data = json_decode($_SESSION["connected"], true);
 }          
 
     $params = explode('/', $_GET['p']);
@@ -30,6 +30,12 @@ if (isset($_COOKIE["connected_user"]) && !empty($_COOKIE["connected_user"])) {
 
                     $resource = $default_resource;
 
+                    setcookie('error_msg', 'Authentification requise ! Veuillez-vous connecter.', time() + 365 * 24 * 3600, '/');
+
+                    header("location:".PROJECT."customer/login");
+
+                    exit;
+
                 }
 
             } else {
@@ -41,6 +47,10 @@ if (isset($_COOKIE["connected_user"]) && !empty($_COOKIE["connected_user"])) {
         } else {
 
             $resource = $default_resource;
+
+            header("location:".PROJECT."customer/login");
+
+            exit;
             
         }
 

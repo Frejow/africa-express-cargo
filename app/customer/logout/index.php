@@ -1,5 +1,8 @@
 <?php 
 
-disconnected(); 
+if (disconnected()) {
 
-header("location:".PROJECT."customer/login");
+    session_destroy();
+
+    header("location:".PROJECT."customer/login");
+}

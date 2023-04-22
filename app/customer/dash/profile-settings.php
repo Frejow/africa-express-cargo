@@ -1,4 +1,4 @@
-<?php //die(var_dump($_SERVER)); 
+<?php //die(var_dump($data[0]['id'])); 
 include '..' . PROJECT . 'app/common/customer/1stpart.php';  ?>
 
 <div class="page-header d-print-none">
@@ -596,4 +596,12 @@ include '..' . PROJECT . 'app/common/customer/1stpart.php';  ?>
 </div>
 
 <?php include '..' . PROJECT . 'app/common/customer/2ndpart.php';
-session_destroy(); ?>
+
+unset($_SESSION['avatar_error']); 
+unset($_SESSION['personal_error']); 
+unset($_SESSION['password_error']); 
+unset($_SESSION['deactivation_error']);
+unset($_SESSION['deletion_error']);
+unset($_SESSION['data']); 
+
+?>

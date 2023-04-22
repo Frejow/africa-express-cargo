@@ -40,7 +40,7 @@ if (empty($errors)) {
             setcookie('connected_user_data', '', time() - 3600, '/');
         }
         
-        header("location:".PROJECT."customer/dash/packages-listings");
+        header("location:".PROJECT."customer/dash/packages-listings?theme=light");
 
         setcookie('user_data', '', time() - 3600, '/');
 
