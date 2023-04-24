@@ -1,4 +1,8 @@
-<?php include '..'.PROJECT.'app/common/customer/1stpart.php' ?>
+<?php 
+if (connected()) {
+    $_SESSION['current_url'] = "http://{$_SERVER['HTTP_HOST']}{$_SERVER['REQUEST_URI']}";
+}
+include '..'.PROJECT.'app/common/customer/1stpart.php'; ?>
 
 <div class="card">
     <div class="card-header">

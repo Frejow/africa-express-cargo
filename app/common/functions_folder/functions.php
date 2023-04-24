@@ -82,7 +82,7 @@ function disconnected(): bool
 
     return $is_disconnected;
 }
-
+ 
 
 function _database_login()
 {

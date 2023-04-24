@@ -1,4 +1,8 @@
-<?php //die(var_dump($data[0]['id'])); 
+<?php 
+if (connected()) {
+    $_SESSION['current_url'] = "http://{$_SERVER['HTTP_HOST']}{$_SERVER['REQUEST_URI']}";
+}
+//die(var_dump(sha1('00000000'))); 
 include '..' . PROJECT . 'app/common/customer/1stpart.php';  ?>
 
 <div class="page-header d-print-none">
@@ -597,11 +601,7 @@ include '..' . PROJECT . 'app/common/customer/1stpart.php';  ?>
 
 <?php include '..' . PROJECT . 'app/common/customer/2ndpart.php';
 
-unset($_SESSION['avatar_error']); 
-unset($_SESSION['personal_error']); 
-unset($_SESSION['password_error']); 
-unset($_SESSION['deactivation_error']);
-unset($_SESSION['deletion_error']);
-unset($_SESSION['data']); 
+unset($_SESSION['avatar_error'], $_SESSION['personal_error'], $_SESSION['password_error'],
+ $_SESSION['deactivation_error'], $_SESSION['deletion_error'], $_SESSION['data']); 
 
 ?>

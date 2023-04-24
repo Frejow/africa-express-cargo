@@ -3,6 +3,10 @@ session_start();
 
 include '..'.PROJECT."app/common/functions_folder/functions.php";
 
+if (!connected()) {
+    unset($_SESSION['current_url']);
+}
+
 $data = [];
 
 if (isset($_SESSION["connected"]) && !empty($_SESSION["connected"])) {
@@ -38,19 +42,46 @@ if (isset($_SESSION["connected"]) && !empty($_SESSION["connected"])) {
 
                 }
 
-            } else {
+            } elseif (($params[1] != 'dash' && $params[1] != 'logout' && $params[1] != 'dash-treatment')) {
+
+                if (connected()) {
+
+                    header("location:".$_SESSION['current_url']);
+
+                } else {
+
+                    $resource = $params[1];
+
+                }
+
+            } elseif (($params[1] == 'logout')) {
 
                 $resource = $params[1];
 
             }
 
+            elseif (($params[1] == 'dash-treatment')) {
+
+                $resource = $params[1];
+
+            }
+            
+
         } else {
 
-            $resource = $default_resource;
+            if (connected()) {
 
-            header("location:".PROJECT."customer/login");
+                header("location:".$_SESSION['current_url']);
 
-            exit;
+            } else {
+
+                $resource = $default_resource;
+
+                header("location:".PROJECT."customer/login");
+    
+                exit;
+
+            }
             
         }
 

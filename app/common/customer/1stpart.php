@@ -177,7 +177,7 @@
                     <span class="navbar-toggler-icon"></span>
                 </button>
                 <h1 class="navbar-brand navbar-brand-autodark d-none-navbar-horizontal pe-0 pe-md-3">
-                    <a href="#">
+                    <a href="<?= PROJECT ?>">
                         <img src='
                         <?php
                         if ($_SERVER['REQUEST_URI'] === $_SERVER['REDIRECT_URL']."?theme=light"){
@@ -189,7 +189,7 @@
                             echo PROJECT."public/images/aec_lightlogo.png";
                         }
                         ?>
-                        ' alt="Africa Express Cargo" class="navbar-brand-image">
+                        ' alt="Africa Express Cargo" title="Aller à l'accueil" class="navbar-brand-image">
                     </a>
                 </h1>
                 <div class="navbar-nav flex-row order-md-last">

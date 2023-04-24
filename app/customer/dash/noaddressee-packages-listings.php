@@ -1,4 +1,8 @@
-<?php include '..'.PROJECT.'app/common/customer/1stpart.php' ?>
+<?php 
+if (connected()) {
+    $_SESSION['current_url'] = "http://{$_SERVER['HTTP_HOST']}{$_SERVER['REQUEST_URI']}";
+}
+include '..'.PROJECT.'app/common/customer/1stpart.php'; ?>
 
 <div class="page-header d-print-none">
     <div class="container-xl d-flex" style="justify-content: center;">
