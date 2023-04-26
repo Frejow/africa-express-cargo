@@ -1,7 +1,4 @@
 <?php 
-if (connected()) {
-    $_SESSION['current_url'] = "http://{$_SERVER['HTTP_HOST']}{$_SERVER['REQUEST_URI']}";
-}
 //die(var_dump(sha1('00000000'))); 
 include '..' . PROJECT . 'app/common/customer/1stpart.php';  ?>
 
@@ -106,7 +103,7 @@ include '..' . PROJECT . 'app/common/customer/1stpart.php';  ?>
                                 if ($data[0]['avatar'] == 'null') {
                                 ?>
                                     <div class="col-md mt-3">
-                                        <a href="#" class="btn link-warning" data-bs-toggle="modal" data-bs-target="#modal-warning1" style="text-decoration: none;" name="submit">Mettre à jour</a>
+                                        <a href="#" class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#modal-warning1" style="text-decoration: none;" name="submit">Mettre à jour</a>
                                     </div>
                                 <?php
                                 }
@@ -118,11 +115,11 @@ include '..' . PROJECT . 'app/common/customer/1stpart.php';  ?>
                             if ($data[0]['avatar'] != 'null') {
                             ?>
                                 <div class="row mt-3 text-center">
-                                    <div class="col-auto">
-                                        <a href="#" class="btn link-warning" data-bs-toggle="modal" data-bs-target="#modal-warning1" style="text-decoration: none;">Mettre à jour</a>
+                                    <div class="col-md mb-1">
+                                        <a href="#" class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#modal-warning1" style="text-decoration: none;">Mettre à jour</a>
                                     </div>
 
-                                    <div class="col-auto"><button type="submit" name="avatar_deletion" class="btn link-danger" style="text-decoration: none;">
+                                    <div class="col-md"><button type="submit" name="avatar_deletion" class="btn btn-danger" style="text-decoration: none;">
                                             Retirer Avatar
                                 </button></div>
                                 </div>

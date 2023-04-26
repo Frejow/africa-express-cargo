@@ -161,6 +161,42 @@
             transform: rotate(360deg);
         }
         }
+
+        #preview {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            align-items: center;
+        }
+
+        #preview img {
+            margin: 2px;
+            max-width: 250px;
+            max-height: 250px;
+            width: auto;
+            height: auto;
+        }
+
+        #importButton {
+            width: 500px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        @media (max-width: 575px) {
+            #importButton {
+            width: 150px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            }
+        }
+
+        #importButton:hover{
+            overflow: auto;
+        }
+
     </style>
 </head>
 
@@ -189,7 +225,7 @@
                             echo PROJECT."public/images/aec_lightlogo.png";
                         }
                         ?>
-                        ' alt="Africa Express Cargo" title="Aller à l'accueil" class="navbar-brand-image">
+                        ' alt="Africa Express Cargo" title="Aller à l'accueil" data-bs-toggle="tooltip" data-bs-placement="top" class="px-0 navbar-brand-image">
                     </a>
                 </h1>
                 <div class="navbar-nav flex-row order-md-last">

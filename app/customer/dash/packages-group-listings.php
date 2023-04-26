@@ -136,7 +136,7 @@ include '..'.PROJECT.'app/common/customer/1stpart.php'; ?>
                                     </tbody>
                                 </table>
                             </div>
-                            <div class="card-footer d-flex align-items-center">
+                            <div class="table-responsive card-footer d-flex align-items-center">
                                 <p class="m-0 text-muted">Affichage <span>1</span> à <span>5</span> sur <span>20</span> lignes</p>
                                 <ul class="pagination m-0 ms-auto">
                                     <li class="page-item disabled">

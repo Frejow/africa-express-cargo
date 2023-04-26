@@ -603,6 +603,34 @@
         }
     </script>
 
+    <script>
+        function updatebuttonLabel() {
+            var fileInput = document.getElementById('filesToUpload');
+            var fileName = "";
+            for(var i = 0; i < fileInput.files.length && i < 4; i++){
+                fileName += fileInput.files[i].name + ", ";
+            }
+            fileName = fileName.substring(0, fileName.length - 2);
+            var importButton = document.getElementById('importButton');
+            importButton.value = fileName;
+            previewImages(fileInput.files);
+        }
+
+        function previewImages(files) {
+            var preview = document.getElementById('preview');
+            preview.innerHTML = "";
+            for(var i = 0; i < files.length && i < 4; i++){
+                var reader = new FileReader();
+                reader.onload = function(event) {
+                    var img = document.createElement('img');
+                    img.src = event.target.result;
+                    preview.appendChild(img);
+                }
+                reader.readAsDataURL(files[i]);
+            }
+        }
+    </script>
+
 </body>
 
 </html>
