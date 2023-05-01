@@ -5,6 +5,17 @@ if (connected()) {
 include '..' . PROJECT . 'app/common/customer/1stpart.php'; ?>
 
 <?php
+if (isset($_SESSION['error_msg']) && !empty($_SESSION['error_msg'])) {
+    $msg = $_SESSION['error_msg'];
+?>
+    <div class="swalDefaultError" role="alert">
+    </div>
+<?php
+    unset($_SESSION['error_msg']);
+}
+?>
+
+<?php
 
 $error = [];
 

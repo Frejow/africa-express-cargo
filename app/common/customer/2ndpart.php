@@ -87,20 +87,26 @@
                             </div>
                         </div>
                     </div><br>
-                    <?php
-                    if (!is_array($packages_listings[$key]["images"])) {
-                        $imgs = explode(' && ', $packages_listings[$key]["images"]);
-                        foreach ($imgs as $k => $value) {
-                    ?>
                     <div class="row row-cols g-3">
-                        <div class="col">
-                           <img src="<?=$imgs?>" alt="">
-                        </div>
-                    </div>
                     <?php
-                    }
-                }
+                    if (check_package_id_in_packages_images_tab($packages_listings[$key]["id"])) {
+                        $select_images = select_package_images($packages_listings[$key]["id"]);
+                        if (!empty($select_images)) {
+                        foreach ($select_images as $_key => $value) {
                     ?>
+                        <div class="col">
+                            <a data-fslightbox="gallery" href='<?=$select_images[$_key]['images']?>'>
+                                <!-- Photo -->
+                                <div class="img-responsive img-responsive-1x1 rounded border" style="background-image: url(<?=$select_images[$_key]['images']?>)"></div>
+                            </a>
+                        </div>
+                        <?php
+                            }
+                        }
+                    }
+                    ?>
+                    </div>
+                    
                 </div>
             </div>
         </div>

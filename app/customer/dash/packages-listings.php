@@ -150,8 +150,11 @@ if (isset($_SESSION['error_msg']) && !empty($_SESSION['error_msg'])) {
                                     </div>
                                     lignes
                                 </div>
-                                <div class="col-lg-4 col-xs mb-2 text-muted ms-auto">
-                                    Rechercher :
+                                <div class="col-lg-4 col-xs mb-2 text-muted ms-auto" style="display: flex;">
+                                    <div>
+                                        <span>Rechercher</span>
+                                    </div>
+                                    
                                     <div class="ms-2 d-inline-block">
                                         <input type="text" name="search" class="form-control" value="<?= isset($_SESSION['research']) ? $_SESSION['research'] : '' ?>" placeholder="N° de suivi">
                                     </div>
@@ -289,7 +292,7 @@ if (isset($_SESSION['error_msg']) && !empty($_SESSION['error_msg'])) {
                                     </button>
                                 </li>
                                 <li class="page-item page-link active"><?= $_SESSION['page'] ?></li>
-                                <li class="page-item">
+                                <li class="page-item <?= ($rows[0]['COUNT(*)'] === $n) ? "disabled" : "" ?>">
                                     <button type="submit" name="next" class="page-link">
                                         suivant <!-- Download SVG icon from http://tabler-icons.io/i/chevron-right -->
                                         <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">

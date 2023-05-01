@@ -94,6 +94,8 @@ if (isset($_FILES["filesToUpload"])) {
                     move_uploaded_file($_FILES['filesToUpload']['tmp_name'][$key], $newfolder . '/' . basename($_FILES['filesToUpload']['name'][$key]));
 
                     $newdata["images"][$key] = PROJECT . 'public/images/uploads/' . $data[0]['id'] . '/packages/' . $newdata['pack_trackN'] . '/' . basename($_FILES['filesToUpload']['name'][$key]);
+
+
                 
                 } else {
 
@@ -114,30 +116,60 @@ if (isset($_FILES["filesToUpload"])) {
         }
     } //die (var_dump($_FILES["filesToUpload"]["name"]));
 } else {
-    $newdata['images'] = "NO IMAGES";
+    $newdata['images'] = [];
 }
-if (!empty($newdata['images']) && $newdata['images'] != "NULL") {
-    $newdata['images'] = implode(' && ', $newdata['images']);
-}
+
 
 if (empty($error)) {
 
     if (add_package($newdata['pack_trackN'], $newdata['pack_count'], $newdata['pack_cost'], $newdata['pack_descp'], 
-    $newdata['pack_netW'], $newdata['pack_metricW'], $newdata['images'], $newdata['pack_type'], $data[0]['id'])) {
+    $newdata['pack_netW'], $newdata['pack_metricW'], $newdata['pack_type'], $data[0]['id'])) {
 
-        $_SESSION['success_msg'] = 'Votre colis a été ajouté avec succès';
+        if (!empty($newdata['images'])) {
+            for ($i = 0; $i < sizeof($newdata['images']); $i++) {
+                if (!add_images_for_package(select_package_id($newdata['pack_trackN'])[0]['id'], $newdata['images'][$i], $data[0]['id'])) {
+                    $_SESSION['error_msg'] = 'Une erreur est survenue. Réessayer. Si cela persiste, contactez-nous.';
 
-        if (isset(explode('?', $_SERVER['REQUEST_URI'])[1]) && explode('?', $_SERVER['REQUEST_URI'])[1] == "theme=light") {
-            header("location:" . PROJECT . "customer/dash/packages-listings?theme=light");
-        } elseif (isset(explode('?', $_SERVER['REQUEST_URI'])[1]) && explode('?', $_SERVER['REQUEST_URI'])[1] == "theme=dark") {
-            header("location:" . PROJECT . "customer/dash/packages-listings?theme=dark");
+                    $_SESSION['data'] = json_encode($updata);
+
+                    if (isset(explode('?', $_SERVER['REQUEST_URI'])[1]) && explode('?', $_SERVER['REQUEST_URI'])[1] == "theme=light") {
+                        header("location:" . PROJECT . "customer/dash/set-packages?theme=light");
+                    } elseif (isset(explode('?', $_SERVER['REQUEST_URI'])[1]) && explode('?', $_SERVER['REQUEST_URI'])[1] == "theme=dark") {
+                        header("location:" . PROJECT . "customer/dash/set-packages?theme=dark");
+                    } else {
+                        header("location:" . PROJECT . "customer/dash/set-packages?theme=light");
+                    }
+                } else {
+                    $_SESSION['imgs_insertion'] = 'Done';
+                }
+            }
+
+            if (isset($_SESSION['imgs_insertion'])) {
+
+                $_SESSION['success_msg'] = 'Votre colis a été ajouté avec succès';
+
+                if (isset(explode('?', $_SERVER['REQUEST_URI'])[1]) && explode('?', $_SERVER['REQUEST_URI'])[1] == "theme=light") {
+                    header("location:" . PROJECT . "customer/dash/packages-listings?theme=light");
+                } elseif (isset(explode('?', $_SERVER['REQUEST_URI'])[1]) && explode('?', $_SERVER['REQUEST_URI'])[1] == "theme=dark") {
+                    header("location:" . PROJECT . "customer/dash/packages-listings?theme=dark");
+                } else {
+                    header("location:" . PROJECT . "customer/dash/packages-listings?theme=light");
+                }
+            }
         } else {
-            header("location:" . PROJECT . "customer/dash/packages-listings?theme=light");
+            $_SESSION['success_msg'] = 'Votre colis a été ajouté avec succès';
+
+            if (isset(explode('?', $_SERVER['REQUEST_URI'])[1]) && explode('?', $_SERVER['REQUEST_URI'])[1] == "theme=light") {
+                header("location:" . PROJECT . "customer/dash/packages-listings?theme=light");
+            } elseif (isset(explode('?', $_SERVER['REQUEST_URI'])[1]) && explode('?', $_SERVER['REQUEST_URI'])[1] == "theme=dark") {
+                header("location:" . PROJECT . "customer/dash/packages-listings?theme=dark");
+            } else {
+                header("location:" . PROJECT . "customer/dash/packages-listings?theme=light");
+            }
         }
+
     }
     
-    //die (var_dump($newdata['images']));
-
 } elseif (!empty($error)) {
 
     //die ('erreur');

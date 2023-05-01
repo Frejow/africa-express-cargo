@@ -689,15 +689,15 @@ function check_tracking_number(string $trackN): bool
 }
 
 function add_package(string $tracking_number, $package_units_number, $worth, string $description, $net_weight,
- $volumetric_weight, $images, $product_type, int $user_id): bool
+ $volumetric_weight, $product_type, int $user_id): bool
 {
 
     $insertion = false;
 
     $database = _database_login();
 
-    $request = "INSERT INTO package (tracking_number, package_units_number, worth, description, net_weight, volumetric_weight, images, product_type, user_id) 
-    VALUES (:tracking_number, :package_units_number, :worth, :description, :net_weight, :volumetric_weight, :images, :product_type, :user_id)";
+    $request = "INSERT INTO package (tracking_number, package_units_number, worth, description, net_weight, volumetric_weight, product_type, user_id) 
+    VALUES (:tracking_number, :package_units_number, :worth, :description, :net_weight, :volumetric_weight, :product_type, :user_id)";
 
     $request_prepare = $database->prepare($request);
 
@@ -709,7 +709,6 @@ function add_package(string $tracking_number, $package_units_number, $worth, str
             'description' => $description,
             'net_weight' => $net_weight,
             'volumetric_weight' => $volumetric_weight,
-            'images' => $images,
             'product_type' => $product_type,
             'user_id' => $user_id
         ]
@@ -722,6 +721,113 @@ function add_package(string $tracking_number, $package_units_number, $worth, str
     }
 
     return $insertion;
+}
+
+function add_images_for_package(int $package_id, string $image, int $user_id): bool
+{
+
+    $insertion = false;
+
+    $database = _database_login();
+
+    $request = "INSERT INTO packages_images (package_id, images, user_id) VALUES (:package_id, :image, :user_id)";
+
+    $request_prepare = $database->prepare($request);
+
+    $request_execution = $request_prepare->execute(
+        [
+            'package_id' => $package_id,
+            'image' => $image,
+            'user_id' => $user_id
+        ]
+    );
+
+    if ($request_execution) {
+
+        $insertion = true;
+
+    }
+
+    return $insertion;
+}
+
+function select_package_id(string $trackN)
+{
+    $package_id = [];
+
+    $database = _database_login();
+
+    $request = "SELECT id FROM package WHERE tracking_number=:trackN";
+
+    $request_prepare = $database->prepare($request);
+
+    $request_execution = $request_prepare->execute([
+        'trackN' => $trackN
+    ]);
+
+    if ($request_execution) {
+
+        $data = $request_prepare->fetchAll(PDO::FETCH_ASSOC);
+
+        if (isset($data) && !empty($data) && is_array($data)) {
+
+            $package_id = $data;
+        }
+    }
+    return $package_id;
+}
+
+function check_package_id_in_packages_images_tab(string $package_id): bool
+{
+
+    $package_id_found = false;
+
+    $database = _database_login();
+
+    $request = "SELECT package_id FROM packages_images WHERE package_id = :package_id";
+
+    $request_prepare = $database->prepare($request);
+
+    $request_execution = $request_prepare->execute([
+        'package_id' => $package_id
+    ]);
+
+    if ($request_execution) {
+
+        $data = $request_prepare->fetchAll(PDO::FETCH_ASSOC);
+
+        if (isset($data) && !empty($data) && is_array($data)) {
+            $package_id_found = true;
+        }
+    }
+
+    return $package_id_found;
+}
+
+function select_package_images(int $package_id)
+{
+    $package_images = [];
+
+    $database = _database_login();
+
+    $request = "SELECT images FROM packages_images WHERE package_id=:package_id";
+
+    $request_prepare = $database->prepare($request);
+
+    $request_execution = $request_prepare->execute([
+        'package_id' => $package_id
+    ]);
+
+    if ($request_execution) {
+
+        $data = $request_prepare->fetchAll(PDO::FETCH_ASSOC);
+
+        if (isset($data) && !empty($data) && is_array($data)) {
+
+            $package_images = $data;
+        }
+    }
+    return $package_images;
 }
 
 function packages_list($page = 1, $packages_nb_per_page = 10, $status = 'undefined', $search = 'UNDEFINED', $user_id = '')

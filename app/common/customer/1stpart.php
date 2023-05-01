@@ -188,10 +188,27 @@
             overflow: hidden;
             text-overflow: ellipsis;
             }
+            .img_container {
+            display: flex;
+            flex-wrap: wrap;
+        }
         }
 
         #importButton:hover{
             overflow: auto;
+        }
+
+        .img_container {
+            display: flex;
+            flex-wrap: wrap;
+        }
+
+        .img_container img {
+            width: 100%;
+            height: auto;
+            margin: 5px;
+            max-width: 250px;
+            max-height: 250px;
         }
 
     </style>
