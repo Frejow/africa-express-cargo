@@ -5,7 +5,7 @@ if (connected()) {
 
 include '..' . PROJECT . 'app/common/customer/1stpart.php';
 
-//unset($_SESSION['next_page']);
+//unset($_SESSION['selected_status']);
 
 $_SESSION['page'] = 1; //die (var_dump($_SESSION['page']));
 
@@ -35,7 +35,7 @@ if (isset($_SESSION['research']) && !empty($_SESSION['research'])) {
     $_SESSION['search'] = $_SESSION['research'];
 }
 
-$packages_listings = packages_list($_SESSION['page'], $_SESSION['packages_nb_per_page'], $_SESSION['status'], strtoupper($_SESSION['search']));
+$packages_listings = packages_list($_SESSION['page'], $_SESSION['packages_nb_per_page'], $_SESSION['status'], strtoupper($_SESSION['search']), $data[0]['id']);
 
 //die (var_dump($packages_listings));
 
@@ -168,6 +168,9 @@ if (isset($_SESSION['error_msg']) && !empty($_SESSION['error_msg'])) {
                                     <div class="ms-2 d-inline-block">
                                         <select class="form-select" name="statusSelect" id="mySelect2">
                                             <option disabled selected value="">Statut</option>
+                                            <option <?php if (isset($_SESSION['selected_status']) && $_SESSION['selected_status'] == 'Tout Afficher') {
+                                                        echo 'selected';
+                                                    } ?> data-value="Tout Afficher">Tout Afficher</option>
                                             <option <?php if (isset($_SESSION['selected_status']) && $_SESSION['selected_status'] == 'En attente...') {
                                                         echo 'selected';
                                                     } ?> data-value="En attente...">En attente...</option>
@@ -216,6 +219,7 @@ if (isset($_SESSION['error_msg']) && !empty($_SESSION['error_msg'])) {
                                                 </td>
                                                 <td class="">
                                                     <span></span>
+                                                    
                                                     <?= !empty($packages_listings[$key]["product_type"]) ? $packages_listings[$key]["product_type"] : '-' ?>
                                                 </td>
                                                 <td>

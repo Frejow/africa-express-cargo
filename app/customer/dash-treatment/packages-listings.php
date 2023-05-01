@@ -20,6 +20,29 @@ if (isset($_POST['previous'])) {
     }
 }
 
+if (isset($_POST['statusSelect']) && $_POST['statusSelect'] != 'Tout Afficher') {
+
+    $_SESSION['selected_status'] = $_POST['statusSelect'];
+
+    if (isset($_SESSION['selected_status'])) {
+        if (isset(explode('?', $_SERVER['REQUEST_URI'])[1]) && explode('?', $_SERVER['REQUEST_URI'])[1] == "theme=light") {
+            header("location:" . PROJECT . "customer/dash/packages-listings?theme=light");
+        } elseif (isset(explode('?', $_SERVER['REQUEST_URI'])[1]) && explode('?', $_SERVER['REQUEST_URI'])[1] == "theme=dark") {
+            header("location:" . PROJECT . "customer/dash/packages-listings?theme=dark");
+        } else {
+            header("location:" . PROJECT . "customer/dash/packages-listings?theme=light");
+        }
+    }
+} else {
+    if (isset(explode('?', $_SERVER['REQUEST_URI'])[1]) && explode('?', $_SERVER['REQUEST_URI'])[1] == "theme=light") {
+        header("location:" . PROJECT . "customer/dash/packages-listings?theme=light");
+    } elseif (isset(explode('?', $_SERVER['REQUEST_URI'])[1]) && explode('?', $_SERVER['REQUEST_URI'])[1] == "theme=dark") {
+        header("location:" . PROJECT . "customer/dash/packages-listings?theme=dark");
+    } else {
+        header("location:" . PROJECT . "customer/dash/packages-listings?theme=light");
+    }
+}
+
 if (isset($_POST['search']) && !empty($_POST['search'])) {
     //die ('dedans');
     $_SESSION['research'] = secure($_POST['search']);
@@ -45,20 +68,7 @@ if (isset($_POST['search']) && !empty($_POST['search'])) {
 }
 
 
-if (isset($_POST['statusSelect'])) {
 
-    $_SESSION['selected_status'] = $_POST['statusSelect'];
-
-    if (isset($_SESSION['selected_status'])) {
-    if (isset(explode('?', $_SERVER['REQUEST_URI'])[1]) && explode('?', $_SERVER['REQUEST_URI'])[1] == "theme=light") {
-        header("location:" . PROJECT . "customer/dash/packages-listings?theme=light");
-    } elseif (isset(explode('?', $_SERVER['REQUEST_URI'])[1]) && explode('?', $_SERVER['REQUEST_URI'])[1] == "theme=dark") {
-        header("location:" . PROJECT . "customer/dash/packages-listings?theme=dark");
-    } else {
-        header("location:" . PROJECT . "customer/dash/packages-listings?theme=light");
-    }
-    }
-} 
 
 if (isset($_POST['next'])) {
     

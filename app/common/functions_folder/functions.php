@@ -1,6 +1,6 @@
 <?php
 use PHPMailer\PHPMailer\PHPMailer;
-use PHPMailer\PHPMailer\Exception;
+use PHPMailer\PHPMailer\Exception;    
 
 /**
  * Send mail.
@@ -661,8 +661,35 @@ function deleted_account(int $id): bool
     return $update_is_deleted_field;
 }
 
-function add_package(string $tracking_number, int $package_units_number, int $worth, string $description, string $net_weight,
- string $volumetric_weight, $images, $product_type, int $user_id): bool
+function check_tracking_number(string $trackN): bool
+{
+
+    $trackN_found = false;
+
+    $database = _database_login();
+
+    $request = "SELECT * FROM package WHERE tracking_number = :tracking_number";
+
+    $request_prepare = $database->prepare($request);
+
+    $request_execution = $request_prepare->execute([
+        'tracking_number' => $trackN
+    ]);
+
+    if ($request_execution) {
+
+        $data = $request_prepare->fetchAll(PDO::FETCH_ASSOC);
+
+        if (isset($data) && !empty($data) && is_array($data)) {
+            $trackN_found = true;
+        }
+    }
+
+    return $trackN_found;
+}
+
+function add_package(string $tracking_number, $package_units_number, $worth, string $description, $net_weight,
+ $volumetric_weight, $images, $product_type, int $user_id): bool
 {
 
     $insertion = false;
@@ -697,7 +724,7 @@ function add_package(string $tracking_number, int $package_units_number, int $wo
     return $insertion;
 }
 
-function packages_list($page = 1, $packages_nb_per_page = 10, $status = 'undefined', $search = 'UNDEFINED')
+function packages_list($page = 1, $packages_nb_per_page = 10, $status = 'undefined', $search = 'UNDEFINED', $user_id = '')
 {
 
     $packages_list = [];
@@ -706,25 +733,30 @@ function packages_list($page = 1, $packages_nb_per_page = 10, $status = 'undefin
 
     if ($status === 'undefined' && $search === 'UNDEFINED') {
 
-        $request = "SELECT * FROM package ORDER BY id DESC LIMIT " . ($page - 1) * $packages_nb_per_page . ", " . $packages_nb_per_page * $page;
-
-        $request_prepare = $database->prepare($request);
-    
-        $request_execution = $request_prepare->execute();
-
-    } elseif ($status !== 'undefined' && $search === 'UNDEFINED') {
-
-        $request = "SELECT * FROM package WHERE status = :status ORDER BY id DESC LIMIT " . ($page - 1) * $packages_nb_per_page . ", " . $packages_nb_per_page * $page;
+        $request = "SELECT * FROM package WHERE user_id = :user_id and is_deleted = :is_deleted ORDER BY id DESC LIMIT " . ($page - 1) * $packages_nb_per_page . ", " . $packages_nb_per_page * $page;
 
         $request_prepare = $database->prepare($request);
     
         $request_execution = $request_prepare->execute([
+            'user_id' => $user_id,
+            'is_deleted' => 0,
+        ]);
+
+    } elseif ($status !== 'undefined' && $search === 'UNDEFINED') {
+
+        $request = "SELECT * FROM package WHERE user_id = :user_id and status = :status and is_deleted = :is_deleted ORDER BY id DESC LIMIT " . ($page - 1) * $packages_nb_per_page . ", " . $packages_nb_per_page * $page;
+
+        $request_prepare = $database->prepare($request);
+    
+        $request_execution = $request_prepare->execute([
+            'user_id' => $user_id,
             'status' => $status,
+            'is_deleted' => 0,
         ]);
 
     } elseif ($status === 'undefined' && $search !== 'UNDEFINED') {
 
-        $request = "SELECT * FROM package WHERE ";
+        $request = "SELECT * FROM package WHERE user_id = :user_id and is_deleted = :is_deleted AND ";
 
         $search_terms_array = str_split($search);
 
@@ -740,11 +772,14 @@ function packages_list($page = 1, $packages_nb_per_page = 10, $status = 'undefin
 
         $request_prepare = $database->prepare($request);
     
-        $request_execution = $request_prepare->execute();
+        $request_execution = $request_prepare->execute([
+            'user_id' => $user_id,
+            'is_deleted' => 0,
+        ]);
 
     } elseif ($status !== 'undefined' && $search !== 'UNDEFINED') {
 
-        $request = "SELECT * FROM package WHERE ";
+        $request = "SELECT * FROM package WHERE user_id = :user_id and is_deleted = :is_deleted AND ";
 
         $search_terms_array = str_split($search);
 
@@ -761,7 +796,9 @@ function packages_list($page = 1, $packages_nb_per_page = 10, $status = 'undefin
         $request_prepare = $database->prepare($request);
     
         $request_execution = $request_prepare->execute([
+            'user_id' => $user_id,
             'status' => $status,
+            'is_deleted' => 0,
         ]);
     }
 

@@ -143,26 +143,26 @@ if (!empty($error)){
 if (isset($_POST['pass']) && !empty($_POST['pass']) && check_password($data[0]['id'], $_POST['pass'])) {
 
     if (isset($_POST['nom']) && !empty($_POST['nom']) && $_POST['nom'] != $data[0]['name']){
-        $newdata ['nom'] = $_POST['nom'];
+        $newdata ['nom'] = secure($_POST['nom']);
     }
     else {
         $newdata ['nom'] = $data[0]['name'];
     }
 
     if (isset($_POST['prenoms']) && !empty($_POST['prenoms']) && $_POST['prenoms'] != $data[0]['first_names']){
-        $newdata ['prenoms'] = $_POST['prenoms'];
+        $newdata ['prenoms'] = secure($_POST['prenoms']);
     } else {
         $newdata ['prenoms'] = $data[0]['first_names'];
     }
 
     if (isset($_POST['pseudo']) && !empty($_POST['pseudo']) && $_POST['pseudo'] != $data[0]['user_name']){
-        $newdata ['pseudo'] = $_POST['pseudo'];
+        $newdata ['pseudo'] = secure($_POST['pseudo']);
     } else {
         $newdata ['pseudo'] = $data[0]['user_name'];
     }
 
     if (isset($_POST['pays']) && !empty($_POST['pays']) && $_POST['pays'] != $data[0]['country']){
-        $newdata ['pays'] = $_POST['pays'];
+        $newdata ['pays'] = secure($_POST['pays']);
     } else {
         $newdata ['pays'] = $data[0]['country'];
     }
@@ -176,7 +176,7 @@ if (isset($_POST['pass']) && !empty($_POST['pass']) && check_password($data[0]['
     }*/
 
     if (isset($_POST['tel']) && !empty($_POST['tel']) && $_POST['tel'] != $data[0]['phone_number']){
-        $newdata ['tel'] = $_POST['tel'];
+        $newdata ['tel'] = secure($_POST['tel']);
     } else {
         $newdata ['tel'] = $data[0]['phone_number'];
     }

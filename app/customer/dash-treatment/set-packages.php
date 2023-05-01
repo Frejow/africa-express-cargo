@@ -5,12 +5,16 @@
 $newdata = [];
 $error = [];
 $updata = [];
-$_SESSION['images_errors'] = [];
+$_SESSION['set_pack_errors'] = [];
 $_SESSION['success_msg'] = [];
 
 
 if (isset($_POST['pack_trackN']) && !empty($_POST['pack_trackN'])) {
-    $newdata['pack_trackN'] = secure(strtoupper($_POST['pack_trackN']));
+    if (!check_tracking_number(secure(strtoupper($_POST['pack_trackN'])))) {
+        $newdata['pack_trackN'] = secure(strtoupper($_POST['pack_trackN']));
+    } else {
+        $error['pack_trackN'] = 'Ce numéro de suivi appartient déjà à un colis. Vérifier votre saisie.';
+    }
     $updata['pack_trackN'] = secure($_POST['pack_trackN']);
 } else {
     $newdata['pack_trackN'] = "NULL";
@@ -41,7 +45,7 @@ if (isset($_POST['pack_type']) && !empty($_POST['pack_type'])) {
     $newdata['pack_type'] = secure($_POST['pack_type']);
     $updata['pack_type'] = secure($_POST['pack_type']);
 } else {
-    $newdata['pack_type'] = "NULL";
+    $newdata['pack_type'] = "-";
 }
 
 if (isset($_POST['pack_netW']) && !empty($_POST['pack_netW'])) {
@@ -140,7 +144,7 @@ if (empty($error)) {
 
     $_SESSION['data'] = json_encode($updata);
 
-    $_SESSION['images_errors'] = $error;
+    $_SESSION['set_pack_errors'] = $error;
 
     if (isset(explode('?', $_SERVER['REQUEST_URI'])[1]) && explode('?', $_SERVER['REQUEST_URI'])[1] == "theme=light") {
         header("location:" . PROJECT . "customer/dash/set-packages?theme=light");

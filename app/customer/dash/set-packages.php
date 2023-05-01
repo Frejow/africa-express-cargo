@@ -8,8 +8,8 @@ include '..' . PROJECT . 'app/common/customer/1stpart.php'; ?>
 
 $error = [];
 
-if (isset($_SESSION["images_errors"]) && !empty($_SESSION["images_errors"])) {
-    $error = $_SESSION["images_errors"];
+if (isset($_SESSION["set_pack_errors"]) && !empty($_SESSION["set_pack_errors"])) {
+    $error = $_SESSION["set_pack_errors"];
 }
 
 $updata = [];
@@ -67,6 +67,11 @@ if (isset(explode('?', $_SERVER['REQUEST_URI'])[1]) && explode('?', $_SERVER['RE
                                         <div class="input-group input-group-flat">
                                             <input type="text" required class="form-control" name="pack_trackN" value="<?php echo (isset($updata["pack_trackN"]) && !empty($updata["pack_trackN"])) ? $updata["pack_trackN"] : "" ?>" placeholder="0X0YZ1" autocomplete="off">
                                         </div>
+                                        <?php
+                                        if (isset($error["pack_trackN"]) && !empty($error["pack_trackN"])) {
+                                            echo "<p style = 'color:red; font-size:13px;'>" . $error["pack_trackN"] . "</p>";
+                                        }
+                                        ?>
                                     </div>
                                 </div>
                                 <div class="col-lg-4">
@@ -200,5 +205,5 @@ if (isset(explode('?', $_SERVER['REQUEST_URI'])[1]) && explode('?', $_SERVER['RE
 
 <?php include '..' . PROJECT . 'app/common/customer/2ndpart.php';
 
-unset($_SESSION['images_errors'], $_SESSION['data']);
+unset($_SESSION['set_pack_errors'], $_SESSION['data']);
 ?>
