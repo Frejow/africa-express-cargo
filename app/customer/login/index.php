@@ -34,14 +34,8 @@
 <body>
 
     <div class="limiter">
+        
             <?php
-            /*
-            if (isset(explode('?', $_SERVER['REQUEST_URI'])[1]) 
-            && isset(explode('=', explode('?', $_SERVER['REQUEST_URI'])[1])[1]) 
-            && !empty(explode('=', explode('?', $_SERVER['REQUEST_URI'])[1])[1]) 
-            && explode('=', explode('?', $_SERVER['REQUEST_URI'])[1])[0] = 'success') {
-                $msg = rawurldecode(explode('=', explode('?', $_SERVER['REQUEST_URI'])[1])[1]);
-                */
             if (isset($_COOKIE['success_msg']) && !empty($_COOKIE['success_msg'])){
                 $msg = $_COOKIE['success_msg'];
             ?>
@@ -73,12 +67,12 @@
                     <span class="login100-form-title">
                         <i class="fa fa-sign-in"></i>
                         <?php
-                        if (isset($_COOKIE['pass_up']) && !empty($_COOKIE['pass_up'])){
-                            echo 'Reconnectez-vous';
+                        if (isset($_COOKIE['psp']) && !empty($_COOKIE['psp'])){
+                            echo 'Reconnectez-vous avec votre nouveau mot de passe';
+                            setcookie('psp', '', time() - 3600, '/');
                         } else {
                             echo 'Connexion';
                         }
-                        setcookie('pass_up', '', time() - 3600, '/');
                         ?>
                     </span>
 
@@ -92,12 +86,12 @@
 
                         $data = [];
 
-                        if (isset($_COOKIE["user_data"]) && !empty($_COOKIE["user_data"])) {
-                            $data = json_decode($_COOKIE["user_data"], true);
+                        if (isset($_COOKIE["ud"]) && !empty($_COOKIE["ud"])) {
+                            $data = json_decode($_COOKIE["ud"], true);
                         }
 
-                        if (isset($_COOKIE["connected_user_data"]) && !empty($_COOKIE["connected_user_data"])) {
-                            $data = json_decode($_COOKIE["connected_user_data"], true);
+                        if (isset($_COOKIE["cud"]) && !empty($_COOKIE["cud"])) {
+                            $data = json_decode($_COOKIE["cud"], true);
                         }
 
                     ?>
@@ -118,7 +112,7 @@
 
                     <!--<label for="pass" class="ml-3">Mot de passe<span class="text-danger">*</span></label>-->
                     <div class="wrap-input100 validate-input" data-validate="Champs requis">
-                        <input class="input100" type="password" id="pass" name="pass" placeholder="Mot de passe">
+                        <input class="input100" type="password" autocomplete="new-password" id="pass" name="pass" placeholder="Mot de passe">
                         <span class="focus-input100"></span>
                         <span class="symbol-input100">
                             <i class="fa fa-lock <?= isset($errors["pass"])? 'text-danger' : ''?>" aria-hidden="true"></i>
@@ -131,7 +125,7 @@
                     ?>
 
                     <div class="form-check text-center">
-                        <input class="form-check-input" type="checkbox" name="remember_me" id="flexCheckChecked" />
+                        <input class="form-check-input" <?= isset($_COOKIE['cud']) ? 'checked' : '' ?> type="checkbox" name="remember_me" id="flexCheckChecked" />
                         <label class="" for="flexCheckChecked" style="font-size: 14px; color: #666;">Se souvenir de moi</label>
                     </div>
 

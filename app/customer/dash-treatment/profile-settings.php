@@ -51,7 +51,7 @@ if (isset($_POST['pass_w']) && !empty($_POST['pass_w']) && check_password($data[
 
                 $rootpath = $_SERVER['DOCUMENT_ROOT'].'/africa-express-cargo/public/images/uploads';
 
-                $newfolder = $rootpath . '/'.$data[0]['user_name'];
+                $newfolder = $rootpath.'/'.$data[0]['id'].'/profile/';
 
                 if (!file_exists($newfolder)) {
 
@@ -61,7 +61,7 @@ if (isset($_POST['pass_w']) && !empty($_POST['pass_w']) && check_password($data[
 
                 move_uploaded_file($_FILES['fileToUpload']['tmp_name'], $newfolder.'/' . basename($_FILES['fileToUpload']['name']));
 
-                $newdata["avatar"] = PROJECT . 'public/images/uploads/'. $data[0]['user_name'] . '/' . basename($_FILES['fileToUpload']['name']);
+                $newdata["avatar"] = PROJECT . 'public/images/uploads/'. $data[0]['id'] . '/profile/' . basename($_FILES['fileToUpload']['name']);
 
             } else {
 
@@ -142,26 +142,26 @@ if (!empty($error)){
 
 if (isset($_POST['pass']) && !empty($_POST['pass']) && check_password($data[0]['id'], $_POST['pass'])) {
 
-    if (isset($_POST['nom']) && !empty($_POST['nom'] && $_POST['nom'] != $data[0]['name'])){
+    if (isset($_POST['nom']) && !empty($_POST['nom']) && $_POST['nom'] != $data[0]['name']){
         $newdata ['nom'] = $_POST['nom'];
     }
     else {
         $newdata ['nom'] = $data[0]['name'];
     }
 
-    if (isset($_POST['prenoms']) && !empty($_POST['prenoms'] && $_POST['prenoms'] != $data[0]['first_names'])){
+    if (isset($_POST['prenoms']) && !empty($_POST['prenoms']) && $_POST['prenoms'] != $data[0]['first_names']){
         $newdata ['prenoms'] = $_POST['prenoms'];
     } else {
         $newdata ['prenoms'] = $data[0]['first_names'];
     }
 
-    if (isset($_POST['pseudo']) && !empty($_POST['pseudo'] && $_POST['pseudo'] != $data[0]['user_name'])){
+    if (isset($_POST['pseudo']) && !empty($_POST['pseudo']) && $_POST['pseudo'] != $data[0]['user_name']){
         $newdata ['pseudo'] = $_POST['pseudo'];
     } else {
         $newdata ['pseudo'] = $data[0]['user_name'];
     }
 
-    if (isset($_POST['pays']) && !empty($_POST['pays'] && $_POST['pays'] != $data[0]['country'])){
+    if (isset($_POST['pays']) && !empty($_POST['pays']) && $_POST['pays'] != $data[0]['country']){
         $newdata ['pays'] = $_POST['pays'];
     } else {
         $newdata ['pays'] = $data[0]['country'];
@@ -175,7 +175,7 @@ if (isset($_POST['pass']) && !empty($_POST['pass']) && check_password($data[0]['
         $newdata ['mail'] = $data[0]['mail'];
     }*/
 
-    if (isset($_POST['tel']) && !empty($_POST['tel'] && $_POST['tel'] != $data[0]['phone_number'])){
+    if (isset($_POST['tel']) && !empty($_POST['tel']) && $_POST['tel'] != $data[0]['phone_number']){
         $newdata ['tel'] = $_POST['tel'];
     } else {
         $newdata ['tel'] = $data[0]['phone_number'];
@@ -227,11 +227,13 @@ if (isset($_POST['passw']) && !empty($_POST['passw']) && check_password($data[0]
 
         if (update_password($data[0]['mail'], sha1($newdata['newpass']))) {
 
+            setcookie('crl', $_SESSION['current_url'], time() + 365 * 24 * 3600, '/');
+
             disconnected();
 
             setcookie(
-                "pass_up",
-                'success',
+                "psp",
+                'psp',
                 [
                     'expires' => time() + 365 * 24 * 3600,
                     'path' => '/',

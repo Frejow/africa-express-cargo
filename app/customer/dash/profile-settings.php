@@ -1,5 +1,8 @@
 <?php 
 //die(var_dump(sha1('00000000'))); 
+if (connected()) {
+    $_SESSION['current_url'] = "http://{$_SERVER['HTTP_HOST']}{$_SERVER['REQUEST_URI']}";
+}
 include '..' . PROJECT . 'app/common/customer/1stpart.php';  ?>
 
 <div class="page-header d-print-none">
@@ -90,7 +93,7 @@ include '..' . PROJECT . 'app/common/customer/1stpart.php';  ?>
                                 <input type="file" name="fileToUpload" id="fileToUpload" style="display: none;" onchange="updateButtonLabel()">
 
                                 <div class="col-md text-center">
-                                    <input type="button" class="btn link-warning" style="text-decoration: none;" value="<?php echo (isset($updata["avatar"]) && !empty($updata["avatar"])) ? $updata["avatar"] : 'Importer un fichier' ?>" id="importButton" onclick="document.getElementById('fileToUpload').click();"/>
+                                    <input type="button" class="btn link-warning" style="text-decoration: none;" value="<?php echo (isset($updata["avatar"]) && !empty($updata["avatar"])) ? $updata["avatar"] : 'Importer un fichier' ?>" id="importbutton" onclick="document.getElementById('fileToUpload').click();"/>
                                 </div>
 
                                 <?php
@@ -142,7 +145,7 @@ include '..' . PROJECT . 'app/common/customer/1stpart.php';  ?>
 
                                             <div class="text-muted">Entrez votre mot de passe dans le champs suivant et cliquez sur le bouton "S'authentifier".</div>
 
-                                            <input type="password" class="mt-1 form-control" name="pass_w" placeholder="Entrez votre mot de passe">
+                                            <input type="password" autocomplete="new-password" class="mt-1 form-control" name="pass_w" placeholder="Entrez votre mot de passe">
 
                                         </div>
                                         <div class="modal-footer">
@@ -377,7 +380,7 @@ include '..' . PROJECT . 'app/common/customer/1stpart.php';  ?>
                                             <h3>Êtes-vous sûr ?</h3>
                                             <div class="text-muted">Selon les informations que vous changez, vous pourrez être amener à vous reconnecter. Si vous êtes certain de vous, entrez votre mot de passe dans le champs suivant et cliquez sur le bouton "Mettre à jour".</div>
 
-                                            <input type="password" class="mt-1 form-control" name="pass" placeholder="Entrez votre mot de passe">
+                                            <input type="password" autocomplete="new-password" class="mt-1 form-control" name="pass" placeholder="Entrez votre mot de passe">
 
                                         </div>
                                         <div class="modal-footer">
@@ -449,7 +452,7 @@ include '..' . PROJECT . 'app/common/customer/1stpart.php';  ?>
                                     <div>
                                         <div class="row g-2">
                                             <div class="col">
-                                                <input type="password" required name="passw" id="password" class="form-control" value="<?php echo (isset($updata["passw"]) && !empty($updata["passw"])) ? $updata["passw"] : "" ?>">
+                                                <input type="password" autocomplete="new-password" required name="passw" id="password" class="form-control" value="<?php echo (isset($updata["passw"]) && !empty($updata["passw"])) ? $updata["passw"] : "" ?>">
                                             </div>
                                         </div>
                                     </div>
@@ -533,7 +536,7 @@ include '..' . PROJECT . 'app/common/customer/1stpart.php';  ?>
 
                                                 <div class="text-muted">En désactivant votre compte, vous ne pourrez plus y accéder tant qu'il n'est pas réactivé soit par vous même (en procédant à une réinitialisation de votre mot de passe) soit par les responsables de la plateforme à votre demande sur notre support d'aide (<a class="text-warning" href="mailto:contact.support@africa-express-cargo.com">contact.support@africa-express-cargo.com</a>).Entrez votre mot de passe dans le champs suivant et confirmez la désactivation de votre compte.</div>
 
-                                                <input type="password" class="mt-1 form-control" name="pass-w" placeholder="Entrez votre mot de passe">
+                                                <input type="password" autocomplete="new-password" class="mt-1 form-control" name="pass-w" placeholder="Entrez votre mot de passe">
 
                                             </div>
                                             <div class="modal-footer">
@@ -569,7 +572,7 @@ include '..' . PROJECT . 'app/common/customer/1stpart.php';  ?>
 
                                                 <div class="text-muted">Cette action est irréversible. En supprimant votre compte, vous perdez toutes vos informations sur ce compte sans aucune possibilité de vous reconnecter à nouveau à moins de créer un nouveau compte. Entrez votre mot de passe dans le champs suivant et confirmez la suppression de votre compte.</div>
 
-                                                <input type="password" class="mt-1 form-control" name="pass--w" placeholder="Entrez votre mot de passe">
+                                                <input type="password" autocomplete="new-password" class="mt-1 form-control" name="pass--w" placeholder="Entrez votre mot de passe">
 
                                             </div>
                                             <div class="modal-footer">

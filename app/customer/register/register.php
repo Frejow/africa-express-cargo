@@ -37,7 +37,7 @@ if (isset($_POST["mail"]) && !empty($_POST["mail"]) && !filter_var($_POST["mail"
     $errors["mail"] = "Entrez une addresse email valide s'il vous plaît";
 }
 
-if (!isset($_POST["pass"]) || empty($_POST["pass"]) && !check_exist_userby_email($_POST["mail"])) {
+if (!isset($_POST["pass"]) || empty($_POST["pass"]) && !check_exist_userby_email($_POST["mail"], 0)) {
     $errors["pass"] = "Le champs du mot de passe est vide.";
 }
 

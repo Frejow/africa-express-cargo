@@ -82,7 +82,6 @@ function disconnected(): bool
 
     return $is_disconnected;
 }
- 
 
 function _database_login()
 {
@@ -542,17 +541,6 @@ function select_user_updated_info(int $id): bool
 
             $_SESSION ['connected'] = json_encode($data);
 
-            /*setcookie(
-                "connected_user",
-                json_encode($data),
-                [
-                    'expires' => time() + 365 * 24 * 3600,
-                    'path' => '/',
-                    'secure' => true,
-                    'httponly' => true,
-                ]
-            );*/
-
             $selected = true;
         }
     }
@@ -671,4 +659,144 @@ function deleted_account(int $id): bool
     }
 
     return $update_is_deleted_field;
+}
+
+function add_package(string $tracking_number, int $package_units_number, int $worth, string $description, string $net_weight,
+ string $volumetric_weight, $images, $product_type, int $user_id): bool
+{
+
+    $insertion = false;
+
+    $database = _database_login();
+
+    $request = "INSERT INTO package (tracking_number, package_units_number, worth, description, net_weight, volumetric_weight, images, product_type, user_id) 
+    VALUES (:tracking_number, :package_units_number, :worth, :description, :net_weight, :volumetric_weight, :images, :product_type, :user_id)";
+
+    $request_prepare = $database->prepare($request);
+
+    $request_execution = $request_prepare->execute(
+        [
+            'tracking_number' => $tracking_number,
+            'package_units_number' => $package_units_number,
+            'worth' => $worth,
+            'description' => $description,
+            'net_weight' => $net_weight,
+            'volumetric_weight' => $volumetric_weight,
+            'images' => $images,
+            'product_type' => $product_type,
+            'user_id' => $user_id
+        ]
+    );
+
+    if ($request_execution) {
+
+        $insertion = true;
+
+    }
+
+    return $insertion;
+}
+
+function packages_list($page = 1, $packages_nb_per_page = 10, $status = 'undefined', $search = 'UNDEFINED')
+{
+
+    $packages_list = [];
+
+    $database = _database_login();
+
+    if ($status === 'undefined' && $search === 'UNDEFINED') {
+
+        $request = "SELECT * FROM package ORDER BY id DESC LIMIT " . ($page - 1) * $packages_nb_per_page . ", " . $packages_nb_per_page * $page;
+
+        $request_prepare = $database->prepare($request);
+    
+        $request_execution = $request_prepare->execute();
+
+    } elseif ($status !== 'undefined' && $search === 'UNDEFINED') {
+
+        $request = "SELECT * FROM package WHERE status = :status ORDER BY id DESC LIMIT " . ($page - 1) * $packages_nb_per_page . ", " . $packages_nb_per_page * $page;
+
+        $request_prepare = $database->prepare($request);
+    
+        $request_execution = $request_prepare->execute([
+            'status' => $status,
+        ]);
+
+    } elseif ($status === 'undefined' && $search !== 'UNDEFINED') {
+
+        $request = "SELECT * FROM package WHERE ";
+
+        $search_terms_array = str_split($search);
+
+        $search_terms_count = count($search_terms_array);
+
+        for ($i = 0; $i < $search_terms_count; $i++) {
+            $request .= "tracking_number LIKE '%" . $search_terms_array[$i] . "%'";
+            if ($i != $search_terms_count - 1) {
+                $request .= " AND ";
+            }
+        }
+        $request .= " ORDER BY id DESC LIMIT " . ($page - 1) * $packages_nb_per_page . ", " . $packages_nb_per_page * $page;
+
+        $request_prepare = $database->prepare($request);
+    
+        $request_execution = $request_prepare->execute();
+
+    } elseif ($status !== 'undefined' && $search !== 'UNDEFINED') {
+
+        $request = "SELECT * FROM package WHERE ";
+
+        $search_terms_array = str_split($search);
+
+        $search_terms_count = count($search_terms_array);
+
+        for ($i = 0; $i < $search_terms_count; $i++) {
+            $request .= "tracking_number LIKE '%" . $search_terms_array[$i] . "%'";
+            if ($i != $search_terms_count - 1) {
+                $request .= " AND ";
+            }
+        }
+        $request .= " AND status = :status ORDER BY id DESC LIMIT " . ($page - 1) * $packages_nb_per_page . ", " . $packages_nb_per_page * $page;
+
+        $request_prepare = $database->prepare($request);
+    
+        $request_execution = $request_prepare->execute([
+            'status' => $status,
+        ]);
+    }
+
+    if ($request_execution) {
+
+        $data = $request_prepare->fetchAll(PDO::FETCH_ASSOC);
+
+        if (isset($data) && !empty($data) && is_array($data)) {
+
+            $packages_list = $data;
+        }
+    }
+
+    return $packages_list;
+}
+
+function count_rows_in_package_table()
+{
+
+    $rows = [];
+
+    $database = _database_login();
+
+    $request = "SELECT COUNT(*) FROM package";
+
+    $request_prepare = $database->prepare($request);
+
+    $request_execution = $request_prepare->execute();
+
+    if ($request_execution) {
+
+        $data = $request_prepare->fetchAll(PDO::FETCH_ASSOC);
+
+        $rows = $data;
+    }
+
+    return $rows;
 }

@@ -104,10 +104,7 @@
     }
     ?>
     <!-- CSS files -->
-    <link href='<?= PROJECT ?>public/libs/dropzone/dist/dropzone.css?202302251230' rel="stylesheet" />
     <link href='<?= PROJECT ?>public/css/tabler.min.css?202302251230' rel="stylesheet" />
-    <link href='<?= PROJECT ?>public/css/tabler-flags.min.css?202302251230' rel="stylesheet" />
-    <link href='<?= PROJECT ?>public/css/tabler-payments.min.css?202302251230' rel="stylesheet" />
     <link href='<?= PROJECT ?>public/css/tabler-vendors.min.css?202302251230' rel="stylesheet" />
     <link href='<?= PROJECT ?>public/css/demo.min.css?202302251230' rel="stylesheet" />
     <link href='<?= PROJECT ?>public/css/packstyle.css' rel="stylesheet" />

@@ -26,7 +26,7 @@ if (empty($errors)) {
         if (isset($_POST["remember_me"]) && !empty($_POST["remember_me"])){
         
             setcookie(
-                "connected_user_data",
+                "cud",
                 json_encode($data),
                 [
                     'expires' => time() + 365 * 24 * 3600,
@@ -37,12 +37,26 @@ if (empty($errors)) {
             );
         
         } else {
-            setcookie('connected_user_data', '', time() - 3600, '/');
+            setcookie('cud', '', time() - 3600, '/');
+        }
+
+        if (isset($_COOKIE['thm'])) {
+
+            header("location:".PROJECT."customer/dash/packages-listings".$_COOKIE['thm']);
+            setcookie('thm', '', time() - 3600, '/');
+
+        } elseif (isset($_COOKIE['crl'])) {
+
+            header("location:".$_COOKIE['crl']);
+            setcookie('crl', '', time() - 3600, '/');
+
+        } else {
+
+            header("location:".PROJECT."customer/dash/packages-listings?theme=light");
+
         }
         
-        header("location:".PROJECT."customer/dash/packages-listings?theme=light");
-
-        setcookie('user_data', '', time() - 3600, '/');
+        setcookie('ud', '', time() - 3600, '/');
 
     }
     elseif (!check_exist_userby_email_and_password($_POST["m_ps"], $_POST["pass"], 'CUSTOMER', 1, 1, 0) 
@@ -60,7 +74,7 @@ if (empty($errors)) {
         );
 
         setcookie(
-            "user_data",
+            "ud",
             json_encode($data),
             [
                 'expires' => time() + 365 * 24 * 3600,
@@ -81,7 +95,7 @@ else {
     $_SESSION["login_errors"] = $errors;
 
     setcookie(
-        "user_data",
+        "ud",
         json_encode($data),
         [
             'expires' => time() + 365 * 24 * 3600,

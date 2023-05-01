@@ -4,6 +4,22 @@ if (connected()) {
 }
 include '..' . PROJECT . 'app/common/customer/1stpart.php'; ?>
 
+<?php
+
+$error = [];
+
+if (isset($_SESSION["images_errors"]) && !empty($_SESSION["images_errors"])) {
+    $error = $_SESSION["images_errors"];
+}
+
+$updata = [];
+
+if (isset($_SESSION["data"]) && !empty($_SESSION["data"])) {
+    $updata = json_decode($_SESSION["data"], true);
+}
+
+?>
+
 <form action="
 <?php
 if (isset(explode('?', $_SERVER['REQUEST_URI'])[1]) && explode('?', $_SERVER['REQUEST_URI'])[1] == "theme=light") {
@@ -39,27 +55,48 @@ if (isset(explode('?', $_SERVER['REQUEST_URI'])[1]) && explode('?', $_SERVER['RE
                                     </svg>Retour
                                 </a>
                             </div>
+                            <button type="submit" class="btn text-white ms-auto btn-warning">
+                                Ajouter
+                            </button>
                         </div>
                         <div class="card-body">
                             <div class="row">
-                                <div class="col-lg-6">
+                                <div class="col-lg-4">
                                     <div class="mb-3">
-                                        <label class="form-label">Nom du colis</label>
-                                        <input type="text" required class="form-control" name="pack_name" placeholder="Entrez le nom de votre colis">
+                                        <label class="form-label">Numéro de suivi [ Requis ]</label>
+                                        <div class="input-group input-group-flat">
+                                            <input type="text" required class="form-control" name="pack_trackN" value="<?php echo (isset($updata["pack_trackN"]) && !empty($updata["pack_trackN"])) ? $updata["pack_trackN"] : "" ?>" placeholder="0X0YZ1" autocomplete="off">
+                                        </div>
                                     </div>
                                 </div>
-                                <div class="col-lg-6">
+                                <div class="col-lg-4">
+                                    <div class="mb-3">
+                                        <label class="form-label">Nombre</label>
+                                        <input type="text" class="form-control" name="pack_count" value="<?php echo (isset($updata["pack_count"]) && !empty($updata["pack_count"])) ? $updata["pack_count"] : "" ?>" placeholder="Nombre d'unités">
+                                    </div>
+                                </div>
+                                <div class="col-lg-4">
                                     <div class="mb-3">
                                         <label class="form-label">Valeur [FCFA]</label>
-                                        <input type="number" required class="form-control" name="pack_cost" placeholder="Coût d'achat">
+                                        <input type="number" class="form-control" name="pack_cost" value="<?php echo (isset($updata["pack_cost"]) && !empty($updata["pack_cost"])) ? $updata["pack_cost"] : "" ?>" placeholder="Coût d'achat">
                                     </div>
                                 </div>
                             </div>
-                            <label class="form-label">Type de produits</label>
+                            <div class="row">
+                                <div class="col-lg-12">
+                                    <div>
+                                        <label class="form-label">Description du colis [ Requis ]</label>
+                                        <textarea class="form-control" required name="pack_descp" rows="3"><?php echo (isset($updata["pack_descp"]) && !empty($updata["pack_descp"])) ? $updata["pack_descp"] : "" ?></textarea>
+                                    </div>
+                                </div>
+                            </div>                        
+                        </div>
+                        <div class="card-body">
+                        <label class="form-label">Type de produits</label>
                             <div class="form-selectgroup-boxes row mb-3">
                                 <div class="col-lg-4">
                                     <label class="form-selectgroup-item">
-                                        <input type="radio" name="pack_type" value="Normal" class="form-selectgroup-input" checked>
+                                        <input type="radio" name="pack_type" <?php echo (isset($updata["pack_type"]) && !empty($updata["pack_type"]) && $updata["pack_type"] == "Normal") ? "checked" : "" ?> value="Normal" class="form-selectgroup-input">
                                         <span class="form-selectgroup-label d-flex align-items-center p-3">
                                             <span class="me-3">
                                                 <span class="form-selectgroup-check"></span>
@@ -73,7 +110,7 @@ if (isset(explode('?', $_SERVER['REQUEST_URI'])[1]) && explode('?', $_SERVER['RE
                                 </div>
                                 <div class="col-lg-4">
                                     <label class="form-selectgroup-item">
-                                        <input type="radio" name="pack_type" value="Spécial" class="form-selectgroup-input">
+                                        <input type="radio" name="pack_type" <?php echo (isset($updata["pack_type"]) && !empty($updata["pack_type"]) && $updata["pack_type"] == "Spécial") ? "checked" : "" ?> value="Spécial" class="form-selectgroup-input">
                                         <span class="form-selectgroup-label d-flex align-items-center p-3">
                                             <span class="me-3">
                                                 <span class="form-selectgroup-check"></span>
@@ -87,7 +124,7 @@ if (isset(explode('?', $_SERVER['REQUEST_URI'])[1]) && explode('?', $_SERVER['RE
                                 </div>
                                 <div class="col-lg-4">
                                     <label class="form-selectgroup-item">
-                                        <input type="radio" name="pack_type" value="A batterie" class="form-selectgroup-input">
+                                        <input type="radio" name="pack_type" <?php echo (isset($updata["pack_type"]) && !empty($updata["pack_type"]) && $updata["pack_type"] == "A batterie") ? "checked" : "" ?> value="A batterie" class="form-selectgroup-input">
                                         <span class="form-selectgroup-label d-flex align-items-center p-3">
                                             <span class="me-3">
                                                 <span class="form-selectgroup-check"></span>
@@ -101,34 +138,16 @@ if (isset(explode('?', $_SERVER['REQUEST_URI'])[1]) && explode('?', $_SERVER['RE
                                 </div>
                             </div>
                             <div class="row">
-                                <div class="col-lg-4">
-                                    <div class="mb-3">
-                                        <label class="form-label">Numéro de suivi</label>
-                                        <div class="input-group input-group-flat">
-                                            <input type="text" required class="form-control ps-0" name="pack_trackN" value="" placeholder="XXXXXXXX" autocomplete="off">
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-lg-4">
+                                <div class="col-lg-6">
                                     <div class="mb-3">
                                         <label class="form-label">Poids Net [KG]</label>
-                                        <input type="number" class="form-control" name="pack_netW" value="0">
+                                        <input type="number" step="0.00000000001" class="form-control" placeholder="0" name="pack_netW" value="<?php echo (isset($updata["pack_netW"]) && !empty($updata["pack_netW"])) ? $updata["pack_netW"] : "" ?>">
                                     </div>
                                 </div>
-                                <div class="col-lg-4">
+                                <div class="col-lg-6">
                                     <div class="mb-3">
                                         <label class="form-label">Poids Volumétrique [CBM]</label>
-                                        <input type="number" class="form-control" name="pack_metricW" value="0">
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="card-body">
-                            <div class="row">
-                                <div class="col-lg-12">
-                                    <div>
-                                        <label class="form-label">Description du colis</label>
-                                        <textarea class="form-control" required name="pack_descp" rows="3"></textarea>
+                                        <input type="number" step="0.00000000001" class="form-control" placeholder="0" name="pack_metricW" value="<?php echo (isset($updata["pack_metricW"]) && !empty($updata["pack_metricW"])) ? $updata["pack_metricW"] : "" ?>">
                                     </div>
                                 </div>
                             </div>
@@ -144,9 +163,12 @@ if (isset(explode('?', $_SERVER['REQUEST_URI'])[1]) && explode('?', $_SERVER['RE
                                         </svg>
                                     </label>
                                     <input type="file" name="filesToUpload[]" id="filesToUpload" style="display:none" multiple onchange="updatebuttonLabel()">
-                                    <input type="button" class="mb-2 btn link-warning" value="AJOUTER DES IMAGES [ MAXIMUM 04 ]" id="importButton" onclick="document.getElementById('filesToUpload').click();" />
-                                    <!--<input type="submit" value="Envoyer" name="submit">-->
-
+                                    <input type="button" class="mb-2 btn <?= isset($updata["images"]) ? 'btn-danger' : 'link-warning' ?>" value="<?php echo (isset($updata["images"]) && !empty($updata["images"])) ? $updata["images"] : "AJOUTER DES IMAGES [ MAXIMUM 04 ]" ?>" id="importButton" onclick="document.getElementById('filesToUpload').click();" />
+                                    <?php
+                                    if (isset($error["images"]) && !empty($error["images"])) {
+                                        echo "<p style = 'color:red; font-size:13px;'>" . $error["images"][0] . "</p>";
+                                    }
+                                    ?>
                                     <div style="display: flex;" id="preview"></div>
                                 </div>
                             </div>
@@ -166,7 +188,7 @@ if (isset(explode('?', $_SERVER['REQUEST_URI'])[1]) && explode('?', $_SERVER['RE
                                 Annuler
                             </a>
                             <button type="submit" class="btn text-white ms-auto btn-warning">
-                                Enregistrer
+                                Ajouter
                             </button>
                         </div>
                     </div>
@@ -176,4 +198,7 @@ if (isset(explode('?', $_SERVER['REQUEST_URI'])[1]) && explode('?', $_SERVER['RE
     </div>
 </form>
 
-<?php include '..' . PROJECT . 'app/common/customer/2ndpart.php' ?>
+<?php include '..' . PROJECT . 'app/common/customer/2ndpart.php';
+
+unset($_SESSION['images_errors'], $_SESSION['data']);
+?>

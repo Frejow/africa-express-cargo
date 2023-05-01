@@ -24,8 +24,12 @@
             </div>
         </footer>
     </div>
+    <?php
+    if (isset($packages_listings) && !empty($packages_listings)) {
 
-    <div class="modal modal-blur fade" id="modal-packages-detail" tabindex="-1" role="dialog" aria-hidden="true">
+        foreach ($packages_listings as $key => $package) {
+    ?>
+    <div class="modal modal-blur fade" id="<?= 'modal-packages-detail'.$key ?>" tabindex="-1" data-bs-backdrop = 'static' role="dialog" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered modal-lg modal-dialog-scrollable" role="document">
             <div class="modal-content">
                 <div class="modal-header">
@@ -35,77 +39,77 @@
                 <div class="modal-body">
                     <div class="datagrid">
                         <div class="datagrid-item">
-                            <div class="datagrid-title">Nom</div>
-                            <div class="datagrid-content">Casque Audio</div>
+                            <div class="datagrid-title">Description</div>
+                            <div class="datagrid-content">
+                            <?= $packages_listings[$key]["description"] ?>
+                            </div>
                         </div>
                         <div class="datagrid-item">
                             <div class="datagrid-title">Type d'Envoi</div>
-                            <div class="datagrid-content">Maritime</div>
+                            <div class="datagrid-content">
+                            <?= !empty($packages_listings[$key]["shipping_type"]) ? $packages_listings[$key]["shipping_type"] : '-' ?>   
+                            </div>
                         </div>
                         <div class="datagrid-item">
-                            <div class="datagrid-title">Poids Net</div>
-                            <div class="datagrid-content">300Gramme</div>
+                            <div class="datagrid-title">Poids Net (KG)</div>
+                            <div class="datagrid-content">
+                            <?= !empty($packages_listings[$key]["net_weight"]) ? $packages_listings[$key]["net_weight"] : '-' ?>   
+                            </div>
                         </div>
                         <div class="datagrid-item">
-                            <div class="datagrid-title">Poids Volumétrique</div>
-                            <div class="datagrid-content">–</div>
+                            <div class="datagrid-title">Poids Volumétrique (CBM)</div>
+                            <div class="datagrid-content">
+                            <?= !empty($packages_listings[$key]["metric_weight"]) ? $packages_listings[$key]["metric_weight"] : '-' ?>
+                            </div>
                         </div>
                         <div class="datagrid-item">
-                            <div class="datagrid-title">Valeur</div>
-                            <div class="datagrid-content">$50</div>
+                            <div class="datagrid-title">Valeur (FCFA)</div>
+                            <div class="datagrid-content">
+                            <?= !empty($packages_listings[$key]["worth"]) ? $packages_listings[$key]["worth"] : '-' ?>
+                            </div>
                         </div>
                         <div class="datagrid-item">
                             <div class="datagrid-title">Nombre</div>
-                            <div class="datagrid-content">01</div>
+                            <div class="datagrid-content">
+                            <?= !empty($packages_listings[$key]["package_units_number"]) ? $packages_listings[$key]["package_units_number"] : '-' ?>
+                            </div>
                         </div>
                         <div class="datagrid-item">
                             <div class="datagrid-title">Coût Unitaire D'Expédition (CUE)</div>
-                            <div class="datagrid-content">10000 Fcfa / pcs</div>
+                            <div class="datagrid-content">
+                            <?= !empty($packages_listings[$key]["shipping_unit_cost"]) ? $packages_listings[$key]["shipping_unit_cost"].' / pcs' : '-' ?>
+                            </div>
                         </div>
                         <div class="datagrid-item">
                             <div class="datagrid-title">Coût Expédition (CUE*Nombre)</div>
-                            <div class="datagrid-content">10000 Fcfa</div>
-                        </div>
-                        <div class="datagrid-item">
-                            <div class="datagrid-title">Reçu</div>
                             <div class="datagrid-content">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="icon text-green" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-                                    <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-                                    <path d="M5 12l5 5l10 -10" />
-                                </svg>
-                            </div>
-                        </div>
-                        <div class="datagrid-item">
-                            <div class="datagrid-title">Description</div>
-                            <div class="datagrid-content">
-                                Casque audio de marque Bose, couleur noir.
+                            <?= !empty($packages_listings[$key]["shipping_cost"]) ? $packages_listings[$key]["shipping_cost"] : '-' ?>
                             </div>
                         </div>
                     </div><br>
+                    <?php
+                    if (!is_array($packages_listings[$key]["images"])) {
+                        $imgs = explode(' && ', $packages_listings[$key]["images"]);
+                        foreach ($imgs as $k => $value) {
+                    ?>
                     <div class="row row-cols g-3">
                         <div class="col">
-                            <a data-fslightbox="gallery" href='<?= PROJECT ?>public/images/img-6.png'>
-                                <!-- Photo -->
-                                <div class="img-responsive img-responsive-1x1 rounded border" style="background-image: url(<?= PROJECT ?>public/images/img-6.png)"></div>
-                            </a>
-                        </div>
-                        <div class="col">
-                            <a data-fslightbox="gallery" href='<?= PROJECT ?>public/images/img-7.png'>
-                                <!-- Photo -->
-                                <div class="img-responsive img-responsive-1x1 rounded border" style="background-image: url(<?= PROJECT ?>public/images/img-7.png)"></div>
-                            </a>
-                        </div>
-                        <div class="col">
-                            <a data-fslightbox="gallery" href='<?= PROJECT ?>public/images/img-8.png'>
-                                <!-- Photo -->
-                                <div class="img-responsive img-responsive-1x1 rounded border" style="background-image: url(<?= PROJECT ?>public/images/img-8.png)"></div>
-                            </a>
+                           <img src="<?=$imgs?>" alt="">
                         </div>
                     </div>
+                    <?php
+                    }
+                }
+                    ?>
                 </div>
             </div>
         </div>
     </div>
+    <?php
+                                    
+        }
+    }
+    ?>
 
     <div class="modal modal-blur fade" id="modal-packages-ingroup-detail" tabindex="-1" role="dialog" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered modal-lg modal-dialog-scrollable" role="document">
@@ -598,7 +602,7 @@
         function updateButtonLabel() {
             var fileInput = document.getElementById('fileToUpload');
             var fileName = fileInput.value.split('\\').pop();
-            var importButton = document.getElementById('importButton');
+            var importButton = document.getElementById('importbutton');
             importButton.value = fileName;
         }
     </script>
@@ -629,6 +633,28 @@
                 reader.readAsDataURL(files[i]);
             }
         }
+    </script>
+
+    <script>
+        $(document).ready(function() {
+            $('#mySelect option').click(function() {
+                var value = $(this).val();
+                if (value) {
+                    $('#myForm').submit();
+                }
+            });
+        });
+    </script>
+
+    <script>
+        $(document).ready(function() {
+            $('#mySelect2 option').click(function() {
+                var value = $(this).data('value');
+                if (value) {
+                    $('#myForm').submit();
+                }
+            });
+        });
     </script>
 
 </body>
