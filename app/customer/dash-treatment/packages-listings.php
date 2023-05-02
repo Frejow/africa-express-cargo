@@ -67,9 +67,6 @@ if (isset($_POST['search']) && !empty($_POST['search'])) {
     }
 }
 
-
-
-
 if (isset($_POST['next'])) {
     
     $_SESSION['next_page'] = $_SESSION['page'] + 1;
@@ -114,3 +111,21 @@ if (isset($_POST['select'])) {
     
 } 
 
+if (isset($_POST['package_deletion']) && !empty($_POST['package_deletion'])) {
+
+    //die (var_dump($_POST['package_deletion']));
+    
+    if (deleted_package($_POST['package_deletion'])) {
+
+        $_SESSION['success_msg'] = 'Votre colis N°'. $_POST['package_deletion'] .' a été supprimé avec succès';
+
+        if (isset(explode('?', $_SERVER['REQUEST_URI'])[1]) && explode('?', $_SERVER['REQUEST_URI'])[1] == "theme=light") {
+            header("location:" . PROJECT . "customer/dash/packages-listings?theme=light");
+        } elseif (isset(explode('?', $_SERVER['REQUEST_URI'])[1]) && explode('?', $_SERVER['REQUEST_URI'])[1] == "theme=dark") {
+            header("location:" . PROJECT . "customer/dash/packages-listings?theme=dark");
+        } else {
+            header("location:" . PROJECT . "customer/dash/packages-listings?theme=light");
+        }
+
+    }
+} 

@@ -136,7 +136,9 @@ if (isset($_SESSION['error_msg']) && !empty($_SESSION['error_msg'])) {
                                     Afficher
                                     <div class="mx-2 d-inline-block">
                                         <select class="form-select" name="select" id="mySelect">
-                                            <option value="10">10</option>
+                                            <option <?php if (isset($_SESSION['select_packages_nb_per_page']) && $_SESSION['select_packages_nb_per_page'] == 10) {
+                                                        echo 'selected';
+                                                    } ?> value="10">10</option>
                                             <option <?php if (isset($_SESSION['select_packages_nb_per_page']) && $_SESSION['select_packages_nb_per_page'] == 15) {
                                                         echo 'selected';
                                                     } ?> value="15">15</option>
@@ -154,7 +156,7 @@ if (isset($_SESSION['error_msg']) && !empty($_SESSION['error_msg'])) {
                                     <div>
                                         <span>Rechercher</span>
                                     </div>
-                                    
+
                                     <div class="ms-2 d-inline-block">
                                         <input type="text" name="search" class="form-control" value="<?= isset($_SESSION['research']) ? $_SESSION['research'] : '' ?>" placeholder="N° de suivi">
                                     </div>
@@ -203,14 +205,14 @@ if (isset($_SESSION['error_msg']) && !empty($_SESSION['error_msg'])) {
                                         <th class="">N° de suivi</th>
                                         <th>Type de produits</th>
                                         <th>Statut</th>
-                                        <th>Groupe Colis</th>
+                                        <th>-> Groupe Colis ?</th>
                                         <th></th>
-                                        <th></th>
+                                        <!--<th></th>-->
                                         <th></th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <?php 
+                                    <?php
                                     if (isset($packages_listings) && !empty($packages_listings)) {
                                         $n = 0;
                                         foreach ($packages_listings as $key => $package) {
@@ -222,11 +224,26 @@ if (isset($_SESSION['error_msg']) && !empty($_SESSION['error_msg'])) {
                                                 </td>
                                                 <td class="">
                                                     <span></span>
-                                                    
+
                                                     <?= !empty($packages_listings[$key]["product_type"]) ? $packages_listings[$key]["product_type"] : '-' ?>
                                                 </td>
                                                 <td>
-                                                    <span class="badge bg-success me-1"></span> <?= $packages_listings[$key]["status"] ?>
+                                                    <span class="badge 
+                                                    <?php if ($packages_listings[$key]["status"] == 'En attente...') {
+                                                        echo 'bg-secondary';
+                                                    } elseif ($packages_listings[$key]["status"] == 'En transit') {
+                                                        echo 'bg-primary';
+                                                    } elseif ($packages_listings[$key]["status"] == 'Entrepôt Chine') {
+                                                        echo 'bg-dark';
+                                                    } elseif ($packages_listings[$key]["status"] == 'Entrepôt Bénin') {
+                                                        echo 'bg-warning';
+                                                    } elseif ($packages_listings[$key]["status"] == 'Livrer') {
+                                                        echo 'bg-success';
+                                                    }
+                                                    ?>
+                                                    me-1"></span>
+
+                                                    <?= $packages_listings[$key]["status"] ?>
                                                 </td>
                                                 <td>
                                                     <?= !empty($packages_listings[$key]["customer_package_group_id"]) ? '<a href = "#">Oui -> ' . $packages_listings[$key]["customer_package_group_id"] . '</a>' : 'Non' ?>
@@ -238,6 +255,7 @@ if (isset($_SESSION['error_msg']) && !empty($_SESSION['error_msg'])) {
                                                         </a>
                                                     </span>
                                                 </td>
+                                                <!--
                                                 <td class="text-end">
                                                     <span class="">
                                                         <a class="btn-link link-warning" href='
@@ -255,16 +273,54 @@ if (isset($_SESSION['error_msg']) && !empty($_SESSION['error_msg'])) {
                                                         </a>
                                                     </span>
                                                 </td>
+                                                -->
                                                 <td class="text-end">
                                                     <span class="">
-                                                        <a class="btn-link link-danger" href="" data-bs-toggle="modal" data-bs-target="">
+                                                        <a class="btn-link link-danger
+                                                        <?php if ($packages_listings[$key]["status"] === 'En attente...' || $packages_listings[$key]["status"] === 'Livrer') {
+                                                            echo '';
+                                                        } else {
+                                                            echo 'disabled text-muted';
+                                                        }
+                                                        ?>
+                                                        " href="#" data-bs-toggle="modal" data-bs-target= "<?="#package_deletionModal".$key?>" >
                                                             Supprimer
                                                         </a>
                                                     </span>
                                                 </td>
                                             </tr>
-                                        <?php
+                                            <div class="modal modal-blur fade" id="<?="package_deletionModal".$key?>" tabindex="-1" role="dialog" aria-hidden="true">
+                                                <div class="modal-dialog modal-sm modal-dialog-centered" role="document">
+                                                    <div class="modal-content">
+                                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                        <div class="modal-status bg-danger"></div>
+                                                        <div class="modal-body text-center py-4">
+                                                            <!-- Download SVG icon from http://tabler-icons.io/i/alert-triangle -->
+                                                            <svg xmlns="http://www.w3.org/2000/svg" class="icon mb-2 text-danger icon-lg" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                                                <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                                                                <path d="M12 9v2m0 4v.01" />
+                                                                <path d="M5 19h14a2 2 0 0 0 1.84 -2.75l-7.1 -12.25a2 2 0 0 0 -3.5 0l-7.1 12.25a2 2 0 0 0 1.75 2.75" />
+                                                            </svg>
 
+                                                            <h3>Cette action est irréversible. Êtes-vous sûr(e) ?</h3>
+
+                                                        </div>
+                                                        <div class="modal-footer">
+                                                            <div class="w-100">
+                                                                <div class="row">
+                                                                    <div class="col"><a href="#" class="btn w-100" data-bs-dismiss="modal">
+                                                                            Annuler
+                                                                        </a></div>
+                                                                    <div class="col"><button type="submit" name="package_deletion" value="<?= $packages_listings[$key]["tracking_number"] ?>" class="btn btn-danger w-100" data-bs-dismiss="modal">
+                                                                            Confirmer
+                                                                        </button></div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        <?php
                                         }
                                         $n = $key + 1;
                                     } else {
@@ -279,7 +335,7 @@ if (isset($_SESSION['error_msg']) && !empty($_SESSION['error_msg'])) {
                         </div>
 
                         <div class="table-responsive card-footer d-flex align-items-center">
-                            <p class="m-0 text-muted">Affichage de <span><?= $n ?></span> ligne (s) sur <span><?= $rows[0]['COUNT(*)'] ?></span> au total</p>
+                            <p class="m-0 text-muted">Affichage de <span><?= $n ?></span> ligne(s) sur <span><?= $rows[0]['COUNT(*)'] ?></span> au total</p>
                             <ul class="pagination m-0 ms-auto">
                                 <li class="page-item <?= ($_SESSION['page'] == 1) ? "disabled" : "" ?>">
                                     <button type="submit" name="previous" class="page-link">
@@ -312,5 +368,16 @@ if (isset($_SESSION['error_msg']) && !empty($_SESSION['error_msg'])) {
 
 <?php include '..' . PROJECT . 'app/common/customer/2ndpart.php';
 
-unset($_SESSION['selected_status'], $_SESSION['select_packages_nb_per_page'], $_SESSION['next_page'], $_SESSION['research']);
+if (isset($_SESSION['selected_status'])) {
+    unset($_SESSION['selected_status']);
+} elseif (isset($_SESSION['select_packages_nb_per_page'])) {
+    unset($_SESSION['select_packages_nb_per_page']);
+} elseif (isset($_SESSION['next_page'])) {
+    unset($_SESSION['next_page']);
+} elseif (isset($_SESSION['previous_page'])) {
+    unset($_SESSION['previous_page']);
+} elseif (isset($_SESSION['research'])) {
+    unset($_SESSION['research']);
+} 
+//unset($_SESSION['selected_status'], $_SESSION['select_packages_nb_per_page'], $_SESSION['next_page'], $_SESSION['previous_page'], $_SESSION['research']);
 ?>

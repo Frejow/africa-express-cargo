@@ -115,7 +115,7 @@ if (empty($errors)) {
             'tel' => $data["tel"],
             'pseudo' => $data["pseudo"],
             'mail' => $data["mail"],
-            'country' => ltrim(preg_replace('/[^\p{L}\p{N}\s]/u', " ", $_POST["country"])),
+            'country' => ltrim(preg_replace('/[^\p{L}\p{N}\s]/u', "", $_POST["country"])),
             'pass' => sha1($_POST["pass"]),
             'profile' => $data["profile"],
         ]);

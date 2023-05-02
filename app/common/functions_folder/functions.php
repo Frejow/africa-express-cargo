@@ -928,11 +928,15 @@ function count_rows_in_package_table()
 
     $database = _database_login();
 
-    $request = "SELECT COUNT(*) FROM package";
+    $request = "SELECT COUNT(*) FROM package WHERE is_deleted = :is_deleted";
 
     $request_prepare = $database->prepare($request);
 
-    $request_execution = $request_prepare->execute();
+    $request_execution = $request_prepare->execute(
+        [
+            "is_deleted" => 0,
+        ]
+    );
 
     if ($request_execution) {
 
@@ -942,4 +946,33 @@ function count_rows_in_package_table()
     }
 
     return $rows;
+}
+
+function deleted_package(string $tracking_number): bool
+{
+    date_default_timezone_set("Africa/Lagos");
+
+    $update_is_deleted_field = false;
+
+    $database = _database_login();
+
+    $request = "UPDATE package SET is_active = :is_active, is_deleted = :is_deleted, updated_on = :updated_on WHERE tracking_number = :tracking_number";
+
+    $request_prepare = $database->prepare($request);
+
+    $request_execution = $request_prepare->execute(
+        [
+            'tracking_number'  => $tracking_number,
+            'is_active' => 0,
+            'is_deleted' => 1,
+            'updated_on' => date('Y-m-d H:i:s')
+        ]
+    );
+
+    if ($request_execution) {
+
+        $update_is_deleted_field = true;
+    }
+
+    return $update_is_deleted_field;
 }
