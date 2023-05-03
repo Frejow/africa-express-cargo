@@ -1,22 +1,16 @@
 <?php
-//die (var_dump($_SESSION['page']));
 
 if (isset($_POST['previous'])) {
+    //die (var_dump($_SESSION['previous_page']));
 
-    if ($_SESSION['page'] - 1 <= 0) {
-        $_SESSION['previous_page'] = 1;
+    $_SESSION['previous_page'] = $_POST['previous'];
+
+    if (isset(explode('?', $_SERVER['REQUEST_URI'])[1]) && explode('?', $_SERVER['REQUEST_URI'])[1] == "theme=light") {
+        header("location:" . PROJECT . "customer/dash/packages-listings?theme=light");
+    } elseif (isset(explode('?', $_SERVER['REQUEST_URI'])[1]) && explode('?', $_SERVER['REQUEST_URI'])[1] == "theme=dark") {
+        header("location:" . PROJECT . "customer/dash/packages-listings?theme=dark");
     } else {
-        $_SESSION['previous_page'] = $_SESSION['page'] - 1;
-    }
-
-    if (isset($_SESSION['previous_page'])) {
-        if (isset(explode('?', $_SERVER['REQUEST_URI'])[1]) && explode('?', $_SERVER['REQUEST_URI'])[1] == "theme=light") {
-            header("location:" . PROJECT . "customer/dash/packages-listings?theme=light");
-        } elseif (isset(explode('?', $_SERVER['REQUEST_URI'])[1]) && explode('?', $_SERVER['REQUEST_URI'])[1] == "theme=dark") {
-            header("location:" . PROJECT . "customer/dash/packages-listings?theme=dark");
-        } else {
-            header("location:" . PROJECT . "customer/dash/packages-listings?theme=light");
-        }
+        header("location:" . PROJECT . "customer/dash/packages-listings?theme=light");
     }
 }
 
@@ -67,9 +61,11 @@ if (isset($_POST['search']) && !empty($_POST['search'])) {
     }
 }
 
+
+
 if (isset($_POST['next'])) {
     
-    $_SESSION['next_page'] = $_SESSION['page'] + 1;
+    $_SESSION['next_page'] = $_POST['next'];
 
     if (isset($_SESSION['next_page'])) {
     if (isset(explode('?', $_SERVER['REQUEST_URI'])[1]) && explode('?', $_SERVER['REQUEST_URI'])[1] == "theme=light") {
@@ -83,6 +79,7 @@ if (isset($_POST['next'])) {
 } 
 
 if (isset($_POST['select'])) {
+
     
     if ($_SESSION['packages_nb_per_page'] == $_POST['select']) {
 
@@ -96,6 +93,8 @@ if (isset($_POST['select'])) {
         
 
     } else {
+
+        $_SESSION['actual_page'] = $_SESSION['page'];
 
         $_SESSION['select_packages_nb_per_page'] = $_POST['select'];
 

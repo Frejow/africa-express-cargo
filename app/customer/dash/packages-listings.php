@@ -7,7 +7,13 @@ include '..' . PROJECT . 'app/common/customer/1stpart.php';
 
 //unset($_SESSION['selected_status']);
 
-$_SESSION['page'] = 1; //die (var_dump($_SESSION['page']));
+//$_SESSION['page'] = null; //die (var_dump($_SESSION['page']));
+
+//die (var_dump($_SESSION['next_page']));
+
+if (!isset($_SESSION['previous_page']) && !isset($_SESSION['next_page']) ) {
+    $_SESSION['page'] = 1;
+}
 
 $_SESSION['packages_nb_per_page'] = 10;
 
@@ -21,6 +27,10 @@ if (isset($_SESSION['previous_page']) && !empty($_SESSION['previous_page'])) {
 
 if (isset($_SESSION['next_page']) && !empty($_SESSION['next_page'])) {
     $_SESSION['page'] = $_SESSION['next_page'];
+}
+
+if (isset($_SESSION['actual_page']) && !empty($_SESSION['actual_page'])) {
+    $_SESSION['page'] = $_SESSION['actual_page'];
 }
 
 if (isset($_SESSION['select_packages_nb_per_page']) && !empty($_SESSION['select_packages_nb_per_page'])) {
@@ -136,9 +146,7 @@ if (isset($_SESSION['error_msg']) && !empty($_SESSION['error_msg'])) {
                                     Afficher
                                     <div class="mx-2 d-inline-block">
                                         <select class="form-select" name="select" id="mySelect">
-                                            <option <?php if (isset($_SESSION['select_packages_nb_per_page']) && $_SESSION['select_packages_nb_per_page'] == 10) {
-                                                        echo 'selected';
-                                                    } ?> value="10">10</option>
+                                            <option value="10">10</option>
                                             <option <?php if (isset($_SESSION['select_packages_nb_per_page']) && $_SESSION['select_packages_nb_per_page'] == 15) {
                                                         echo 'selected';
                                                     } ?> value="15">15</option>
@@ -214,11 +222,29 @@ if (isset($_SESSION['error_msg']) && !empty($_SESSION['error_msg'])) {
                                 <tbody>
                                     <?php
                                     if (isset($packages_listings) && !empty($packages_listings)) {
-                                        $n = 0;
+                                        $n = 0; $m = 0;
+
+                                        if (isset($_SESSION['next_page']) && !empty($_SESSION['next_page'])) {
+                                            $m = $_SESSION['next_page'];
+                                        } 
+                                        if (isset($_SESSION['previous_page']) && !empty($_SESSION['previous_page'])) {
+                                            $m = $_SESSION['previous_page'];
+                                        }
+
                                         foreach ($packages_listings as $key => $package) {
                                     ?>
                                             <tr>
-                                                <td><?= $key + 1 ?><input class="form-check-input m-0 align-middle row-check" type="checkbox" value="BN95F621" name="checkbox" aria-label="Select invoice"></td>
+                                                <td><?php //echo $key + 1;
+                                                if ($_SESSION['page'] == 1) {
+                                                    echo $key + 1;
+                                                } elseif ($_SESSION['page'] == 2) {
+                                                    echo $_SESSION['select_packages_nb_per_page'] + $key + 1;
+                                                } elseif ($_SESSION['page'] > 2 && $m > 2) {
+                                                    echo ($_SESSION['select_packages_nb_per_page'] * ($m-1)) + $key + 1;
+                                                } else {
+                                                    echo $key + 1;
+                                                }
+                                                ?><input class="form-check-input m-0 align-middle row-check" type="checkbox" value="BN95F621" name="checkbox" aria-label="Select invoice"></td>
                                                 <td>
                                                     <?= $packages_listings[$key]["tracking_number"] ?>
                                                 </td>
@@ -338,7 +364,7 @@ if (isset($_SESSION['error_msg']) && !empty($_SESSION['error_msg'])) {
                             <p class="m-0 text-muted">Affichage de <span><?= $n ?></span> ligne(s) sur <span><?= $rows[0]['COUNT(*)'] ?></span> au total</p>
                             <ul class="pagination m-0 ms-auto">
                                 <li class="page-item <?= ($_SESSION['page'] == 1) ? "disabled" : "" ?>">
-                                    <button type="submit" name="previous" class="page-link">
+                                    <button type="submit" name="previous" value="<?= $_SESSION['page'] - 1 ?>" class="page-link">
                                         <!-- Download SVG icon from http://tabler-icons.io/i/chevron-left -->
                                         <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
                                             <path stroke="none" d="M0 0h24v24H0z" fill="none" />
@@ -349,7 +375,7 @@ if (isset($_SESSION['error_msg']) && !empty($_SESSION['error_msg'])) {
                                 </li>
                                 <li class="page-item page-link active"><?= $_SESSION['page'] ?></li>
                                 <li class="page-item <?= ($rows[0]['COUNT(*)'] === $n) ? "disabled" : "" ?>">
-                                    <button type="submit" name="next" class="page-link">
+                                    <button type="submit" name="next" value="<?= $_SESSION['page'] + 1 ?>" class="page-link">
                                         suivant <!-- Download SVG icon from http://tabler-icons.io/i/chevron-right -->
                                         <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
                                             <path stroke="none" d="M0 0h24v24H0z" fill="none" />
@@ -370,14 +396,14 @@ if (isset($_SESSION['error_msg']) && !empty($_SESSION['error_msg'])) {
 
 if (isset($_SESSION['selected_status'])) {
     unset($_SESSION['selected_status']);
-} elseif (isset($_SESSION['select_packages_nb_per_page'])) {
-    unset($_SESSION['select_packages_nb_per_page']);
-} elseif (isset($_SESSION['next_page'])) {
-    unset($_SESSION['next_page']);
-} elseif (isset($_SESSION['previous_page'])) {
-    unset($_SESSION['previous_page']);
 } elseif (isset($_SESSION['research'])) {
     unset($_SESSION['research']);
+} elseif (isset($_SESSION['next_page']) && $_SESSION['next_page'] == $_SESSION['page']) {
+    unset($_SESSION['next_page']);
+} elseif (isset($_SESSION['previous_page']) && $_SESSION['previous_page'] == $_SESSION['page']) {
+    unset($_SESSION['previous_page']);
+} elseif (isset($_SESSION['actual_page']) && $_SESSION['actual_page'] == $_SESSION['page']) {
+    unset($_SESSION['actual_page']);
 } 
 //unset($_SESSION['selected_status'], $_SESSION['select_packages_nb_per_page'], $_SESSION['next_page'], $_SESSION['previous_page'], $_SESSION['research']);
 ?>

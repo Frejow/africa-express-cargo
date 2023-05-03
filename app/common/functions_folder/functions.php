@@ -830,7 +830,7 @@ function select_package_images(int $package_id)
     return $package_images;
 }
 
-function packages_list($page = 1, $packages_nb_per_page = 10, $status = 'undefined', $search = 'UNDEFINED', $user_id = '')
+function packages_list($page, $packages_nb_per_page, $status, $search, $user_id)
 {
 
     $packages_list = [];
@@ -839,7 +839,7 @@ function packages_list($page = 1, $packages_nb_per_page = 10, $status = 'undefin
 
     if ($status === 'undefined' && $search === 'UNDEFINED') {
 
-        $request = "SELECT * FROM package WHERE user_id = :user_id and is_deleted = :is_deleted ORDER BY id DESC LIMIT " . ($page - 1) * $packages_nb_per_page . ", " . $packages_nb_per_page * $page;
+        $request = "SELECT * FROM package WHERE user_id = :user_id and is_deleted = :is_deleted ORDER BY id DESC LIMIT " . $packages_nb_per_page . " OFFSET " . ($page - 1) * $packages_nb_per_page;
 
         $request_prepare = $database->prepare($request);
     
@@ -850,7 +850,7 @@ function packages_list($page = 1, $packages_nb_per_page = 10, $status = 'undefin
 
     } elseif ($status !== 'undefined' && $search === 'UNDEFINED') {
 
-        $request = "SELECT * FROM package WHERE user_id = :user_id and status = :status and is_deleted = :is_deleted ORDER BY id DESC LIMIT " . ($page - 1) * $packages_nb_per_page . ", " . $packages_nb_per_page * $page;
+        $request = "SELECT * FROM package WHERE user_id = :user_id and status = :status and is_deleted = :is_deleted ORDER BY id DESC LIMIT " . $packages_nb_per_page . " OFFSET " . ($page - 1) * $packages_nb_per_page;
 
         $request_prepare = $database->prepare($request);
     
@@ -874,7 +874,7 @@ function packages_list($page = 1, $packages_nb_per_page = 10, $status = 'undefin
                 $request .= " AND ";
             }
         }
-        $request .= " ORDER BY id DESC LIMIT " . ($page - 1) * $packages_nb_per_page . ", " . $packages_nb_per_page * $page;
+        $request .= " ORDER BY id DESC LIMIT " . $packages_nb_per_page . " OFFSET " . ($page - 1) * $packages_nb_per_page;
 
         $request_prepare = $database->prepare($request);
     
@@ -897,7 +897,7 @@ function packages_list($page = 1, $packages_nb_per_page = 10, $status = 'undefin
                 $request .= " AND ";
             }
         }
-        $request .= " AND status = :status ORDER BY id DESC LIMIT " . ($page - 1) * $packages_nb_per_page . ", " . $packages_nb_per_page * $page;
+        $request .= " AND status = :status ORDER BY id DESC LIMIT " . $packages_nb_per_page . " OFFSET " . ($page - 1) * $packages_nb_per_page;
 
         $request_prepare = $database->prepare($request);
     
