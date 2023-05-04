@@ -472,7 +472,7 @@ include '..' . PROJECT . 'app/common/customer/1stpart.php';  ?>
                                     <div>
                                         <div class="row g-2">
                                             <div class="col">
-                                                <input type="password" required name="newpass" id="repassword" class="form-control" value="<?php echo (isset($updata["newpass"]) && !empty($updata["newpass"])) ? $updata["newpass"] : "" ?>">
+                                                <input type="password" pattern="^[a-zA-Z0-9]{8,}$" title="Ce champs doit recevoir 08 caractères minimum, les caractères spéciaux étant exclus." required name="newpass" id="repassword" class="form-control" value="<?php echo (isset($updata["newpass"]) && !empty($updata["newpass"])) ? $updata["newpass"] : "" ?>">
                                             </div>
                                         </div>
                                     </div>

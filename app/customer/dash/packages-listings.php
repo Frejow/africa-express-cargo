@@ -366,7 +366,45 @@ if (isset($_SESSION['error_msg']) && !empty($_SESSION['error_msg'])) {
                         </div>
 
                         <div class="table-responsive card-footer d-flex align-items-center">
-                            <p class="m-0 text-muted">Affichage de <span><?= $n ?></span> ligne(s) sur <span><?= $rows[0]['COUNT(*)'] ?></span> au total</p>
+                            <?php
+                            $e = null;
+                            if (!isset($_SESSION['previous_page']) && !isset($_SESSION['next_page']) && !isset($_SESSION['actual_page'])) {
+                                $e = $_SESSION['packages_nb_per_page'];
+                                if ($e > $rows[0]['COUNT(*)']) {
+                                    $e = $rows[0]['COUNT(*)'];
+                                }
+                            ?>
+                                <p class="m-0 text-muted">Affichage de la ligne <span><?= $_SESSION['page'] ?></span> à la ligne <span><?= $e ?></span> sur <span><?= $rows[0]['COUNT(*)'] ?></span> ligne(s) au total</p>
+                            <?php
+                            }
+                            elseif ((isset($_SESSION['previous_page']) || isset($_SESSION['next_page']) || isset($_SESSION['actual_page'])) && $_SESSION['page'] == 2) {
+                                $e = $_SESSION['packages_nb_per_page'] * $_SESSION['page'];
+                                if ($e > $rows[0]['COUNT(*)']) {
+                                    $e = $rows[0]['COUNT(*)'];
+                                }
+                            ?>
+                                <p class="m-0 text-muted">Affichage de la ligne <span><?= $_SESSION['packages_nb_per_page'] + 1 ?></span> à la ligne <span><?= $e ?></span> sur <span><?= $rows[0]['COUNT(*)'] ?></span> ligne(s) au total</p>
+                            <?php
+                            }
+                            elseif ((isset($_SESSION['previous_page']) || isset($_SESSION['next_page']) || isset($_SESSION['actual_page'])) && $_SESSION['page'] > 2) {
+                                $e = $_SESSION['packages_nb_per_page'] * $_SESSION['page'];
+                                if ($e > $rows[0]['COUNT(*)']) {
+                                    $e = $rows[0]['COUNT(*)'];
+                                }
+                            ?>
+                                <p class="m-0 text-muted">Affichage de la ligne <span><?= ($_SESSION['packages_nb_per_page'] * ($_SESSION['page'] - 1)) + 1 ?></span> à la ligne <span><?= $e ?></span> sur <span><?= $rows[0]['COUNT(*)'] ?></span> ligne(s) au total</p>
+                            <?php
+                            }
+                            else {
+                                $e = $_SESSION['packages_nb_per_page'] * $_SESSION['page'];
+                                if ($e > $rows[0]['COUNT(*)']) {
+                                    $e = $rows[0]['COUNT(*)'];
+                                }
+                            ?>
+                                <p class="m-0 text-muted">Affichage de la ligne <span><?= ($_SESSION['packages_nb_per_page'] * ($_SESSION['page'] - 1)) + 1 ?></span> à la ligne <span><?= $e ?></span> sur <span><?= $rows[0]['COUNT(*)'] ?></span> ligne(s) au total</p>
+                            <?php
+                            }
+                            ?>
                             <ul class="pagination m-0 ms-auto">
                                 <li class="page-item <?= ($_SESSION['page'] == 1) ? "disabled" : "" ?>">
                                     <button type="submit" name="previous" value="<?= $_SESSION['page'] - 1 ?>" class="page-link">
@@ -379,7 +417,7 @@ if (isset($_SESSION['error_msg']) && !empty($_SESSION['error_msg'])) {
                                     </button>
                                 </li>
                                 <li class="page-item page-link active"><?= $_SESSION['page'] ?></li>
-                                <li class="page-item <?= ($rows[0]['COUNT(*)'] === $n) ? "disabled" : "" ?>">
+                                <li class="page-item <?= ($rows[0]['COUNT(*)'] === $e) ? "disabled" : "" ?>">
                                     <button type="submit" name="next" value="<?= $_SESSION['page'] + 1 ?>" class="page-link">
                                         suivant <!-- Download SVG icon from http://tabler-icons.io/i/chevron-right -->
                                         <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">

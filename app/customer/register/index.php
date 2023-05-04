@@ -396,7 +396,7 @@ $countries = [
                             <div class="col-lg-6">
                                 <label for="pass" class="ml-3">Mot de passe<span class="text-danger">*</span></label>
                                 <div class="wrap-input100">
-                                    <input class="input100" type="password" id="pass" name="pass" placeholder="Mot de passe" value="<?php echo (isset($data["pass"]) && !empty($data["pass"])) ? $data["pass"] : "" ?>">
+                                    <input class="input100" type="password" pattern="^[a-zA-Z0-9]{8,}$" title="Ce champs doit recevoir 08 caractères minimum, les caractères spéciaux étant exclus." required id="pass" name="pass" placeholder="Mot de passe" value="<?php echo (isset($data["pass"]) && !empty($data["pass"])) ? $data["pass"] : "" ?>">
                                     <span class="focus-input100"></span>
                                     <span class="symbol-input100">
                                         <i class="fa fa-lock <?= isset($errors["pass"])? 'text-danger' : ''?>" aria-hidden="true"></i>
