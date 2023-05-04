@@ -13,7 +13,7 @@ include '..' . PROJECT . 'app/common/customer/1stpart.php';
 
 $table = "package";
 
-if (!isset($_SESSION['previous_page']) && !isset($_SESSION['next_page']) ) {
+if (!isset($_SESSION['previous_page']) && !isset($_SESSION['next_page'])) {
     $_SESSION['page'] = 1;
 }
 
@@ -224,11 +224,12 @@ if (isset($_SESSION['error_msg']) && !empty($_SESSION['error_msg'])) {
                                 <tbody>
                                     <?php
                                     if (isset($packages_listings) && !empty($packages_listings)) {
-                                        $n = 0; $m = 0;
+                                        $n = 0;
+                                        $m = 0;
 
                                         if (isset($_SESSION['next_page']) && !empty($_SESSION['next_page'])) {
                                             $m = $_SESSION['next_page'];
-                                        } 
+                                        }
                                         if (isset($_SESSION['previous_page']) && !empty($_SESSION['previous_page'])) {
                                             $m = $_SESSION['previous_page'];
                                         }
@@ -240,16 +241,16 @@ if (isset($_SESSION['error_msg']) && !empty($_SESSION['error_msg'])) {
                                     ?>
                                             <tr>
                                                 <td><?php //echo $key + 1;
-                                                if ($_SESSION['page'] == 1) {
-                                                    echo $key + 1;
-                                                } elseif ($_SESSION['page'] == 2) {
-                                                    echo $_SESSION['packages_nb_per_page'] + $key + 1;
-                                                } elseif ($_SESSION['page'] > 2 && $m > 2) {
-                                                    echo ($_SESSION['packages_nb_per_page'] * ($m-1)) + $key + 1;
-                                                } else {
-                                                    echo ($_SESSION['packages_nb_per_page'] * ($m-1)) + $key + 1;
-                                                }
-                                                ?><input class="form-check-input m-0 align-middle row-check" type="checkbox" value="BN95F621" name="checkbox" aria-label="Select invoice"></td>
+                                                    if ($_SESSION['page'] == 1) {
+                                                        echo $key + 1;
+                                                    } elseif ($_SESSION['page'] == 2) {
+                                                        echo $_SESSION['packages_nb_per_page'] + $key + 1;
+                                                    } elseif ($_SESSION['page'] > 2 && $m > 2) {
+                                                        echo ($_SESSION['packages_nb_per_page'] * ($m - 1)) + $key + 1;
+                                                    } else {
+                                                        echo ($_SESSION['packages_nb_per_page'] * ($m - 1)) + $key + 1;
+                                                    }
+                                                    ?><input class="form-check-input m-0 align-middle row-check" type="checkbox" value="BN95F621" name="checkbox" aria-label="Select invoice"></td>
                                                 <td>
                                                     <?= $packages_listings[$key]["tracking_number"] ?>
                                                 </td>
@@ -314,13 +315,13 @@ if (isset($_SESSION['error_msg']) && !empty($_SESSION['error_msg'])) {
                                                             echo 'disabled text-muted';
                                                         }
                                                         ?>
-                                                        " href="#" data-bs-toggle="modal" data-bs-target= "<?="#package_deletionModal".$key?>" >
+                                                        " href="#" data-bs-toggle="modal" data-bs-target="<?= "#package_deletionModal" . $key ?>">
                                                             Supprimer
                                                         </a>
                                                     </span>
                                                 </td>
                                             </tr>
-                                            <div class="modal modal-blur fade" id="<?="package_deletionModal".$key?>" tabindex="-1" role="dialog" aria-hidden="true">
+                                            <div class="modal modal-blur fade" id="<?= "package_deletionModal" . $key ?>" tabindex="-1" role="dialog" aria-hidden="true">
                                                 <div class="modal-dialog modal-sm modal-dialog-centered" role="document">
                                                     <div class="modal-content">
                                                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
@@ -367,44 +368,84 @@ if (isset($_SESSION['error_msg']) && !empty($_SESSION['error_msg'])) {
 
                         <div class="table-responsive card-footer d-flex align-items-center">
                             <?php
+
+                            $s = null;
                             $e = null;
+
                             if (!isset($_SESSION['previous_page']) && !isset($_SESSION['next_page']) && !isset($_SESSION['actual_page'])) {
+
                                 $e = $_SESSION['packages_nb_per_page'];
+                                $s = $_SESSION['page'];
+
                                 if ($e > $rows[0]['COUNT(*)']) {
                                     $e = $rows[0]['COUNT(*)'];
                                 }
+
+                                if (!isset($packages_listings) || empty($packages_listings)) {
+                                    $s = $n . ' ligne';
+                                }
+
                             ?>
-                                <p class="m-0 text-muted">Affichage de la ligne <span><?= $_SESSION['page'] ?></span> à la ligne <span><?= $e ?></span> sur <span><?= $rows[0]['COUNT(*)'] ?></span> ligne(s) au total</p>
+                                <p class="m-0 text-muted">Affichage <?php if (isset($packages_listings) && !empty($packages_listings)) { ?> de la ligne <?php } ?> <span><?= $s ?></span> <?php if (isset($packages_listings) && !empty($packages_listings)) { ?> à la ligne <span><?= $e ?></span> <?php } ?> sur <span><?= $rows[0]['COUNT(*)'] ?></span> ligne(s) au total</p>
+
                             <?php
-                            }
-                            elseif ((isset($_SESSION['previous_page']) || isset($_SESSION['next_page']) || isset($_SESSION['actual_page'])) && $_SESSION['page'] == 2) {
+
+                            } elseif ((isset($_SESSION['previous_page']) || isset($_SESSION['next_page']) || isset($_SESSION['actual_page'])) && $_SESSION['page'] == 2) {
+
                                 $e = $_SESSION['packages_nb_per_page'] * $_SESSION['page'];
+                                $s = $_SESSION['packages_nb_per_page'] + 1;
+
                                 if ($e > $rows[0]['COUNT(*)']) {
                                     $e = $rows[0]['COUNT(*)'];
                                 }
+
+                                if (!isset($packages_listings) || empty($packages_listings)) {
+                                    $s = $n . ' ligne';
+                                }
+
                             ?>
-                                <p class="m-0 text-muted">Affichage de la ligne <span><?= $_SESSION['packages_nb_per_page'] + 1 ?></span> à la ligne <span><?= $e ?></span> sur <span><?= $rows[0]['COUNT(*)'] ?></span> ligne(s) au total</p>
+                                <p class="m-0 text-muted">Affichage <?php if (isset($packages_listings) && !empty($packages_listings)) { ?> de la ligne <?php } ?> <span><?= $s ?></span> <?php if (isset($packages_listings) && !empty($packages_listings)) { ?> à la ligne <span><?= $e ?></span> <?php } ?> sur <span><?= $rows[0]['COUNT(*)'] ?></span> ligne(s) au total</p>
+
                             <?php
-                            }
-                            elseif ((isset($_SESSION['previous_page']) || isset($_SESSION['next_page']) || isset($_SESSION['actual_page'])) && $_SESSION['page'] > 2) {
+
+                            } elseif ((isset($_SESSION['previous_page']) || isset($_SESSION['next_page']) || isset($_SESSION['actual_page'])) && $_SESSION['page'] > 2) {
+
                                 $e = $_SESSION['packages_nb_per_page'] * $_SESSION['page'];
+                                $s = ($_SESSION['packages_nb_per_page'] * ($_SESSION['page'] - 1)) + 1;
+
                                 if ($e > $rows[0]['COUNT(*)']) {
                                     $e = $rows[0]['COUNT(*)'];
                                 }
+
+                                if (!isset($packages_listings) || empty($packages_listings)) {
+                                    $s = $n . ' ligne';
+                                }
+
                             ?>
-                                <p class="m-0 text-muted">Affichage de la ligne <span><?= ($_SESSION['packages_nb_per_page'] * ($_SESSION['page'] - 1)) + 1 ?></span> à la ligne <span><?= $e ?></span> sur <span><?= $rows[0]['COUNT(*)'] ?></span> ligne(s) au total</p>
+                                <p class="m-0 text-muted">Affichage <?php if (isset($packages_listings) && !empty($packages_listings)) { ?> de la ligne <?php } ?> <span><?= $s ?></span> <?php if (isset($packages_listings) && !empty($packages_listings)) { ?> à la ligne <span><?= $e ?></span> <?php } ?> sur <span><?= $rows[0]['COUNT(*)'] ?></span> ligne(s) au total</p>
+
                             <?php
-                            }
-                            else {
+                            
+                            } else {
+
                                 $e = $_SESSION['packages_nb_per_page'] * $_SESSION['page'];
+                                $s = ($_SESSION['packages_nb_per_page'] * ($_SESSION['page'] - 1)) + 1;
+
                                 if ($e > $rows[0]['COUNT(*)']) {
                                     $e = $rows[0]['COUNT(*)'];
                                 }
+
+                                if (!isset($packages_listings) || empty($packages_listings)) {
+                                    $s = $n . ' ligne';
+                                }
+
                             ?>
-                                <p class="m-0 text-muted">Affichage de la ligne <span><?= ($_SESSION['packages_nb_per_page'] * ($_SESSION['page'] - 1)) + 1 ?></span> à la ligne <span><?= $e ?></span> sur <span><?= $rows[0]['COUNT(*)'] ?></span> ligne(s) au total</p>
+                                <p class="m-0 text-muted">Affichage <?php if (isset($packages_listings) && !empty($packages_listings)) { ?> de la ligne <?php } ?> <span><?= $s ?></span> <?php if (isset($packages_listings) && !empty($packages_listings)) { ?> à la ligne <span><?= $e ?></span> <?php } ?> sur <span><?= $rows[0]['COUNT(*)'] ?></span> ligne(s) au total</p>
+
                             <?php
                             }
                             ?>
+
                             <ul class="pagination m-0 ms-auto">
                                 <li class="page-item <?= ($_SESSION['page'] == 1) ? "disabled" : "" ?>">
                                     <button type="submit" name="previous" value="<?= $_SESSION['page'] - 1 ?>" class="page-link">
@@ -447,6 +488,6 @@ if (isset($_SESSION['selected_status'])) {
     unset($_SESSION['previous_page']);
 } elseif (isset($_SESSION['actual_page']) && $_SESSION['actual_page'] == $_SESSION['page']) {
     unset($_SESSION['actual_page']);
-} 
+}
 //unset($_SESSION['selected_status'], $_SESSION['select_packages_nb_per_page'], $_SESSION['next_page'], $_SESSION['previous_page'], $_SESSION['research']);
 ?>
