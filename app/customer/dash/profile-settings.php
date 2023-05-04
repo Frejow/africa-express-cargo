@@ -26,13 +26,13 @@ include '..' . PROJECT . 'app/common/customer/1stpart.php';  ?>
                     <div class="card-body" style="display: flex;flex-direction: column;align-items:center;">
 
                         <?php
-                        if (isset($_COOKIE['error_msg']) && !empty($_COOKIE['error_msg'])){
-                            $msg = $_COOKIE['error_msg'];
+                        if (isset($_SESSION['error_msg']) && !empty($_SESSION['error_msg'])) {
+                            $msg = $_SESSION['error_msg'];
                         ?>
                             <div class="swalDefaultError" role="alert">
                             </div>
                         <?php
-                            //setcookie('error_msg', '', time() - 3600, '/');
+                            unset($_SESSION['error_msg']);
                         }
                         ?>
 
@@ -106,7 +106,7 @@ include '..' . PROJECT . 'app/common/customer/1stpart.php';  ?>
                                 if ($data[0]['avatar'] == 'null') {
                                 ?>
                                     <div class="col-md mt-3">
-                                        <a href="#" class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#modal-warning1" style="text-decoration: none;" name="submit">Mettre à jour</a>
+                                        <a href="#" class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#modal-warning1" style="text-decoration: none;" name="submit">Mettre à jour Avatar</a>
                                     </div>
                                 <?php
                                 }
@@ -119,7 +119,7 @@ include '..' . PROJECT . 'app/common/customer/1stpart.php';  ?>
                             ?>
                                 <div class="row mt-3 text-center">
                                     <div class="col-md mb-1">
-                                        <a href="#" class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#modal-warning1" style="text-decoration: none;">Mettre à jour</a>
+                                        <a href="#" class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#modal-warning1" style="text-decoration: none;">Mettre à jour Avatar</a>
                                     </div>
 
                                     <div class="col-md"><button type="submit" name="avatar_deletion" class="btn btn-danger" style="text-decoration: none;">
@@ -130,7 +130,7 @@ include '..' . PROJECT . 'app/common/customer/1stpart.php';  ?>
                             }
                             ?>
 
-                            <div class="modal modal-blur fade" id="modal-warning1" tabindex="-1" role="dialog" aria-hidden="true">
+                            <div class="modal modal-blur fade" id="modal-warning1" data-bs-backdrop = 'static' tabindex="-1" role="dialog" aria-hidden="true">
                                 <div class="modal-dialog modal-sm modal-dialog-centered" role="document">
                                     <div class="modal-content">
                                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
@@ -154,7 +154,7 @@ include '..' . PROJECT . 'app/common/customer/1stpart.php';  ?>
                                                     <div class="col"><a href="#" class="btn w-100" data-bs-dismiss="modal">
                                                             Annuler
                                                         </a></div>
-                                                    <div class="col"><button type="submit" class="btn btn-warning w-100" data-bs-dismiss="modal">
+                                                    <div class="col"><button type="submit" name="auth" class="btn btn-warning w-100" data-bs-dismiss="modal">
                                                     S'authentifier
                                                         </button></div>
                                                 </div>

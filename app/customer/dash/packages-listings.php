@@ -11,6 +11,8 @@ include '..' . PROJECT . 'app/common/customer/1stpart.php';
 
 //die (var_dump($_SESSION['next_page']));
 
+$table = "package";
+
 if (!isset($_SESSION['previous_page']) && !isset($_SESSION['next_page']) ) {
     $_SESSION['page'] = 1;
 }
@@ -45,7 +47,7 @@ if (isset($_SESSION['research']) && !empty($_SESSION['research'])) {
     $_SESSION['search'] = $_SESSION['research'];
 }
 
-$packages_listings = packages_list($_SESSION['page'], $_SESSION['packages_nb_per_page'], $_SESSION['status'], strtoupper($_SESSION['search']), $data[0]['id']);
+$packages_listings = listings($table, $_SESSION['page'], $_SESSION['packages_nb_per_page'], $_SESSION['status'], strtoupper($_SESSION['search']), $data[0]['id']);
 
 //die (var_dump($packages_listings));
 
@@ -230,6 +232,9 @@ if (isset($_SESSION['error_msg']) && !empty($_SESSION['error_msg'])) {
                                         if (isset($_SESSION['previous_page']) && !empty($_SESSION['previous_page'])) {
                                             $m = $_SESSION['previous_page'];
                                         }
+                                        if (isset($_SESSION['actual_page']) && !empty($_SESSION['actual_page'])) {
+                                            $m = $_SESSION['actual_page'];
+                                        }
 
                                         foreach ($packages_listings as $key => $package) {
                                     ?>
@@ -238,11 +243,11 @@ if (isset($_SESSION['error_msg']) && !empty($_SESSION['error_msg'])) {
                                                 if ($_SESSION['page'] == 1) {
                                                     echo $key + 1;
                                                 } elseif ($_SESSION['page'] == 2) {
-                                                    echo $_SESSION['select_packages_nb_per_page'] + $key + 1;
+                                                    echo $_SESSION['packages_nb_per_page'] + $key + 1;
                                                 } elseif ($_SESSION['page'] > 2 && $m > 2) {
-                                                    echo ($_SESSION['select_packages_nb_per_page'] * ($m-1)) + $key + 1;
+                                                    echo ($_SESSION['packages_nb_per_page'] * ($m-1)) + $key + 1;
                                                 } else {
-                                                    echo $key + 1;
+                                                    echo ($_SESSION['packages_nb_per_page'] * ($m-1)) + $key + 1;
                                                 }
                                                 ?><input class="form-check-input m-0 align-middle row-check" type="checkbox" value="BN95F621" name="checkbox" aria-label="Select invoice"></td>
                                                 <td>

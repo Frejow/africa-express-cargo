@@ -830,7 +830,7 @@ function select_package_images(int $package_id)
     return $package_images;
 }
 
-function packages_list($page, $packages_nb_per_page, $status, $search, $user_id)
+function listings($table, $page, $packages_nb_per_page, $status, $search, $user_id)
 {
 
     $packages_list = [];
@@ -839,7 +839,7 @@ function packages_list($page, $packages_nb_per_page, $status, $search, $user_id)
 
     if ($status === 'undefined' && $search === 'UNDEFINED') {
 
-        $request = "SELECT * FROM package WHERE user_id = :user_id and is_deleted = :is_deleted ORDER BY id DESC LIMIT " . $packages_nb_per_page . " OFFSET " . ($page - 1) * $packages_nb_per_page;
+        $request = "SELECT * FROM " . $table . " WHERE user_id = :user_id and is_deleted = :is_deleted ORDER BY id DESC LIMIT " . $packages_nb_per_page . " OFFSET " . ($page - 1) * $packages_nb_per_page;
 
         $request_prepare = $database->prepare($request);
     
@@ -850,7 +850,7 @@ function packages_list($page, $packages_nb_per_page, $status, $search, $user_id)
 
     } elseif ($status !== 'undefined' && $search === 'UNDEFINED') {
 
-        $request = "SELECT * FROM package WHERE user_id = :user_id and status = :status and is_deleted = :is_deleted ORDER BY id DESC LIMIT " . $packages_nb_per_page . " OFFSET " . ($page - 1) * $packages_nb_per_page;
+        $request = "SELECT * FROM " . $table . " WHERE user_id = :user_id and status = :status and is_deleted = :is_deleted ORDER BY id DESC LIMIT " . $packages_nb_per_page . " OFFSET " . ($page - 1) * $packages_nb_per_page;
 
         $request_prepare = $database->prepare($request);
     
@@ -862,7 +862,7 @@ function packages_list($page, $packages_nb_per_page, $status, $search, $user_id)
 
     } elseif ($status === 'undefined' && $search !== 'UNDEFINED') {
 
-        $request = "SELECT * FROM package WHERE user_id = :user_id and is_deleted = :is_deleted AND ";
+        $request = "SELECT * FROM " . $table . " WHERE user_id = :user_id and is_deleted = :is_deleted AND ";
 
         $search_terms_array = str_split($search);
 
@@ -885,7 +885,7 @@ function packages_list($page, $packages_nb_per_page, $status, $search, $user_id)
 
     } elseif ($status !== 'undefined' && $search !== 'UNDEFINED') {
 
-        $request = "SELECT * FROM package WHERE user_id = :user_id and is_deleted = :is_deleted AND ";
+        $request = "SELECT * FROM " . $table . " WHERE user_id = :user_id and is_deleted = :is_deleted AND ";
 
         $search_terms_array = str_split($search);
 

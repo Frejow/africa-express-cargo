@@ -12,25 +12,33 @@ $_SESSION['data'] = [];
 
 //Avatar Updating
 
-if (isset($_POST['avatar_deletion'])) {
 
-    if (update_avatar($data[0]['id'], 'null')) {
+if (isset($_POST["avatar_deletion"])) {
 
-        if (select_user_updated_info($data[0]['id'])) {
+    //die (var_dump($_POST['avatar_deletion']));
 
-            if (isset(explode('?', $_SERVER['REQUEST_URI'])[1]) && explode('?', $_SERVER['REQUEST_URI'])[1] == "theme=light"){
-                header("location:".PROJECT."customer/dash/profile-settings?theme=light");
-            } elseif (isset(explode('?', $_SERVER['REQUEST_URI'])[1]) && explode('?', $_SERVER['REQUEST_URI'])[1] == "theme=dark"){
-                header("location:".PROJECT."customer/dash/profile-settings?theme=dark");
-            } else {
-                header("location:".PROJECT."customer/dash/profile-settings?theme=light");
+    //die ('dedans');
+
+    
+        if (update_avatar($data[0]['id'], 'null')) {
+
+            if (select_user_updated_info($data[0]['id'])) {
+    
+                if (isset(explode('?', $_SERVER['REQUEST_URI'])[1]) && explode('?', $_SERVER['REQUEST_URI'])[1] == "theme=light"){
+                    header("location:".PROJECT."customer/dash/profile-settings?theme=light");
+                } elseif (isset(explode('?', $_SERVER['REQUEST_URI'])[1]) && explode('?', $_SERVER['REQUEST_URI'])[1] == "theme=dark"){
+                    header("location:".PROJECT."customer/dash/profile-settings?theme=dark");
+                } else {
+                    header("location:".PROJECT."customer/dash/profile-settings?theme=light");
+                }
+    
+                //header("location:".PROJECT."customer/dash/profile-settings");
+                
             }
-
-            //header("location:".PROJECT."customer/dash/profile-settings");
-            
+    
         }
+    
 
-    }
 }
 
 if (isset($_POST['pass_w']) && !empty($_POST['pass_w']) && check_password($data[0]['id'], $_POST['pass_w'])) {
@@ -110,11 +118,18 @@ if (isset($_POST['pass_w']) && !empty($_POST['pass_w']) && check_password($data[
 
 } elseif (isset($_POST['pass_w']) && !empty($_POST['pass_w']) && !check_password($data[0]['id'], $_POST['pass_w'])) {
 
-    $error["pass_w"] = 'La tentative de mise à jour a échoué. Mot de passe erroné. Réessayer !';
+    $error["pass_w"] = 'La tentative de mise à jour a échoué de l\'avatar. Mot de passe erroné. Réessayer !';
 
-    $updata ['avatar'] = $file_name;
+    $updata ['avatar'] = 'REESSAYER';
 
-}
+
+} elseif (isset($_POST['pass_w']) && empty($_POST['pass_w']) && !isset($_POST['avatar_deletion'])) {
+
+    $error["pass_w"] = 'La tentative de mise à jour a échoué de l\'avatar. Aucun mot de passe n\'a été soumis. Réessayer !';
+
+    $updata ['avatar'] = 'REESSAYER';
+
+}  
 
 if (!empty($error)){
 
@@ -272,6 +287,12 @@ if (!empty($error)){
 
     $_SESSION['password_error'] = $error;
 
+    if (isset($error['newpass'])) {
+        $_SESSION['error_msg'] = isset($error['newpass']);
+    } elseif (isset($error['passw'])) {
+        $_SESSION['error_msg'] = isset($error['passw']);
+    }
+
     if (isset(explode('?', $_SERVER['REQUEST_URI'])[1]) && explode('?', $_SERVER['REQUEST_URI'])[1] == "theme=light"){
         header("location:".PROJECT."customer/dash/profile-settings?theme=light");
     } elseif (isset(explode('?', $_SERVER['REQUEST_URI'])[1]) && explode('?', $_SERVER['REQUEST_URI'])[1] == "theme=dark"){
@@ -308,7 +329,8 @@ if (isset($_POST['pass-w']) && !empty($_POST['pass-w']) && check_password($data[
 
 if (!empty($error)){
 
-    setcookie('error_msg', $error['pass-w'], time() + 365 * 24 * 3600, '/');
+    $_SESSION['error_msg'] = $error['pass-w'];
+    //setcookie('error_msg', $error['pass-w'], time() + 365 * 24 * 3600, '/');
 
     //$_SESSION['deactivation_error'] = $error;
 
@@ -348,7 +370,9 @@ if (isset($_POST['pass--w']) && !empty($_POST['pass--w']) && check_password($dat
 
 if (!empty($error)){
 
-    setcookie('error_msg', $error['pass--w'], time() + 365 * 24 * 3600, '/');
+    $_SESSION['error_msg'] = $error['pass--w'];
+
+    //setcookie('error_msg', $error['pass--w'], time() + 365 * 24 * 3600, '/');
 
     //$_SESSION['deletion_error'] = $error;
 

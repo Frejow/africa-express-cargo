@@ -1,5 +1,7 @@
 <?php
 
+//Pagination
+
 if (isset($_POST['previous'])) {
     //die (var_dump($_SESSION['previous_page']));
 
@@ -13,6 +15,27 @@ if (isset($_POST['previous'])) {
         header("location:" . PROJECT . "customer/dash/packages-listings?theme=light");
     }
 }
+
+if (isset($_POST['next'])) {
+    
+    $_SESSION['next_page'] = $_POST['next'];
+
+    if (isset($_SESSION['next_page'])) {
+    if (isset(explode('?', $_SERVER['REQUEST_URI'])[1]) && explode('?', $_SERVER['REQUEST_URI'])[1] == "theme=light") {
+        header("location:" . PROJECT . "customer/dash/packages-listings?theme=light");
+    } elseif (isset(explode('?', $_SERVER['REQUEST_URI'])[1]) && explode('?', $_SERVER['REQUEST_URI'])[1] == "theme=dark") {
+        header("location:" . PROJECT . "customer/dash/packages-listings?theme=dark");
+    } else {
+        header("location:" . PROJECT . "customer/dash/packages-listings?theme=light");
+    }
+    }
+} 
+
+//Pagination
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+//Filter
 
 if (isset($_POST['statusSelect']) && $_POST['statusSelect'] != 'Tout Afficher') {
 
@@ -36,6 +59,12 @@ if (isset($_POST['statusSelect']) && $_POST['statusSelect'] != 'Tout Afficher') 
         header("location:" . PROJECT . "customer/dash/packages-listings?theme=light");
     }
 }
+
+//Filter
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+//Research
 
 if (isset($_POST['search']) && !empty($_POST['search'])) {
     //die ('dedans');
@@ -61,22 +90,11 @@ if (isset($_POST['search']) && !empty($_POST['search'])) {
     }
 }
 
+//Research
 
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-if (isset($_POST['next'])) {
-    
-    $_SESSION['next_page'] = $_POST['next'];
-
-    if (isset($_SESSION['next_page'])) {
-    if (isset(explode('?', $_SERVER['REQUEST_URI'])[1]) && explode('?', $_SERVER['REQUEST_URI'])[1] == "theme=light") {
-        header("location:" . PROJECT . "customer/dash/packages-listings?theme=light");
-    } elseif (isset(explode('?', $_SERVER['REQUEST_URI'])[1]) && explode('?', $_SERVER['REQUEST_URI'])[1] == "theme=dark") {
-        header("location:" . PROJECT . "customer/dash/packages-listings?theme=dark");
-    } else {
-        header("location:" . PROJECT . "customer/dash/packages-listings?theme=light");
-    }
-    }
-} 
+//Entries
 
 if (isset($_POST['select'])) {
 
@@ -110,6 +128,12 @@ if (isset($_POST['select'])) {
     
 } 
 
+//Entries
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+//Package deletion
+
 if (isset($_POST['package_deletion']) && !empty($_POST['package_deletion'])) {
 
     //die (var_dump($_POST['package_deletion']));
@@ -128,3 +152,7 @@ if (isset($_POST['package_deletion']) && !empty($_POST['package_deletion'])) {
 
     }
 } 
+
+//Package deletion
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
