@@ -837,7 +837,7 @@ function listings($table, $page, $packages_nb_per_page, $status, $search, $user_
 
     $database = _database_login();
 
-    if ($status === 'undefined' && $search === 'UNDEFINED') {
+    if ($status === 'Tout Afficher' && $search === 'UNDEFINED') {
 
         $request = "SELECT * FROM " . $table . " WHERE user_id = :user_id and is_deleted = :is_deleted ORDER BY id DESC LIMIT " . $packages_nb_per_page . " OFFSET " . ($page - 1) * $packages_nb_per_page;
 
@@ -848,7 +848,7 @@ function listings($table, $page, $packages_nb_per_page, $status, $search, $user_
             'is_deleted' => 0,
         ]);
 
-    } elseif ($status !== 'undefined' && $search === 'UNDEFINED') {
+    } elseif ($status !== 'Tout Afficher' && $search === 'UNDEFINED') {
 
         $request = "SELECT * FROM " . $table . " WHERE user_id = :user_id and status = :status and is_deleted = :is_deleted ORDER BY id DESC LIMIT " . $packages_nb_per_page . " OFFSET " . ($page - 1) * $packages_nb_per_page;
 
@@ -860,7 +860,7 @@ function listings($table, $page, $packages_nb_per_page, $status, $search, $user_
             'is_deleted' => 0,
         ]);
 
-    } elseif ($status === 'undefined' && $search !== 'UNDEFINED') {
+    } elseif ($status === 'Tout Afficher' && $search !== 'UNDEFINED') {
 
         $request = "SELECT * FROM " . $table . " WHERE user_id = :user_id and is_deleted = :is_deleted AND ";
 
@@ -883,7 +883,7 @@ function listings($table, $page, $packages_nb_per_page, $status, $search, $user_
             'is_deleted' => 0,
         ]);
 
-    } elseif ($status !== 'undefined' && $search !== 'UNDEFINED') {
+    } elseif ($status !== 'Tout Afficher' && $search !== 'UNDEFINED') {
 
         $request = "SELECT * FROM " . $table . " WHERE user_id = :user_id and is_deleted = :is_deleted AND ";
 
@@ -921,14 +921,14 @@ function listings($table, $page, $packages_nb_per_page, $status, $search, $user_
     return $packages_list;
 }
 
-function count_rows_in_package_table()
+function count_rows_in_table($table)
 {
 
     $rows = [];
 
     $database = _database_login();
 
-    $request = "SELECT COUNT(*) FROM package WHERE is_deleted = :is_deleted";
+    $request = "SELECT COUNT(*) FROM " . $table . " WHERE is_deleted = :is_deleted";
 
     $request_prepare = $database->prepare($request);
 
@@ -948,7 +948,7 @@ function count_rows_in_package_table()
     return $rows;
 }
 
-function deleted_package(string $tracking_number): bool
+function deleted_package_or_packagegroup (string $tracking_number, string $table): bool
 {
     date_default_timezone_set("Africa/Lagos");
 
@@ -956,7 +956,7 @@ function deleted_package(string $tracking_number): bool
 
     $database = _database_login();
 
-    $request = "UPDATE package SET is_active = :is_active, is_deleted = :is_deleted, updated_on = :updated_on WHERE tracking_number = :tracking_number";
+    $request = "UPDATE " . $table ." SET is_active = :is_active, is_deleted = :is_deleted, updated_on = :updated_on WHERE tracking_number = :tracking_number";
 
     $request_prepare = $database->prepare($request);
 
@@ -975,4 +975,191 @@ function deleted_package(string $tracking_number): bool
     }
 
     return $update_is_deleted_field;
+}
+
+function packages_listing_in_selectfield($user_id)
+{
+
+    $packages_listing = [];
+
+    $database = _database_login();
+
+    $request = "SELECT * FROM package WHERE user_id = :user_id and is_deleted = :is_deleted and customer_package_group_id IS NULL ORDER BY id DESC";
+
+    $request_prepare = $database->prepare($request);
+
+    $request_execution = $request_prepare->execute([
+        'user_id' => $user_id,
+        'is_deleted' => 0,
+    ]);
+
+    if ($request_execution) {
+
+        $data = $request_prepare->fetchAll(PDO::FETCH_ASSOC);
+
+        if (isset($data) && !empty($data) && is_array($data)) {
+
+            $packages_listing = $data;
+        }
+    }
+
+    return $packages_listing;
+}
+
+function insert_select_incustomerpackagegroup_table(string $tracking_number, int $user_id): bool
+{
+
+    $insertselect = false;
+
+    $database = _database_login();
+
+    $insertrequest = "INSERT INTO customer_package_group (tracking_number, user_id) VALUES (:tracking_number, :user_id)";
+
+    $insertrequest_prepare = $database->prepare($insertrequest);
+
+    $insertrequest_execution = $insertrequest_prepare->execute(
+        [
+            'tracking_number' => strtoupper($tracking_number),
+            'user_id' => $user_id,
+        ]
+    );
+
+    if ($insertrequest_execution) {
+
+        $selectrequest = "SELECT id FROM customer_package_group WHERE tracking_number = :tracking_number";
+
+        $selectrequest_prepare = $database->prepare($selectrequest);
+
+        $selectrequest_execution = $selectrequest_prepare->execute(
+            [
+                'tracking_number' => $tracking_number,
+            ]
+        );
+
+        if ($selectrequest_execution) {
+
+            $data = $selectrequest_prepare->fetchAll(PDO::FETCH_ASSOC);
+
+            if (isset($data) && !empty($data) && is_array($data)) {
+
+                $_SESSION['nowcreated_packagegroup_id'] = $data;
+
+                $insertselect = true;
+
+            }
+            
+        }
+
+    }
+
+    return $insertselect;
+
+}
+
+function update_customerpackagegroupid_field_inpackage_table(int $customer_package_group_id, string $package_tracking_number): bool
+{
+    date_default_timezone_set("Africa/Lagos");
+
+    $update = false;
+
+    $database = _database_login();
+
+    $request = "UPDATE package SET customer_package_group_id = :customer_package_group_id, updated_on= :updated_on WHERE tracking_number = :package_tracking_number";
+
+    $request_prepare = $database->prepare($request);
+
+    $request_execution = $request_prepare->execute(
+        [
+            'package_tracking_number' => $package_tracking_number,
+            'customer_package_group_id'  => $customer_package_group_id,
+            'updated_on' => date('Y-m-d H:i:s')
+        ]
+    );
+
+    if ($request_execution) {
+
+        $update = true;
+    }
+
+    return $update;
+}
+
+function select_packagegroup_trackingnumber(int $package_group_id)
+{
+    $packagegroup_trackingnumber = [];
+
+    $database = _database_login();
+
+    $request = "SELECT tracking_number FROM customer_package_group WHERE id=:package_group_id";
+
+    $request_prepare = $database->prepare($request);
+
+    $request_execution = $request_prepare->execute([
+        'package_group_id' => $package_group_id
+    ]);
+
+    if ($request_execution) {
+
+        $data = $request_prepare->fetchAll(PDO::FETCH_ASSOC);
+
+        if (isset($data) && !empty($data) && is_array($data)) {
+
+            $packagegroup_trackingnumber = $data;
+        }
+    }
+    return $packagegroup_trackingnumber;
+}
+
+function select_allpackages_forpackagegroup(int $package_group_id)
+{
+    $allpackages_forpackagegroup = [];
+
+    $database = _database_login();
+
+    $request = "SELECT * FROM package WHERE customer_package_group_id = :package_group_id and is_deleted = :is_deleted ORDER BY id DESC";
+
+    $request_prepare = $database->prepare($request);
+
+    $request_execution = $request_prepare->execute([
+        'package_group_id' => $package_group_id,
+        'is_deleted' => 0
+    ]);
+
+    if ($request_execution) {
+
+        $data = $request_prepare->fetchAll(PDO::FETCH_ASSOC);
+
+        if (isset($data) && !empty($data) && is_array($data)) {
+
+            $allpackages_forpackagegroup = $data;
+        }
+    }
+    return $allpackages_forpackagegroup;
+}
+
+function update_customer_package_group_id_inpackagetable(string $customer_package_group_id): bool
+{
+    date_default_timezone_set("Africa/Lagos");
+
+    $update_customer_package_group_id = false;
+
+    $database = _database_login();
+
+    $request = "UPDATE package SET customer_package_group_id = NULL, updated_on= :updated_on WHERE customer_package_group_id = :customer_package_group_id";
+
+    $request_prepare = $database->prepare($request);
+
+    $request_execution = $request_prepare->execute(
+        [
+            'customer_package_group_id' => $customer_package_group_id,
+            'updated_on' => date('Y-m-d H:i:s')
+        ]
+    );
+
+    if ($request_execution) {
+
+        $update_customer_package_group_id = true;
+    }
+
+    return $update_customer_package_group_id;
 }

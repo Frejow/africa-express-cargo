@@ -19,7 +19,7 @@ if (!isset($_SESSION['previous_page']) && !isset($_SESSION['next_page'])) {
 
 $_SESSION['packages_nb_per_page'] = 10;
 
-$_SESSION['status'] = 'undefined';
+$_SESSION['status'] = 'Tout Afficher';
 
 $_SESSION['search'] = 'UNDEFINED';
 
@@ -51,7 +51,7 @@ $packages_listings = listings($table, $_SESSION['page'], $_SESSION['packages_nb_
 
 //die (var_dump($packages_listings));
 
-$rows = count_rows_in_package_table();
+$rows = count_rows_in_table($table);
 
 ?>
 
@@ -182,7 +182,7 @@ if (isset($_SESSION['error_msg']) && !empty($_SESSION['error_msg'])) {
                                     Filtrer :
                                     <div class="ms-2 d-inline-block">
                                         <select class="form-select" name="statusSelect" id="mySelect2">
-                                            <option disabled selected value="">Statut</option>
+                                            <option disabled selected value="">Tout Afficher</option>
                                             <option <?php if (isset($_SESSION['selected_status']) && $_SESSION['selected_status'] == 'Tout Afficher') {
                                                         echo 'selected';
                                                     } ?> data-value="Tout Afficher">Tout Afficher</option>
@@ -224,8 +224,10 @@ if (isset($_SESSION['error_msg']) && !empty($_SESSION['error_msg'])) {
                                 <tbody>
                                     <?php
                                     if (isset($packages_listings) && !empty($packages_listings)) {
+
                                         $n = 0;
                                         $m = 0;
+                                        $en = 0;
 
                                         if (isset($_SESSION['next_page']) && !empty($_SESSION['next_page'])) {
                                             $m = $_SESSION['next_page'];
@@ -238,18 +240,42 @@ if (isset($_SESSION['error_msg']) && !empty($_SESSION['error_msg'])) {
                                         }
 
                                         foreach ($packages_listings as $key => $package) {
+
+                                            if (!empty($packages_listings[$key]["customer_package_group_id"])) {
+
+                                                //Package group tracking number
+                                                $packages_group_tracking_number = select_packagegroup_trackingnumber($packages_listings[$key]["customer_package_group_id"])[0]['tracking_number'];
+
+                                                //All packages in a package group based on package_group_id || customer_package_group_id
+                                                $packages_ingrouplistings = select_allpackages_forpackagegroup($packages_listings[$key]["customer_package_group_id"]);
+                                            }
                                     ?>
                                             <tr>
-                                                <td><?php //echo $key + 1;
+                                                <td>
+                                                    <?php
+
                                                     if ($_SESSION['page'] == 1) {
-                                                        echo $key + 1;
+
+                                                        $en = $key + 1;
+
+                                                        echo $en;
                                                     } elseif ($_SESSION['page'] == 2) {
-                                                        echo $_SESSION['packages_nb_per_page'] + $key + 1;
+
+                                                        $en = $_SESSION['packages_nb_per_page'] + $key + 1;
+
+                                                        echo $en;
                                                     } elseif ($_SESSION['page'] > 2 && $m > 2) {
-                                                        echo ($_SESSION['packages_nb_per_page'] * ($m - 1)) + $key + 1;
+
+                                                        $en = ($_SESSION['packages_nb_per_page'] * ($m - 1)) + $key + 1;
+
+                                                        echo $en;
                                                     } else {
-                                                        echo ($_SESSION['packages_nb_per_page'] * ($m - 1)) + $key + 1;
+
+                                                        $en = ($_SESSION['packages_nb_per_page'] * ($m - 1)) + $key + 1;
+
+                                                        echo $en;
                                                     }
+
                                                     ?><input class="form-check-input m-0 align-middle row-check" type="checkbox" value="BN95F621" name="checkbox" aria-label="Select invoice"></td>
                                                 <td>
                                                     <?= $packages_listings[$key]["tracking_number"] ?>
@@ -266,7 +292,7 @@ if (isset($_SESSION['error_msg']) && !empty($_SESSION['error_msg'])) {
                                                     } elseif ($packages_listings[$key]["status"] == 'En transit') {
                                                         echo 'bg-primary';
                                                     } elseif ($packages_listings[$key]["status"] == 'Entrepôt Chine') {
-                                                        echo 'bg-dark';
+                                                        echo 'bg-danger';
                                                     } elseif ($packages_listings[$key]["status"] == 'Entrepôt Bénin') {
                                                         echo 'bg-warning';
                                                     } elseif ($packages_listings[$key]["status"] == 'Livrer') {
@@ -278,7 +304,81 @@ if (isset($_SESSION['error_msg']) && !empty($_SESSION['error_msg'])) {
                                                     <?= $packages_listings[$key]["status"] ?>
                                                 </td>
                                                 <td>
-                                                    <?= !empty($packages_listings[$key]["customer_package_group_id"]) ? '<a href = "#">Oui -> ' . $packages_listings[$key]["customer_package_group_id"] . '</a>' : 'Non' ?>
+                                                    <?= !empty($packages_listings[$key]["customer_package_group_id"]) ? 'Oui -> <a href = "#" data-bs-toggle="modal" data-bs-target="#' . $packages_group_tracking_number.$key . '">' . $packages_group_tracking_number . ' [ Voir ]</a>' : 'Non' ?>
+
+                                                    <div class="modal modal-blur fade" data-bs-backdrop='static' id="<?= !empty($packages_listings[$key]["customer_package_group_id"]) ? $packages_group_tracking_number.$key : '' ?>" tabindex="-1" role="dialog" aria-hidden="true">
+                                                        <div class="modal-dialog modal-dialog-centered modal-lg modal-dialog-scrollable" role="document">
+                                                            <div class="modal-content">
+                                                                <div class="modal-header">
+                                                                    <h3 class="modal-title">Groupe N° <?= !empty($packages_listings[$key]["customer_package_group_id"]) ? $packages_group_tracking_number : ''?></h3>
+                                                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                                </div>
+                                                                <div class="modal-body">
+                                                                    <div class="datagrid">
+                                                                        <div class="datagrid-item">
+                                                                            <div class="datagrid-title">Nombre de Colis</div>
+                                                                            <div class="datagrid-content"><?= !empty($packages_listings[$key]["customer_package_group_id"]) ? sizeof($packages_ingrouplistings) : ''?></div>
+                                                                        </div>
+                                                                    </div><br>
+                                                                    <div class="row row-deck row-cards text-center">
+                                                                        <div class="col-12">
+                                                                            <div class="card">
+                                                                                <div class="card-body border-bottom py-3">
+                                                                                    <div class="d-flex justify-content-center">
+                                                                                        <div class="">
+                                                                                            <h3 class="d-inline-block">
+                                                                                                Colis du Groupe
+                                                                                            </h3>
+                                                                                        </div>
+                                                                                    </div>
+                                                                                </div>
+                                                                                <div class="table-responsive">
+                                                                                    <table class="table card-table table-vcenter text-nowrap datatable">
+                                                                                        <thead>
+                                                                                            <tr>
+                                                                                                <th class="">N° de suivi</th>
+                                                                                                <th>Type de produits</th>
+                                                                                            </tr>
+                                                                                        </thead>
+                                                                                        <tbody>
+                                                                                            <?php
+                                                                                            if (isset($packages_ingrouplistings) && !empty($packages_ingrouplistings)) {
+
+                                                                                                foreach ($packages_ingrouplistings as $_key => $packages_ingroup) {
+                                                                                            ?>
+                                                                                                    <tr>
+                                                                                                        <td>
+                                                                                                            <?= $packages_ingrouplistings[$_key]["tracking_number"] == $packages_listings[$key]["tracking_number"] ? '<span class="badge bg-orange">'.$packages_ingrouplistings[$_key]["tracking_number"].'</span>' : $packages_ingrouplistings[$_key]["tracking_number"] ?>
+                                                                                                        </td>
+                                                                                                        <td class="">
+                                                                                                            <span></span>
+                                                                                                            <?= !empty($packages_ingrouplistings[$_key]["product_type"]) ? $packages_ingrouplistings[$_key]["product_type"] : '-' ?>
+                                                                                                        </td>
+                                                                                                        <!--
+                                                                                                        <td class="text-end">
+                                                                                                            <span class="">
+                                                                                                                <a class="btn-link" href="" data-bs-toggle="modal" data-bs-dismiss="false" data-bs-target="<?= "#modal-packages-ingroup-detail" . $key ?>">
+                                                                                                                    Détails
+                                                                                                                </a>
+                                                                                                            </span>
+                                                                                                        </td>
+                                                                                                        -->
+                                                                                                    </tr>
+                                                                                            <?php
+
+                                                                                                }
+                                                                                            }
+                                                                                            ?>
+                                                                                        </tbody>
+                                                                                    </table>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
                                                 </td>
                                                 <td class="text-end">
                                                     <span class="">
@@ -309,7 +409,7 @@ if (isset($_SESSION['error_msg']) && !empty($_SESSION['error_msg'])) {
                                                 <td class="text-end">
                                                     <span class="">
                                                         <a class="btn-link link-danger
-                                                        <?php if ($packages_listings[$key]["status"] === 'En attente...' || $packages_listings[$key]["status"] === 'Livrer') {
+                                                        <?php if ($packages_listings[$key]["status"] === 'En attente...') {
                                                             echo '';
                                                         } else {
                                                             echo 'disabled text-muted';
@@ -382,11 +482,11 @@ if (isset($_SESSION['error_msg']) && !empty($_SESSION['error_msg'])) {
                                 }
 
                                 if (!isset($packages_listings) || empty($packages_listings)) {
-                                    $s = $n . ' ligne';
+                                    $s = 'de ' . $n . ' ligne';
                                 }
 
                             ?>
-                                <p class="m-0 text-muted">Affichage <?php if (isset($packages_listings) && !empty($packages_listings)) { ?> de la ligne <?php } ?> <span><?= $s ?></span> <?php if (isset($packages_listings) && !empty($packages_listings)) { ?> à la ligne <span><?= $e ?></span> <?php } ?> sur <span><?= $rows[0]['COUNT(*)'] ?></span> ligne(s) au total</p>
+                                <p class="m-0 text-muted">Affichage <?php if (isset($packages_listings) && !empty($packages_listings)) { ?> de la ligne <?php } ?> <span><?= $s ?></span> <?php if (isset($packages_listings) && !empty($packages_listings)) { ?> à la ligne <span><?= $en ?></span> <?php } ?> sur <span><?= $rows[0]['COUNT(*)'] ?></span> ligne(s) au total</p>
 
                             <?php
 
@@ -400,11 +500,11 @@ if (isset($_SESSION['error_msg']) && !empty($_SESSION['error_msg'])) {
                                 }
 
                                 if (!isset($packages_listings) || empty($packages_listings)) {
-                                    $s = $n . ' ligne';
+                                    $s = 'de ' . $n . ' ligne';
                                 }
 
                             ?>
-                                <p class="m-0 text-muted">Affichage <?php if (isset($packages_listings) && !empty($packages_listings)) { ?> de la ligne <?php } ?> <span><?= $s ?></span> <?php if (isset($packages_listings) && !empty($packages_listings)) { ?> à la ligne <span><?= $e ?></span> <?php } ?> sur <span><?= $rows[0]['COUNT(*)'] ?></span> ligne(s) au total</p>
+                                <p class="m-0 text-muted">Affichage <?php if (isset($packages_listings) && !empty($packages_listings)) { ?> de la ligne <?php } ?> <span><?= $s ?></span> <?php if (isset($packages_listings) && !empty($packages_listings)) { ?> à la ligne <span><?= $en ?></span> <?php } ?> sur <span><?= $rows[0]['COUNT(*)'] ?></span> ligne(s) au total</p>
 
                             <?php
 
@@ -418,14 +518,14 @@ if (isset($_SESSION['error_msg']) && !empty($_SESSION['error_msg'])) {
                                 }
 
                                 if (!isset($packages_listings) || empty($packages_listings)) {
-                                    $s = $n . ' ligne';
+                                    $s = 'de ' . $n . ' ligne';
                                 }
 
                             ?>
-                                <p class="m-0 text-muted">Affichage <?php if (isset($packages_listings) && !empty($packages_listings)) { ?> de la ligne <?php } ?> <span><?= $s ?></span> <?php if (isset($packages_listings) && !empty($packages_listings)) { ?> à la ligne <span><?= $e ?></span> <?php } ?> sur <span><?= $rows[0]['COUNT(*)'] ?></span> ligne(s) au total</p>
+                                <p class="m-0 text-muted">Affichage <?php if (isset($packages_listings) && !empty($packages_listings)) { ?> de la ligne <?php } ?> <span><?= $s ?></span> <?php if (isset($packages_listings) && !empty($packages_listings)) { ?> à la ligne <span><?= $en ?></span> <?php } ?> sur <span><?= $rows[0]['COUNT(*)'] ?></span> ligne(s) au total</p>
 
                             <?php
-                            
+
                             } else {
 
                                 $e = $_SESSION['packages_nb_per_page'] * $_SESSION['page'];
@@ -436,11 +536,11 @@ if (isset($_SESSION['error_msg']) && !empty($_SESSION['error_msg'])) {
                                 }
 
                                 if (!isset($packages_listings) || empty($packages_listings)) {
-                                    $s = $n . ' ligne';
+                                    $s = 'de ' . $n . ' ligne';
                                 }
 
                             ?>
-                                <p class="m-0 text-muted">Affichage <?php if (isset($packages_listings) && !empty($packages_listings)) { ?> de la ligne <?php } ?> <span><?= $s ?></span> <?php if (isset($packages_listings) && !empty($packages_listings)) { ?> à la ligne <span><?= $e ?></span> <?php } ?> sur <span><?= $rows[0]['COUNT(*)'] ?></span> ligne(s) au total</p>
+                                <p class="m-0 text-muted">Affichage <?php if (isset($packages_listings) && !empty($packages_listings)) { ?> de la ligne <?php } ?> <span><?= $s ?></span> <?php if (isset($packages_listings) && !empty($packages_listings)) { ?> à la ligne <span><?= $en ?></span> <?php } ?> sur <span><?= $rows[0]['COUNT(*)'] ?></span> ligne(s) au total</p>
 
                             <?php
                             }
@@ -458,7 +558,9 @@ if (isset($_SESSION['error_msg']) && !empty($_SESSION['error_msg'])) {
                                     </button>
                                 </li>
                                 <li class="page-item page-link active"><?= $_SESSION['page'] ?></li>
-                                <li class="page-item <?= ($rows[0]['COUNT(*)'] === $e) ? "disabled" : "" ?>">
+                                <li class="page-item <?php if (!isset($packages_listings) || empty($packages_listings)) {
+                                                            echo 'disabled';
+                                                        } ?>">
                                     <button type="submit" name="next" value="<?= $_SESSION['page'] + 1 ?>" class="page-link">
                                         suivant <!-- Download SVG icon from http://tabler-icons.io/i/chevron-right -->
                                         <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
@@ -478,16 +580,21 @@ if (isset($_SESSION['error_msg']) && !empty($_SESSION['error_msg'])) {
 
 <?php include '..' . PROJECT . 'app/common/customer/2ndpart.php';
 
-if (isset($_SESSION['selected_status'])) {
-    unset($_SESSION['selected_status']);
-} elseif (isset($_SESSION['research'])) {
-    unset($_SESSION['research']);
-} elseif (isset($_SESSION['next_page']) && $_SESSION['next_page'] == $_SESSION['page']) {
+//die (var_dump($en));
+
+
+if (isset($_SESSION['next_page']) && $_SESSION['next_page'] == $_SESSION['page']) {
     unset($_SESSION['next_page']);
 } elseif (isset($_SESSION['previous_page']) && $_SESSION['previous_page'] == $_SESSION['page']) {
     unset($_SESSION['previous_page']);
 } elseif (isset($_SESSION['actual_page']) && $_SESSION['actual_page'] == $_SESSION['page']) {
     unset($_SESSION['actual_page']);
 }
+
+unset($_SESSION['research']);
+
+/*if (!isset($_SESSION['research']) || !isset($_SESSION['selected_status'])) {
+    unset($_SESSION['research'], $_SESSION['selected_status']);
+}*/
 //unset($_SESSION['selected_status'], $_SESSION['select_packages_nb_per_page'], $_SESSION['next_page'], $_SESSION['previous_page'], $_SESSION['research']);
 ?>

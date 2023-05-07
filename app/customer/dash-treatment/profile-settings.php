@@ -92,6 +92,8 @@ if (isset($_POST['pass_w']) && !empty($_POST['pass_w']) && check_password($data[
 
         $newdata["avatar"] = $data[0]["avatar"];
 
+        $error["avatar"] = "Veuillez importer une image.";
+
     }
 
     if (isset($newdata["avatar"])) {
@@ -118,16 +120,16 @@ if (isset($_POST['pass_w']) && !empty($_POST['pass_w']) && check_password($data[
 
 } elseif (isset($_POST['pass_w']) && !empty($_POST['pass_w']) && !check_password($data[0]['id'], $_POST['pass_w'])) {
 
-    $error["pass_w"] = 'La tentative de mise à jour a échoué de l\'avatar. Mot de passe erroné. Réessayer !';
+    $error["pass_w"] = 'La tentative de mise à jour de l\'avatar a échoué. Mot de passe erroné. Réessayer !';
 
-    $updata ['avatar'] = 'REESSAYER';
+    //$updata ['avatar'] = 'REESSAYER';
 
 
 } elseif (isset($_POST['pass_w']) && empty($_POST['pass_w']) && !isset($_POST['avatar_deletion'])) {
 
-    $error["pass_w"] = 'La tentative de mise à jour a échoué de l\'avatar. Aucun mot de passe n\'a été soumis. Réessayer !';
+    $error["pass_w"] = 'La tentative de mise à jour de l\'avatar a échoué. Aucun mot de passe n\'a été soumis. Réessayer !';
 
-    $updata ['avatar'] = 'REESSAYER';
+    //$updata ['avatar'] = 'REESSAYER';
 
 }  
 
@@ -144,8 +146,6 @@ if (!empty($error)){
     } else {
         header("location:".PROJECT."customer/dash/profile-settings?theme=light");
     }
-
-    //header("location:".PROJECT."customer/dash/profile-settings");
 
 }
 
@@ -184,12 +184,6 @@ if (isset($_POST['pass']) && !empty($_POST['pass']) && check_password($data[0]['
 
     $newdata ['mail'] = $data[0]['mail'];
 
-    /*if ($_POST['mail'] != $data[0]['mail'] && filter_var($_POST["mail"], FILTER_VALIDATE_EMAIL)){
-        $newdata ['mail'] = $_POST['mail'];
-    } else {
-        $newdata ['mail'] = $data[0]['mail'];
-    }*/
-
     if (isset($_POST['tel']) && !empty($_POST['tel']) && $_POST['tel'] != $data[0]['phone_number']){
         $newdata ['tel'] = secure($_POST['tel']);
     } else {
@@ -207,14 +201,12 @@ if (isset($_POST['pass']) && !empty($_POST['pass']) && check_password($data[0]['
                 header("location:".PROJECT."customer/dash/profile-settings?theme=light");
             }
 
-            //header("location:".PROJECT."customer/dash/profile-settings");
-
         }
     }
 
 } elseif (isset($_POST['pass']) && !empty($_POST['pass']) && !check_password($data[0]['id'], $_POST['pass'])) {
 
-    $_SESSION['personal_error'] = 'La tentative de mise à jour a échoué. Mot de passe erroné. Réessayer !';
+    $_SESSION['personal_error'] = 'La tentative de mise à jour des informations personnelles a échoué. Mot de passe erroné. Réessayer !';
 
     if (isset(explode('?', $_SERVER['REQUEST_URI'])[1]) && explode('?', $_SERVER['REQUEST_URI'])[1] == "theme=light"){
         header("location:".PROJECT."customer/dash/profile-settings?theme=light");
@@ -224,8 +216,16 @@ if (isset($_POST['pass']) && !empty($_POST['pass']) && check_password($data[0]['
         header("location:".PROJECT."customer/dash/profile-settings?theme=light");
     }
     
-    //header("location:".PROJECT."customer/dash/profile-settings");
+} elseif (isset($_POST['pass']) && empty($_POST['pass'])) {
+    $_SESSION['personal_error'] = 'La tentative de mise à jour des informations personnelles a échoué. Aucun mot de passe n\'a été soumis. Réessayer !';
 
+    if (isset(explode('?', $_SERVER['REQUEST_URI'])[1]) && explode('?', $_SERVER['REQUEST_URI'])[1] == "theme=light"){
+        header("location:".PROJECT."customer/dash/profile-settings?theme=light");
+    } elseif (isset(explode('?', $_SERVER['REQUEST_URI'])[1]) && explode('?', $_SERVER['REQUEST_URI'])[1] == "theme=dark"){
+        header("location:".PROJECT."customer/dash/profile-settings?theme=dark");
+    } else {
+        header("location:".PROJECT."customer/dash/profile-settings?theme=light");
+    }
 }
 
 //Personal Informations
@@ -279,6 +279,8 @@ if (isset($_POST['passw']) && !empty($_POST['passw']) && check_password($data[0]
 
     $error['passw'] = 'Mot de passe erroné. Réessayer !';
 
+} elseif (isset($_POST['passw']) && empty($_POST['passw'])) {
+    $error['passw'] = 'Ce champs est requis. Entrez votre mot de passe actuel.';
 }
 
 if (!empty($error)){
@@ -287,12 +289,6 @@ if (!empty($error)){
 
     $_SESSION['password_error'] = $error;
 
-    if (isset($error['newpass'])) {
-        $_SESSION['error_msg'] = isset($error['newpass']);
-    } elseif (isset($error['passw'])) {
-        $_SESSION['error_msg'] = isset($error['passw']);
-    }
-
     if (isset(explode('?', $_SERVER['REQUEST_URI'])[1]) && explode('?', $_SERVER['REQUEST_URI'])[1] == "theme=light"){
         header("location:".PROJECT."customer/dash/profile-settings?theme=light");
     } elseif (isset(explode('?', $_SERVER['REQUEST_URI'])[1]) && explode('?', $_SERVER['REQUEST_URI'])[1] == "theme=dark"){
@@ -300,8 +296,6 @@ if (!empty($error)){
     } else {
         header("location:".PROJECT."customer/dash/profile-settings?theme=light");
     }
-
-    //header("location:".PROJECT."customer/dash/profile-settings");
 
 }
 
@@ -325,14 +319,19 @@ if (isset($_POST['pass-w']) && !empty($_POST['pass-w']) && check_password($data[
 
     $error['pass-w'] = 'Mot de passe erroné. Veuillez réessayer !';
 
+} else {
+    if (isset(explode('?', $_SERVER['REQUEST_URI'])[1]) && explode('?', $_SERVER['REQUEST_URI'])[1] == "theme=light"){
+        header("location:".PROJECT."customer/dash/profile-settings?theme=light");
+    } elseif (isset(explode('?', $_SERVER['REQUEST_URI'])[1]) && explode('?', $_SERVER['REQUEST_URI'])[1] == "theme=dark"){
+        header("location:".PROJECT."customer/dash/profile-settings?theme=dark");
+    } else {
+        header("location:".PROJECT."customer/dash/profile-settings?theme=light");
+    }
 }
 
 if (!empty($error)){
 
-    $_SESSION['error_msg'] = $error['pass-w'];
-    //setcookie('error_msg', $error['pass-w'], time() + 365 * 24 * 3600, '/');
-
-    //$_SESSION['deactivation_error'] = $error;
+    $_SESSION['deactivation_error'] = $error;
 
     if (isset(explode('?', $_SERVER['REQUEST_URI'])[1]) && explode('?', $_SERVER['REQUEST_URI'])[1] == "theme=light"){
         header("location:".PROJECT."customer/dash/profile-settings?theme=light");
@@ -341,8 +340,6 @@ if (!empty($error)){
     } else {
         header("location:".PROJECT."customer/dash/profile-settings?theme=light");
     }
-
-    //header("location:".PROJECT."customer/dash/profile-settings");
 
 }
 
@@ -366,15 +363,19 @@ if (isset($_POST['pass--w']) && !empty($_POST['pass--w']) && check_password($dat
 
     $error['pass--w'] = 'Mot de passe erroné. Veuillez réessayer !';
 
+} else {
+    if (isset(explode('?', $_SERVER['REQUEST_URI'])[1]) && explode('?', $_SERVER['REQUEST_URI'])[1] == "theme=light"){
+        header("location:".PROJECT."customer/dash/profile-settings?theme=light");
+    } elseif (isset(explode('?', $_SERVER['REQUEST_URI'])[1]) && explode('?', $_SERVER['REQUEST_URI'])[1] == "theme=dark"){
+        header("location:".PROJECT."customer/dash/profile-settings?theme=dark");
+    } else {
+        header("location:".PROJECT."customer/dash/profile-settings?theme=light");
+    }
 }
 
 if (!empty($error)){
 
-    $_SESSION['error_msg'] = $error['pass--w'];
-
-    //setcookie('error_msg', $error['pass--w'], time() + 365 * 24 * 3600, '/');
-
-    //$_SESSION['deletion_error'] = $error;
+    $_SESSION['deletion_error'] = $error;
 
     if (isset(explode('?', $_SERVER['REQUEST_URI'])[1]) && explode('?', $_SERVER['REQUEST_URI'])[1] == "theme=light"){
         header("location:".PROJECT."customer/dash/profile-settings?theme=light");
@@ -384,10 +385,24 @@ if (!empty($error)){
         header("location:".PROJECT."customer/dash/profile-settings?theme=light");
     }
 
-    //header("location:".PROJECT."customer/dash/profile-settings");
-
 }
 
 //Deletion
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+if ((isset($error['pass_w']) && !empty($error['pass_w'])) 
+|| (isset($_SESSION['personal_error']) && !empty($_SESSION['personal_error'])) 
+|| (isset($error['passw']) && !empty($error['passw'])) 
+|| (isset($error['pass-w']) && !empty($error['pass-w'])) 
+|| (isset($error['pass--w']) && !empty($error['pass--w'])) 
+|| (isset($error['avatar']) && !empty($error['avatar'])) 
+|| (isset($error['newpass']) && !empty($error['newpass']))){
+    //die ('yes');
+    $_SESSION['error_msg'] = 'Echec. Une erreur a été détecté lors de la mise à jour. Vérifiez vos saisies puis réessayer.';
+} else {
+    die ('yes');
+    unset($_SESSION['error_msg']);
+}
+
+

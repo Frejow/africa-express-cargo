@@ -15,6 +15,14 @@ ini_set('session.cookie_samesite', 'Strict');
 */
 
 session_start();
+if (isset($_COOKIE['error_msg']) && !empty($_COOKIE['error_msg'])){
+    $msg = $_COOKIE['error_msg'];
+?>
+    <div class="swalDefaultError" role="alert">
+    </div>
+<?php
+    setcookie('error_msg', '', time() - 3600, '/');
+}
 session_regenerate_id(true);
 
 $params = explode('/', $_GET['p']);

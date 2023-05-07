@@ -1,4 +1,4 @@
-<?php 
+<?php
 //die(var_dump(sha1('00000000'))); 
 if (connected()) {
     $_SESSION['current_url'] = "http://{$_SERVER['HTTP_HOST']}{$_SERVER['REQUEST_URI']}";
@@ -10,7 +10,7 @@ include '..' . PROJECT . 'app/common/customer/1stpart.php';  ?>
         <div class="row g-2 align-items-center">
             <div class="col">
                 <h2 class="page-title">
-                    Paramètres du compte
+                    Mon Profil
                 </h2>
             </div>
         </div>
@@ -24,10 +24,18 @@ include '..' . PROJECT . 'app/common/customer/1stpart.php';  ?>
 
                 <div class="col d-flex flex-column">
                     <div class="card-body" style="display: flex;flex-direction: column;align-items:center;">
+                        <h3 class="mb-4 text-center">
+                            Avatar
+                            <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                                <path d="M12 7m-4 0a4 4 0 1 0 8 0a4 4 0 1 0 -8 0"></path>
+                                <path d="M6 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2"></path>
+                            </svg>
+                        </h3>
 
                         <?php
                         if (isset($_SESSION['error_msg']) && !empty($_SESSION['error_msg'])) {
-                            $msg = $_SESSION['error_msg'];
+                            $msg = $_SESSION['error_msg']; //die (var_dump($msg ));
                         ?>
                             <div class="swalDefaultError" role="alert">
                             </div>
@@ -79,12 +87,12 @@ include '..' . PROJECT . 'app/common/customer/1stpart.php';  ?>
 
                         <form action="
                         <?php
-                        if (isset(explode('?', $_SERVER['REQUEST_URI'])[1]) && explode('?', $_SERVER['REQUEST_URI'])[1] == "theme=light"){
-                            echo PROJECT.'customer/dash-treatment/profile-settings'.'?theme=light';
-                        } elseif (isset(explode('?', $_SERVER['REQUEST_URI'])[1]) && explode('?', $_SERVER['REQUEST_URI'])[1] == "theme=dark"){
-                            echo PROJECT.'customer/dash-treatment/profile-settings'.'?theme=dark';
+                        if (isset(explode('?', $_SERVER['REQUEST_URI'])[1]) && explode('?', $_SERVER['REQUEST_URI'])[1] == "theme=light") {
+                            echo PROJECT . 'customer/dash-treatment/profile-settings' . '?theme=light';
+                        } elseif (isset(explode('?', $_SERVER['REQUEST_URI'])[1]) && explode('?', $_SERVER['REQUEST_URI'])[1] == "theme=dark") {
+                            echo PROJECT . 'customer/dash-treatment/profile-settings' . '?theme=dark';
                         } else {
-                            echo PROJECT.'customer/dash-treatment/profile-settings'.'?theme=light';
+                            echo PROJECT . 'customer/dash-treatment/profile-settings' . '?theme=light';
                         }
                         ?>
                         " class="text-center" method="post" enctype="multipart/form-data">
@@ -92,9 +100,41 @@ include '..' . PROJECT . 'app/common/customer/1stpart.php';  ?>
                             <div class="col mt-3">
                                 <input type="file" name="fileToUpload" id="fileToUpload" style="display: none;" onchange="updateButtonLabel()">
 
-                                <div class="col-md text-center">
-                                    <input type="button" class="btn link-warning" style="text-decoration: none;" value="<?php echo (isset($updata["avatar"]) && !empty($updata["avatar"])) ? $updata["avatar"] : 'Importer un fichier' ?>" id="importbutton" onclick="document.getElementById('fileToUpload').click();"/>
-                                </div>
+                                <?php
+                                if ($data[0]['avatar'] != 'null') {
+                                ?>
+                                    <div class="col-md text-center">
+                                        <label for="importbutton">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                            <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                                            <path d="M4 17v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2 -2v-2"></path>
+                                            <path d="M7 9l5 -5l5 5"></path>
+                                            <path d="M12 4l0 12"></path>
+                                        </svg>
+                                        </label>
+                                        <input type="button" class="btn link-secondary" style="text-decoration: none;" value="<?php echo (isset($updata["avatar"]) && !empty($updata["avatar"])) ? $updata["avatar"] : 'Importer une autre image' ?>" id="importbutton" onclick="document.getElementById('fileToUpload').click();" />
+                                    </div>
+                                <?php
+                                }
+                                ?>
+
+                                <?php
+                                if ($data[0]['avatar'] == 'null') {
+                                ?>
+                                    <div class="col-md text-center">
+                                        <label for="importbutton">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                            <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                                            <path d="M4 17v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2 -2v-2"></path>
+                                            <path d="M7 9l5 -5l5 5"></path>
+                                            <path d="M12 4l0 12"></path>
+                                        </svg>
+                                        </label>
+                                        <input type="button" class="btn link-secondary" style="text-decoration: none;" value="<?php echo (isset($updata["avatar"]) && !empty($updata["avatar"])) ? $updata["avatar"] : 'Importer une image' ?>" id="importbutton" onclick="document.getElementById('fileToUpload').click();" />
+                                    </div>
+                                <?php
+                                }
+                                ?>
 
                                 <?php
                                 if (isset($error["avatar"]) && !empty($error["avatar"])) {
@@ -106,7 +146,7 @@ include '..' . PROJECT . 'app/common/customer/1stpart.php';  ?>
                                 if ($data[0]['avatar'] == 'null') {
                                 ?>
                                     <div class="col-md mt-3">
-                                        <a href="#" class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#modal-warning1" style="text-decoration: none;" name="submit">Mettre à jour Avatar</a>
+                                        <a href="#" class="btn link-warning" data-bs-toggle="modal" data-bs-target="#modal-warning1" style="text-decoration: none;" name="submit">Mettre à jour Avatar</a>
                                     </div>
                                 <?php
                                 }
@@ -119,18 +159,18 @@ include '..' . PROJECT . 'app/common/customer/1stpart.php';  ?>
                             ?>
                                 <div class="row mt-3 text-center">
                                     <div class="col-md mb-1">
-                                        <a href="#" class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#modal-warning1" style="text-decoration: none;">Mettre à jour Avatar</a>
+                                        <a href="#" class="btn link-warning" data-bs-toggle="modal" data-bs-target="#modal-warning1" style="text-decoration: none;">Mettre à jour Avatar</a>
                                     </div>
 
-                                    <div class="col-md"><button type="submit" name="avatar_deletion" class="btn btn-danger" style="text-decoration: none;">
+                                    <div class="col-md"><button type="submit" name="avatar_deletion" class="btn link-danger" style="text-decoration: none;">
                                             Retirer Avatar
-                                </button></div>
+                                        </button></div>
                                 </div>
                             <?php
                             }
                             ?>
 
-                            <div class="modal modal-blur fade" id="modal-warning1" data-bs-backdrop = 'static' tabindex="-1" role="dialog" aria-hidden="true">
+                            <div class="modal modal-blur fade" id="modal-warning1" data-bs-backdrop='static' tabindex="-1" role="dialog" aria-hidden="true">
                                 <div class="modal-dialog modal-sm modal-dialog-centered" role="document">
                                     <div class="modal-content">
                                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
@@ -155,7 +195,7 @@ include '..' . PROJECT . 'app/common/customer/1stpart.php';  ?>
                                                             Annuler
                                                         </a></div>
                                                     <div class="col"><button type="submit" name="auth" class="btn btn-warning w-100" data-bs-dismiss="modal">
-                                                    S'authentifier
+                                                            S'authentifier
                                                         </button></div>
                                                 </div>
                                             </div>
@@ -268,12 +308,12 @@ include '..' . PROJECT . 'app/common/customer/1stpart.php';  ?>
 
                         <form class="col-lg-11" action="
                         <?php
-                        if (isset(explode('?', $_SERVER['REQUEST_URI'])[1]) && explode('?', $_SERVER['REQUEST_URI'])[1] == "theme=light"){
-                            echo PROJECT.'customer/dash-treatment/profile-settings'.'?theme=light';
-                        } elseif (isset(explode('?', $_SERVER['REQUEST_URI'])[1]) && explode('?', $_SERVER['REQUEST_URI'])[1] == "theme=dark"){
-                            echo PROJECT.'customer/dash-treatment/profile-settings'.'?theme=dark';
+                        if (isset(explode('?', $_SERVER['REQUEST_URI'])[1]) && explode('?', $_SERVER['REQUEST_URI'])[1] == "theme=light") {
+                            echo PROJECT . 'customer/dash-treatment/profile-settings' . '?theme=light';
+                        } elseif (isset(explode('?', $_SERVER['REQUEST_URI'])[1]) && explode('?', $_SERVER['REQUEST_URI'])[1] == "theme=dark") {
+                            echo PROJECT . 'customer/dash-treatment/profile-settings' . '?theme=dark';
                         } else {
-                            echo PROJECT.'customer/dash-treatment/profile-settings'.'?theme=light';
+                            echo PROJECT . 'customer/dash-treatment/profile-settings' . '?theme=light';
                         }
                         ?>
                         " method="post" id="form_appear" style="display: flex; flex-direction: column; display: none;">
@@ -403,12 +443,12 @@ include '..' . PROJECT . 'app/common/customer/1stpart.php';  ?>
 
                         <form action="
                         <?php
-                        if (isset(explode('?', $_SERVER['REQUEST_URI'])[1]) && explode('?', $_SERVER['REQUEST_URI'])[1] == "theme=light"){
-                            echo PROJECT.'customer/dash-treatment/profile-settings'.'?theme=light';
-                        } elseif (isset(explode('?', $_SERVER['REQUEST_URI'])[1]) && explode('?', $_SERVER['REQUEST_URI'])[1] == "theme=dark"){
-                            echo PROJECT.'customer/dash-treatment/profile-settings'.'?theme=dark';
+                        if (isset(explode('?', $_SERVER['REQUEST_URI'])[1]) && explode('?', $_SERVER['REQUEST_URI'])[1] == "theme=light") {
+                            echo PROJECT . 'customer/dash-treatment/profile-settings' . '?theme=light';
+                        } elseif (isset(explode('?', $_SERVER['REQUEST_URI'])[1]) && explode('?', $_SERVER['REQUEST_URI'])[1] == "theme=dark") {
+                            echo PROJECT . 'customer/dash-treatment/profile-settings' . '?theme=dark';
                         } else {
-                            echo PROJECT.'customer/dash-treatment/profile-settings'.'?theme=light';
+                            echo PROJECT . 'customer/dash-treatment/profile-settings' . '?theme=light';
                         }
                         ?>
                         " method="post" style="display: flex;flex-direction: column;align-items:center;">
@@ -419,7 +459,7 @@ include '..' . PROJECT . 'app/common/customer/1stpart.php';  ?>
 
                             if (isset($_SESSION["password_error"]) && !empty($_SESSION["password_error"])) {
                                 $error = $_SESSION["password_error"];
-                            } 
+                            }
 
                             $updata = [];
 
@@ -441,6 +481,8 @@ include '..' . PROJECT . 'app/common/customer/1stpart.php';  ?>
                                     <path d="M10 11v-2a2 2 0 1 1 4 0v2"></path>
                                 </svg>
                             </h3>
+                            <h3 class="text-center">-> Réinitialisation de Mot de passe</h3>
+                            <div class="text-danger bold text-center mt-2">Important ! En changeant votre mot de passe, vous allez être déconnecté. Vous n'aurez qu'à vous reconnecter avec votre nouveau mot de passe.</div>
                             <div class="row g-3 mt-2" id="updatePasswordBlock">
                                 <div class="col-md-12">
                                     <h3 class="form-label">
@@ -484,41 +526,63 @@ include '..' . PROJECT . 'app/common/customer/1stpart.php';  ?>
                                 </div>
                             </div>
 
-                            <div class="text-muted text-center mt-2">En changeant votre mot de passe, vous allez être déconnecté. Vous n'aurez qu'à vous reconnecter avec votre nouveau mot de passe.</div>
-
                             <div class="row mt-2">
                                 <div class="col-auto">
                                     <button id="clicktoUpdate" type="submit" class="btn link-warning">
-                                        Changer mon mot de passe
+                                        Mettre à jour
                                     </button>
                                 </div>
                             </div>
                         </form>
 
-                        <div class="row mt-4">
-                            <form  action="
+                        <h3 class="mt-3">-> Section Dangereuse</h3>
+                        <div class="row">
+                            <form action="
                             <?php
-                            if (isset(explode('?', $_SERVER['REQUEST_URI'])[1]) && explode('?', $_SERVER['REQUEST_URI'])[1] == "theme=light"){
-                                echo PROJECT.'customer/dash-treatment/profile-settings'.'?theme=light';
-                            } elseif (isset(explode('?', $_SERVER['REQUEST_URI'])[1]) && explode('?', $_SERVER['REQUEST_URI'])[1] == "theme=dark"){
-                                echo PROJECT.'customer/dash-treatment/profile-settings'.'?theme=dark';
+                            if (isset(explode('?', $_SERVER['REQUEST_URI'])[1]) && explode('?', $_SERVER['REQUEST_URI'])[1] == "theme=light") {
+                                echo PROJECT . 'customer/dash-treatment/profile-settings' . '?theme=light';
+                            } elseif (isset(explode('?', $_SERVER['REQUEST_URI'])[1]) && explode('?', $_SERVER['REQUEST_URI'])[1] == "theme=dark") {
+                                echo PROJECT . 'customer/dash-treatment/profile-settings' . '?theme=dark';
                             } else {
-                                echo PROJECT.'customer/dash-treatment/profile-settings'.'?theme=light';
+                                echo PROJECT . 'customer/dash-treatment/profile-settings' . '?theme=light';
                             }
                             ?>
                             " method="post">
+
+                                <?php
+
+                                $error = [];
+
+                                if (isset($_SESSION["deactivation_error"]) && !empty($_SESSION["deactivation_error"])) {
+                                    $error = $_SESSION["deactivation_error"];
+                                }
+
+                                if (isset($_SESSION["deletion_error"]) && !empty($_SESSION["deletion_error"])) {
+                                    $error = $_SESSION["deletion_error"];
+                                }
+
+                                ?>
 
                                 <div class="col-md text-center">
                                     <a href="#" data-bs-toggle="modal" data-bs-target="#modal-danger" class="btn btn-ghost-danger">
                                         Désactiver mon compte
                                     </a>
                                 </div>
+                                <?php
+                                if (isset($error["pass-w"]) && !empty($error["pass-w"])) {
+                                    echo "<p style = 'color:red; font-size:12px;'>" . $error["pass-w"] . "</p>";
+                                }
+                                ?>
                                 <div class="col-md text-center">
                                     <a href="#" data-bs-toggle="modal" data-bs-target="#modal-danger1" class="btn btn-ghost-danger">
                                         Supprimer mon compte
                                     </a>
                                 </div>
-
+                                <?php
+                                if (isset($error["pass--w"]) && !empty($error["pass--w"])) {
+                                    echo "<p style = 'color:red; font-size:12px;'>" . $error["pass--w"] . "</p>";
+                                }
+                                ?>
                                 <div class="modal modal-blur fade" id="modal-danger" tabindex="-1" role="dialog" aria-hidden="true">
                                     <div class="modal-dialog modal-sm modal-dialog-centered" role="document">
                                         <div class="modal-content">
@@ -546,7 +610,7 @@ include '..' . PROJECT . 'app/common/customer/1stpart.php';  ?>
                                                                 Annuler
                                                             </a></div>
                                                         <div class="col"><button type="submit" class="btn btn-danger w-100" data-bs-dismiss="modal">
-                                                        Confirmer
+                                                                Confirmer
                                                             </button></div>
                                                     </div>
                                                 </div>
@@ -582,7 +646,7 @@ include '..' . PROJECT . 'app/common/customer/1stpart.php';  ?>
                                                                 Annuler
                                                             </a></div>
                                                         <div class="col"><button type="submit" class="btn btn-danger w-100" data-bs-dismiss="modal">
-                                                        Confirmer
+                                                                Confirmer
                                                             </button></div>
                                                     </div>
                                                 </div>
@@ -601,7 +665,14 @@ include '..' . PROJECT . 'app/common/customer/1stpart.php';  ?>
 
 <?php include '..' . PROJECT . 'app/common/customer/2ndpart.php';
 
-unset($_SESSION['avatar_error'], $_SESSION['personal_error'], $_SESSION['password_error'],
- $_SESSION['deactivation_error'], $_SESSION['deletion_error'], $_SESSION['data']); 
+unset(
+    $_SESSION['avatar_error'],
+    $_SESSION['personal_error'],
+    $_SESSION['password_error'],
+    $_SESSION['deactivation_error'],
+    $_SESSION['deletion_error'],
+    $_SESSION['data'],
+    $_SESSION['error_msg']
+);
 
 ?>
