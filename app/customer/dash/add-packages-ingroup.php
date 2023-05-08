@@ -2,7 +2,7 @@
 if (connected()) {
     $_SESSION['current_url'] = "http://{$_SERVER['HTTP_HOST']}{$_SERVER['REQUEST_URI']}";
 }
-include '..'.PROJECT.'app/common/customer/1stpart.php'; ?>
+include 'app/common/customer/1stpart.php'; ?>
 
 <form action="" method="post">
     <div class="page-header d-print-none">
@@ -59,4 +59,4 @@ include '..'.PROJECT.'app/common/customer/1stpart.php'; ?>
     </div>
 </form>
 
-<?php include '..'.PROJECT.'app/common/customer/2ndpart.php' ?>
+<?php include 'app/common/customer/2ndpart.php' ?>

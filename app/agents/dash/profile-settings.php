@@ -1,4 +1,4 @@
-<?php include '..'.PROJECT.'app/common/agents/1stpart.php' ?>
+<?php include 'app/common/agents/1stpart.php' ?>
 
 <div class="page-header d-print-none">
     <div class="container-xl">
@@ -155,4 +155,4 @@
     </div>
 </div>
 
-<?php include '..'.PROJECT.'app/common/agents/2ndpart.php' ?>
+<?php include 'app/common/agents/2ndpart.php' ?>

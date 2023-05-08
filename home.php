@@ -43,7 +43,7 @@
                   <a class="nav-link" href="">Accueil</a>
                </li>
                <li class="nav-item">
-                  <a class="nav-link" href="about.html">A propos</a>
+                  <a class="nav-link" href="#">A propos</a>
                </li>
                <li class="nav-item">
                   <a class="nav-link" href="#contact">Contactez-Nous</a>
@@ -82,7 +82,7 @@
                         <div class="col-md-5">
                            <h1 class="banner_taital">Achetez depuis la chine</h1>
                            <p class="banner_text">Faites vos achats depuis la chine en toute quiétude</p>
-                           <div class="contact_bt mb-5"><a href="about.php">En savoir plus</a></div>
+                           <div class="contact_bt mb-5"><a href="#">En savoir plus</a></div>
                         </div>
                      </div>
                   </div>
@@ -96,7 +96,7 @@
                         <div class="col-md-5">
                            <h1 class="banner_taital">Recevez vos colis chez vous</h1>
                            <p class="banner_text">Nous importons vos colis jusqu'à vous</p>
-                           <div class="contact_bt mb-5"><a href="about.php">En savoir plus</a></div>
+                           <div class="contact_bt mb-5"><a href="#">En savoir plus</a></div>
                         </div>
                      </div>
                   </div>

@@ -29,8 +29,8 @@ function mailsendin(string $destination, string $recipient, string $subject, str
         $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
         $mail->Port = 587;
 
-        $mail->Username = 'express.cargo.africa@gmail.com';
-        $mail->Password = EMAILING_PASSWORD;
+        $mail->Username = MAIL_ADDRESS;
+        $mail->Password = MAIL_PASSWORD;
 
         // Sender and recipient settings
         $mail->setFrom('express.cargo.africa@gmail.com', htmlspecialchars_decode('Africa Express Cargo'));

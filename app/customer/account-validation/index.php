@@ -2,7 +2,7 @@
 
 //session_start();
 
-//include '..'.PROJECT."app/common/functions_folder/functions.php";
+//include "app/common/functions_folder/functions.php";
 
 if (isset($_GET['p']) && !empty($_GET['p'])) {
 

@@ -44,7 +44,7 @@ $params = explode('/', $_GET['p']);
 }*/
 
 
-include '..'.PROJECT."app/common/functions_folder/functions.php";
+include "app/common/functions_folder/functions.php";
 
 if (!connected()) {
     unset($_SESSION['current_url']);

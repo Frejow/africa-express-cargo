@@ -1,4 +1,4 @@
-<?php include '..'.PROJECT.'app/common/admin/1stpart.php' ?>
+<?php include 'app/common/admin/1stpart.php' ?>
 
     <form action="" method="post">
         <div class="page-body">
@@ -66,4 +66,4 @@
         </div>
     </form>
 
-<?php include '..'.PROJECT.'app/common/admin/2ndpart.php' ?>
+<?php include 'app/common/admin/2ndpart.php' ?>

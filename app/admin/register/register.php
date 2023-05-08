@@ -5,7 +5,7 @@ session_start();
 //die (var_dump ('admin'));
 //die(var_dump($_POST['country']));
 
-include '..'.PROJECT."app/common/functions_folder/functions.php";
+include "app/common/functions_folder/functions.php";
 
 $_SESSION["register_errors"] = [];
 
