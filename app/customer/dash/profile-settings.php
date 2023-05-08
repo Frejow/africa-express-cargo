@@ -61,7 +61,7 @@ include 'app/common/customer/1stpart.php';  ?>
                         ?>
                         <div class="row align-items-center">
                             <a href="" class="modal-fade" data-bs-toggle="modal" data-bs-target="#previous-image">
-                                <div class="col-auto"><span class="avatar avatar-xl" style="background-image: url(<?= $data[0]['avatar'] == 'null' ? PROJECT . 'public/images/default-user-profile.jpg' : $data[0]['avatar'] ?>);"></span>
+                                <div class="col-auto"><span class="avatar avatar-xl" style='background-image: url("<?= $data[0]['avatar'] == 'null' ? PROJECT . 'public/images/default-user-profile.jpg' : '../../'. $data[0]['avatar'] ?>");'></span>
                                 </div>
                             </a>
                             <?php
@@ -71,7 +71,7 @@ include 'app/common/customer/1stpart.php';  ?>
                                     <div class="modal-dialog modal-dialog-centered modal-fullscreen-sm-down">
                                         <div class="modal-content">
                                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                            <img class="" src="<?= $data[0]['avatar'] == 'null' ? PROJECT . 'public/images/default-user-profile.jpg' : $data[0]['avatar'] ?>" alt="User profile picture">
+                                            <img class="" src="<?= $data[0]['avatar'] == 'null' ? PROJECT . 'public/images/default-user-profile.jpg' : PROJECT . $data[0]['avatar'] ?>" alt="User profile picture">
                                         </div>
                                     </div>
                                 </div>
