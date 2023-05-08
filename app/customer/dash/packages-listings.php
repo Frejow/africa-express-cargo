@@ -443,7 +443,7 @@ if (isset($_SESSION['error_msg']) && !empty($_SESSION['error_msg'])) {
                                                                     <div class="col"><a href="#" class="btn w-100" data-bs-dismiss="modal">
                                                                             Annuler
                                                                         </a></div>
-                                                                    <div class="col"><button type="submit" name="package_deletion" value="<?= $packages_listings[$key]["tracking_number"] ?>" class="btn btn-danger w-100" data-bs-dismiss="modal">
+                                                                    <div class="col"><button type="submit" name="package_deletion" value="<?= empty($packages_listings[$key]["customer_package_group_id"]) ? $packages_listings[$key]["tracking_number"] : $packages_listings[$key]["tracking_number"] .'&' . $packages_listings[$key]["customer_package_group_id"] ?>" class="btn btn-danger w-100" data-bs-dismiss="modal">
                                                                             Confirmer
                                                                         </button></div>
                                                                 </div>

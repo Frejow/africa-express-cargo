@@ -149,19 +149,44 @@ if (isset($_POST['package_deletion']) && !empty($_POST['package_deletion'])) {
 
     //die (var_dump($_POST['package_deletion']));
     
-    if (deleted_package_or_packagegroup($_POST['package_deletion'], 'package')) {
+    if (isset(explode('&', $_POST['package_deletion'])[1])) {
 
-        $_SESSION['success_msg'] = 'Votre colis N°'. $_POST['package_deletion'] .' a été supprimé avec succès';
+        if (deleted_package_or_packagegroup(explode('&', $_POST['package_deletion'])[0], 'package')) {
 
-        if (isset(explode('?', $_SERVER['REQUEST_URI'])[1]) && explode('?', $_SERVER['REQUEST_URI'])[1] == "theme=light") {
-            header("location:" . PROJECT . "customer/dash/packages-listings?theme=light");
-        } elseif (isset(explode('?', $_SERVER['REQUEST_URI'])[1]) && explode('?', $_SERVER['REQUEST_URI'])[1] == "theme=dark") {
-            header("location:" . PROJECT . "customer/dash/packages-listings?theme=dark");
-        } else {
-            header("location:" . PROJECT . "customer/dash/packages-listings?theme=light");
+            if (update_customer_package_group_id(explode('&', $_POST['package_deletion'])[1], explode('&', $_POST['package_deletion'])[0])) {
+
+                $_SESSION['success_msg'] = 'Votre colis N°'. explode('&', $_POST['package_deletion'])[0] .' a été supprimé avec succès';
+    
+                if (isset(explode('?', $_SERVER['REQUEST_URI'])[1]) && explode('?', $_SERVER['REQUEST_URI'])[1] == "theme=light") {
+                    header("location:" . PROJECT . "customer/dash/packages-listings?theme=light");
+                } elseif (isset(explode('?', $_SERVER['REQUEST_URI'])[1]) && explode('?', $_SERVER['REQUEST_URI'])[1] == "theme=dark") {
+                    header("location:" . PROJECT . "customer/dash/packages-listings?theme=dark");
+                } else {
+                    header("location:" . PROJECT . "customer/dash/packages-listings?theme=light");
+                }
+
+            }
+    
+        }
+
+    } else {
+
+        if (deleted_package_or_packagegroup($_POST['package_deletion'], 'package')) {
+
+            $_SESSION['success_msg'] = 'Votre colis N°'. $_POST['package_deletion'] .' a été supprimé avec succès';
+    
+            if (isset(explode('?', $_SERVER['REQUEST_URI'])[1]) && explode('?', $_SERVER['REQUEST_URI'])[1] == "theme=light") {
+                header("location:" . PROJECT . "customer/dash/packages-listings?theme=light");
+            } elseif (isset(explode('?', $_SERVER['REQUEST_URI'])[1]) && explode('?', $_SERVER['REQUEST_URI'])[1] == "theme=dark") {
+                header("location:" . PROJECT . "customer/dash/packages-listings?theme=dark");
+            } else {
+                header("location:" . PROJECT . "customer/dash/packages-listings?theme=light");
+            }
+    
         }
 
     }
+    
 } 
 
 //Package deletion

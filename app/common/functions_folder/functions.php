@@ -977,6 +977,34 @@ function deleted_package_or_packagegroup (string $tracking_number, string $table
     return $update_is_deleted_field;
 }
 
+function update_customer_package_group_id(string $customer_package_group_id, string $tracking_number): bool
+{
+    date_default_timezone_set("Africa/Lagos");
+
+    $update_customer_package_group_id = false;
+
+    $database = _database_login();
+
+    $request = "UPDATE package SET customer_package_group_id = NULL, updated_on= :updated_on WHERE customer_package_group_id = :customer_package_group_id and tracking_number = :tracking_number";
+
+    $request_prepare = $database->prepare($request);
+
+    $request_execution = $request_prepare->execute(
+        [
+            'customer_package_group_id' => $customer_package_group_id,
+            'tracking_number' => $tracking_number,
+            'updated_on' => date('Y-m-d H:i:s')
+        ]
+    );
+
+    if ($request_execution) {
+
+        $update_customer_package_group_id = true;
+    }
+
+    return $update_customer_package_group_id;
+}
+
 function packages_listing_in_selectfield($user_id)
 {
 
