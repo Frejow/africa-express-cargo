@@ -1,4 +1,4 @@
-<?php include '..'.PROJECT.'app/common/admin/1stpart.php' ?>
+<?php include 'app/common/admin/1stpart.php' ?>
 
 <div class="container-xl">
     <div class="row row-cards">
@@ -53,4 +53,4 @@
     </div>
 </div>
 
-<?php include '..'.PROJECT.'app/common/admin/2ndpart.php' ?>
+<?php include 'app/common/admin/2ndpart.php' ?>

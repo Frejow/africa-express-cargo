@@ -1,4 +1,4 @@
-<?php include '..'.PROJECT.'app/common/agents/1stpart.php' ?>
+<?php include 'app/common/agents/1stpart.php' ?>
 
 <form action="" method="post" class="mt-3">
     <div class="page-body">
@@ -183,4 +183,4 @@
     </div>
 </form>
 
-<?php include '..'.PROJECT.'app/common/agents/2ndpart.php' ?>
+<?php include 'app/common/agents/2ndpart.php' ?>

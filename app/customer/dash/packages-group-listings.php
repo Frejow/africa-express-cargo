@@ -3,7 +3,7 @@ if (connected()) {
     $_SESSION['current_url'] = "http://{$_SERVER['HTTP_HOST']}{$_SERVER['REQUEST_URI']}";
 }
 
-include '..' . PROJECT . 'app/common/customer/1stpart.php';
+include 'app/common/customer/1stpart.php';
 
 //unset($_SESSION['selected_status']);
 
@@ -499,7 +499,7 @@ if (isset($_SESSION['error_msg']) && !empty($_SESSION['error_msg'])) {
     </div>
 </form>
 
-<?php include '..' . PROJECT . 'app/common/customer/2ndpart.php';
+<?php include 'app/common/customer/2ndpart.php';
 
 //die (var_dump($en));
 
