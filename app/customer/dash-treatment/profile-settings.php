@@ -401,7 +401,7 @@ if ((isset($error['pass_w']) && !empty($error['pass_w']))
     //die ('yes');
     $_SESSION['error_msg'] = 'Echec. Une erreur a été détecté lors de la mise à jour. Vérifiez vos saisies puis réessayer.';
 } else {
-    die ('yes');
+    //die ('yes');
     unset($_SESSION['error_msg']);
 }
 
