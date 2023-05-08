@@ -1,6 +1,7 @@
 <?php
+
 use PHPMailer\PHPMailer\PHPMailer;
-use PHPMailer\PHPMailer\Exception;    
+use PHPMailer\PHPMailer\Exception;
 
 /**
  * Send mail.
@@ -42,13 +43,10 @@ function mailsendin(string $destination, string $recipient, string $subject, str
         $mail->Body = $body;
 
         return $mail->send();
-
     } catch (Exception $e) {
 
         return false;
-
     }
-
 }
 
 function secure($data)
@@ -89,7 +87,7 @@ function _database_login()
     $database = "";
 
     try {
-        $database = new PDO('mysql:host=localhost;dbname='.DATABASE_NAME.';charset=utf8', DATABASE_USERNAME, DATABASE_PASSWORD);
+        $database = new PDO('mysql:host=' . DATABASE_HOST . ';dbname=' . DATABASE_NAME . ';charset=utf8', DATABASE_USERNAME, DATABASE_PASSWORD);
     } catch (Exception $e) {
         $database = "Une erreur s'est produite lors de la connexion à la base de donnée.";
     }
@@ -185,14 +183,15 @@ function update_account_status(int $user_id)
     return $update_account_status;
 }
 
-function buffer_html_file(string $filename) {
+function buffer_html_file(string $filename)
+{
     ob_start(); // Démarre la temporisation de sortie
-    
+
     include $filename; // Inclut le fichier HTML dans le tampon
-    
+
     $html = ob_get_contents(); // Récupère le contenu du tampon
     ob_end_clean(); // Arrête et vide la temporisation de sortie
-    
+
     return $html; // Retourne le contenu du fichier HTML
 }
 
@@ -303,7 +302,7 @@ function insert_intoken_table(int $user_id, string $type, string $token): bool
     return $insertion;
 }
 
-function check_user_registered_token_info(int $user_id, string $token, string $type, int $is_active, int $is_deleted ):bool
+function check_user_registered_token_info(int $user_id, string $token, string $type, int $is_active, int $is_deleted): bool
 {
 
     $info_found = false;
@@ -419,7 +418,7 @@ function check_exist_userby_email_and_password(string $mail, string $password, s
 
         if (isset($data) && !empty($data) && is_array($data)) {
 
-            $_SESSION ['connected'] = json_encode($data);
+            $_SESSION['connected'] = json_encode($data);
 
             /*setcookie(
                 "connected_user",
@@ -465,7 +464,7 @@ function check_exist_userby_pseudo_and_password(string $pseudo, string $password
 
         if (isset($data) && !empty($data) && is_array($data)) {
 
-            $_SESSION ['connected'] = json_encode($data);
+            $_SESSION['connected'] = json_encode($data);
 
             /*setcookie(
                 "connected_user",
@@ -539,7 +538,7 @@ function select_user_updated_info(int $id): bool
 
         if (isset($data) && !empty($data) && is_array($data)) {
 
-            $_SESSION ['connected'] = json_encode($data);
+            $_SESSION['connected'] = json_encode($data);
 
             $selected = true;
         }
@@ -688,9 +687,16 @@ function check_tracking_number(string $trackN): bool
     return $trackN_found;
 }
 
-function add_package(string $tracking_number, $package_units_number, $worth, string $description, $net_weight,
- $volumetric_weight, $product_type, int $user_id): bool
-{
+function add_package(
+    string $tracking_number,
+    $package_units_number,
+    $worth,
+    string $description,
+    $net_weight,
+    $volumetric_weight,
+    $product_type,
+    int $user_id
+): bool {
 
     $insertion = false;
 
@@ -717,7 +723,6 @@ function add_package(string $tracking_number, $package_units_number, $worth, str
     if ($request_execution) {
 
         $insertion = true;
-
     }
 
     return $insertion;
@@ -745,7 +750,6 @@ function add_images_for_package(int $package_id, string $image, int $user_id): b
     if ($request_execution) {
 
         $insertion = true;
-
     }
 
     return $insertion;
@@ -842,24 +846,22 @@ function listings($table, $page, $packages_nb_per_page, $status, $search, $user_
         $request = "SELECT * FROM " . $table . " WHERE user_id = :user_id and is_deleted = :is_deleted ORDER BY id DESC LIMIT " . $packages_nb_per_page . " OFFSET " . ($page - 1) * $packages_nb_per_page;
 
         $request_prepare = $database->prepare($request);
-    
+
         $request_execution = $request_prepare->execute([
             'user_id' => $user_id,
             'is_deleted' => 0,
         ]);
-
     } elseif ($status !== 'Tout Afficher' && $search === 'UNDEFINED') {
 
         $request = "SELECT * FROM " . $table . " WHERE user_id = :user_id and status = :status and is_deleted = :is_deleted ORDER BY id DESC LIMIT " . $packages_nb_per_page . " OFFSET " . ($page - 1) * $packages_nb_per_page;
 
         $request_prepare = $database->prepare($request);
-    
+
         $request_execution = $request_prepare->execute([
             'user_id' => $user_id,
             'status' => $status,
             'is_deleted' => 0,
         ]);
-
     } elseif ($status === 'Tout Afficher' && $search !== 'UNDEFINED') {
 
         $request = "SELECT * FROM " . $table . " WHERE user_id = :user_id and is_deleted = :is_deleted AND ";
@@ -877,12 +879,11 @@ function listings($table, $page, $packages_nb_per_page, $status, $search, $user_
         $request .= " ORDER BY id DESC LIMIT " . $packages_nb_per_page . " OFFSET " . ($page - 1) * $packages_nb_per_page;
 
         $request_prepare = $database->prepare($request);
-    
+
         $request_execution = $request_prepare->execute([
             'user_id' => $user_id,
             'is_deleted' => 0,
         ]);
-
     } elseif ($status !== 'Tout Afficher' && $search !== 'UNDEFINED') {
 
         $request = "SELECT * FROM " . $table . " WHERE user_id = :user_id and is_deleted = :is_deleted AND ";
@@ -900,7 +901,7 @@ function listings($table, $page, $packages_nb_per_page, $status, $search, $user_
         $request .= " AND status = :status ORDER BY id DESC LIMIT " . $packages_nb_per_page . " OFFSET " . ($page - 1) * $packages_nb_per_page;
 
         $request_prepare = $database->prepare($request);
-    
+
         $request_execution = $request_prepare->execute([
             'user_id' => $user_id,
             'status' => $status,
@@ -948,7 +949,7 @@ function count_rows_in_table($table)
     return $rows;
 }
 
-function deleted_package_or_packagegroup (string $tracking_number, string $table): bool
+function deleted_package_or_packagegroup(string $tracking_number, string $table): bool
 {
     date_default_timezone_set("Africa/Lagos");
 
@@ -956,7 +957,7 @@ function deleted_package_or_packagegroup (string $tracking_number, string $table
 
     $database = _database_login();
 
-    $request = "UPDATE " . $table ." SET is_active = :is_active, is_deleted = :is_deleted, updated_on = :updated_on WHERE tracking_number = :tracking_number";
+    $request = "UPDATE " . $table . " SET is_active = :is_active, is_deleted = :is_deleted, updated_on = :updated_on WHERE tracking_number = :tracking_number";
 
     $request_prepare = $database->prepare($request);
 
@@ -1073,15 +1074,11 @@ function insert_select_incustomerpackagegroup_table(string $tracking_number, int
                 $_SESSION['nowcreated_packagegroup_id'] = $data;
 
                 $insertselect = true;
-
             }
-            
         }
-
     }
 
     return $insertselect;
-
 }
 
 function update_customerpackagegroupid_field_inpackage_table(int $customer_package_group_id, string $package_tracking_number): bool

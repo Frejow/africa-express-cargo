@@ -1,11 +1,13 @@
 <?php
     require 'vendor/autoload.php';
     define( 'ROOTPATH', getcwd() );
-    define( 'PROJECT', '/africa-express-cargo/' );
-    define( 'DATABASE_NAME', 'a_c_e' );
+    define( 'PROJECT', '/stage/africa-express-cargo/' );
+    define( 'DATABASE_HOST', 'localhost:8889' );
+    define( 'DATABASE_NAME', 'africa-express-cargo' );
     define( 'DATABASE_USERNAME', 'root');
-    define( 'DATABASE_PASSWORD', 'jevaisreussir08' );
-    define( 'EMAILING_PASSWORD', 'dbeudcejvbqoniit' );
+    define( 'DATABASE_PASSWORD', 'root' );
+    define( 'MAIL_ADDRESS', '' );
+    define( 'MAIL_PASSWORD', '' );
 
     $default_profile = "customer";
     $default_profile_folder = "app/customer/index.php";

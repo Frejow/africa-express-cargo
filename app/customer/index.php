@@ -2,7 +2,7 @@
 //ini_set('session.gc_maxlifetime', 60);
 
 //session_id();
-session_save_path('C:/wamp64/www'.PROJECT.'sessions');
+//session_save_path('C:/wamp64/www'.PROJECT.'sessions');
 //session_set_cookie_params(1800);
 
 /*
