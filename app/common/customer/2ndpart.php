@@ -317,7 +317,7 @@ if (isset($packages_ingrouplistings) && !empty($packages_ingrouplistings)) {
             toast: true,
             position: 'top',
             showConfirmButton: false,
-            timer: 8000
+            timer: 10000
         });
 
         if ($('.swalDefaultSuccess').length) {
@@ -431,6 +431,26 @@ if (isset($packages_ingrouplistings) && !empty($packages_ingrouplistings)) {
         abort.style.display = "none";
         formAppear.style.display = "none";
         divNone.style.display = "flex";
+    });
+</script>
+
+<!--add package in created group form-->
+
+<script>
+    const clickToAdd = document.getElementById("click_to_add");
+    const blockAppear = document.getElementById("block_appear");
+    const buttonNone = document.getElementById("click_to_add");
+    const aborted = document.getElementById("aborted");
+
+    clickToAdd.addEventListener("click", function() {
+        clickToAdd.style.display = "none";
+        blockAppear.style.display = "flex";
+        buttonNone.style.display = "none";
+    });
+    aborted.addEventListener("click", function() {
+        aborted.style.display = "none";
+        blockAppear.style.display = "none";
+        buttonNone.style.display = "flex";
     });
 </script>
 

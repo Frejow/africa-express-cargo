@@ -8,7 +8,7 @@ if (isset($_POST['set-pack-grp']) && !empty($_POST['set-pack-grp'])) {
     
     if (isset($_POST['packSelect']) && !empty($_POST['packSelect'])) {
 
-        if (sizeof($_POST['packSelect']) >= 2) {
+        //if (sizeof($_POST['packSelect']) >= 2) {
 
             if (insert_select_incustomerpackagegroup_table($_POST['set-pack-grp'], $data[0]['id'])) {
 
@@ -56,11 +56,11 @@ if (isset($_POST['set-pack-grp']) && !empty($_POST['set-pack-grp'])) {
 
             }
 
-        } else {
+        //} else {
 
-            $error['packselect'] = 'Deux colis au moins doivent être sélectionnés pour créer un groupe';
+            //$error['packselect'] = 'Deux colis au moins doivent être sélectionnés pour créer un groupe';
 
-        }
+        //}
 
     } else {
 

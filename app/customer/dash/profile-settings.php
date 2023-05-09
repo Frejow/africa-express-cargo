@@ -24,7 +24,7 @@ include 'app/common/customer/1stpart.php';  ?>
 
                 <div class="col d-flex flex-column">
                     <div class="card-body" style="display: flex;flex-direction: column;align-items:center;">
-                        <h3 class="mb-4 text-center">
+                        <h3 class="mb-2 text-center">
                             Avatar
                             <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
                                 <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
@@ -32,6 +32,8 @@ include 'app/common/customer/1stpart.php';  ?>
                                 <path d="M6 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2"></path>
                             </svg>
                         </h3>
+
+                        <p class="text-muted"> Poids Maximum : 3Mo. Extensions autorisées [ PNG/JPG/JPEG/GIF ]</p>
 
                         <?php
                         if (isset($_SESSION['error_msg']) && !empty($_SESSION['error_msg'])) {
@@ -41,6 +43,17 @@ include 'app/common/customer/1stpart.php';  ?>
                             </div>
                         <?php
                             unset($_SESSION['error_msg']);
+                        }
+                        ?>
+
+                        <?php
+                        if (isset($_SESSION['success_msg']) && !empty($_SESSION['success_msg'])) {
+                            $msg = $_SESSION['success_msg'];
+                        ?>
+                            <div class="swalDefaultSuccess" role="alert">
+                            </div>
+                        <?php
+                            unset($_SESSION['success_msg']);
                         }
                         ?>
 
@@ -61,7 +74,7 @@ include 'app/common/customer/1stpart.php';  ?>
                         ?>
                         <div class="row align-items-center">
                             <a href="" class="modal-fade" data-bs-toggle="modal" data-bs-target="#previous-image">
-                                <div class="col-auto"><span class="avatar avatar-xl" style='background-image: url("<?= $data[0]['avatar'] == 'null' ? PROJECT . 'public/images/default-user-profile.jpg' : '../../'. $data[0]['avatar'] ?>");'></span>
+                                <div class="col-auto"><span class="avatar avatar-xl" style='background-image: url("<?= $data[0]['avatar'] == 'null' ? PROJECT . 'public/images/default-user-profile.jpg' : $data[0]['avatar'] ?>");'></span>
                                 </div>
                             </a>
                             <?php
@@ -71,7 +84,7 @@ include 'app/common/customer/1stpart.php';  ?>
                                     <div class="modal-dialog modal-dialog-centered modal-fullscreen-sm-down">
                                         <div class="modal-content">
                                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                            <img class="" src="<?= $data[0]['avatar'] == 'null' ? PROJECT . 'public/images/default-user-profile.jpg' : PROJECT . $data[0]['avatar'] ?>" alt="User profile picture">
+                                            <img class="" src="<?= $data[0]['avatar'] == 'null' ? PROJECT . 'public/images/default-user-profile.jpg' : $data[0]['avatar'] ?>" alt="User profile picture">
                                         </div>
                                     </div>
                                 </div>
@@ -105,12 +118,12 @@ include 'app/common/customer/1stpart.php';  ?>
                                 ?>
                                     <div class="col-md text-center">
                                         <label for="importbutton">
-                                        <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-                                            <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
-                                            <path d="M4 17v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2 -2v-2"></path>
-                                            <path d="M7 9l5 -5l5 5"></path>
-                                            <path d="M12 4l0 12"></path>
-                                        </svg>
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                                <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                                                <path d="M4 17v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2 -2v-2"></path>
+                                                <path d="M7 9l5 -5l5 5"></path>
+                                                <path d="M12 4l0 12"></path>
+                                            </svg>
                                         </label>
                                         <input type="button" class="btn link-secondary" style="text-decoration: none;" value="<?php echo (isset($updata["avatar"]) && !empty($updata["avatar"])) ? $updata["avatar"] : 'Importer une autre image' ?>" id="importbutton" onclick="document.getElementById('fileToUpload').click();" />
                                     </div>
@@ -123,12 +136,12 @@ include 'app/common/customer/1stpart.php';  ?>
                                 ?>
                                     <div class="col-md text-center">
                                         <label for="importbutton">
-                                        <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-                                            <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
-                                            <path d="M4 17v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2 -2v-2"></path>
-                                            <path d="M7 9l5 -5l5 5"></path>
-                                            <path d="M12 4l0 12"></path>
-                                        </svg>
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                                <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                                                <path d="M4 17v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2 -2v-2"></path>
+                                                <path d="M7 9l5 -5l5 5"></path>
+                                                <path d="M12 4l0 12"></path>
+                                            </svg>
                                         </label>
                                         <input type="button" class="btn link-secondary" style="text-decoration: none;" value="<?php echo (isset($updata["avatar"]) && !empty($updata["avatar"])) ? $updata["avatar"] : 'Importer une image' ?>" id="importbutton" onclick="document.getElementById('fileToUpload').click();" />
                                     </div>
@@ -290,8 +303,16 @@ include 'app/common/customer/1stpart.php';  ?>
                                     </div>
                                 </div>
                             </div>
-
-                            <div class="row mt-3">
+                            <p class="text-center mt-3 text-muted">Cliquez ce bouton pour modifier
+                                <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                    <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                                    <path d="M12 3l0 12"></path>
+                                    <path d="M16 11l-4 4"></path>
+                                    <path d="M8 11l4 4"></path>
+                                    <path d="M12 20m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0"></path>
+                                </svg>
+                            </p>
+                            <div class="row">
                                 <div class="col text-center">
                                     <div class="btn link-warning" id="click" style="text-decoration: none;">
                                         <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">

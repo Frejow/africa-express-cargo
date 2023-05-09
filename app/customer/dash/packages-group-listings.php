@@ -216,7 +216,7 @@ if (isset($_SESSION['error_msg']) && !empty($_SESSION['error_msg'])) {
                                         <th>Type de produits</th>
                                         <th>Statut</th>
                                         <th></th>
-                                        <!--<th></th>-->
+                                        <th></th>
                                         <th></th>
                                     </tr>
                                 </thead>
@@ -305,25 +305,15 @@ if (isset($_SESSION['error_msg']) && !empty($_SESSION['error_msg'])) {
                                                             </a>
                                                         </span>
                                                     </td>
-                                                    <!--
+                                                    
                                                 <td class="text-end">
                                                     <span class="">
-                                                        <a class="btn-link link-warning" href='
-                                                    <?php
-                                                    if (isset(explode('?', $_SERVER['REQUEST_URI'])[1]) && explode('?', $_SERVER['REQUEST_URI'])[1] == "theme=light") {
-                                                        echo PROJECT . 'customer/dash/edit-packages-group' . '?theme=light';
-                                                    } elseif (isset(explode('?', $_SERVER['REQUEST_URI'])[1]) && explode('?', $_SERVER['REQUEST_URI'])[1] == "theme=dark") {
-                                                        echo PROJECT . 'customer/dash/edit-packages-group' . '?theme=dark';
-                                                    } else {
-                                                        echo PROJECT . 'customer/dash/edit-packages-group' . '?theme=light';
-                                                    }
-                                                    ?>
-                                                    '>
+                                                        <button class="btn-link link-warning" name="packages_group_edition" value="<?= $packages_group_listings[$key]["tracking_number"].'&'.$packages_group_listings[$key]["id"] ?>" type="submit">
                                                             Modifier
-                                                        </a>
+                                                        </button>
                                                     </span>
                                                 </td>
-                                                -->
+                                                
                                                     <td class="text-end">
                                                         <span class="">
                                                             <a class="btn-link link-danger

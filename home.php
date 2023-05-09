@@ -1,3 +1,11 @@
+<?php
+session_start();
+include "app/common/functions_folder/functions.php";
+//die(var_dump(connected()));
+
+?>
+
+
 <!DOCTYPE html>
 <html lang="fr">
 
@@ -30,6 +38,7 @@
 </head>
 
 <body>
+   
    <!-- header section start -->
    <div class="header_section header_bg">
       <nav class="navbar navbar-expand-lg navbar-light bg-light">
@@ -37,6 +46,9 @@
          <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
          </button>
+         <?php
+         if (!connected()) {
+         ?>
          <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav mr-auto">
                <li class="nav-item active">
@@ -48,6 +60,7 @@
                <li class="nav-item">
                   <a class="nav-link" href="#contact">Contactez-Nous</a>
                </li>
+               
                <li class="nav-item d-lg-none">
                   <a class="nav-link" href="customer/login/">Connexion</a>
                </li>
@@ -65,9 +78,47 @@
                <div></div>
             </form>
          </div>
+         
          <div id="main">
             <span style="font-size:36px;cursor:pointer; color: #fff" onclick="openNav()"><img src="public/images/toggle-icon.png" style="height: 30px;"></span>
          </div>
+         <?php
+         }
+         ?>
+         <?php
+         if (connected()) {
+         ?>
+         <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav mr-auto">
+               <li class="nav-item active">
+                  <a class="nav-link" href="">Accueil</a>
+               </li>
+               <li class="nav-item">
+                  <a class="nav-link" href="#">A propos</a>
+               </li>
+               <li class="nav-item">
+                  <a class="nav-link" href="#contact">Contactez-Nous</a>
+               </li>
+               <li class="nav-item d-lg-none">
+                  <a class="nav-link" href="<?= $_SESSION['current_url'] ?>"> Page Précédente </a>
+               </li>
+            </ul>
+            <form class="form-inline my-2 my-lg-0">
+               <div class="login_menu">
+                  <ul>
+                     <li><a href="<?= $_SESSION['current_url'] ?>"> Page Précédente </a></li>
+                  </ul>
+               </div>
+               <div></div>
+            </form>
+         </div>
+         
+         <div id="main">
+            <span style="font-size:36px;cursor:pointer; color: #fff" onclick="openNav()"><img src="public/images/toggle-icon.png" style="height: 30px;"></span>
+         </div>
+         <?php
+         }
+         ?>
       </nav>
       <!-- banner section start -->
       <div class="banner_section layout_padding">
@@ -358,8 +409,8 @@
             <script>
                document.write(new Date().getFullYear())
             </script>
-            Tous les droits réservés par<a href=""> Africa Express Cargo </p>
-         <p class="copyright_text">Propulsé par <a href="">Concept Solux</a></p>
+            Tous droits réservés par<a href=""> Africa Express Cargo </p>
+         <p class="copyright_text">By <a href="#">Logic;</a></p>
       </div>
    </div>
    <!-- copyright section end -->

@@ -171,3 +171,25 @@ if (isset($_POST['package_group_deletion']) && !empty($_POST['package_group_dele
 //Package deletion
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+//Package edition
+
+if (isset($_POST['packages_group_edition']) && !empty($_POST['packages_group_edition'])) {
+
+    $_SESSION['packages_group_tracking_number'] = explode('&',$_POST['packages_group_edition'])[0];
+
+    $_SESSION['packages_group_id'] = explode('&',$_POST['packages_group_edition'])[1];
+
+    if (isset(explode('?', $_SERVER['REQUEST_URI'])[1]) && explode('?', $_SERVER['REQUEST_URI'])[1] == "theme=light") {
+        header("location:" . PROJECT . "customer/dash/edit-packages-group?theme=light");
+    } elseif (isset(explode('?', $_SERVER['REQUEST_URI'])[1]) && explode('?', $_SERVER['REQUEST_URI'])[1] == "theme=dark") {
+        header("location:" . PROJECT . "customer/dash/edit-packages-group?theme=dark");
+    } else {
+        header("location:" . PROJECT . "customer/dash/edit-packages-group?theme=light");
+    }
+
+}
+
+//Package edition
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

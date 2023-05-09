@@ -1,122 +1,199 @@
-<?php 
+<?php
 if (connected()) {
     $_SESSION['current_url'] = "http://{$_SERVER['HTTP_HOST']}{$_SERVER['REQUEST_URI']}";
 }
 include 'app/common/customer/1stpart.php'; ?>
 
-<form action="" method="post">
+<?php
+if (isset($_SESSION['success_msg']) && !empty($_SESSION['success_msg'])) {
+    $msg = $_SESSION['success_msg'];
+?>
+    <div class="swalDefaultSuccess" role="alert">
+    </div>
+<?php
+    unset($_SESSION['success_msg']);
+}
+?>
+
+<?php
+if (isset($_SESSION['error_msg']) && !empty($_SESSION['error_msg'])) {
+    $msg = $_SESSION['error_msg'];
+?>
+    <div class="swalDefaultError" role="alert">
+    </div>
+<?php
+    unset($_SESSION['error_msg']);
+}
+?>
+
+<form action="
+<?php
+    if (isset(explode('?', $_SERVER['REQUEST_URI'])[1]) && explode('?', $_SERVER['REQUEST_URI'])[1] == "theme=light") {
+        echo PROJECT . 'customer/dash-treatment/edit-packages-group' . '?theme=light';
+    } elseif (isset(explode('?', $_SERVER['REQUEST_URI'])[1]) && explode('?', $_SERVER['REQUEST_URI'])[1] == "theme=dark") {
+        echo PROJECT . 'customer/dash-treatment/edit-packages-group' . '?theme=dark';
+    } else {
+        echo PROJECT . 'customer/dash-treatment/edit-packages-group' . '?theme=light';
+    }
+    ?>
+" method="post">
     <div class="page-header d-print-none">
+        <div class="container-xl d-flex" style="justify-content: center;">
+            <div class="row g-2 align-items-center " style="flex-wrap: wrap;">
+                <!-- Page title actions -->
+                <div class="col-12 col-lg-auto ms-auto d-print-none">
+                    <div class="btn-list justify-content-center">
+                        <a href="
+                            <?php
+                            if (isset(explode('?', $_SERVER['REQUEST_URI'])[1]) && explode('?', $_SERVER['REQUEST_URI'])[1] == "theme=light") {
+                                echo PROJECT . 'customer/dash/add-packages-ingroup' . '?theme=light';
+                            } elseif (isset(explode('?', $_SERVER['REQUEST_URI'])[1]) && explode('?', $_SERVER['REQUEST_URI'])[1] == "theme=dark") {
+                                echo PROJECT . 'customer/dash/add-packages-ingroup' . '?theme=dark';
+                            } else {
+                                echo PROJECT . 'customer/dash/add-packages-ingroup' . '?theme=light';
+                            }
+                            ?>
+                            " class="btn d-none text-white d-sm-inline-block btn-warning">
+                            <!-- Download SVG icon from http://tabler-icons.io/i/plus -->
+                            <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                                <path d="M12 5l0 14" />
+                                <path d="M5 12l14 0" />
+                            </svg>
+                            Ajouter de nouveau colis au groupe
+                        </a>
+                        <a href="
+                            <?php
+                            if (isset(explode('?', $_SERVER['REQUEST_URI'])[1]) && explode('?', $_SERVER['REQUEST_URI'])[1] == "theme=light") {
+                                echo PROJECT . 'customer/dash/add-packages-ingroup' . '?theme=light';
+                            } elseif (isset(explode('?', $_SERVER['REQUEST_URI'])[1]) && explode('?', $_SERVER['REQUEST_URI'])[1] == "theme=dark") {
+                                echo PROJECT . 'customer/dash/add-packages-ingroup' . '?theme=dark';
+                            } else {
+                                echo PROJECT . 'customer/dash/add-packages-ingroup' . '?theme=light';
+                            }
+                            ?>
+                            " class="btn d-sm-none text-white btn-warning">
+                            <!-- Download SVG icon from http://tabler-icons.io/i/plus -->
+                            <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                                <path d="M12 5l0 14" />
+                                <path d="M5 12l14 0" />
+                            </svg>
+                            Ajouter colis
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
     <div class="page-body">
         <div class="container-xl text-center">
-            <p id="instruction" class="text-muted text-sm">Ajout : Cliquer sur le bouton "Ajouter"</p>
-            <p id="instruction" class="text-muted text-sm">Retrait : Cocher les cases des colis à retirer puis cliquer ensuite sur le bouton "Retirer"</p>
             <div class="row row-deck row-cards">
                 <div class="col-12">
                     <div class="card">
-                        <div class="card-body border-bottom py-3">
-                            <div class="d-flex">
-                                <div class="text-muted">
-                                    Afficher
-                                    <div class="mx-2 d-inline-block">
-                                        <input type="text" class="form-control form-control-sm" value="5" size="3" aria-label="Invoices count">
+                    <div class="card-body border-bottom py-3">
+                                        <div class="d-flex justify-content-center">
+                                            <div class="">
+                                                <h3 class="d-inline-block">
+                                                    Groupe N° <?= $_SESSION['packages_group_tracking_number'] ?>
+                                                </h3>
+                                            </div>
+                                        </div>
                                     </div>
-                                    lignes
-                                </div>
-                                <div class="ms-auto text-muted">
-                                    <div class=" d-inline-block">
-                                        Groupe de colis [N° de suivi]
-                                    </div>
-                                </div>
-                                <div class="ms-auto text-muted">
-                                    Rechercher :
-                                    <div class="ms-2 d-inline-block">
-                                        <input type="text" class="form-control form-control-sm" aria-label="Search invoice">
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
                         <div class="table-responsive">
                             <table class="table card-table table-vcenter text-nowrap datatable">
                                 <thead>
                                     <tr>
-                                        <th class="w-1"><input class="form-check-input m-0 align-middle" type="checkbox" id="check-all" aria-label="Select all invoices"></th>
+                                        <th class="w-1">#<input class="form-check-input m-0 align-middle row-check" type="checkbox" id="check-all" aria-label="Select all invoices"></th>
                                         <th class="">N° de suivi</th>
-                                        <th>Type de produits</th>
-                                        <th>Statut</th>
                                         <th></th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr>
-                                        <td><input class="form-check-input m-0 align-middle" type="checkbox" value="BN95F621" name="checkbox" aria-label="Select invoice"></td>
-                                        <td>
-                                            BN95F621
-                                        </td>
-                                        <td class="">
-                                            <span></span>
-                                            A batterie
-                                        </td>
-                                        <td>
-                                            <span class="badge bg-success me-1"></span> Livrer Au Client
-                                        </td>
-                                        <td class="text-end">
-                                            <span class="">
-                                                <a class="btn-link" href="" data-bs-toggle="modal" data-bs-target="#modal-detail">
-                                                    Détails
-                                                </a>
-                                            </span>
-                                        </td>
-                                    </tr>
+                                    <?php
+
+                                    $packages_ingrouplistings = select_allpackages_forpackagegroup($_SESSION['packages_group_id']);
+
+                                    if (isset($packages_ingrouplistings) && !empty($packages_ingrouplistings)) {
+
+                                        foreach ($packages_ingrouplistings as $key => $packages_ingroup) {
+                                    ?>
+                                            <tr>
+                                                <td>
+                                                    <?= $key + 1 ?>
+                                                </td>
+                                                <td>
+                                                    <?= $packages_ingrouplistings[$key]["tracking_number"] ?>
+                                                </td>
+                                                <td class="">
+                                                    <span class="">
+                                                        <a class="btn-link link-danger" href="#" data-bs-toggle="modal" data-bs-target="<?= "#withdraw_packageModal" . $key ?>">
+                                                            Retirer
+                                                        </a>
+                                                    </span>
+                                                </td>
+                                            </tr>
+                                            <div class="modal modal-blur fade" id="<?= "withdraw_packageModal" . $key ?>" tabindex="-1" role="dialog" aria-hidden="true">
+                                                <div class="modal-dialog modal-sm modal-dialog-centered" role="document">
+                                                    <div class="modal-content">
+                                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                        <div class="modal-status bg-danger"></div>
+                                                        <div class="modal-body text-center py-4">
+                                                            <!-- Download SVG icon from http://tabler-icons.io/i/alert-triangle -->
+                                                            <svg xmlns="http://www.w3.org/2000/svg" class="icon mb-2 text-danger icon-lg" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                                                <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                                                                <path d="M12 9v2m0 4v.01" />
+                                                                <path d="M5 19h14a2 2 0 0 0 1.84 -2.75l-7.1 -12.25a2 2 0 0 0 -3.5 0l-7.1 12.25a2 2 0 0 0 1.75 2.75" />
+                                                            </svg>
+
+                                                            <h3>Cette action est irréversible. Êtes-vous sûr(e) ?</h3>
+
+                                                        </div>
+                                                        <div class="modal-footer">
+                                                            <div class="w-100">
+                                                                <div class="row">
+                                                                    <div class="col"><a href="#" class="btn w-100" data-bs-dismiss="modal">
+                                                                            Annuler
+                                                                        </a></div>
+                                                                    <div class="col"><button type="submit" name="withdraw_package_ingroup" value="<?= $packages_ingrouplistings[$key]["tracking_number"].'&'.$packages_ingrouplistings[$key]["customer_package_group_id"] ?>" class="btn btn-danger w-100" data-bs-dismiss="modal">
+                                                                            Confirmer
+                                                                        </button></div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                    <?php
+
+                                        }
+                                    } else {
+                                        ?>
+                                             <tr>Groupe vide. Veuillez ajouter des colis pour conserver le groupe.</tr>
+                                        <?php
+                                    }
+                                    ?>
                                 </tbody>
                             </table>
-                        </div>
-                        <div class="card-footer d-flex align-items-center">
-                            <p class="m-0 text-muted">Affichage <span>1</span> à <span>5</span> sur <span>20</span> lignes</p>
-                            <ul class="pagination m-0 ms-auto">
-                                <li class="page-item disabled">
-                                    <a class="page-link" href="#" tabindex="-1" aria-disabled="true">
-                                        <!-- Download SVG icon from http://tabler-icons.io/i/chevron-left -->
-                                        <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-                                            <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-                                            <path d="M15 6l-6 6l6 6" />
-                                        </svg>
-                                        précédent
-                                    </a>
-                                </li>
-                                <li class="page-item"><a class="page-link" href="#">1</a></li>
-                                <li class="page-item active"><a class="page-link" href="#">2</a></li>
-                                <li class="page-item"><a class="page-link" href="#">3</a></li>
-                                <li class="page-item"><a class="page-link" href="#">4</a></li>
-                                <li class="page-item"><a class="page-link" href="#">5</a></li>
-                                <li class="page-item">
-                                    <a class="page-link" href="#">
-                                        suivant <!-- Download SVG icon from http://tabler-icons.io/i/chevron-right -->
-                                        <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-                                            <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-                                            <path d="M9 6l6 6l-6 6" />
-                                        </svg>
-                                    </a>
-                                </li>
-                            </ul>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
+<!--
     <div class="container-xl d-flex" style="justify-content: center;">
         <div class="row">
-            <!-- Page title actions -->
+
             <div class="btn-list justify-content-center col-4 col-lg-4">
                 <a href="
-                <?php 
-                if (isset(explode('?', $_SERVER['REQUEST_URI'])[1]) && explode('?', $_SERVER['REQUEST_URI'])[1] == "theme=light"){
-                    echo PROJECT.'customer/dash/packages-group-listings'.'?theme=light';
-                } elseif (isset(explode('?', $_SERVER['REQUEST_URI'])[1]) && explode('?', $_SERVER['REQUEST_URI'])[1] == "theme=dark"){
-                    echo PROJECT.'customer/dash/packages-group-listings'.'?theme=dark';
+                <?php
+                if (isset(explode('?', $_SERVER['REQUEST_URI'])[1]) && explode('?', $_SERVER['REQUEST_URI'])[1] == "theme=light") {
+                    echo PROJECT . 'customer/dash/packages-group-listings' . '?theme=light';
+                } elseif (isset(explode('?', $_SERVER['REQUEST_URI'])[1]) && explode('?', $_SERVER['REQUEST_URI'])[1] == "theme=dark") {
+                    echo PROJECT . 'customer/dash/packages-group-listings' . '?theme=dark';
                 } else {
-                    echo PROJECT.'customer/dash/packages-group-listings'.'?theme=light';
+                    echo PROJECT . 'customer/dash/packages-group-listings' . '?theme=light';
                 }
                 ?>
                 " class="btn btn-link link-secondary" style="border:none; width:fit-content; text-decoration:none;">
@@ -126,45 +203,65 @@ include 'app/common/customer/1stpart.php'; ?>
                     </svg>Retour
                 </a>
             </div>
-            <div class="btn-list justify-content-center col-4 col-lg-4">
-                <button class="link-danger btn btn-link d-none d-sm-inline-block" style="border:none; text-decoration:none;">
-                    <!-- Download SVG icon from http://tabler-icons.io/i/plus -->
-                    Retirer
-                </button>
-                <button class="link-danger btn btn-link d-sm-none" style="border:none; text-decoration:none;">
-                    <!-- Download SVG icon from http://tabler-icons.io/i/plus -->
-                    Retirer
-                </button>
+
+        </div>
+    </div>
+ -->
+    <div class="container-xl d-flex" style="justify-content: space-around; flex-wrap :wrap;">
+
+            <div class="btn-list mb-1">
+                <a href="
+                <?php
+                if (isset(explode('?', $_SERVER['REQUEST_URI'])[1]) && explode('?', $_SERVER['REQUEST_URI'])[1] == "theme=light") {
+                    echo PROJECT . 'customer/dash/packages-group-listings' . '?theme=light';
+                } elseif (isset(explode('?', $_SERVER['REQUEST_URI'])[1]) && explode('?', $_SERVER['REQUEST_URI'])[1] == "theme=dark") {
+                    echo PROJECT . 'customer/dash/packages-group-listings' . '?theme=dark';
+                } else {
+                    echo PROJECT . 'customer/dash/packages-group-listings' . '?theme=light';
+                }
+                ?>
+                " class=" text-center btn link-danger" style="border:none; width:fit-content; text-decoration:none;">
+                    <- Liste Groupe de colis
+                </a>
             </div>
-            <div class="btn-list justify-content-center col-4 col-lg-4">
-                <a href="
-                <?php 
-                if (isset(explode('?', $_SERVER['REQUEST_URI'])[1]) && explode('?', $_SERVER['REQUEST_URI'])[1] == "theme=light"){
-                    echo PROJECT.'customer/dash/add-packages-ingroup'.'?theme=light';
-                } elseif (isset(explode('?', $_SERVER['REQUEST_URI'])[1]) && explode('?', $_SERVER['REQUEST_URI'])[1] == "theme=dark"){
-                    echo PROJECT.'customer/dash/add-packages-ingroup'.'?theme=dark';
-                } else {
-                    echo PROJECT.'customer/dash/add-packages-ingroup'.'?theme=light';
-                }
-                ?>
-                " class="link-warning btn btn-link d-none d-sm-inline-block" style="border:none; text-decoration:none;">
-                    <!-- Download SVG icon from http://tabler-icons.io/i/plus -->
-                    Ajouter
+
+            <div class="btn-list mt-1">
+                <a href="#" data-bs-toggle="modal" data-bs-target="#withdraw_allpackageModal" class=" text-center btn btn-danger" style="border:none; width:fit-content; text-decoration:none;">
+                    Retirer tous les colis
                 </a>
-                <a href="
-                <?php 
-                if (isset(explode('?', $_SERVER['REQUEST_URI'])[1]) && explode('?', $_SERVER['REQUEST_URI'])[1] == "theme=light"){
-                    echo PROJECT.'customer/dash/add-packages-ingroup'.'?theme=light';
-                } elseif (isset(explode('?', $_SERVER['REQUEST_URI'])[1]) && explode('?', $_SERVER['REQUEST_URI'])[1] == "theme=dark"){
-                    echo PROJECT.'customer/dash/add-packages-ingroup'.'?theme=dark';
-                } else {
-                    echo PROJECT.'customer/dash/add-packages-ingroup'.'?theme=light';
-                }
-                ?>
-                " class="link-warning btn btn-link d-sm-none" style="border:none; text-decoration:none;">
-                    <!-- Download SVG icon from http://tabler-icons.io/i/plus -->
-                    Ajouter
-                </a>
+            </div>
+
+        <div class="modal modal-blur fade" id="withdraw_allpackageModal" tabindex="-1" role="dialog" aria-hidden="true">
+            <div class="modal-dialog modal-sm modal-dialog-centered" role="document">
+                <div class="modal-content">
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    <div class="modal-status bg-danger"></div>
+                    <div class="modal-body text-center py-4">
+                        <!-- Download SVG icon from http://tabler-icons.io/i/alert-triangle -->
+                        <svg xmlns="http://www.w3.org/2000/svg" class="icon mb-2 text-danger icon-lg" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                            <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                            <path d="M12 9v2m0 4v.01" />
+                            <path d="M5 19h14a2 2 0 0 0 1.84 -2.75l-7.1 -12.25a2 2 0 0 0 -3.5 0l-7.1 12.25a2 2 0 0 0 1.75 2.75" />
+                        </svg>
+
+                        <h3>Cette action est irréversible. Êtes-vous sûr(e) ?</h3>
+
+                        <div class="text-muted">Si vous supprimez tous les colis du groupe sans en ajouter de nouveau(x), le groupe sera supprimé puisqu'il ne peut exister et être vide.</div>
+
+                    </div>
+                    <div class="modal-footer">
+                        <div class="w-100">
+                            <div class="row">
+                                <div class="col"><a href="#" class="btn w-100" data-bs-dismiss="modal">
+                                        Annuler
+                                    </a></div>
+                                <div class="col"><button type="submit" name="withdraw_allpackages_ingroup" value="<?= $_SESSION['packages_group_id'] ?>" class="btn btn-danger w-100" data-bs-dismiss="modal">
+                                        Confirmer
+                                    </button></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>

@@ -667,12 +667,13 @@ function check_tracking_number(string $trackN): bool
 
     $database = _database_login();
 
-    $request = "SELECT * FROM package WHERE tracking_number = :tracking_number";
+    $request = "SELECT * FROM package WHERE tracking_number = :tracking_number and is_deleted = :is_deleted";
 
     $request_prepare = $database->prepare($request);
 
     $request_execution = $request_prepare->execute([
-        'tracking_number' => $trackN
+        'tracking_number' => $trackN,
+        'is_deleted' => 0
     ]);
 
     if ($request_execution) {

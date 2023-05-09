@@ -66,7 +66,7 @@ if (isset($_POST['pass_w']) && !empty($_POST['pass_w']) && check_password($data[
                 $move_uploaded_file = move_uploaded_file($_FILES['fileToUpload']['tmp_name'], $newfolder . '/' . basename($_FILES['fileToUpload']['name']));
 
                 if ($move_uploaded_file) {
-                    $newdata["avatar"] = 'public/images/uploads/' . $data[0]['id'] . '/profile/' . basename($_FILES['fileToUpload']['name']);
+                    $newdata["avatar"] = PROJECT . 'public/images/uploads/' . $data[0]['id'] . '/profile/' . basename($_FILES['fileToUpload']['name']);
                 }
             } else {
 
@@ -371,8 +371,11 @@ if ((isset($error['pass_w']) && !empty($error['pass_w']))
     || (isset($error['newpass']) && !empty($error['newpass']))
 ) {
     //die ('yes');
-    $_SESSION['error_msg'] = 'Echec. Une erreur a été détecté lors de la mise à jour. Vérifiez vos saisies puis réessayer.';
+    $_SESSION['error_msg'] = 'Echec. Causes probables : Mot de passe erroné ou violation de règles au niveau des champs de la section concernée par la mise à jour. Vérifiez puis réessayer.';
 } else {
     //die ('yes');
     unset($_SESSION['error_msg']);
+
+    $_SESSION['success_msg'] = 'Mise à jour effectuée avec succès';
+
 }
