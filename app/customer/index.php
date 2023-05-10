@@ -2,6 +2,8 @@
 
 session_start();
 
+include "app/common/functions_folder/functions.php";
+
 if (isset(explode('?', $_SERVER['REQUEST_URI'])[1])) {
     $_SESSION ['theme'] = explode('?', $_SERVER['REQUEST_URI'])[1];
 } else {
@@ -19,10 +21,6 @@ if (isset($_COOKIE['error_msg']) && !empty($_COOKIE['error_msg'])){
 
 session_regenerate_id(true);
 
-$params = explode('/', $_GET['p']);
-
-include "app/common/functions_folder/functions.php";
-
 if (!connected()) {
     unset($_SESSION['current_url']);
 }
@@ -31,8 +29,9 @@ $data = [];
 
 if (isset($_SESSION["connected"]) && !empty($_SESSION["connected"])) {
     $data = json_decode($_SESSION["connected"], true);
-}          
+}   
 
+    $params = explode('/', $_GET['p']);
     $profile = "customer";
     $default_resource = "login";
     $default_action = "index";

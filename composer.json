@@ -4,7 +4,8 @@
         "mailgun/mailgun-php": "^3.5",
         "symfony/http-client": "^6.2",
         "nyholm/psr7": "^1.5",
-        "stephanecoinon/mailtrap": "^0.2.0"
+        "stephanecoinon/mailtrap": "^0.2.0",
+        "vlucas/phpdotenv": "^5.5"
     },
     "config": {
         "allow-plugins": {

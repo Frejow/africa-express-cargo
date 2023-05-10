@@ -1,13 +1,20 @@
 <?php
-    require 'vendor/autoload.php';
+    //use Dotenv\Dotenv;
+
+    require_once __DIR__ . '/vendor/autoload.php';
+    $dotenv = Dotenv\Dotenv::createImmutable(__DIR__);
+    $dotenv -> load();
+
+    //die(var_dump($_ENV));
+    
     define( 'ROOTPATH', getcwd() );
-    define( 'PROJECT', '/africa-express-cargo/' );
-    define( 'DATABASE_HOST', 'localhost' );
-    define( 'DATABASE_NAME', 'a_c_e' );
-    define( 'DATABASE_USERNAME', 'root');
-    define( 'DATABASE_PASSWORD', 'jevaisreussir08' );
-    define( 'MAIL_ADDRESS', '' );
-    define( 'MAIL_PASSWORD', '' );
+    define( 'PROJECT', $_ENV['PROJECT'] );
+    define( 'DATABASE_HOST', $_ENV['DATABASE_HOST'] );
+    define( 'DATABASE_NAME', $_ENV['DATABASE_NAME'] );
+    define( 'DATABASE_USERNAME', $_ENV['DATABASE_USERNAME']);
+    define( 'DATABASE_PASSWORD', $_ENV['DATABASE_PASSWORD'] );
+    define( 'MAIL_ADDRESS', $_ENV['MAIL_ADDRESS'] );
+    define( 'MAIL_PASSWORD', $_ENV['MAIL_PASSWORD'] );
 
     $default_profile = "customer";
     $default_profile_folder = "app/customer/index.php";

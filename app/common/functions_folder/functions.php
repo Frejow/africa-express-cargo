@@ -11,14 +11,6 @@ function redirect($theme, $link) {
 
 }
 
-/**
- * Send mail.
- *
- * @param string $destination The destination.
- * @param string $subject The subject.
- * @param string $body The body.
- * @return bool The result.
- */
 function mailsendin(string $destination, string $recipient, string $subject, string $body): bool
 {
     // passing true in constructor enables exceptions in PHPMailer
@@ -41,9 +33,9 @@ function mailsendin(string $destination, string $recipient, string $subject, str
         $mail->Password = MAIL_PASSWORD;
 
         // Sender and recipient settings
-        $mail->setFrom('express.cargo.africa@gmail.com', htmlspecialchars_decode('Africa Express Cargo'));
+        $mail->setFrom(MAIL_ADDRESS, htmlspecialchars_decode('Africa Express Cargo'));
         $mail->addAddress($destination, $recipient);
-        $mail->addReplyTo('express.cargo.africa@gmail.com', htmlspecialchars_decode('Africa Express Cargo'));
+        $mail->addReplyTo(MAIL_ADDRESS, htmlspecialchars_decode('Africa Express Cargo'));
 
         // Setting the email content
         $mail->IsHTML(true);

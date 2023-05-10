@@ -11,7 +11,7 @@ Pré-requis :
 
 - Créer une base de données.
 
-- Importer le ficher de la base de données situé dans le dossier : base-de-donnees/africa-express-cargo.sql.
+- Importer le ficher de la base de données situé dans le dossier : database/africa-express-cargo.sql.
 
 - Configurer la constante PROJECT dans le fichier index.php a la racine du projet en spécifiant le path de votre projet a partir du répertoire web. 
 Exemple : C:\wamp64\www\africa-express-cargo. Ma constante PROJECT aura comme valeur : /africa-express-cargo/
