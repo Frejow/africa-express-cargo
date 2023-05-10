@@ -1,20 +1,13 @@
 <?php
-//ini_set('session.gc_maxlifetime', 60);
-
-//session_id();
-//session_save_path('C:/wamp64/www'.PROJECT.'sessions');
-//session_set_cookie_params(1800);
-
-/*
-ini_set('session.use_cookies', 1);
-ini_set('session.use_only_cookies', 1);
-ini_set('session.use_strict_mode', 1);
-ini_set('session.cookie_httponly', 1);
-ini_set('session.cookie_secure', 1);
-ini_set('session.cookie_samesite', 'Strict');
-*/
 
 session_start();
+
+if (isset(explode('?', $_SERVER['REQUEST_URI'])[1])) {
+    $_SESSION ['theme'] = explode('?', $_SERVER['REQUEST_URI'])[1];
+} else {
+    $_SESSION ['theme'] = 'theme=light';
+}
+
 if (isset($_COOKIE['error_msg']) && !empty($_COOKIE['error_msg'])){
     $msg = $_COOKIE['error_msg'];
 ?>
@@ -23,26 +16,10 @@ if (isset($_COOKIE['error_msg']) && !empty($_COOKIE['error_msg'])){
 <?php
     setcookie('error_msg', '', time() - 3600, '/');
 }
+
 session_regenerate_id(true);
 
 $params = explode('/', $_GET['p']);
-
-/*if ($params[1] != 'login' && $params[1] != 'logout'){
-
-    if (!isset($_SESSION['connected'])) {
-
-        //setcookie('connected_user_data', '', time() - 3600, '/');
-
-        setcookie('error_msg', 'Pour des raisons de sécurité, vous êtes déconnecté après une période d\'inactivité de 30 minutes. Veuillez vous reconnecter.', time() + 365 * 24 * 3600, '/');
-
-        header("location:".PROJECT."customer/login");
-
-        exit;
-    
-    }
-
-}*/
-
 
 include "app/common/functions_folder/functions.php";
 

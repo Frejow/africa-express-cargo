@@ -3,6 +3,14 @@
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
 
+function redirect($theme, $link) {
+
+    $redirect_url = $link.'?'.$theme;
+
+    return $redirect_url;
+
+}
+
 /**
  * Send mail.
  *

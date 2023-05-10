@@ -287,28 +287,8 @@
                             </div>
                         </a>
                         <div class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
-                            <a href='
-                            <?php 
-                            if (isset(explode('?', $_SERVER['REQUEST_URI'])[1]) && explode('?', $_SERVER['REQUEST_URI'])[1] == "theme=light"){
-                                echo PROJECT.'admin/dash/profile'.'?theme=light';
-                            } elseif (isset(explode('?', $_SERVER['REQUEST_URI'])[1]) && explode('?', $_SERVER['REQUEST_URI'])[1] == "theme=dark"){
-                                echo PROJECT.'admin/dash/profile'.'?theme=dark';
-                            } else {
-                                echo PROJECT.'admin/dash/profile'.'?theme=light';
-                            }
-                            ?>
-                            ' class="dropdown-item">Mon Compte</a>
-                            <a href='
-                            <?php 
-                            if (isset(explode('?', $_SERVER['REQUEST_URI'])[1]) && explode('?', $_SERVER['REQUEST_URI'])[1] == "theme=light"){
-                                echo PROJECT.'admin/dash/profile-settings'.'?theme=light';
-                            } elseif (isset(explode('?', $_SERVER['REQUEST_URI'])[1]) && explode('?', $_SERVER['REQUEST_URI'])[1] == "theme=dark"){
-                                echo PROJECT.'admin/dash/profile-settings'.'?theme=dark';
-                            } else {
-                                echo PROJECT.'admin/dash/profile-settings'.'?theme=light';
-                            }
-                            ?>
-                            ' class="dropdown-item">Paramètres du compte</a>
+                            <a href='<?= redirect($_SESSION['theme'], PROJECT.'admin/dash/profile') ?>' class="dropdown-item">Mon Compte</a>
+                            <a href='<?= redirect($_SESSION['theme'], PROJECT.'admin/dash/profile-settings') ?>' class="dropdown-item">Paramètres du compte</a>
                             <a href="./sign-in.html" class="dropdown-item">Déconnexion</a>
                         </div>
                     </div>
@@ -316,17 +296,7 @@
                 <div class="collapse navbar-collapse" id="sidebar-menu">
                     <ul class="navbar-nav pt-lg-3">
                         <li class="nav-item d-lg-none <?= $params[2] == 'notifications' ? 'active' : '' ?>">
-                            <a class="nav-link" href="
-                            <?php 
-                            if (isset(explode('?', $_SERVER['REQUEST_URI'])[1]) && explode('?', $_SERVER['REQUEST_URI'])[1] == "theme=light"){
-                                echo PROJECT.'admin/dash/notifications'.'?theme=light';
-                            } elseif (isset(explode('?', $_SERVER['REQUEST_URI'])[1]) && explode('?', $_SERVER['REQUEST_URI'])[1] == "theme=dark"){
-                                echo PROJECT.'admin/dash/notifications'.'?theme=dark';
-                            } else {
-                                echo PROJECT.'admin/dash/notifications'.'?theme=light';
-                            }
-                            ?>
-                            ">
+                            <a class="nav-link" href="<?= redirect($_SESSION['theme'], PROJECT.'admin/dash/notifications') ?>">
                                 <span class="nav-link-icon d-md-none d-lg-inline-block"><!-- Download SVG icon from http://tabler-icons.io/i/checkbox -->
                                     <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
                                         <path stroke="none" d="M0 0h24v24H0z" fill="none" />
@@ -346,17 +316,7 @@
                             }
                             ?>
                             ">
-                            <a class="nav-link" href="
-                            <?php 
-                            if (isset(explode('?', $_SERVER['REQUEST_URI'])[1]) && explode('?', $_SERVER['REQUEST_URI'])[1] == "theme=light"){
-                                echo PROJECT.'admin/dash/noaddressee-packages-listings'.'?theme=light';
-                            } elseif (isset(explode('?', $_SERVER['REQUEST_URI'])[1]) && explode('?', $_SERVER['REQUEST_URI'])[1] == "theme=dark"){
-                                echo PROJECT.'admin/dash/noaddressee-packages-listings'.'?theme=dark';
-                            } else {
-                                echo PROJECT.'admin/dash/noaddressee-packages-listings'.'?theme=light';
-                            }
-                            ?>
-                            ">
+                            <a class="nav-link" href="<?= redirect($_SESSION['theme'], PROJECT.'admin/dash/noaddressee-packages-listings') ?>">
                                 <span class="nav-link-icon d-md-none d-lg-inline-block"><!-- Download SVG icon from http://tabler-icons.io/i/checkbox -->
                                     <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
                                         <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
@@ -380,17 +340,7 @@
                             }
                             ?>
                             ">
-                            <a class="nav-link" href="
-                            <?php 
-                            if (isset(explode('?', $_SERVER['REQUEST_URI'])[1]) && explode('?', $_SERVER['REQUEST_URI'])[1] == "theme=light"){
-                                echo PROJECT.'admin/dash/shipping-packages-group-listings'.'?theme=light';
-                            } elseif (isset(explode('?', $_SERVER['REQUEST_URI'])[1]) && explode('?', $_SERVER['REQUEST_URI'])[1] == "theme=dark"){
-                                echo PROJECT.'admin/dash/shipping-packages-group-listings'.'?theme=dark';
-                            } else {
-                                echo PROJECT.'admin/dash/shipping-packages-group-listings'.'?theme=light';
-                            }
-                            ?>
-                            ">
+                            <a class="nav-link" href="<?= redirect($_SESSION['theme'], PROJECT.'admin/dash/shipping-packages-group-listings') ?>">
                                 <span class="nav-link-icon d-md-none d-lg-inline-block"><!-- Download SVG icon from http://tabler-icons.io/i/home -->
                                     <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
                                         <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
@@ -430,17 +380,7 @@
                                     <div class="dropdown-menu-column">
                                         <div class="dropend">
                                             <a class="dropdown-item <?= $params[2] == 'customers-listings' ? 'active' : '' ?>" 
-                                            href="
-                                            <?php 
-                                            if (isset(explode('?', $_SERVER['REQUEST_URI'])[1]) && explode('?', $_SERVER['REQUEST_URI'])[1] == "theme=light"){
-                                                echo PROJECT.'admin/dash/customers-listings'.'?theme=light';
-                                            } elseif (isset(explode('?', $_SERVER['REQUEST_URI'])[1]) && explode('?', $_SERVER['REQUEST_URI'])[1] == "theme=dark"){
-                                                echo PROJECT.'admin/dash/customers-listings'.'?theme=dark';
-                                            } else {
-                                                echo PROJECT.'admin/dash/customers-listings'.'?theme=light';
-                                            }
-                                            ?>
-                                            ">  
+                                            href="<?= redirect($_SESSION['theme'], PROJECT.'admin/dash/customers-listings') ?>">  
                                                 <span class="nav-link-icon d-md-none d-lg-inline-block"><!-- Download SVG icon from http://tabler-icons.io/i/checkbox -->
                                                     <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
                                                         <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
@@ -462,17 +402,7 @@
                                                 echo 'active';
                                             }
                                             ?>" 
-                                            href="
-                                            <?php 
-                                            if (isset(explode('?', $_SERVER['REQUEST_URI'])[1]) && explode('?', $_SERVER['REQUEST_URI'])[1] == "theme=light"){
-                                                echo PROJECT.'admin/dash/customers-packages-listings'.'?theme=light';
-                                            } elseif (isset(explode('?', $_SERVER['REQUEST_URI'])[1]) && explode('?', $_SERVER['REQUEST_URI'])[1] == "theme=dark"){
-                                                echo PROJECT.'admin/dash/customers-packages-listings'.'?theme=dark';
-                                            } else {
-                                                echo PROJECT.'admin/dash/customers-packages-listings'.'?theme=light';
-                                            }
-                                            ?>
-                                            ">
+                                            href="<?= redirect($_SESSION['theme'], PROJECT.'admin/dash/customers-packages-listings') ?>">
                                                 <span class="nav-link-icon d-md-none d-lg-inline-block"><!-- Download SVG icon from http://tabler-icons.io/i/checkbox -->
                                                     <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
                                                         <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
@@ -493,17 +423,7 @@
                                                 echo 'active';
                                             }
                                             ?>" 
-                                            href="
-                                            <?php 
-                                            if (isset(explode('?', $_SERVER['REQUEST_URI'])[1]) && explode('?', $_SERVER['REQUEST_URI'])[1] == "theme=light"){
-                                                echo PROJECT.'admin/dash/customers-packages-group-listings'.'?theme=light';
-                                            } elseif (isset(explode('?', $_SERVER['REQUEST_URI'])[1]) && explode('?', $_SERVER['REQUEST_URI'])[1] == "theme=dark"){
-                                                echo PROJECT.'admin/dash/customers-packages-group-listings'.'?theme=dark';
-                                            } else {
-                                                echo PROJECT.'admin/dash/customers-packages-group-listings'.'?theme=light';
-                                            }
-                                            ?>
-                                            ">  
+                                            href="<?= redirect($_SESSION['theme'], PROJECT.'admin/dash/customers-packages-group-listings') ?>">  
                                                 <span class="nav-link-icon d-md-none d-lg-inline-block"><!-- Download SVG icon from http://tabler-icons.io/i/home -->
                                                     <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
                                                         <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
@@ -544,17 +464,7 @@
                                     <div class="dropdown-menu-column">
                                         <div class="dropend">
                                             <a class="dropdown-item <?= $params[2] == 'agents-listings' ? 'active' : '' ?>" 
-                                            href="
-                                            <?php 
-                                            if (isset(explode('?', $_SERVER['REQUEST_URI'])[1]) && explode('?', $_SERVER['REQUEST_URI'])[1] == "theme=light"){
-                                                echo PROJECT.'admin/dash/agents-listings'.'?theme=light';
-                                            } elseif (isset(explode('?', $_SERVER['REQUEST_URI'])[1]) && explode('?', $_SERVER['REQUEST_URI'])[1] == "theme=dark"){
-                                                echo PROJECT.'admin/dash/agents-listings'.'?theme=dark';
-                                            } else {
-                                                echo PROJECT.'admin/dash/agents-listings'.'?theme=light';
-                                            }
-                                            ?>
-                                            ">
+                                            href="<?= redirect($_SESSION['theme'], PROJECT.'admin/dash/agents-listings') ?>">
                                                 <span class="nav-link-icon d-md-none d-lg-inline-block"><!-- Download SVG icon from http://tabler-icons.io/i/checkbox -->
                                                     <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
                                                         <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
@@ -576,17 +486,7 @@
                                                 echo 'active';
                                             }
                                             ?>" 
-                                            href="
-                                            <?php 
-                                            if (isset(explode('?', $_SERVER['REQUEST_URI'])[1]) && explode('?', $_SERVER['REQUEST_URI'])[1] == "theme=light"){
-                                                echo PROJECT.'admin/dash/agents-packages-group-listings'.'?theme=light';
-                                            } elseif (isset(explode('?', $_SERVER['REQUEST_URI'])[1]) && explode('?', $_SERVER['REQUEST_URI'])[1] == "theme=dark"){
-                                                echo PROJECT.'admin/dash/agents-packages-group-listings'.'?theme=dark';
-                                            } else {
-                                                echo PROJECT.'admin/dash/agents-packages-group-listings'.'?theme=light';
-                                            }
-                                            ?>
-                                            ">
+                                            href="<?= redirect($_SESSION['theme'], PROJECT.'admin/dash/agents-packages-group-listings') ?>">
                                                 <span class="nav-link-icon d-md-none d-lg-inline-block"><!-- Download SVG icon from http://tabler-icons.io/i/home -->
                                                     <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
                                                         <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
@@ -744,29 +644,9 @@
                             </div>
                         </a>
                         <div class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
-                            <a href='
-                            <?php 
-                            if (isset(explode('?', $_SERVER['REQUEST_URI'])[1]) && explode('?', $_SERVER['REQUEST_URI'])[1] == "theme=light"){
-                                echo PROJECT.'admin/dash/profile'.'?theme=light';
-                            } elseif (isset(explode('?', $_SERVER['REQUEST_URI'])[1]) && explode('?', $_SERVER['REQUEST_URI'])[1] == "theme=dark"){
-                                echo PROJECT.'admin/dash/profile'.'?theme=dark';
-                            } else {
-                                echo PROJECT.'admin/dash/profile'.'?theme=light';
-                            }
-                            ?>
-                            ' class="dropdown-item">Mon Compte</a>
-                            <a href='
-                            <?php 
-                            if (isset(explode('?', $_SERVER['REQUEST_URI'])[1]) && explode('?', $_SERVER['REQUEST_URI'])[1] == "theme=light"){
-                                echo PROJECT.'admin/dash/profile-settings'.'?theme=light';
-                            } elseif (isset(explode('?', $_SERVER['REQUEST_URI'])[1]) && explode('?', $_SERVER['REQUEST_URI'])[1] == "theme=dark"){
-                                echo PROJECT.'admin/dash/profile-settings'.'?theme=dark';
-                            } else {
-                                echo PROJECT.'admin/dash/profile-settings'.'?theme=light';
-                            }
-                            ?>
-                            ' class="dropdown-item">Paramètres du compte</a>
-                            <a href="./sign-in.html" class="dropdown-item">Déconnexion</a>
+                            <a href='<?= redirect($_SESSION['theme'], PROJECT.'admin/dash/profile') ?>' class="dropdown-item">Mon Compte</a>
+                            <a href='<?= redirect($_SESSION['theme'], PROJECT.'admin/dash/profile-settings') ?>' class="dropdown-item">Paramètres du compte</a>
+                            <a href="#" class="dropdown-item">Déconnexion</a>
                         </div>
                     </div>
                 </div>

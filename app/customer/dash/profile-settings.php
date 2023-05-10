@@ -98,17 +98,7 @@ include 'app/common/customer/1stpart.php';  ?>
                         }
                         ?>
 
-                        <form action="
-                        <?php
-                        if (isset(explode('?', $_SERVER['REQUEST_URI'])[1]) && explode('?', $_SERVER['REQUEST_URI'])[1] == "theme=light") {
-                            echo PROJECT . 'customer/dash-treatment/profile-settings' . '?theme=light';
-                        } elseif (isset(explode('?', $_SERVER['REQUEST_URI'])[1]) && explode('?', $_SERVER['REQUEST_URI'])[1] == "theme=dark") {
-                            echo PROJECT . 'customer/dash-treatment/profile-settings' . '?theme=dark';
-                        } else {
-                            echo PROJECT . 'customer/dash-treatment/profile-settings' . '?theme=light';
-                        }
-                        ?>
-                        " class="text-center" method="post" enctype="multipart/form-data">
+                        <form action="<?= redirect($_SESSION['theme'], PROJECT.'customer/dash-treatment/profile-settings') ?>" class="text-center" method="post" enctype="multipart/form-data">
 
                             <div class="col mt-3">
                                 <input type="file" name="fileToUpload" id="fileToUpload" style="display: none;" onchange="updateButtonLabel()">
@@ -327,17 +317,7 @@ include 'app/common/customer/1stpart.php';  ?>
                             </div>
                         </div>
 
-                        <form class="col-lg-11" action="
-                        <?php
-                        if (isset(explode('?', $_SERVER['REQUEST_URI'])[1]) && explode('?', $_SERVER['REQUEST_URI'])[1] == "theme=light") {
-                            echo PROJECT . 'customer/dash-treatment/profile-settings' . '?theme=light';
-                        } elseif (isset(explode('?', $_SERVER['REQUEST_URI'])[1]) && explode('?', $_SERVER['REQUEST_URI'])[1] == "theme=dark") {
-                            echo PROJECT . 'customer/dash-treatment/profile-settings' . '?theme=dark';
-                        } else {
-                            echo PROJECT . 'customer/dash-treatment/profile-settings' . '?theme=light';
-                        }
-                        ?>
-                        " method="post" id="form_appear" style="display: flex; flex-direction: column; display: none;">
+                        <form class="col-lg-11" action="<?= redirect($_SESSION['theme'], PROJECT.'customer/dash-treatment/profile-settings') ?>" method="post" id="form_appear" style="display: flex; flex-direction: column; display: none;">
                             <h3 class="mt-4 text-center">Mise à jour - Informations Personnelles</h3>
                             <div class="row g-3">
                                 <div class="col-md">
@@ -462,17 +442,7 @@ include 'app/common/customer/1stpart.php';  ?>
 
                         </form>
 
-                        <form action="
-                        <?php
-                        if (isset(explode('?', $_SERVER['REQUEST_URI'])[1]) && explode('?', $_SERVER['REQUEST_URI'])[1] == "theme=light") {
-                            echo PROJECT . 'customer/dash-treatment/profile-settings' . '?theme=light';
-                        } elseif (isset(explode('?', $_SERVER['REQUEST_URI'])[1]) && explode('?', $_SERVER['REQUEST_URI'])[1] == "theme=dark") {
-                            echo PROJECT . 'customer/dash-treatment/profile-settings' . '?theme=dark';
-                        } else {
-                            echo PROJECT . 'customer/dash-treatment/profile-settings' . '?theme=light';
-                        }
-                        ?>
-                        " method="post" style="display: flex;flex-direction: column;align-items:center;">
+                        <form action="<?= redirect($_SESSION['theme'], PROJECT.'customer/dash-treatment/profile-settings') ?>" method="post" style="display: flex;flex-direction: column;align-items:center;">
 
                             <?php
 
@@ -558,17 +528,7 @@ include 'app/common/customer/1stpart.php';  ?>
 
                         <h3 class="mt-3">-> Section Dangereuse</h3>
                         <div class="row">
-                            <form action="
-                            <?php
-                            if (isset(explode('?', $_SERVER['REQUEST_URI'])[1]) && explode('?', $_SERVER['REQUEST_URI'])[1] == "theme=light") {
-                                echo PROJECT . 'customer/dash-treatment/profile-settings' . '?theme=light';
-                            } elseif (isset(explode('?', $_SERVER['REQUEST_URI'])[1]) && explode('?', $_SERVER['REQUEST_URI'])[1] == "theme=dark") {
-                                echo PROJECT . 'customer/dash-treatment/profile-settings' . '?theme=dark';
-                            } else {
-                                echo PROJECT . 'customer/dash-treatment/profile-settings' . '?theme=light';
-                            }
-                            ?>
-                            " method="post">
+                            <form action="<?= redirect($_SESSION['theme'], PROJECT.'customer/dash-treatment/profile-settings') ?>" method="post">
 
                                 <?php
 

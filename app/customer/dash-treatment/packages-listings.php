@@ -7,13 +7,7 @@ if (isset($_POST['previous'])) {
 
     $_SESSION['previous_page'] = $_POST['previous'];
 
-    if (isset(explode('?', $_SERVER['REQUEST_URI'])[1]) && explode('?', $_SERVER['REQUEST_URI'])[1] == "theme=light") {
-        header("location:" . PROJECT . "customer/dash/packages-listings?theme=light");
-    } elseif (isset(explode('?', $_SERVER['REQUEST_URI'])[1]) && explode('?', $_SERVER['REQUEST_URI'])[1] == "theme=dark") {
-        header("location:" . PROJECT . "customer/dash/packages-listings?theme=dark");
-    } else {
-        header("location:" . PROJECT . "customer/dash/packages-listings?theme=light");
-    }
+    header("location:". redirect($_SESSION['theme'], PROJECT.'customer/dash/packages-listings'));
 }
 
 if (isset($_POST['next'])) {
@@ -21,13 +15,9 @@ if (isset($_POST['next'])) {
     $_SESSION['next_page'] = $_POST['next'];
 
     if (isset($_SESSION['next_page'])) {
-    if (isset(explode('?', $_SERVER['REQUEST_URI'])[1]) && explode('?', $_SERVER['REQUEST_URI'])[1] == "theme=light") {
-        header("location:" . PROJECT . "customer/dash/packages-listings?theme=light");
-    } elseif (isset(explode('?', $_SERVER['REQUEST_URI'])[1]) && explode('?', $_SERVER['REQUEST_URI'])[1] == "theme=dark") {
-        header("location:" . PROJECT . "customer/dash/packages-listings?theme=dark");
-    } else {
-        header("location:" . PROJECT . "customer/dash/packages-listings?theme=light");
-    }
+
+        header("location:". redirect($_SESSION['theme'], PROJECT.'customer/dash/packages-listings'));
+
     }
 } 
 
@@ -44,13 +34,7 @@ if (isset($_POST['statusSelect']) && !empty($_POST['statusSelect'])) {
 
     if ($_SESSION['status'] == $_POST['statusSelect']) {
 
-        if (isset(explode('?', $_SERVER['REQUEST_URI'])[1]) && explode('?', $_SERVER['REQUEST_URI'])[1] == "theme=light") {
-            header("location:" . PROJECT . "customer/dash/packages-listings?theme=light");
-        } elseif (isset(explode('?', $_SERVER['REQUEST_URI'])[1]) && explode('?', $_SERVER['REQUEST_URI'])[1] == "theme=dark") {
-            header("location:" . PROJECT . "customer/dash/packages-listings?theme=dark");
-        } else {
-            header("location:" . PROJECT . "customer/dash/packages-listings?theme=light");
-        }
+        header("location:". redirect($_SESSION['theme'], PROJECT.'customer/dash/packages-listings'));
 
     } else {
 
@@ -59,13 +43,9 @@ if (isset($_POST['statusSelect']) && !empty($_POST['statusSelect'])) {
         $_SESSION['selected_status'] = $_POST['statusSelect'];
 
         if (isset($_SESSION['selected_status'])) {
-            if (isset(explode('?', $_SERVER['REQUEST_URI'])[1]) && explode('?', $_SERVER['REQUEST_URI'])[1] == "theme=light") {
-                header("location:" . PROJECT . "customer/dash/packages-listings?theme=light");
-            } elseif (isset(explode('?', $_SERVER['REQUEST_URI'])[1]) && explode('?', $_SERVER['REQUEST_URI'])[1] == "theme=dark") {
-                header("location:" . PROJECT . "customer/dash/packages-listings?theme=dark");
-            } else {
-                header("location:" . PROJECT . "customer/dash/packages-listings?theme=light");
-            }
+
+            header("location:". redirect($_SESSION['theme'], PROJECT.'customer/dash/packages-listings'));
+
         }
     }
     
@@ -82,23 +62,15 @@ if (isset($_POST['search']) && !empty($_POST['search'])) {
     $_SESSION['research'] = secure($_POST['search']);
 
     if (isset($_SESSION['research'])) {
-        if (isset(explode('?', $_SERVER['REQUEST_URI'])[1]) && explode('?', $_SERVER['REQUEST_URI'])[1] == "theme=light") {
-            header("location:" . PROJECT . "customer/dash/packages-listings?theme=light");
-        } elseif (isset(explode('?', $_SERVER['REQUEST_URI'])[1]) && explode('?', $_SERVER['REQUEST_URI'])[1] == "theme=dark") {
-            header("location:" . PROJECT . "customer/dash/packages-listings?theme=dark");
-        } else {
-            header("location:" . PROJECT . "customer/dash/packages-listings?theme=light");
-        }
+
+        header("location:". redirect($_SESSION['theme'], PROJECT.'customer/dash/packages-listings'));
+
     }
 //die ('dedans');
 } else {
-    if (isset(explode('?', $_SERVER['REQUEST_URI'])[1]) && explode('?', $_SERVER['REQUEST_URI'])[1] == "theme=light") {
-        header("location:" . PROJECT . "customer/dash/packages-listings?theme=light");
-    } elseif (isset(explode('?', $_SERVER['REQUEST_URI'])[1]) && explode('?', $_SERVER['REQUEST_URI'])[1] == "theme=dark") {
-        header("location:" . PROJECT . "customer/dash/packages-listings?theme=dark");
-    } else {
-        header("location:" . PROJECT . "customer/dash/packages-listings?theme=light");
-    }
+
+    header("location:". redirect($_SESSION['theme'], PROJECT.'customer/dash/packages-listings'));
+
 }
 
 //Research
@@ -112,14 +84,7 @@ if (isset($_POST['select'])) {
     
     if ($_SESSION['packages_nb_per_page'] == $_POST['select']) {
 
-        if (isset(explode('?', $_SERVER['REQUEST_URI'])[1]) && explode('?', $_SERVER['REQUEST_URI'])[1] == "theme=light") {
-            header("location:" . PROJECT . "customer/dash/packages-listings?theme=light");
-        } elseif (isset(explode('?', $_SERVER['REQUEST_URI'])[1]) && explode('?', $_SERVER['REQUEST_URI'])[1] == "theme=dark") {
-            header("location:" . PROJECT . "customer/dash/packages-listings?theme=dark");
-        } else {
-            header("location:" . PROJECT . "customer/dash/packages-listings?theme=light");
-        }
-        
+        header("location:". redirect($_SESSION['theme'], PROJECT.'customer/dash/packages-listings'));
 
     } else {
 
@@ -127,13 +92,7 @@ if (isset($_POST['select'])) {
 
         $_SESSION['select_packages_nb_per_page'] = $_POST['select'];
 
-        if (isset(explode('?', $_SERVER['REQUEST_URI'])[1]) && explode('?', $_SERVER['REQUEST_URI'])[1] == "theme=light") {
-            header("location:" . PROJECT . "customer/dash/packages-listings?theme=light");
-        } elseif (isset(explode('?', $_SERVER['REQUEST_URI'])[1]) && explode('?', $_SERVER['REQUEST_URI'])[1] == "theme=dark") {
-            header("location:" . PROJECT . "customer/dash/packages-listings?theme=dark");
-        } else {
-            header("location:" . PROJECT . "customer/dash/packages-listings?theme=light");
-        }
+        header("location:". redirect($_SESSION['theme'], PROJECT.'customer/dash/packages-listings'));
         
     }
     
@@ -157,13 +116,7 @@ if (isset($_POST['package_deletion']) && !empty($_POST['package_deletion'])) {
 
                 $_SESSION['success_msg'] = 'Votre colis N°'. explode('&', $_POST['package_deletion'])[0] .' a été supprimé avec succès';
     
-                if (isset(explode('?', $_SERVER['REQUEST_URI'])[1]) && explode('?', $_SERVER['REQUEST_URI'])[1] == "theme=light") {
-                    header("location:" . PROJECT . "customer/dash/packages-listings?theme=light");
-                } elseif (isset(explode('?', $_SERVER['REQUEST_URI'])[1]) && explode('?', $_SERVER['REQUEST_URI'])[1] == "theme=dark") {
-                    header("location:" . PROJECT . "customer/dash/packages-listings?theme=dark");
-                } else {
-                    header("location:" . PROJECT . "customer/dash/packages-listings?theme=light");
-                }
+                header("location:". redirect($_SESSION['theme'], PROJECT.'customer/dash/packages-listings'));
 
             }
     
@@ -175,13 +128,7 @@ if (isset($_POST['package_deletion']) && !empty($_POST['package_deletion'])) {
 
             $_SESSION['success_msg'] = 'Votre colis N°'. $_POST['package_deletion'] .' a été supprimé avec succès';
     
-            if (isset(explode('?', $_SERVER['REQUEST_URI'])[1]) && explode('?', $_SERVER['REQUEST_URI'])[1] == "theme=light") {
-                header("location:" . PROJECT . "customer/dash/packages-listings?theme=light");
-            } elseif (isset(explode('?', $_SERVER['REQUEST_URI'])[1]) && explode('?', $_SERVER['REQUEST_URI'])[1] == "theme=dark") {
-                header("location:" . PROJECT . "customer/dash/packages-listings?theme=dark");
-            } else {
-                header("location:" . PROJECT . "customer/dash/packages-listings?theme=light");
-            }
+            header("location:". redirect($_SESSION['theme'], PROJECT.'customer/dash/packages-listings'));
     
         }
 

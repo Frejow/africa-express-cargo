@@ -18,13 +18,7 @@ if (isset($_POST['set-pack-grp']) && !empty($_POST['set-pack-grp'])) {
 
                         $_SESSION['error_msg'] = 'Un problème est survenu lors de la création du groupe. Réessayer. Si cela persiste, contactez nous.';
 
-                        if (isset(explode('?', $_SERVER['REQUEST_URI'])[1]) && explode('?', $_SERVER['REQUEST_URI'])[1] == "theme=light") {
-                            header("location:" . PROJECT . "customer/dash/set-packages-group?theme=light");
-                        } elseif (isset(explode('?', $_SERVER['REQUEST_URI'])[1]) && explode('?', $_SERVER['REQUEST_URI'])[1] == "theme=dark") {
-                            header("location:" . PROJECT . "customer/dash/set-packages-group?theme=dark");
-                        } else {
-                            header("location:" . PROJECT . "customer/dash/set-packages-group?theme=light");
-                        }
+                        header("location:". redirect($_SESSION['theme'], PROJECT.'customer/dash/set-packages-group'));
 
                         exit;
 
@@ -40,19 +34,16 @@ if (isset($_POST['set-pack-grp']) && !empty($_POST['set-pack-grp'])) {
 
                     $_SESSION['success_msg'] = 'Groupe de colis créé avec succès';
     
-                    if (isset(explode('?', $_SERVER['REQUEST_URI'])[1]) && explode('?', $_SERVER['REQUEST_URI'])[1] == "theme=light") {
-                        header("location:" . PROJECT . "customer/dash/packages-group-listings?theme=light");
-                    } elseif (isset(explode('?', $_SERVER['REQUEST_URI'])[1]) && explode('?', $_SERVER['REQUEST_URI'])[1] == "theme=dark") {
-                        header("location:" . PROJECT . "customer/dash/packages-group-listings?theme=dark");
-                    } else {
-                        header("location:" . PROJECT . "customer/dash/packages-group-listings?theme=light");
-                    }
+                    header("location:". redirect($_SESSION['theme'], PROJECT.'customer/dash/packages-group-listings'));
+
                     exit;
                 }
     
             } else {
 
                 $_SESSION['error_msg'] = 'Un problème est survenu lors de la création du groupe. Réessayer. Si cela persiste, contactez nous.';
+
+                header("location:". redirect($_SESSION['theme'], PROJECT.'customer/dash/set-packages-group'));
 
             }
 
@@ -76,12 +67,6 @@ if (!empty($error)) {
 
     $_SESSION['set_pack_group_errors'] = $error;
 
-    if (isset(explode('?', $_SERVER['REQUEST_URI'])[1]) && explode('?', $_SERVER['REQUEST_URI'])[1] == "theme=light") {
-        header("location:" . PROJECT . "customer/dash/set-packages-group?theme=light");
-    } elseif (isset(explode('?', $_SERVER['REQUEST_URI'])[1]) && explode('?', $_SERVER['REQUEST_URI'])[1] == "theme=dark") {
-        header("location:" . PROJECT . "customer/dash/set-packages-group?theme=dark");
-    } else {
-        header("location:" . PROJECT . "customer/dash/set-packages-group?theme=light");
-    }
+    header("location:". redirect($_SESSION['theme'], PROJECT.'customer/dash/set-packages-group'));
 
 }

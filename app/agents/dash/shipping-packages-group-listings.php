@@ -6,17 +6,7 @@
                 <div class="row g-2 align-items-center " style="flex-wrap: wrap;">
                     <div class="col-12 col-lg-auto ms-auto d-print-none">
                         <div class="btn-list justify-content-center" id="">
-                            <a href="
-                            <?php 
-                            if (isset(explode('?', $_SERVER['REQUEST_URI'])[1]) && explode('?', $_SERVER['REQUEST_URI'])[1] == "theme=light"){
-                                echo PROJECT.'agents/dash/set-shipping-packages-group'.'?theme=light';
-                            } elseif (isset(explode('?', $_SERVER['REQUEST_URI'])[1]) && explode('?', $_SERVER['REQUEST_URI'])[1] == "theme=dark"){
-                                echo PROJECT.'agents/dash/set-shipping-packages-group'.'?theme=dark';
-                            } else {
-                                echo PROJECT.'agents/dash/set-shipping-packages-group'.'?theme=light';
-                            }
-                            ?>
-                            " class="btn d-none text-white d-sm-inline-block btn-warning" data-bs-toggle="" data-bs-target="">
+                            <a href="<?= redirect($_SESSION['theme'], PROJECT.'agents/dash/set-shipping-packages-group') ?>" class="btn d-none text-white d-sm-inline-block btn-warning" data-bs-toggle="" data-bs-target="">
                                 <!-- Download SVG icon from http://tabler-icons.io/i/plus -->
                                 <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
                                     <path stroke="none" d="M0 0h24v24H0z" fill="none" />
@@ -25,17 +15,7 @@
                                 </svg>
                                 Créer un groupe de colis
                             </a>
-                            <a href="
-                            <?php 
-                            if (isset(explode('?', $_SERVER['REQUEST_URI'])[1]) && explode('?', $_SERVER['REQUEST_URI'])[1] == "theme=light"){
-                                echo PROJECT.'agents/dash/set-shipping-packages-group'.'?theme=light';
-                            } elseif (isset(explode('?', $_SERVER['REQUEST_URI'])[1]) && explode('?', $_SERVER['REQUEST_URI'])[1] == "theme=dark"){
-                                echo PROJECT.'agents/dash/set-shipping-packages-group'.'?theme=dark';
-                            } else {
-                                echo PROJECT.'agents/dash/set-shipping-packages-group'.'?theme=light';
-                            }
-                            ?>
-                            " class="btn d-sm-none text-white btn-warning" data-bs-toggle="" data-bs-target="">
+                            <a href="<?= redirect($_SESSION['theme'], PROJECT.'agents/dash/set-shipping-packages-group') ?>" class="btn d-sm-none text-white btn-warning" data-bs-toggle="" data-bs-target="">
                                 <!-- Download SVG icon from http://tabler-icons.io/i/plus -->
                                 <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
                                     <path stroke="none" d="M0 0h24v24H0z" fill="none" />
@@ -101,17 +81,7 @@
                                             </td>
                                             <td class="text-end">
                                                 <span class="">
-                                                    <a class="link-warning link" href="
-                                                    <?php 
-                                                    if (isset(explode('?', $_SERVER['REQUEST_URI'])[1]) && explode('?', $_SERVER['REQUEST_URI'])[1] == "theme=light"){
-                                                        echo PROJECT.'agents/dash/edit-shipping-packages-group'.'?theme=light';
-                                                    } elseif (isset(explode('?', $_SERVER['REQUEST_URI'])[1]) && explode('?', $_SERVER['REQUEST_URI'])[1] == "theme=dark"){
-                                                        echo PROJECT.'agents/dash/edit-shipping-packages-group'.'?theme=dark';
-                                                    } else {
-                                                        echo PROJECT.'agents/dash/edit-shipping-packages-group'.'?theme=light';
-                                                    }
-                                                    ?>
-                                                    ">
+                                                    <a class="link-warning link" href="<?= redirect($_SESSION['theme'], PROJECT.'agents/dash/edit-shipping-packages-group') ?>">
                                                         Modifier
                                                     </a>
                                                 </span>

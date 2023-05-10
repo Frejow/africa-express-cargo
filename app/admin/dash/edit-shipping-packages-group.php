@@ -105,17 +105,7 @@
         <div class="row">
             <!-- Page title actions -->
             <div class="btn-list justify-content-center col-4 col-lg-4">
-                <a href="
-                <?php 
-                if (isset(explode('?', $_SERVER['REQUEST_URI'])[1]) && explode('?', $_SERVER['REQUEST_URI'])[1] == "theme=light"){
-                    echo PROJECT.'admin/dash/shipping-packages-group-listings'.'?theme=light';
-                } elseif (isset(explode('?', $_SERVER['REQUEST_URI'])[1]) && explode('?', $_SERVER['REQUEST_URI'])[1] == "theme=dark"){
-                    echo PROJECT.'admin/dash/shipping-packages-group-listings'.'?theme=dark';
-                } else {
-                    echo PROJECT.'admin/dash/shipping-packages-group-listings'.'?theme=light';
-                }
-                ?>
-                " class="btn btn-link link-secondary" style="border:none; width:fit-content; text-decoration:none;">
+                <a href="<?= redirect($_SESSION['theme'], PROJECT.'admin/dash/shipping-packages-group-listings') ?>" class="btn btn-link link-secondary" style="border:none; width:fit-content; text-decoration:none;">
                     <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
                         <path stroke="none" d="M0 0h24v24H0z" fill="none" />
                         <path d="M9 11l-4 4l4 4m-4 -4h11a4 4 0 0 0 0 -8h-1" />
@@ -133,31 +123,11 @@
                 </button>
             </div>
             <div class="btn-list justify-content-center col-4 col-lg-4">
-                <a href="
-                <?php 
-                if (isset(explode('?', $_SERVER['REQUEST_URI'])[1]) && explode('?', $_SERVER['REQUEST_URI'])[1] == "theme=light"){
-                    echo PROJECT.'admin/dash/add-packages-inshipping-packagesgroup'.'?theme=light';
-                } elseif (isset(explode('?', $_SERVER['REQUEST_URI'])[1]) && explode('?', $_SERVER['REQUEST_URI'])[1] == "theme=dark"){
-                    echo PROJECT.'admin/dash/add-packages-inshipping-packagesgroup'.'?theme=dark';
-                } else {
-                    echo PROJECT.'admin/dash/add-packages-inshipping-packagesgroup'.'?theme=light';
-                }
-                ?>
-                " class="link-warning btn btn-link d-none d-sm-inline-block" style="border:none; text-decoration:none;">
+                <a href="<?= redirect($_SESSION['theme'], PROJECT.'admin/dash/add-packages-inshipping-packagesgroup-listings') ?>" class="link-warning btn btn-link d-none d-sm-inline-block" style="border:none; text-decoration:none;">
                     <!-- Download SVG icon from http://tabler-icons.io/i/plus -->
                     Ajouter
                 </a>
-                <a href="
-                <?php 
-                if (isset(explode('?', $_SERVER['REQUEST_URI'])[1]) && explode('?', $_SERVER['REQUEST_URI'])[1] == "theme=light"){
-                    echo PROJECT.'admin/dash/add-packages-inshipping-packagesgroup'.'?theme=light';
-                } elseif (isset(explode('?', $_SERVER['REQUEST_URI'])[1]) && explode('?', $_SERVER['REQUEST_URI'])[1] == "theme=dark"){
-                    echo PROJECT.'admin/dash/add-packages-inshipping-packagesgroup'.'?theme=dark';
-                } else {
-                    echo PROJECT.'admin/dash/add-packages-inshipping-packagesgroup'.'?theme=light';
-                }
-                ?>
-                " class="link-warning btn btn-link d-sm-none" style="border:none; text-decoration:none;">
+                <a href="<?= redirect($_SESSION['theme'], PROJECT.'admin/dash/add-packages-inshipping-packagesgroup-listings') ?>" class="link-warning btn btn-link d-sm-none" style="border:none; text-decoration:none;">
                     <!-- Download SVG icon from http://tabler-icons.io/i/plus -->
                     Ajouter
                 </a>

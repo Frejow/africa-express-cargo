@@ -11,13 +11,7 @@ if (isset($_POST['withdraw_package_ingroup']) && !empty($_POST['withdraw_package
 
         $_SESSION['success_msg'] = 'Le colis N°'. explode('&',$_POST['withdraw_package_ingroup'])[0] .' a été retiré avec succès';
 
-        if (isset(explode('?', $_SERVER['REQUEST_URI'])[1]) && explode('?', $_SERVER['REQUEST_URI'])[1] == "theme=light") {
-            header("location:" . PROJECT . "customer/dash/edit-packages-group?theme=light");
-        } elseif (isset(explode('?', $_SERVER['REQUEST_URI'])[1]) && explode('?', $_SERVER['REQUEST_URI'])[1] == "theme=dark") {
-            header("location:" . PROJECT . "customer/dash/edit-packages-group?theme=dark");
-        } else {
-            header("location:" . PROJECT . "customer/dash/edit-packages-group?theme=light");
-        }
+        header("location:". redirect($_SESSION['theme'], PROJECT.'customer/dash/edit-packages-group'));
 
     }
 
@@ -35,13 +29,7 @@ if (isset($_POST['withdraw_allpackages_ingroup']) && !empty($_POST['withdraw_all
 
         $_SESSION['success_msg'] = 'Tous les colis du groupe ont été retiré avec succès.';
 
-        if (isset(explode('?', $_SERVER['REQUEST_URI'])[1]) && explode('?', $_SERVER['REQUEST_URI'])[1] == "theme=light") {
-            header("location:" . PROJECT . "customer/dash/edit-packages-group?theme=light");
-        } elseif (isset(explode('?', $_SERVER['REQUEST_URI'])[1]) && explode('?', $_SERVER['REQUEST_URI'])[1] == "theme=dark") {
-            header("location:" . PROJECT . "customer/dash/edit-packages-group?theme=dark");
-        } else {
-            header("location:" . PROJECT . "customer/dash/edit-packages-group?theme=light");
-        }
+        header("location:". redirect($_SESSION['theme'], PROJECT.'customer/dash/edit-packages-group'));
 
     }
 

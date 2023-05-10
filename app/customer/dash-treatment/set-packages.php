@@ -10,56 +10,89 @@ $_SESSION['success_msg'] = [];
 
 
 if (isset($_POST['pack_trackN']) && !empty($_POST['pack_trackN'])) {
+
     if (!check_tracking_number(secure(strtoupper($_POST['pack_trackN'])))) {
+
         $newdata['pack_trackN'] = secure(strtoupper($_POST['pack_trackN']));
+
     } else {
+
         $error['pack_trackN'] = 'Ce numéro de suivi appartient déjà à un colis. Vérifier votre saisie.';
+
     }
+
     $updata['pack_trackN'] = secure($_POST['pack_trackN']);
+
 } else {
+
     $newdata['pack_trackN'] = "NULL";
+
 }
 
 if (isset($_POST['pack_count']) && !empty($_POST['pack_count'])) {
+
     $newdata['pack_count'] = secure($_POST['pack_count']);
     $updata['pack_count'] = secure($_POST['pack_count']);
+
 } else {
+
     $newdata['pack_count'] = 0;
+
 }
 
 if (isset($_POST['pack_cost']) && !empty($_POST['pack_cost'])) {
+
     $newdata['pack_cost'] = secure($_POST['pack_cost']);
     $updata['pack_cost'] = secure($_POST['pack_cost']);
+
 } else {
+
     $newdata['pack_cost'] = 0;
+
 }
 
 if (isset($_POST['pack_descp']) && !empty($_POST['pack_descp'])) {
+
     $newdata['pack_descp'] = secure($_POST['pack_descp']);
     $updata['pack_descp'] = secure($_POST['pack_descp']);
+
 } else {
+
     $newdata['pack_descp'] = "NULL";
+
 }
 
 if (isset($_POST['pack_type']) && !empty($_POST['pack_type'])) {
+
     $newdata['pack_type'] = secure($_POST['pack_type']);
     $updata['pack_type'] = secure($_POST['pack_type']);
+
 } else {
+
     $newdata['pack_type'] = "-";
+
 }
 
 if (isset($_POST['pack_netW']) && !empty($_POST['pack_netW'])) {
+
     $newdata['pack_netW'] = secure($_POST['pack_netW']);
     $updata['pack_netW'] = secure($_POST['pack_netW']);
+
 } else {
+
     $newdata['pack_netW'] = 0;
+
 }
 
 if (isset($_POST['pack_metricW']) && !empty($_POST['pack_metricW'])) {
+
     $newdata['pack_metricW'] = secure($_POST['pack_metricW']);
     $updata['pack_metricW'] = secure($_POST['pack_metricW']);
+
 } else {
+
     $newdata['pack_metricW'] = 0;
+
 }
 
 if (isset($_FILES["filesToUpload"])) {
@@ -126,21 +159,20 @@ if (empty($error)) {
     $newdata['pack_netW'], $newdata['pack_metricW'], $newdata['pack_type'], $data[0]['id'])) {
 
         if (!empty($newdata['images'])) {
+
             for ($i = 0; $i < sizeof($newdata['images']); $i++) {
+
                 if (!add_images_for_package(select_package_id($newdata['pack_trackN'])[0]['id'], $newdata['images'][$i], $data[0]['id'])) {
                     $_SESSION['error_msg'] = 'Une erreur est survenue. Réessayer. Si cela persiste, contactez-nous.';
 
                     $_SESSION['data'] = json_encode($updata);
 
-                    if (isset(explode('?', $_SERVER['REQUEST_URI'])[1]) && explode('?', $_SERVER['REQUEST_URI'])[1] == "theme=light") {
-                        header("location:" . PROJECT . "customer/dash/set-packages?theme=light");
-                    } elseif (isset(explode('?', $_SERVER['REQUEST_URI'])[1]) && explode('?', $_SERVER['REQUEST_URI'])[1] == "theme=dark") {
-                        header("location:" . PROJECT . "customer/dash/set-packages?theme=dark");
-                    } else {
-                        header("location:" . PROJECT . "customer/dash/set-packages?theme=light");
-                    }
+                    header("location:". redirect($_SESSION['theme'], PROJECT.'customer/dash/set-packages'));
+
                 } else {
+
                     $_SESSION['imgs_insertion'] = 'Done';
+
                 }
             }
 
@@ -148,24 +180,14 @@ if (empty($error)) {
 
                 $_SESSION['success_msg'] = 'Votre colis a été ajouté avec succès';
 
-                if (isset(explode('?', $_SERVER['REQUEST_URI'])[1]) && explode('?', $_SERVER['REQUEST_URI'])[1] == "theme=light") {
-                    header("location:" . PROJECT . "customer/dash/packages-listings?theme=light");
-                } elseif (isset(explode('?', $_SERVER['REQUEST_URI'])[1]) && explode('?', $_SERVER['REQUEST_URI'])[1] == "theme=dark") {
-                    header("location:" . PROJECT . "customer/dash/packages-listings?theme=dark");
-                } else {
-                    header("location:" . PROJECT . "customer/dash/packages-listings?theme=light");
-                }
+                header("location:". redirect($_SESSION['theme'], PROJECT.'customer/dash/packages-listings'));
+
             }
         } else {
             $_SESSION['success_msg'] = 'Votre colis a été ajouté avec succès';
 
-            if (isset(explode('?', $_SERVER['REQUEST_URI'])[1]) && explode('?', $_SERVER['REQUEST_URI'])[1] == "theme=light") {
-                header("location:" . PROJECT . "customer/dash/packages-listings?theme=light");
-            } elseif (isset(explode('?', $_SERVER['REQUEST_URI'])[1]) && explode('?', $_SERVER['REQUEST_URI'])[1] == "theme=dark") {
-                header("location:" . PROJECT . "customer/dash/packages-listings?theme=dark");
-            } else {
-                header("location:" . PROJECT . "customer/dash/packages-listings?theme=light");
-            }
+            header("location:". redirect($_SESSION['theme'], PROJECT.'customer/dash/packages-listings'));
+
         }
 
     }
@@ -178,13 +200,7 @@ if (empty($error)) {
 
     $_SESSION['set_pack_errors'] = $error;
 
-    if (isset(explode('?', $_SERVER['REQUEST_URI'])[1]) && explode('?', $_SERVER['REQUEST_URI'])[1] == "theme=light") {
-        header("location:" . PROJECT . "customer/dash/set-packages?theme=light");
-    } elseif (isset(explode('?', $_SERVER['REQUEST_URI'])[1]) && explode('?', $_SERVER['REQUEST_URI'])[1] == "theme=dark") {
-        header("location:" . PROJECT . "customer/dash/set-packages?theme=dark");
-    } else {
-        header("location:" . PROJECT . "customer/dash/set-packages?theme=light");
-    }
+    header("location:". redirect($_SESSION['theme'], PROJECT.'customer/dash/set-packages'));
 
 }
 

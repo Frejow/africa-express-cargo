@@ -57,17 +57,7 @@
                                             </td>
                                             <td class="text-end">
                                                 <span class="">
-                                                    <a class="link-warning link" href="
-                                                    <?php 
-                                                    if (isset(explode('?', $_SERVER['REQUEST_URI'])[1]) && explode('?', $_SERVER['REQUEST_URI'])[1] == "theme=light"){
-                                                        echo PROJECT.'agents/dash/update-customers-packages-group'.'?theme=light';
-                                                    } elseif (isset(explode('?', $_SERVER['REQUEST_URI'])[1]) && explode('?', $_SERVER['REQUEST_URI'])[1] == "theme=dark"){
-                                                        echo PROJECT.'agents/dash/update-customers-packages-group'.'?theme=dark';
-                                                    } else {
-                                                        echo PROJECT.'agents/dash/update-customers-packages-group'.'?theme=light';
-                                                    }
-                                                    ?>
-                                                    ">
+                                                    <a class="link-warning link" href="<?= redirect($_SESSION['theme'], PROJECT.'agents/dash/update-customers-packages-group') ?>">
                                                         Mettre à jour
                                                     </a>
                                                 </span>

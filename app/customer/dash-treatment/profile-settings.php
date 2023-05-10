@@ -24,15 +24,7 @@ if (isset($_POST["avatar_deletion"])) {
 
         if (select_user_updated_info($data[0]['id'])) {
 
-            if (isset(explode('?', $_SERVER['REQUEST_URI'])[1]) && explode('?', $_SERVER['REQUEST_URI'])[1] == "theme=light") {
-                header("location:" . PROJECT . "customer/dash/profile-settings?theme=light");
-            } elseif (isset(explode('?', $_SERVER['REQUEST_URI'])[1]) && explode('?', $_SERVER['REQUEST_URI'])[1] == "theme=dark") {
-                header("location:" . PROJECT . "customer/dash/profile-settings?theme=dark");
-            } else {
-                header("location:" . PROJECT . "customer/dash/profile-settings?theme=light");
-            }
-
-            //header("location:".PROJECT."customer/dash/profile-settings");
+            header("location:". redirect($_SESSION['theme'], PROJECT.'customer/dash/profile-settings'));
 
         }
     }
@@ -95,15 +87,7 @@ if (isset($_POST['pass_w']) && !empty($_POST['pass_w']) && check_password($data[
 
             if (select_user_updated_info($data[0]['id'])) {
 
-                if (isset(explode('?', $_SERVER['REQUEST_URI'])[1]) && explode('?', $_SERVER['REQUEST_URI'])[1] == "theme=light") {
-                    header("location:" . PROJECT . "customer/dash/profile-settings?theme=light");
-                } elseif (isset(explode('?', $_SERVER['REQUEST_URI'])[1]) && explode('?', $_SERVER['REQUEST_URI'])[1] == "theme=dark") {
-                    header("location:" . PROJECT . "customer/dash/profile-settings?theme=dark");
-                } else {
-                    header("location:" . PROJECT . "customer/dash/profile-settings?theme=light");
-                }
-
-                //header("location:".PROJECT."customer/dash/profile-settings");
+                header("location:". redirect($_SESSION['theme'], PROJECT.'customer/dash/profile-settings'));
 
             }
         }
@@ -129,13 +113,8 @@ if (!empty($error)) {
 
     $_SESSION['avatar_error'] = $error;
 
-    if (isset(explode('?', $_SERVER['REQUEST_URI'])[1]) && explode('?', $_SERVER['REQUEST_URI'])[1] == "theme=light") {
-        header("location:" . PROJECT . "customer/dash/profile-settings?theme=light");
-    } elseif (isset(explode('?', $_SERVER['REQUEST_URI'])[1]) && explode('?', $_SERVER['REQUEST_URI'])[1] == "theme=dark") {
-        header("location:" . PROJECT . "customer/dash/profile-settings?theme=dark");
-    } else {
-        header("location:" . PROJECT . "customer/dash/profile-settings?theme=light");
-    }
+    header("location:". redirect($_SESSION['theme'], PROJECT.'customer/dash/profile-settings'));
+
 }
 
 //Avatar Updating
@@ -181,36 +160,22 @@ if (isset($_POST['pass']) && !empty($_POST['pass']) && check_password($data[0]['
     if (update_personal_info($data[0]['id'], $newdata['nom'], $newdata['prenoms'], $newdata['pseudo'], $newdata['pays'], $newdata['mail'], $newdata['tel'])) {
         if (select_user_updated_info($data[0]['id'])) {
 
-            if (isset(explode('?', $_SERVER['REQUEST_URI'])[1]) && explode('?', $_SERVER['REQUEST_URI'])[1] == "theme=light") {
-                header("location:" . PROJECT . "customer/dash/profile-settings?theme=light");
-            } elseif (isset(explode('?', $_SERVER['REQUEST_URI'])[1]) && explode('?', $_SERVER['REQUEST_URI'])[1] == "theme=dark") {
-                header("location:" . PROJECT . "customer/dash/profile-settings?theme=dark");
-            } else {
-                header("location:" . PROJECT . "customer/dash/profile-settings?theme=light");
-            }
+            header("location:". redirect($_SESSION['theme'], PROJECT.'customer/dash/profile-settings'));
+
         }
     }
 } elseif (isset($_POST['pass']) && !empty($_POST['pass']) && !check_password($data[0]['id'], $_POST['pass'])) {
 
     $_SESSION['personal_error'] = 'La tentative de mise à jour des informations personnelles a échoué. Mot de passe erroné. Réessayer !';
 
-    if (isset(explode('?', $_SERVER['REQUEST_URI'])[1]) && explode('?', $_SERVER['REQUEST_URI'])[1] == "theme=light") {
-        header("location:" . PROJECT . "customer/dash/profile-settings?theme=light");
-    } elseif (isset(explode('?', $_SERVER['REQUEST_URI'])[1]) && explode('?', $_SERVER['REQUEST_URI'])[1] == "theme=dark") {
-        header("location:" . PROJECT . "customer/dash/profile-settings?theme=dark");
-    } else {
-        header("location:" . PROJECT . "customer/dash/profile-settings?theme=light");
-    }
+    header("location:". redirect($_SESSION['theme'], PROJECT.'customer/dash/profile-settings'));
+
 } elseif (isset($_POST['pass']) && empty($_POST['pass'])) {
+
     $_SESSION['personal_error'] = 'La tentative de mise à jour des informations personnelles a échoué. Aucun mot de passe n\'a été soumis. Réessayer !';
 
-    if (isset(explode('?', $_SERVER['REQUEST_URI'])[1]) && explode('?', $_SERVER['REQUEST_URI'])[1] == "theme=light") {
-        header("location:" . PROJECT . "customer/dash/profile-settings?theme=light");
-    } elseif (isset(explode('?', $_SERVER['REQUEST_URI'])[1]) && explode('?', $_SERVER['REQUEST_URI'])[1] == "theme=dark") {
-        header("location:" . PROJECT . "customer/dash/profile-settings?theme=dark");
-    } else {
-        header("location:" . PROJECT . "customer/dash/profile-settings?theme=light");
-    }
+    header("location:". redirect($_SESSION['theme'], PROJECT.'customer/dash/profile-settings'));
+
 }
 
 //Personal Informations
@@ -259,8 +224,11 @@ if (isset($_POST['passw']) && !empty($_POST['passw']) && check_password($data[0]
     $updata['passw'] = $_POST['passw'];
 
     $error['passw'] = 'Mot de passe erroné. Réessayer !';
+
 } elseif (isset($_POST['passw']) && empty($_POST['passw'])) {
+
     $error['passw'] = 'Ce champs est requis. Entrez votre mot de passe actuel.';
+
 }
 
 if (!empty($error)) {
@@ -269,13 +237,8 @@ if (!empty($error)) {
 
     $_SESSION['password_error'] = $error;
 
-    if (isset(explode('?', $_SERVER['REQUEST_URI'])[1]) && explode('?', $_SERVER['REQUEST_URI'])[1] == "theme=light") {
-        header("location:" . PROJECT . "customer/dash/profile-settings?theme=light");
-    } elseif (isset(explode('?', $_SERVER['REQUEST_URI'])[1]) && explode('?', $_SERVER['REQUEST_URI'])[1] == "theme=dark") {
-        header("location:" . PROJECT . "customer/dash/profile-settings?theme=dark");
-    } else {
-        header("location:" . PROJECT . "customer/dash/profile-settings?theme=light");
-    }
+    header("location:". redirect($_SESSION['theme'], PROJECT.'customer/dash/profile-settings'));
+
 }
 
 //Password Updating
@@ -295,27 +258,19 @@ if (isset($_POST['pass-w']) && !empty($_POST['pass-w']) && check_password($data[
 } elseif (isset($_POST['pass-w']) && !empty($_POST['pass-w']) && !check_password($data[0]['id'], $_POST['pass-w'])) {
 
     $error['pass-w'] = 'Mot de passe erroné. Veuillez réessayer !';
+
 } else {
-    if (isset(explode('?', $_SERVER['REQUEST_URI'])[1]) && explode('?', $_SERVER['REQUEST_URI'])[1] == "theme=light") {
-        header("location:" . PROJECT . "customer/dash/profile-settings?theme=light");
-    } elseif (isset(explode('?', $_SERVER['REQUEST_URI'])[1]) && explode('?', $_SERVER['REQUEST_URI'])[1] == "theme=dark") {
-        header("location:" . PROJECT . "customer/dash/profile-settings?theme=dark");
-    } else {
-        header("location:" . PROJECT . "customer/dash/profile-settings?theme=light");
-    }
+
+    header("location:". redirect($_SESSION['theme'], PROJECT.'customer/dash/profile-settings'));
+
 }
 
 if (!empty($error)) {
 
     $_SESSION['deactivation_error'] = $error;
 
-    if (isset(explode('?', $_SERVER['REQUEST_URI'])[1]) && explode('?', $_SERVER['REQUEST_URI'])[1] == "theme=light") {
-        header("location:" . PROJECT . "customer/dash/profile-settings?theme=light");
-    } elseif (isset(explode('?', $_SERVER['REQUEST_URI'])[1]) && explode('?', $_SERVER['REQUEST_URI'])[1] == "theme=dark") {
-        header("location:" . PROJECT . "customer/dash/profile-settings?theme=dark");
-    } else {
-        header("location:" . PROJECT . "customer/dash/profile-settings?theme=light");
-    }
+    header("location:". redirect($_SESSION['theme'], PROJECT.'customer/dash/profile-settings'));
+
 }
 
 //Deactivation
@@ -335,27 +290,19 @@ if (isset($_POST['pass--w']) && !empty($_POST['pass--w']) && check_password($dat
 } elseif (isset($_POST['pass--w']) && !empty($_POST['pass--w']) && !check_password($data[0]['id'], $_POST['pass--w'])) {
 
     $error['pass--w'] = 'Mot de passe erroné. Veuillez réessayer !';
+
 } else {
-    if (isset(explode('?', $_SERVER['REQUEST_URI'])[1]) && explode('?', $_SERVER['REQUEST_URI'])[1] == "theme=light") {
-        header("location:" . PROJECT . "customer/dash/profile-settings?theme=light");
-    } elseif (isset(explode('?', $_SERVER['REQUEST_URI'])[1]) && explode('?', $_SERVER['REQUEST_URI'])[1] == "theme=dark") {
-        header("location:" . PROJECT . "customer/dash/profile-settings?theme=dark");
-    } else {
-        header("location:" . PROJECT . "customer/dash/profile-settings?theme=light");
-    }
+
+    header("location:". redirect($_SESSION['theme'], PROJECT.'customer/dash/profile-settings'));
+
 }
 
 if (!empty($error)) {
 
     $_SESSION['deletion_error'] = $error;
 
-    if (isset(explode('?', $_SERVER['REQUEST_URI'])[1]) && explode('?', $_SERVER['REQUEST_URI'])[1] == "theme=light") {
-        header("location:" . PROJECT . "customer/dash/profile-settings?theme=light");
-    } elseif (isset(explode('?', $_SERVER['REQUEST_URI'])[1]) && explode('?', $_SERVER['REQUEST_URI'])[1] == "theme=dark") {
-        header("location:" . PROJECT . "customer/dash/profile-settings?theme=dark");
-    } else {
-        header("location:" . PROJECT . "customer/dash/profile-settings?theme=light");
-    }
+    header("location:". redirect($_SESSION['theme'], PROJECT.'customer/dash/profile-settings'));
+
 }
 
 //Deletion
@@ -372,6 +319,7 @@ if ((isset($error['pass_w']) && !empty($error['pass_w']))
 ) {
     //die ('yes');
     $_SESSION['error_msg'] = 'Echec. Causes probables : Mot de passe erroné ou violation de règles au niveau des champs de la section concernée par la mise à jour. Vérifiez puis réessayer.';
+
 } else {
     //die ('yes');
     unset($_SESSION['error_msg']);

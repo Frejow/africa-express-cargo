@@ -7,17 +7,7 @@
                     <!-- Page title actions -->
                     <div class="col-12 col-lg-auto ms-auto d-print-none">
                         <div class="btn-list justify-content-center">
-                            <a href="
-                            <?php 
-                            if (isset(explode('?', $_SERVER['REQUEST_URI'])[1]) && explode('?', $_SERVER['REQUEST_URI'])[1] == "theme=light"){
-                                echo PROJECT.'agents/dash/set-noaddressee-packages'.'?theme=light';
-                            } elseif (isset(explode('?', $_SERVER['REQUEST_URI'])[1]) && explode('?', $_SERVER['REQUEST_URI'])[1] == "theme=dark"){
-                                echo PROJECT.'agents/dash/set-noaddressee-packages'.'?theme=dark';
-                            } else {
-                                echo PROJECT.'agents/dash/set-noaddressee-packages'.'?theme=light';
-                            }
-                            ?>
-                            " class="btn d-none text-white d-sm-inline-block btn-warning">
+                            <a href="<?= redirect($_SESSION['theme'], PROJECT.'agents/dash/set-noaddressee-packages') ?>" class="btn d-none text-white d-sm-inline-block btn-warning">
                                 <!-- Download SVG icon from http://tabler-icons.io/i/plus -->
                                 <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
                                     <path stroke="none" d="M0 0h24v24H0z" fill="none" />
@@ -26,17 +16,7 @@
                                 </svg>
                                 Nouveau colis
                             </a>
-                            <a href="
-                            <?php 
-                            if (isset(explode('?', $_SERVER['REQUEST_URI'])[1]) && explode('?', $_SERVER['REQUEST_URI'])[1] == "theme=light"){
-                                echo PROJECT.'agents/dash/set-noaddressee-packages'.'?theme=light';
-                            } elseif (isset(explode('?', $_SERVER['REQUEST_URI'])[1]) && explode('?', $_SERVER['REQUEST_URI'])[1] == "theme=dark"){
-                                echo PROJECT.'agents/dash/set-noaddressee-packages'.'?theme=dark';
-                            } else {
-                                echo PROJECT.'agents/dash/set-noaddressee-packages'.'?theme=light';
-                            }
-                            ?>
-                            " class="btn d-sm-none text-white btn-warning">
+                            <a href="<?= redirect($_SESSION['theme'], PROJECT.'agents/dash/set-noaddressee-packages') ?>" class="btn d-sm-none text-white btn-warning">
                                 <!-- Download SVG icon from http://tabler-icons.io/i/plus -->
                                 <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
                                     <path stroke="none" d="M0 0h24v24H0z" fill="none" />
@@ -106,17 +86,7 @@
                                             </td>
                                             <td class="text-end">
                                                 <span class="">
-                                                    <a class="btn-link link-warning" href="
-                                                    <?php 
-                                                    if (isset(explode('?', $_SERVER['REQUEST_URI'])[1]) && explode('?', $_SERVER['REQUEST_URI'])[1] == "theme=light"){
-                                                        echo PROJECT.'agents/dash/edit-noaddressee-packages'.'?theme=light';
-                                                    } elseif (isset(explode('?', $_SERVER['REQUEST_URI'])[1]) && explode('?', $_SERVER['REQUEST_URI'])[1] == "theme=dark"){
-                                                        echo PROJECT.'agents/dash/edit-noaddressee-packages'.'?theme=dark';
-                                                    } else {
-                                                        echo PROJECT.'agents/dash/edit-noaddressee-packages'.'?theme=light';
-                                                    }
-                                                    ?>
-                                                    ">
+                                                    <a class="btn-link link-warning" href="<?= redirect($_SESSION['theme'], PROJECT.'agents/dash/edit-noaddressee-packages') ?>">
                                                         Modifier
                                                     </a>
                                                 </span>

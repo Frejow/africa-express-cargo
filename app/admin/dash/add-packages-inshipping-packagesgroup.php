@@ -24,17 +24,7 @@
                             </div>
                             <div class="mb-3 row d-flex">
                                 <div class="col-6 text-center">
-                                    <a href="
-                                    <?php 
-                                    if (isset(explode('?', $_SERVER['REQUEST_URI'])[1]) && explode('?', $_SERVER['REQUEST_URI'])[1] == "theme=light"){
-                                        echo PROJECT.'admin/dash/edit-shipping-packages-group'.'?theme=light';
-                                    } elseif (isset(explode('?', $_SERVER['REQUEST_URI'])[1]) && explode('?', $_SERVER['REQUEST_URI'])[1] == "theme=dark"){
-                                        echo PROJECT.'admin/dash/edit-shipping-packages-group'.'?theme=dark';
-                                    } else {
-                                        echo PROJECT.'admin/dash/edit-shipping-packages-group'.'?theme=light';
-                                    }
-                                    ?>
-                                    " class="btn btn-link link-secondary" style="border:none; width:fit-content; text-decoration:none;">
+                                    <a href="<?= redirect($_SESSION['theme'], PROJECT.'admin/dash/edit-shipping-packages-group') ?>" class="btn btn-link link-secondary" style="border:none; width:fit-content; text-decoration:none;">
                                         <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
                                             <path stroke="none" d="M0 0h24v24H0z" fill="none" />
                                             <path d="M9 11l-4 4l4 4m-4 -4h11a4 4 0 0 0 0 -8h-1" />

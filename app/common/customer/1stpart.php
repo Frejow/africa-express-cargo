@@ -4,7 +4,7 @@
 //die (var_dump(explode('/', $_SERVER['REQUEST_URI'])[5]));
 //die (var_dump($params[2]));
 //if (!isset($params[3])){
-    //$_SERVER['REQUEST_URI'] = $_SERVER['REDIRECT_URL'].'#';
+//$_SERVER['REQUEST_URI'] = $_SERVER['REDIRECT_URL'].'#';
 //}
 ?>
 <!doctype html>
@@ -113,7 +113,7 @@
     <link href='<?= PROJECT ?>public/select2/css/select2.css' rel="stylesheet">
     <link href='<?= PROJECT ?>public/select2-bootstrap4-theme/select2-bootstrap4.css' rel="stylesheet">
     <link href='<?= PROJECT ?>public/datatables-bs4/css/dataTables.bootstrap4.css' rel="stylesheet">
-    <link href='<?= PROJECT ?>public/sweetalert2-theme-bootstrap-4/bootstrap-4.min.css' rel="stylesheet" type="text/css" >
+    <link href='<?= PROJECT ?>public/sweetalert2-theme-bootstrap-4/bootstrap-4.min.css' rel="stylesheet" type="text/css">
     <script src='<?= PROJECT ?>public/js/jquery/jquery-3.6.3.min.js'></script>
 
     <style>
@@ -132,31 +132,31 @@
         }
 
         .loader-container {
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
-        height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
         }
 
         .logo {
-        width: 100px;
-        margin-bottom: 20px;
+            width: 100px;
+            margin-bottom: 20px;
         }
 
         .loader {
-        width: 40px;
-        height: 40px;
-        border: 6px solid #2b348d;
-        border-top-color: #f58337;
-        border-radius: 50%;
-        animation: spin 1s ease-in-out infinite;
+            width: 40px;
+            height: 40px;
+            border: 6px solid #2b348d;
+            border-top-color: #f58337;
+            border-radius: 50%;
+            animation: spin 1s ease-in-out infinite;
         }
 
         @keyframes spin {
-        to {
-            transform: rotate(360deg);
-        }
+            to {
+                transform: rotate(360deg);
+            }
         }
 
         #preview {
@@ -183,18 +183,19 @@
 
         @media (max-width: 575px) {
             #importButton {
-            width: 150px;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
+                width: 150px;
+                white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
             }
+
             .img_container {
-            display: flex;
-            flex-wrap: wrap;
-        }
+                display: flex;
+                flex-wrap: wrap;
+            }
         }
 
-        #importButton:hover{
+        #importButton:hover {
             overflow: auto;
         }
 
@@ -210,16 +211,15 @@
             max-width: 250px;
             max-height: 250px;
         }
-
     </style>
 </head>
 
 <body>
 
     <script src="<?= PROJECT ?>public/js/demo-theme.min.js?202302251230"></script>
-        <div class="loader-container" id="loader-wrapper">
-            <div class="loader"></div>
-        </div>
+    <div class="loader-container" id="loader-wrapper">
+        <div class="loader"></div>
+    </div>
     <div class="page">
         <header class="navbar navbar-expand-md navbar-light d-print-none">
             <div class="container-xl">
@@ -230,13 +230,13 @@
                     <a href="<?= PROJECT ?>">
                         <img src='
                         <?php
-                        if ($_SERVER['REQUEST_URI'] === $_SERVER['REDIRECT_URL']."?theme=light"){
-                            echo PROJECT."public/images/aec_lightlogo.png";
-                        }elseif ($_SERVER['REQUEST_URI'] === $_SERVER['REDIRECT_URL']."?theme=dark"){
-                            echo PROJECT."public/images/aec_darklogo.png";
+                        if ($_SERVER['REQUEST_URI'] === $_SERVER['REDIRECT_URL'] . "?theme=light") {
+                            echo PROJECT . "public/images/aec_lightlogo.png";
+                        } elseif ($_SERVER['REQUEST_URI'] === $_SERVER['REDIRECT_URL'] . "?theme=dark") {
+                            echo PROJECT . "public/images/aec_darklogo.png";
                         }
-                        if ($_SERVER['REQUEST_URI'] === $_SERVER['REDIRECT_URL']){
-                            echo PROJECT."public/images/aec_lightlogo.png";
+                        if ($_SERVER['REQUEST_URI'] === $_SERVER['REDIRECT_URL']) {
+                            echo PROJECT . "public/images/aec_lightlogo.png";
                         }
                         ?>
                         ' alt="Africa Express Cargo" title="Aller à l'accueil" data-bs-toggle="tooltip" data-bs-placement="top" class="px-0 navbar-brand-image">
@@ -247,14 +247,14 @@
 
                     </div>
                     <div class="d-flex d-md-flex">
-                        <a href="<?= $_SERVER['REDIRECT_URL']."?theme=dark"?>" class="nav-link px-0 hide-theme-dark" title="Mode sombre" data-bs-toggle="tooltip" data-bs-placement="bottom">
+                        <a href="<?= $_SERVER['REDIRECT_URL'] . "?theme=dark" ?>" class="nav-link px-0 hide-theme-dark" title="Mode sombre" data-bs-toggle="tooltip" data-bs-placement="bottom">
                             <!-- Download SVG icon from http://tabler-icons.io/i/moon -->
                             <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
                                 <path stroke="none" d="M0 0h24v24H0z" fill="none" />
                                 <path d="M12 3c.132 0 .263 0 .393 0a7.5 7.5 0 0 0 7.92 12.446a9 9 0 1 1 -8.313 -12.454z" />
                             </svg>
                         </a>
-                        <a href="<?= $_SERVER['REDIRECT_URL']."?theme=light"?>" class="nav-link px-0 hide-theme-light" title="Mode éclairé" data-bs-toggle="tooltip" data-bs-placement="bottom">
+                        <a href="<?= $_SERVER['REDIRECT_URL'] . "?theme=light" ?>" class="nav-link px-0 hide-theme-light" title="Mode éclairé" data-bs-toggle="tooltip" data-bs-placement="bottom">
                             <!-- Download SVG icon from http://tabler-icons.io/i/sun -->
                             <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
                                 <path stroke="none" d="M0 0h24v24H0z" fill="none" />
@@ -365,58 +365,18 @@
                     </div>
                     <div class="nav-item dropdown">
                         <a href="#" class="nav-link d-flex lh-1 text-reset p-0" data-bs-toggle="dropdown" aria-label="Open user menu">
-                            <span class="avatar avatar-sm" style="background-image: url(<?= $data[0]['avatar'] == 'null' ? PROJECT.'public/images/default-user-profile.jpg' : $data[0]['avatar'] ?>)"></span>
+                            <span class="avatar avatar-sm" style="background-image: url(<?= $data[0]['avatar'] == 'null' ? PROJECT . 'public/images/default-user-profile.jpg' : $data[0]['avatar'] ?>)"></span>
                             <div class="d-none d-xl-block ps-2">
-                                <div><?= $data[0]['first_names'].' '.$data[0]['name'] ?></div>
-                                <div class="mt-1 small text-muted"><?= '@'.$data[0]['user_name'] ?></div>
+                                <div><?= $data[0]['first_names'] . ' ' . $data[0]['name'] ?></div>
+                                <div class="mt-1 small text-muted"><?= '@' . $data[0]['user_name'] ?></div>
                             </div>
                         </a>
                         <div class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
-                            <a href='
-                            <?php 
-                            if (isset(explode('?', $_SERVER['REQUEST_URI'])[1]) && explode('?', $_SERVER['REQUEST_URI'])[1] == "theme=light"){
-                                echo PROJECT.'customer/dash/profile'.'?theme=light';
-                            } elseif (isset(explode('?', $_SERVER['REQUEST_URI'])[1]) && explode('?', $_SERVER['REQUEST_URI'])[1] == "theme=dark"){
-                                echo PROJECT.'customer/dash/profile'.'?theme=dark';
-                            } else {
-                                echo PROJECT.'customer/dash/profile'.'?theme=light';
-                            }
-                            ?>
-                            ' class="dropdown-item">Mon Compte</a>                            
-                            <a href='
-                            <?php 
-                            if (isset(explode('?', $_SERVER['REQUEST_URI'])[1]) && explode('?', $_SERVER['REQUEST_URI'])[1] == "theme=light"){
-                                echo PROJECT.'customer/dash/feedback'.'?theme=light';
-                            } elseif (isset(explode('?', $_SERVER['REQUEST_URI'])[1]) && explode('?', $_SERVER['REQUEST_URI'])[1] == "theme=dark"){
-                                echo PROJECT.'customer/dash/feedback'.'?theme=dark';
-                            } else {
-                                echo PROJECT.'customer/dash/feedback'.'?theme=light';
-                            }
-                            ?>
-                            ' class="dropdown-item">Feedback</a>
+                            <a href='<?= redirect($_SESSION['theme'], PROJECT.'customer/dash/profile') ?>' class="dropdown-item">Mon Compte</a>
+                            <a href='<?= redirect($_SESSION['theme'], PROJECT.'customer/dash/feedback') ?>' class="dropdown-item">Feedback</a>
                             <div class="dropdown-divider"></div>
-                            <a href='
-                            <?php 
-                            if (isset(explode('?', $_SERVER['REQUEST_URI'])[1]) && explode('?', $_SERVER['REQUEST_URI'])[1] == "theme=light"){
-                                echo PROJECT.'customer/dash/profile-settings'.'?theme=light';
-                            } elseif (isset(explode('?', $_SERVER['REQUEST_URI'])[1]) && explode('?', $_SERVER['REQUEST_URI'])[1] == "theme=dark"){
-                                echo PROJECT.'customer/dash/profile-settings'.'?theme=dark';
-                            } else {
-                                echo PROJECT.'customer/dash/profile-settings'.'?theme=light';
-                            }
-                            ?>
-                            ' class="dropdown-item">Paramètres du compte</a>                            
-                            <a href='
-                            <?php 
-                            if (isset(explode('?', $_SERVER['REQUEST_URI'])[1]) && explode('?', $_SERVER['REQUEST_URI'])[1] == "theme=light"){
-                                echo PROJECT.'customer/logout'.'?theme=light';
-                            } elseif (isset(explode('?', $_SERVER['REQUEST_URI'])[1]) && explode('?', $_SERVER['REQUEST_URI'])[1] == "theme=dark"){
-                                echo PROJECT.'customer/logout'.'?theme=dark';
-                            } else {
-                                echo PROJECT.'customer/logout'.'?theme=light';
-                            }
-                            ?>
-                            ' class="dropdown-item">Déconnexion</a>
+                            <a href='<?= redirect($_SESSION['theme'], PROJECT.'customer/dash/profile-settings') ?>' class="dropdown-item">Paramètres du compte</a>
+                            <a href='<?= redirect($_SESSION['theme'], PROJECT.'customer/logout') ?>' class="dropdown-item">Déconnexion</a>
                         </div>
                     </div>
                 </div>
@@ -428,17 +388,7 @@
                     <div class="container-xl">
                         <ul class="navbar-nav">
                             <li class="nav-item d-lg-none <?= $params[2] == 'notifications' ? 'active' : '' ?>">
-                                <a class="nav-link" href="
-                                <?php 
-                                if (isset(explode('?', $_SERVER['REQUEST_URI'])[1]) && explode('?', $_SERVER['REQUEST_URI'])[1] == "theme=light"){
-                                    echo PROJECT.'customer/dash/notifications'.'?theme=light';
-                                } elseif (isset(explode('?', $_SERVER['REQUEST_URI'])[1]) && explode('?', $_SERVER['REQUEST_URI'])[1] == "theme=dark"){
-                                    echo PROJECT.'customer/dash/notifications'.'?theme=dark';
-                                } else {
-                                    echo PROJECT.'customer/dash/notifications'.'?theme=light';
-                                }
-                                ?>
-                                ">
+                                <a class="nav-link" href="<?= redirect($_SESSION['theme'], PROJECT.'customer/dash/notifications') ?>">
                                     <span class="nav-link-icon d-md-none d-lg-inline-block"><!-- Download SVG icon from http://tabler-icons.io/i/checkbox -->
                                         <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
                                             <path stroke="none" d="M0 0h24v24H0z" fill="none" />
@@ -453,21 +403,11 @@
                             </li>
                             <li class="nav-item 
                             <?php
-                            if ($params[2] == 'packages-listings' || $params[2] == 'set-packages' || $params[2] == 'edit-packages'){
+                            if ($params[2] == 'packages-listings' || $params[2] == 'set-packages' || $params[2] == 'edit-packages') {
                                 echo 'active';
                             }
                             ?>">
-                                <a class="nav-link" href="
-                                <?php 
-                                if (isset(explode('?', $_SERVER['REQUEST_URI'])[1]) && explode('?', $_SERVER['REQUEST_URI'])[1] == "theme=light"){
-                                    echo PROJECT.'customer/dash/packages-listings'.'?theme=light';
-                                } elseif (isset(explode('?', $_SERVER['REQUEST_URI'])[1]) && explode('?', $_SERVER['REQUEST_URI'])[1] == "theme=dark"){
-                                    echo PROJECT.'customer/dash/packages-listings'.'?theme=dark';
-                                } else {
-                                    echo PROJECT.'customer/dash/packages-listings'.'?theme=light';
-                                }
-                                ?>
-                                ">
+                                <a class="nav-link" href="<?= redirect($_SESSION['theme'], PROJECT.'customer/dash/packages-listings') ?>">
                                     <span class="nav-link-icon d-md-none d-lg-inline-block"><!-- Download SVG icon from http://tabler-icons.io/i/checkbox -->
                                         <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
                                             <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
@@ -485,22 +425,12 @@
                             </li>
                             <li class="nav-item 
                             <?php
-                            if ($params[2] == 'packages-group-listings' || $params[2] == 'set-packages-group' || $params[2] == 'edit-packages-group' || $params[2] == 'add-packages-ingroup'){
+                            if ($params[2] == 'packages-group-listings' || $params[2] == 'set-packages-group' || $params[2] == 'edit-packages-group' || $params[2] == 'add-packages-ingroup') {
                                 echo 'active';
                             }
                             ?>
                             ">
-                                <a class="nav-link" href="
-                                <?php 
-                                if (isset(explode('?', $_SERVER['REQUEST_URI'])[1]) && explode('?', $_SERVER['REQUEST_URI'])[1] == "theme=light"){
-                                    echo PROJECT.'customer/dash/packages-group-listings'.'?theme=light';
-                                } elseif (isset(explode('?', $_SERVER['REQUEST_URI'])[1]) && explode('?', $_SERVER['REQUEST_URI'])[1] == "theme=dark"){
-                                    echo PROJECT.'customer/dash/packages-group-listings'.'?theme=dark';
-                                } else {
-                                    echo PROJECT.'customer/dash/packages-group-listings'.'?theme=light';
-                                }
-                                ?>
-                                ">
+                                <a class="nav-link" href="<?= redirect($_SESSION['theme'], PROJECT.'customer/dash/packages-group-listings') ?>">
                                     <span class="nav-link-icon d-md-none d-lg-inline-block"><!-- Download SVG icon from http://tabler-icons.io/i/home -->
                                         <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
                                             <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
@@ -521,17 +451,7 @@
                                 </a>
                             </li>
                             <li class="nav-item <?= $params[2] == 'noaddressee-packages-listings' ? 'active' : '' ?>">
-                                <a class="nav-link" href="
-                                <?php 
-                                if (isset(explode('?', $_SERVER['REQUEST_URI'])[1]) && explode('?', $_SERVER['REQUEST_URI'])[1] == "theme=light"){
-                                    echo PROJECT.'customer/dash/noaddressee-packages-listings'.'?theme=light';
-                                } elseif (isset(explode('?', $_SERVER['REQUEST_URI'])[1]) && explode('?', $_SERVER['REQUEST_URI'])[1] == "theme=dark"){
-                                    echo PROJECT.'customer/dash/noaddressee-packages-listings'.'?theme=dark';
-                                } else {
-                                    echo PROJECT.'customer/dash/noaddressee-packages-listings'.'?theme=light';
-                                }
-                                ?>
-                                ">
+                                <a class="nav-link" href="<?= redirect($_SESSION['theme'], PROJECT.'customer/dash/noaddressee-packages-listings') ?>">
                                     <span class="nav-link-icon d-md-none d-lg-inline-block"><!-- Download SVG icon from http://tabler-icons.io/i/checkbox -->
                                         <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
                                             <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
@@ -550,13 +470,13 @@
                             </li>
                             <li class="nav-item dropdown">
                                 <a class="nav-link dropdown-toggle" href="#navbar-base" data-bs-toggle="dropdown" data-bs-auto-close="outside" role="button" aria-expanded="false">
-                                    <span class="nav-link-icon d-md-none d-lg-inline-block"><!-- Download SVG icon from http://tabler-icons.io/i/package -->
+                                    <span class="nav-link-icon d-md-none d-lg-inline-block">
                                         <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
                                             <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
-                                            <path d="M4 4m0 2a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v1a2 2 0 0 1 -2 2h-2a2 2 0 0 1 -2 -2z"></path>
-                                            <path d="M4 13m0 2a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v3a2 2 0 0 1 -2 2h-2a2 2 0 0 1 -2 -2z"></path>
-                                            <path d="M14 4m0 2a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v3a2 2 0 0 1 -2 2h-2a2 2 0 0 1 -2 -2z"></path>
-                                            <path d="M14 15m0 2a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v1a2 2 0 0 1 -2 2h-2a2 2 0 0 1 -2 -2z"></path>
+                                            <path d="M14 4h6v6h-6z"></path>
+                                            <path d="M4 14h6v6h-6z"></path>
+                                            <path d="M17 17m-3 0a3 3 0 1 0 6 0a3 3 0 1 0 -6 0"></path>
+                                            <path d="M7 7m-3 0a3 3 0 1 0 6 0a3 3 0 1 0 -6 0"></path>
                                         </svg>
                                     </span>
                                     <span class="nav-link-title">

@@ -7,13 +7,8 @@ if (isset($_POST['previous'])) {
 
     $_SESSION['previous_page'] = $_POST['previous'];
 
-    if (isset(explode('?', $_SERVER['REQUEST_URI'])[1]) && explode('?', $_SERVER['REQUEST_URI'])[1] == "theme=light") {
-        header("location:" . PROJECT . "customer/dash/packages-group-listings?theme=light");
-    } elseif (isset(explode('?', $_SERVER['REQUEST_URI'])[1]) && explode('?', $_SERVER['REQUEST_URI'])[1] == "theme=dark") {
-        header("location:" . PROJECT . "customer/dash/packages-group-listings?theme=dark");
-    } else {
-        header("location:" . PROJECT . "customer/dash/packages-group-listings?theme=light");
-    }
+    header("location:". redirect($_SESSION['theme'], PROJECT.'customer/dash/packages-group-listings'));
+
 }
 
 if (isset($_POST['next'])) {
@@ -21,13 +16,7 @@ if (isset($_POST['next'])) {
     $_SESSION['next_page'] = $_POST['next'];
 
     if (isset($_SESSION['next_page'])) {
-    if (isset(explode('?', $_SERVER['REQUEST_URI'])[1]) && explode('?', $_SERVER['REQUEST_URI'])[1] == "theme=light") {
-        header("location:" . PROJECT . "customer/dash/packages-group-listings?theme=light");
-    } elseif (isset(explode('?', $_SERVER['REQUEST_URI'])[1]) && explode('?', $_SERVER['REQUEST_URI'])[1] == "theme=dark") {
-        header("location:" . PROJECT . "customer/dash/packages-group-listings?theme=dark");
-    } else {
-        header("location:" . PROJECT . "customer/dash/packages-group-listings?theme=light");
-    }
+        header("location:". redirect($_SESSION['theme'], PROJECT.'customer/dash/packages-group-listings'));
     }
 } 
 
@@ -44,13 +33,7 @@ if (isset($_POST['statusSelect']) && !empty($_POST['statusSelect'])) {
 
     if ($_SESSION['status'] == $_POST['statusSelect']) {
 
-        if (isset(explode('?', $_SERVER['REQUEST_URI'])[1]) && explode('?', $_SERVER['REQUEST_URI'])[1] == "theme=light") {
-            header("location:" . PROJECT . "customer/dash/packages-group-listings?theme=light");
-        } elseif (isset(explode('?', $_SERVER['REQUEST_URI'])[1]) && explode('?', $_SERVER['REQUEST_URI'])[1] == "theme=dark") {
-            header("location:" . PROJECT . "customer/dash/packages-group-listings?theme=dark");
-        } else {
-            header("location:" . PROJECT . "customer/dash/packages-group-listings?theme=light");
-        }
+        header("location:". redirect($_SESSION['theme'], PROJECT.'customer/dash/packages-group-listings'));
 
     } else {
 
@@ -59,13 +42,9 @@ if (isset($_POST['statusSelect']) && !empty($_POST['statusSelect'])) {
         $_SESSION['selected_status'] = $_POST['statusSelect'];
 
         if (isset($_SESSION['selected_status'])) {
-            if (isset(explode('?', $_SERVER['REQUEST_URI'])[1]) && explode('?', $_SERVER['REQUEST_URI'])[1] == "theme=light") {
-                header("location:" . PROJECT . "customer/dash/packages-group-listings?theme=light");
-            } elseif (isset(explode('?', $_SERVER['REQUEST_URI'])[1]) && explode('?', $_SERVER['REQUEST_URI'])[1] == "theme=dark") {
-                header("location:" . PROJECT . "customer/dash/packages-group-listings?theme=dark");
-            } else {
-                header("location:" . PROJECT . "customer/dash/packages-group-listings?theme=light");
-            }
+
+            header("location:". redirect($_SESSION['theme'], PROJECT.'customer/dash/packages-group-listings'));
+
         }
     }
     
@@ -82,23 +61,15 @@ if (isset($_POST['search']) && !empty($_POST['search'])) {
     $_SESSION['research'] = secure($_POST['search']);
 
     if (isset($_SESSION['research'])) {
-        if (isset(explode('?', $_SERVER['REQUEST_URI'])[1]) && explode('?', $_SERVER['REQUEST_URI'])[1] == "theme=light") {
-            header("location:" . PROJECT . "customer/dash/packages-group-listings?theme=light");
-        } elseif (isset(explode('?', $_SERVER['REQUEST_URI'])[1]) && explode('?', $_SERVER['REQUEST_URI'])[1] == "theme=dark") {
-            header("location:" . PROJECT . "customer/dash/packages-group-listings?theme=dark");
-        } else {
-            header("location:" . PROJECT . "customer/dash/packages-group-listings?theme=light");
-        }
+
+        header("location:". redirect($_SESSION['theme'], PROJECT.'customer/dash/packages-group-listings'));
+
     }
 //die ('dedans');
 } else {
-    if (isset(explode('?', $_SERVER['REQUEST_URI'])[1]) && explode('?', $_SERVER['REQUEST_URI'])[1] == "theme=light") {
-        header("location:" . PROJECT . "customer/dash/packages-group-listings?theme=light");
-    } elseif (isset(explode('?', $_SERVER['REQUEST_URI'])[1]) && explode('?', $_SERVER['REQUEST_URI'])[1] == "theme=dark") {
-        header("location:" . PROJECT . "customer/dash/packages-group-listings?theme=dark");
-    } else {
-        header("location:" . PROJECT . "customer/dash/packages-group-listings?theme=light");
-    }
+
+    header("location:". redirect($_SESSION['theme'], PROJECT.'customer/dash/packages-group-listings'));
+
 }
 
 //Research
@@ -112,28 +83,15 @@ if (isset($_POST['select'])) {
     
     if ($_SESSION['packages_nb_per_page'] == $_POST['select']) {
 
-        if (isset(explode('?', $_SERVER['REQUEST_URI'])[1]) && explode('?', $_SERVER['REQUEST_URI'])[1] == "theme=light") {
-            header("location:" . PROJECT . "customer/dash/packages-group-listings?theme=light");
-        } elseif (isset(explode('?', $_SERVER['REQUEST_URI'])[1]) && explode('?', $_SERVER['REQUEST_URI'])[1] == "theme=dark") {
-            header("location:" . PROJECT . "customer/dash/packages-group-listings?theme=dark");
-        } else {
-            header("location:" . PROJECT . "customer/dash/packages-group-listings?theme=light");
-        }
+        header("location:". redirect($_SESSION['theme'], PROJECT.'customer/dash/packages-group-listings'));
         
-
     } else {
 
         $_SESSION['actual_page'] = $_SESSION['page'];
 
         $_SESSION['select_packages_nb_per_page'] = $_POST['select'];
 
-        if (isset(explode('?', $_SERVER['REQUEST_URI'])[1]) && explode('?', $_SERVER['REQUEST_URI'])[1] == "theme=light") {
-            header("location:" . PROJECT . "customer/dash/packages-group-listings?theme=light");
-        } elseif (isset(explode('?', $_SERVER['REQUEST_URI'])[1]) && explode('?', $_SERVER['REQUEST_URI'])[1] == "theme=dark") {
-            header("location:" . PROJECT . "customer/dash/packages-group-listings?theme=dark");
-        } else {
-            header("location:" . PROJECT . "customer/dash/packages-group-listings?theme=light");
-        }
+        header("location:". redirect($_SESSION['theme'], PROJECT.'customer/dash/packages-group-listings'));
         
     }
     
@@ -143,7 +101,7 @@ if (isset($_POST['select'])) {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-//Package deletion
+//Package group deletion
 
 if (isset($_POST['package_group_deletion']) && !empty($_POST['package_group_deletion'])) {
 
@@ -155,24 +113,18 @@ if (isset($_POST['package_group_deletion']) && !empty($_POST['package_group_dele
 
             $_SESSION['success_msg'] = 'Le groupe de colis N°'. explode('&',$_POST['package_group_deletion'])[0] .' a été supprimé avec succès';
 
-            if (isset(explode('?', $_SERVER['REQUEST_URI'])[1]) && explode('?', $_SERVER['REQUEST_URI'])[1] == "theme=light") {
-                header("location:" . PROJECT . "customer/dash/packages-group-listings?theme=light");
-            } elseif (isset(explode('?', $_SERVER['REQUEST_URI'])[1]) && explode('?', $_SERVER['REQUEST_URI'])[1] == "theme=dark") {
-                header("location:" . PROJECT . "customer/dash/packages-group-listings?theme=dark");
-            } else {
-                header("location:" . PROJECT . "customer/dash/packages-group-listings?theme=light");
-            }
+            header("location:". redirect($_SESSION['theme'], PROJECT.'customer/dash/packages-group-listings'));
 
         }
 
     }
 } 
 
-//Package deletion
+//Package group deletion
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-//Package edition
+//Package group edition
 
 if (isset($_POST['packages_group_edition']) && !empty($_POST['packages_group_edition'])) {
 
@@ -180,16 +132,10 @@ if (isset($_POST['packages_group_edition']) && !empty($_POST['packages_group_edi
 
     $_SESSION['packages_group_id'] = explode('&',$_POST['packages_group_edition'])[1];
 
-    if (isset(explode('?', $_SERVER['REQUEST_URI'])[1]) && explode('?', $_SERVER['REQUEST_URI'])[1] == "theme=light") {
-        header("location:" . PROJECT . "customer/dash/edit-packages-group?theme=light");
-    } elseif (isset(explode('?', $_SERVER['REQUEST_URI'])[1]) && explode('?', $_SERVER['REQUEST_URI'])[1] == "theme=dark") {
-        header("location:" . PROJECT . "customer/dash/edit-packages-group?theme=dark");
-    } else {
-        header("location:" . PROJECT . "customer/dash/edit-packages-group?theme=light");
-    }
+    header("location:". redirect($_SESSION['theme'], PROJECT.'customer/dash/edit-packages-group'));
 
 }
 
-//Package edition
+//Package group edition
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
