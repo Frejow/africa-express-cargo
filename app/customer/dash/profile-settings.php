@@ -10,7 +10,7 @@ include 'app/common/customer/1stpart.php';  ?>
         <div class="row g-2 align-items-center">
             <div class="col">
                 <h2 class="page-title">
-                    Mon Profil
+                    Paramètres du compte
                 </h2>
             </div>
         </div>
@@ -265,7 +265,7 @@ include 'app/common/customer/1stpart.php';  ?>
                                     <div>
                                         <div class="row g-2">
                                             <div class="col">
-                                                <input disabled type="text" class="form-control focon" id="input-field-phone" value="<?= '(+229) ' . $data[0]['phone_number'] ?>">
+                                                <input disabled type="text" class="form-control focon" id="input-field-phone" value="<?= $data[0]['phone_number'] ?>">
                                             </div>
                                         </div>
                                     </div>

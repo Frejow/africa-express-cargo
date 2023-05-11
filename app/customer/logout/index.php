@@ -10,6 +10,8 @@ if (isset(explode('?', $_SERVER['REQUEST_URI'])[1]) && explode('?', $_SERVER['RE
 
 if (disconnected()) {
 
+    setcookie('success_msg', 'Déconnexion réussie', time() + 365 * 24 * 3600, '/');
+
     session_destroy();
 
     setcookie(session_name(), '', time() - 3600, '/');

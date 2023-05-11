@@ -157,7 +157,6 @@ $rows = count_rows_in_table($table);
                                         <th>Statut</th>
                                         <th>-> Groupe Colis ?</th>
                                         <th></th>
-                                        <!--<th></th>-->
                                         <th></th>
                                     </tr>
                                 </thead>

@@ -9,7 +9,23 @@ include 'app/common/customer/1stpart.php'; ?>
     <div class="container-xl">
         <div class="row g-2 align-items-center">
             <div class="col-auto">
-                <span class="avatar avatar-lg rounded" style="background-image: url(<?= $data[0]['avatar'] == 'null' ? PROJECT . 'public/images/default-user-profile.jpg' : $data[0]['avatar'] ?>)"></span>
+                <a href="" class="modal-fade" data-bs-toggle="modal" data-bs-target="#previousimage">
+                    <span class="avatar avatar-lg rounded" style="background-image: url(<?= $data[0]['avatar'] == 'null' ? PROJECT . 'public/images/default-user-profile.jpg' : $data[0]['avatar'] ?>)"></span>
+                </a>
+                <?php
+                    if ($data[0]['avatar'] != 'null') {
+                    ?>
+                        <div class="modal fade" id="previousimage">
+                            <div class="modal-dialog modal-dialog-centered modal-fullscreen-sm-down">
+                                <div class="modal-content">
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                    <img class="" src="<?= $data[0]['avatar'] == 'null' ? PROJECT . 'public/images/default-user-profile.jpg' : $data[0]['avatar'] ?>" alt="User profile picture">
+                                </div>
+                            </div>
+                        </div>
+                    <?php
+                    }
+                ?>
             </div>
             <div class="col">
                 <h1 class="fw-bold"><?= $data[0]['first_names'] . ' ' . $data[0]['name'] ?></h1>
@@ -33,7 +49,7 @@ include 'app/common/customer/1stpart.php'; ?>
                             <path d="M3 5m0 2a2 2 0 0 1 2 -2h14a2 2 0 0 1 2 2v10a2 2 0 0 1 -2 2h-14a2 2 0 0 1 -2 -2z" />
                             <path d="M3 7l9 6l9 -6" />
                         </svg>
-                        <a href="#" class="text-reset"><?= $data[0]['mail'] ?></a>
+                        <?= $data[0]['mail'] ?>
                     </div>
                 </div>
             </div>
