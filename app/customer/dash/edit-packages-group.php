@@ -3,7 +3,7 @@ if (connected()) {
     $_SESSION['current_url'] = "http://{$_SERVER['HTTP_HOST']}{$_SERVER['REQUEST_URI']}";
 }
 
-//include 'app/common/customer/1stpart.php'; ?>
+include 'app/common/customer/1stpart.php'; ?>
 
 <form action="<?= redirect($_SESSION['theme'], PROJECT.'customer/dash-treatment/edit-packages-group') ?>" method="post">
     <div class="page-header d-print-none">
@@ -203,4 +203,4 @@ if (connected()) {
     </div>
 </form>
 
-<?php //include 'app/common/customer/2ndpart.php' ?>
+<?php include 'app/common/customer/2ndpart.php' ?>

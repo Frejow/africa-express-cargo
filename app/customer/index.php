@@ -6,14 +6,8 @@ session_regenerate_id(true);
 
 include "app/common/functions_folder/functions.php";
 
-$data = [];
 
-//Affecter la valeur de cookie de session de l'utilisateur connecté à la variable $data
-if (isset($_SESSION["connected"]) && !empty($_SESSION["connected"])) {
-    $data = json_decode($_SESSION["connected"], true);
-} 
-
-include 'app/common/customer/1stpart.php';
+//include 'app/common/customer/1stpart.php';
 
 //Récupération du thème actif
 if (isset(explode('?', $_SERVER['REQUEST_URI'])[1])) {
@@ -31,9 +25,7 @@ if (isset($_SESSION['success_msg']) && !empty($_SESSION['success_msg'])) {
 <?php
     unset($_SESSION['success_msg']);
 }
-?>
 
-<?php
 if (isset($_SESSION['error_msg']) && !empty($_SESSION['error_msg'])) {
     $msg = $_SESSION['error_msg'];
 ?>
@@ -41,6 +33,15 @@ if (isset($_SESSION['error_msg']) && !empty($_SESSION['error_msg'])) {
     </div>
 <?php
     unset($_SESSION['error_msg']);
+}
+
+if (isset($_COOKIE['success_msg']) && !empty($_COOKIE['success_msg'])){
+    $msg = $_COOKIE['success_msg'];
+?>
+    <div class="swalDefaultSuccess" role="alert">
+    </div>
+<?php
+    setcookie('success_msg', '', time() - 3600, '/');
 }
 
 if (isset($_COOKIE['error_msg']) && !empty($_COOKIE['error_msg'])){
@@ -56,6 +57,12 @@ if (isset($_COOKIE['error_msg']) && !empty($_COOKIE['error_msg'])){
 if (!connected()) {
     unset($_SESSION['current_url']);
 }  
+$data = [];
+
+//Affecter la valeur de cookie de session de l'utilisateur connecté à la variable $data
+if (isset($_SESSION["connected"]) && !empty($_SESSION["connected"])) {
+    $data = json_decode($_SESSION["connected"], true);
+} 
 
     $params = explode('/', $_GET['p']);
     $profile = "customer";
@@ -181,4 +188,4 @@ if (!connected()) {
         require_once $default_action_folder;
     }
 
-include 'app/common/customer/2ndpart.php';
+//include 'app/common/customer/2ndpart.php';

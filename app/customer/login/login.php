@@ -42,15 +42,23 @@ if (empty($errors)) {
 
         if (isset($_COOKIE['thm'])) {
 
+            $_SESSION['success_msg'] = 'Authentification réussie';
+
             header("location:".PROJECT."customer/dash/packages-listings".$_COOKIE['thm']);
+
             setcookie('thm', '', time() - 3600, '/');
 
         } elseif (isset($_COOKIE['crl'])) {
 
+            $_SESSION['success_msg'] = 'Authentification réussie';
+
             header("location:".$_COOKIE['crl']);
+
             setcookie('crl', '', time() - 3600, '/');
 
         } else {
+            
+            $_SESSION['success_msg'] = 'Authentification réussie';
 
             header("location:".PROJECT."customer/dash/packages-listings?theme=light");
 

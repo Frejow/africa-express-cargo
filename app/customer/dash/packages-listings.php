@@ -3,7 +3,7 @@ if (connected()) {
     $_SESSION['current_url'] = "http://{$_SERVER['HTTP_HOST']}{$_SERVER['REQUEST_URI']}";
 }
 
-//include 'app/common/customer/1stpart.php';
+include 'app/common/customer/1stpart.php';
 
 $table = "package";
 
@@ -508,10 +508,7 @@ $rows = count_rows_in_table($table);
     </div>
 </form>
 
-<?php //include 'app/common/customer/2ndpart.php';
-
-//die (var_dump($en));
-
+<?php include 'app/common/customer/2ndpart.php';
 
 if (isset($_SESSION['next_page']) && $_SESSION['next_page'] == $_SESSION['page']) {
     unset($_SESSION['next_page']);

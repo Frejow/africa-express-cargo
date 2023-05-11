@@ -96,7 +96,7 @@ function _database_login()
     try {
         $database = new PDO('mysql:host=' . DATABASE_HOST . ';dbname=' . DATABASE_NAME . ';charset=utf8', DATABASE_USERNAME, DATABASE_PASSWORD);
     } catch (Exception $e) {
-        $database = "Une erreur s'est produite lors de la connexion à la base de donnée.";
+        $database = "Une erreur a été détecté lors de la connexion à la base de donnée.";
     }
 
     return $database;

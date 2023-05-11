@@ -3,7 +3,7 @@ if (connected()) {
     $_SESSION['current_url'] = "http://{$_SERVER['HTTP_HOST']}{$_SERVER['REQUEST_URI']}";
 }
 
-//include 'app/common/customer/1stpart.php'; 
+include 'app/common/customer/1stpart.php'; 
 
 $error = [];
 
@@ -70,7 +70,7 @@ if (isset($_SESSION["add_pack_ingroup_errors"]) && !empty($_SESSION["add_pack_in
     </div>
 </form>
 
-<?php //include 'app/common/customer/2ndpart.php';
+<?php include 'app/common/customer/2ndpart.php';
 
 unset($_SESSION['add_pack_ingroup_errors']);
 

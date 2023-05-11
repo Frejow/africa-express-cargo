@@ -3,7 +3,7 @@ if (connected()) {
     $_SESSION['current_url'] = "http://{$_SERVER['HTTP_HOST']}{$_SERVER['REQUEST_URI']}";
 }
 
-//include 'app/common/customer/1stpart.php';  ?>
+include 'app/common/customer/1stpart.php';  ?>
 
 <div class="page-header d-print-none">
     <div class="container-xl">
@@ -622,7 +622,7 @@ if (connected()) {
     </div>
 </div>
 
-<?php //include 'app/common/customer/2ndpart.php';
+<?php include 'app/common/customer/2ndpart.php';
 
 unset(
     $_SESSION['avatar_error'],

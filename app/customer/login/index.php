@@ -35,28 +35,6 @@
 
     <div class="limiter">
         
-            <?php
-            if (isset($_COOKIE['success_msg']) && !empty($_COOKIE['success_msg'])){
-                $msg = $_COOKIE['success_msg'];
-            ?>
-                <div class="swalDefaultSuccess" role="alert">
-                </div>
-            <?php
-                setcookie('success_msg', '', time() - 3600, '/');
-            }
-            ?>
-
-            <?php
-            if (isset($_COOKIE['error_msg']) && !empty($_COOKIE['error_msg'])){
-                $msg = $_COOKIE['error_msg'];
-            ?>
-                <div class="swalDefaultError" role="alert">
-                </div>
-            <?php
-                setcookie('error_msg', '', time() - 3600, '/');
-            }
-            ?>
-
         <div class="container">
             <div class="wrap-login100 col">
                 <div class="login100-pic js-tilt" data-tilt>

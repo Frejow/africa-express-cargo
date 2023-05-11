@@ -138,21 +138,31 @@ if (empty($errors)) {
             $mailcontent = buffer_html_file('..'.PROJECT.'app/customer/register/mailtemp.php');
 
             if (mailsendin($data['mail'], $data["pseudo"], $subject, $mailcontent)){
+
                 header("location:".PROJECT."customer/register/true");
 
                 setcookie('user_register_data', '', time() - 3600, '/');
+
+            } else {
+
+                deleted_account($user_id);
+
+                $_SESSION['error_msg'] = 'Erreur lors du processus. Cause probable : Hors Connexion. Réessayer, si cela persiste, contactez-nous.';
+
+                header("location:".PROJECT."customer/register");
+
             }
 
         } else {
 
-            $_SESSION['error'] = 'Oupss!!! Une erreur s\'est produite lors de l\'enregistrement de l\'utilisateur. Veuillez réessayer ou contacter l\'administrateur du site.';
+            $_SESSION['error_msg'] = 'Oupss!!! Une erreur a été détecté lors du processus. Veuillez réessayer ou nous contacter si cela persiste.';
 
             header("location:".PROJECT."customer/register");
 
         }
     } else {
 
-        $_SESSION['error'] = $database;
+        $_SESSION['error_msg'] = $database;
 
         header("location:".PROJECT."customer/register");
     }
