@@ -1,9 +1,9 @@
 <?php
-//die(var_dump(sha1('00000000'))); 
 if (connected()) {
     $_SESSION['current_url'] = "http://{$_SERVER['HTTP_HOST']}{$_SERVER['REQUEST_URI']}";
 }
-include 'app/common/customer/1stpart.php';  ?>
+
+//include 'app/common/customer/1stpart.php';  ?>
 
 <div class="page-header d-print-none">
     <div class="container-xl">
@@ -34,28 +34,6 @@ include 'app/common/customer/1stpart.php';  ?>
                         </h3>
 
                         <p class="text-muted"> Poids Maximum : 3Mo. Extensions autorisées [ PNG/JPG/JPEG/GIF ]</p>
-
-                        <?php
-                        if (isset($_SESSION['error_msg']) && !empty($_SESSION['error_msg'])) {
-                            $msg = $_SESSION['error_msg']; //die (var_dump($msg ));
-                        ?>
-                            <div class="swalDefaultError" role="alert">
-                            </div>
-                        <?php
-                            unset($_SESSION['error_msg']);
-                        }
-                        ?>
-
-                        <?php
-                        if (isset($_SESSION['success_msg']) && !empty($_SESSION['success_msg'])) {
-                            $msg = $_SESSION['success_msg'];
-                        ?>
-                            <div class="swalDefaultSuccess" role="alert">
-                            </div>
-                        <?php
-                            unset($_SESSION['success_msg']);
-                        }
-                        ?>
 
                         <?php
 
@@ -644,7 +622,7 @@ include 'app/common/customer/1stpart.php';  ?>
     </div>
 </div>
 
-<?php include 'app/common/customer/2ndpart.php';
+<?php //include 'app/common/customer/2ndpart.php';
 
 unset(
     $_SESSION['avatar_error'],

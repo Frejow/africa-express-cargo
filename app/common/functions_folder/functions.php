@@ -1,8 +1,10 @@
 <?php
 
+// Instance d'initialisation des class PHPMailer
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
 
+// Fonction de redirection basée sur le thème
 function redirect($theme, $link) {
 
     $redirect_url = $link.'?'.$theme;
@@ -11,6 +13,7 @@ function redirect($theme, $link) {
 
 }
 
+//Fonction d'envoi de mail
 function mailsendin(string $destination, string $recipient, string $subject, string $body): bool
 {
     // passing true in constructor enables exceptions in PHPMailer
@@ -49,6 +52,7 @@ function mailsendin(string $destination, string $recipient, string $subject, str
     }
 }
 
+//Fonction de sécurisation des champs d'entrées de formulaires
 function secure($data)
 {
     $data = trim($data);
@@ -57,6 +61,7 @@ function secure($data)
     return $data;
 }
 
+//Fonction de vérification d'utilisateur connecté
 function connected(): bool
 {
     $is_connected = false;
@@ -68,6 +73,7 @@ function connected(): bool
     return $is_connected;
 }
 
+//Fonction de déconnexion
 function disconnected(): bool
 {
     $is_disconnected = false;
@@ -81,6 +87,7 @@ function disconnected(): bool
     return $is_disconnected;
 }
 
+//Fonction de connexion à la base de données
 function _database_login()
 {
 
@@ -95,6 +102,7 @@ function _database_login()
     return $database;
 }
 
+//Fonction de vérification d'email existant dans la base de données
 function check_exist_userby_email(string $mail, int $is_deleted)
 {
 
@@ -124,6 +132,7 @@ function check_exist_userby_email(string $mail, int $is_deleted)
     return $exist_mail;
 }
 
+//Fonction de vérification de nom d'utilisateur existant dans la base de données
 function check_exist_userby_pseudo(string $pseudo, int $is_deleted)
 {
 
@@ -153,6 +162,7 @@ function check_exist_userby_pseudo(string $pseudo, int $is_deleted)
     return $exist_pseudo;
 }
 
+//Fonction de mise à jour du statut de compte (valide et actif)
 function update_account_status(int $user_id)
 {
     date_default_timezone_set("Africa/Lagos");
@@ -183,6 +193,7 @@ function update_account_status(int $user_id)
     return $update_account_status;
 }
 
+//Fonction de temporisation de contenu html
 function buffer_html_file(string $filename)
 {
     ob_start(); // Démarre la temporisation de sortie
@@ -195,6 +206,7 @@ function buffer_html_file(string $filename)
     return $html; // Retourne le contenu du fichier HTML
 }
 
+//Fonction de récupération de token à l'inscription
 function select_register_user_token(string $mail)
 {
     $register_user_token = [];
@@ -221,6 +233,7 @@ function select_register_user_token(string $mail)
     return $register_user_token;
 }
 
+//Fonction de récupération de l'id utilisateur
 function select_user_id(string $mail)
 {
     $user_id = [];
@@ -247,6 +260,7 @@ function select_user_id(string $mail)
     return $user_id;
 }
 
+//Fonction de récupération de nom utilisateur 
 function select_username(string $mail)
 {
     $user_id = [];
@@ -273,6 +287,7 @@ function select_username(string $mail)
     return $user_id;
 }
 
+//Fonction d'insertion de token dans la table token
 function insert_intoken_table(int $user_id, string $type, string $token): bool
 {
 
@@ -302,6 +317,7 @@ function insert_intoken_table(int $user_id, string $type, string $token): bool
     return $insertion;
 }
 
+//Fonction de vérification de token à la validation de compte
 function check_user_registered_token_info(int $user_id, string $token, string $type, int $is_active, int $is_deleted): bool
 {
 
@@ -334,6 +350,7 @@ function check_user_registered_token_info(int $user_id, string $token, string $t
     return $info_found;
 }
 
+//Fonction de mise à jour de la table token
 function update_token_table(int $user_id): bool
 {
     date_default_timezone_set("Africa/Lagos");
@@ -363,6 +380,7 @@ function update_token_table(int $user_id): bool
     return $update_token_table;
 }
 
+//Fonction de mise à jour de mot de passe
 function update_password(string $mail, string $password): bool
 {
     date_default_timezone_set("Africa/Lagos");
@@ -392,6 +410,7 @@ function update_password(string $mail, string $password): bool
     return $update_password;
 }
 
+//Fonction de vérification des informations de l'utilisateur (email & password) à la connexion
 function check_exist_userby_email_and_password(string $mail, string $password, string $profile, int $is_valid_account, int $is_active, int $is_deleted): bool
 {
 
@@ -438,6 +457,7 @@ function check_exist_userby_email_and_password(string $mail, string $password, s
     return $exist_user;
 }
 
+//Fonction de vérification des informations de l'utilisateur (pseudo & password) à la connexion
 function check_exist_userby_pseudo_and_password(string $pseudo, string $password, string $profile, int $is_valid_account, int $is_active, int $is_deleted): bool
 {
 
@@ -484,7 +504,8 @@ function check_exist_userby_pseudo_and_password(string $pseudo, string $password
     return $exist_user;
 }
 
-function update_personal_info(int $id, string $name, string $first_names, string $user_name, string $country, string $mail, string $phone_number,): bool
+//Fonction de mise à jour des informations personnelles de l'utilisateur
+function update_personal_info(int $id, string $name, string $first_names, string $user_name, string $country, string $mail, string $phone_number): bool
 {
     date_default_timezone_set("Africa/Lagos");
 
@@ -517,6 +538,7 @@ function update_personal_info(int $id, string $name, string $first_names, string
     return $updating;
 }
 
+//Fonction de récupération des informations utilisateurs mises à jour 
 function select_user_updated_info(int $id): bool
 {
 
@@ -547,6 +569,7 @@ function select_user_updated_info(int $id): bool
     return $selected;
 }
 
+//Fonction de vérification de mot de passe
 function check_password(int $id, string $password): bool
 {
 
@@ -575,6 +598,7 @@ function check_password(int $id, string $password): bool
     return $password_found;
 }
 
+//Fonction de mise à jour d'avatar
 function update_avatar(int $id, string $avatar): bool
 {
     date_default_timezone_set("Africa/Lagos");
@@ -603,6 +627,7 @@ function update_avatar(int $id, string $avatar): bool
     return $update_avatar;
 }
 
+//Fonction de désactivation de compte
 function deactivated_account(int $id): bool
 {
     date_default_timezone_set("Africa/Lagos");
@@ -631,6 +656,7 @@ function deactivated_account(int $id): bool
     return $update_is_active_field;
 }
 
+//Fonction de suppression de compte
 function deleted_account(int $id): bool
 {
     date_default_timezone_set("Africa/Lagos");
@@ -660,6 +686,7 @@ function deleted_account(int $id): bool
     return $update_is_deleted_field;
 }
 
+//Fonction de vérification de numéro de suivi
 function check_tracking_number(string $trackN): bool
 {
 
@@ -688,6 +715,7 @@ function check_tracking_number(string $trackN): bool
     return $trackN_found;
 }
 
+//Fonction d'ajout de colis dans la table package
 function add_package(
     string $tracking_number,
     $package_units_number,
@@ -729,6 +757,7 @@ function add_package(
     return $insertion;
 }
 
+//Fonction d'ajout d'image(s) de colis dans la table images
 function add_images_for_package(int $package_id, string $image, int $user_id): bool
 {
 
@@ -756,6 +785,7 @@ function add_images_for_package(int $package_id, string $image, int $user_id): b
     return $insertion;
 }
 
+//Fonction de récupération de l'id d'un colis
 function select_package_id(string $trackN)
 {
     $package_id = [];
@@ -782,6 +812,7 @@ function select_package_id(string $trackN)
     return $package_id;
 }
 
+//Fonction de vérification de l'id d'un colis dans la table images
 function check_package_id_in_packages_images_tab(string $package_id): bool
 {
 
@@ -809,6 +840,7 @@ function check_package_id_in_packages_images_tab(string $package_id): bool
     return $package_id_found;
 }
 
+//Fonction de récupération d'image(s) de colis
 function select_package_images(int $package_id)
 {
     $package_images = [];
@@ -835,6 +867,7 @@ function select_package_images(int $package_id)
     return $package_images;
 }
 
+//Fonction de listings des colis
 function listings($table, $page, $packages_nb_per_page, $status, $search, $user_id)
 {
 
@@ -923,6 +956,7 @@ function listings($table, $page, $packages_nb_per_page, $status, $search, $user_
     return $packages_list;
 }
 
+//Fonction de récupération du nombre de lignes d'une table
 function count_rows_in_table($table)
 {
 
@@ -950,6 +984,7 @@ function count_rows_in_table($table)
     return $rows;
 }
 
+//Fonction de suppression de colis ou de groupe de colis
 function deleted_package_or_packagegroup(string $tracking_number, string $table): bool
 {
     date_default_timezone_set("Africa/Lagos");
@@ -979,6 +1014,7 @@ function deleted_package_or_packagegroup(string $tracking_number, string $table)
     return $update_is_deleted_field;
 }
 
+//Fonction de mise à jour du champs 'customer_package_group_id' dans la table package
 function update_customer_package_group_id(string $customer_package_group_id, string $tracking_number): bool
 {
     date_default_timezone_set("Africa/Lagos");
@@ -1007,6 +1043,7 @@ function update_customer_package_group_id(string $customer_package_group_id, str
     return $update_customer_package_group_id;
 }
 
+//Fonction de listings des colis éligibles à la sélection pour groupe de colis
 function packages_listing_in_selectfield($user_id)
 {
 
@@ -1036,6 +1073,10 @@ function packages_listing_in_selectfield($user_id)
     return $packages_listing;
 }
 
+/**
+ * Fonction d'insertion de numéro de suivi de groupe de colis dans la table 'customer_package_group' et de récupération
+ *  de l'id du groupe de colis
+ */
 function insert_select_incustomerpackagegroup_table(string $tracking_number, int $user_id): bool
 {
 
@@ -1082,6 +1123,7 @@ function insert_select_incustomerpackagegroup_table(string $tracking_number, int
     return $insertselect;
 }
 
+//Fonction de mise à jour du champs 'customer_package_group_id' pour un colis dans la table 'package'
 function update_customerpackagegroupid_field_inpackage_table(int $customer_package_group_id, string $package_tracking_number): bool
 {
     date_default_timezone_set("Africa/Lagos");
@@ -1110,6 +1152,7 @@ function update_customerpackagegroupid_field_inpackage_table(int $customer_packa
     return $update;
 }
 
+//Fonction de récupération du numéro de suivi d'un groupe de colis
 function select_packagegroup_trackingnumber(int $package_group_id)
 {
     $packagegroup_trackingnumber = [];
@@ -1136,6 +1179,7 @@ function select_packagegroup_trackingnumber(int $package_group_id)
     return $packagegroup_trackingnumber;
 }
 
+//Fonction de récupération des numéros de suivi des colis d'un groupe de colis
 function select_allpackages_forpackagegroup(int $package_group_id)
 {
     $allpackages_forpackagegroup = [];
@@ -1163,6 +1207,7 @@ function select_allpackages_forpackagegroup(int $package_group_id)
     return $allpackages_forpackagegroup;
 }
 
+//Fonction de mise à jour du champs 'customer_package_group_id' dans la table 'package'
 function update_customer_package_group_id_inpackagetable(string $customer_package_group_id): bool
 {
     date_default_timezone_set("Africa/Lagos");

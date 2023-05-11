@@ -3,13 +3,7 @@ if (connected()) {
     $_SESSION['current_url'] = "http://{$_SERVER['HTTP_HOST']}{$_SERVER['REQUEST_URI']}";
 }
 
-include 'app/common/customer/1stpart.php';
-
-//unset($_SESSION['selected_status']);
-
-//$_SESSION['page'] = null; //die (var_dump($_SESSION['page']));
-
-//die (var_dump($_SESSION['next_page']));
+//include 'app/common/customer/1stpart.php';
 
 $table = "customer_package_group";
 
@@ -49,32 +43,8 @@ if (isset($_SESSION['research']) && !empty($_SESSION['research'])) {
 
 $packages_group_listings = listings($table, $_SESSION['page'], $_SESSION['packages_nb_per_page'], $_SESSION['status'], strtoupper($_SESSION['search']), $data[0]['id']);
 
-//die (var_dump($packages_group_listings));
-
 $rows = count_rows_in_table($table);
 
-?>
-
-<?php
-if (isset($_SESSION['success_msg']) && !empty($_SESSION['success_msg'])) {
-    $msg = $_SESSION['success_msg'];
-?>
-    <div class="swalDefaultSuccess" role="alert">
-    </div>
-<?php
-    unset($_SESSION['success_msg']);
-}
-?>
-
-<?php
-if (isset($_SESSION['error_msg']) && !empty($_SESSION['error_msg'])) {
-    $msg = $_SESSION['error_msg'];
-?>
-    <div class="swalDefaultError" role="alert">
-    </div>
-<?php
-    unset($_SESSION['error_msg']);
-}
 ?>
 
 <form id="myForm" action="<?= redirect($_SESSION['theme'], PROJECT.'customer/dash-treatment/packages-group-listings') ?>" method="post">
@@ -459,9 +429,7 @@ if (isset($_SESSION['error_msg']) && !empty($_SESSION['error_msg'])) {
     </div>
 </form>
 
-<?php include 'app/common/customer/2ndpart.php';
-
-//die (var_dump($en));
+<?php //include 'app/common/customer/2ndpart.php';
 
 
 if (isset($_SESSION['next_page']) && $_SESSION['next_page'] == $_SESSION['page']) {

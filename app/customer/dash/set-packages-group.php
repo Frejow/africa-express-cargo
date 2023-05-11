@@ -2,7 +2,8 @@
 if (connected()) {
     $_SESSION['current_url'] = "http://{$_SERVER['HTTP_HOST']}{$_SERVER['REQUEST_URI']}";
 }
-include 'app/common/customer/1stpart.php'; 
+
+//include 'app/common/customer/1stpart.php'; 
 
 $error = [];
 
@@ -10,28 +11,6 @@ if (isset($_SESSION["set_pack_group_errors"]) && !empty($_SESSION["set_pack_grou
     $error = $_SESSION["set_pack_group_errors"];
 }
 
-?>
-
-<?php
-if (isset($_SESSION['success_msg']) && !empty($_SESSION['success_msg'])) {
-    $msg = $_SESSION['success_msg'];
-?>
-    <div class="swalDefaultSuccess" role="alert">
-    </div>
-<?php
-    unset($_SESSION['success_msg']);
-}
-?>
-
-<?php
-if (isset($_SESSION['error_msg']) && !empty($_SESSION['error_msg'])) {
-    $msg = $_SESSION['error_msg'];
-?>
-    <div class="swalDefaultError" role="alert">
-    </div>
-<?php
-    unset($_SESSION['error_msg']);
-}
 ?>
 
 <form action="<?= redirect($_SESSION['theme'], PROJECT.'customer/dash-treatment/set-packages-group') ?>" method="post">
@@ -94,7 +73,7 @@ if (isset($_SESSION['error_msg']) && !empty($_SESSION['error_msg'])) {
     </div>
 </form>
 
-<?php include 'app/common/customer/2ndpart.php';
+<?php //include 'app/common/customer/2ndpart.php';
 
 unset($_SESSION['set_pack_group_errors']);
 
