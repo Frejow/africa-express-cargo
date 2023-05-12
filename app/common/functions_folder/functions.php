@@ -166,21 +166,21 @@ function _database_login()
     return $database;
 }
 
-//Fonction de vérification d'email existant dans la base de données
-function check_exist_userby_email(string $mail, int $is_deleted)
+//Fonction de vérification de valeurs d'entrée existant dans la base de données
+function check_exist_fieldentry(string $fieldtype, string $fieldentry)
 {
 
-    $exist_mail = false;
+    $exist_fieldentry = false;
 
     $database = _database_login();
 
-    $request = "SELECT * FROM user WHERE mail=:mail and is_deleted = :is_deleted";
+    $request = "SELECT * FROM user WHERE " .$fieldtype."=:fieldtype and is_deleted = :is_deleted";
 
     $request_prepare = $database->prepare($request);
 
     $request_execution = $request_prepare->execute([
-        'mail' => $mail,
-        'is_deleted' => $is_deleted
+        'fieldtype' => $fieldentry,
+        'is_deleted' => 0
     ]);
 
     if ($request_execution) {
@@ -189,41 +189,11 @@ function check_exist_userby_email(string $mail, int $is_deleted)
 
         if (isset($data) && !empty($data) && is_array($data)) {
 
-            $exist_mail = true;
+            $exist_fieldentry = true;
         }
     }
 
-    return $exist_mail;
-}
-
-//Fonction de vérification de nom d'utilisateur existant dans la base de données
-function check_exist_userby_pseudo(string $pseudo, int $is_deleted)
-{
-
-    $exist_pseudo = false;
-
-    $database = _database_login();
-
-    $request = "SELECT * FROM user WHERE user_name=:pseudo and is_deleted = :is_deleted";
-
-    $request_prepare = $database->prepare($request);
-
-    $request_execution = $request_prepare->execute([
-        'pseudo' => $pseudo,
-        'is_deleted' => $is_deleted
-    ]);
-
-    if ($request_execution) {
-
-        $data = $request_prepare->fetchAll(PDO::FETCH_ASSOC);
-
-        if (isset($data) && !empty($data) && is_array($data)) {
-
-            $exist_pseudo = true;
-        }
-    }
-
-    return $exist_pseudo;
+    return $exist_fieldentry;
 }
 
 //Fonction de mise à jour du statut de compte (valide et actif)

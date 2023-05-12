@@ -1,53 +1,88 @@
 <?php
+
+//Récupération de l'url de la page
 if (connected()) {
     $_SESSION['current_url'] = "http://{$_SERVER['HTTP_HOST']}{$_SERVER['REQUEST_URI']}";
 }
 
+//Inclure l'en-tête 
 include 'app/common/customer/1stpart.php';
 
-$table = "package";
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+//Initialisation des valeurs par défaut des différents paramètres de la fonction de listings
+
+//Premier paramètre, le nom de la table en base de données à lister. Table "package" pour le cas présent
+$table = "package"; 
+
+//Second paramètre, le numéro de la page. 1 par défaut
 if (!isset($_SESSION['previous_page']) && !isset($_SESSION['next_page'])) {
-    $_SESSION['page'] = 1;
+    $_SESSION['page'] = 1; 
 }
 
-$_SESSION['packages_nb_per_page'] = 10;
+//Troisième paramètre, nombre de colis à afficher par page. 10 par défaut
+$_SESSION['packages_nb_per_page'] = 10; 
 
-$_SESSION['status'] = 'Tout Afficher';
+//Quatrième paramètre, le type de statut suivant lequel filtrer la liste. "Tout Afficher" par défaut
+$_SESSION['status'] = 'Tout Afficher'; 
 
-$_SESSION['search'] = 'UNDEFINED';
+// Cinquième paramètre, le numéro de suivi à rechercher. "UNDEFINED" par défaut dans le cas où aucune recherche n'est lancée
+$_SESSION['search'] = 'UNDEFINED'; 
 
+//Nouvelle valeur du second paramètre, le numéro de page selon le cas (page précédente)
 if (isset($_SESSION['previous_page']) && !empty($_SESSION['previous_page'])) {
-    $_SESSION['page'] = $_SESSION['previous_page'];
+    $_SESSION['page'] = $_SESSION['previous_page']; 
 }
 
+//Nouvelle valeur du second paramètre, le numéro de page selon le cas (page suivante)
 if (isset($_SESSION['next_page']) && !empty($_SESSION['next_page'])) {
-    $_SESSION['page'] = $_SESSION['next_page'];
+    $_SESSION['page'] = $_SESSION['next_page']; 
 }
 
+//Nouvelle valeur du second paramètre, le numéro de page selon le cas (page actuel)
 if (isset($_SESSION['actual_page']) && !empty($_SESSION['actual_page'])) {
-    $_SESSION['page'] = $_SESSION['actual_page'];
+    $_SESSION['page'] = $_SESSION['actual_page']; 
 }
 
+/**
+ * Nouvelle valeur du troisième paramètre, nombre de colis par page, lorsqu'un autre nombre autre que 10 est sélectionné 
+ * par l'utilisateur poiur afficher le nombre de colis par page
+ */
 if (isset($_SESSION['select_packages_nb_per_page']) && !empty($_SESSION['select_packages_nb_per_page'])) {
-    $_SESSION['packages_nb_per_page'] = $_SESSION['select_packages_nb_per_page'];
+    $_SESSION['packages_nb_per_page'] = $_SESSION['select_packages_nb_per_page']; 
 }
 
+/**
+ * Nouvelle valeur du quatrième paramètre, type de statut, lorsque l'utilisateur décide de filtrer la liste selon un 
+ * statut autre que celui par défaut
+ */
 if (isset($_SESSION['selected_status']) && !empty($_SESSION['selected_status'])) {
-    $_SESSION['status'] = $_SESSION['selected_status'];
+    $_SESSION['status'] = $_SESSION['selected_status']; 
 }
 
+//Nouvelle valeur du cinquième paramètre, le numéro de suivi à rechercher dans la table "package"
 if (isset($_SESSION['research']) && !empty($_SESSION['research'])) {
-    $_SESSION['search'] = $_SESSION['research'];
+    $_SESSION['search'] = $_SESSION['research']; 
 }
 
+//Affectation du retour de la fonction listings avec les cinq paramètres suscités à la variable $packages_lisitngs
 $packages_listings = listings($table, $_SESSION['page'], $_SESSION['packages_nb_per_page'], $_SESSION['status'], strtoupper($_SESSION['search']), $data[0]['id']);
 
+/**
+ * Affectation du retour de la fonction count_rows_in_table avec pour paramètre la table concernée par le listings à la 
+ * variable $rows. Cette fonction retourne le nombre de lignes dans la table avec le champs is_deleted = 0
+ */
 $rows = count_rows_in_table($table);
 
 ?>
 
+<!--
+    Ce bloc de formulaire prend en charge le tableau de listings des colis. Toutes les possibles valeurs des différents 
+    paramètres de la fonction listings sont soumises et récupérées via la méthode POST. Ici, aucune valeur ne transite par
+    l'url.
+-->
 <form id="myForm" action="<?= redirect($_SESSION['theme'], PROJECT.'customer/dash-treatment/packages-listings') ?>" method="post">
+    <!-- Bouton de création de colis -->
     <div class="page-header d-print-none">
         <div class="container-xl d-flex" style="justify-content: center;">
             <div class="row g-2 align-items-center " style="flex-wrap: wrap;">
@@ -77,6 +112,7 @@ $rows = count_rows_in_table($table);
             </div>
         </div>
     </div>
+    <!-- Tableau d'affichage des données de colis récupérées depuis la base de données -->
     <div class="page-body">
         <div class="container-xl text-center">
             <div class="row row-deck row-cards">
@@ -84,6 +120,12 @@ $rows = count_rows_in_table($table);
                     <div class="card">
                         <div class="card-body border-bottom py-3">
                             <div class="row">
+                                <!-- 
+                                    Bloc select de sélection des différentes valeurs proposées pour le nombre de colis à 
+                                    afficher par page. Ici un script Js facilite la soumission de la valeur à la sélection
+                                    d'une des options. Ce script se base sur l'id du champs select et l'id du formulaire
+                                    pour envoyer la valeur correspondante au fichier de traiment du formulaire.
+                                -->
                                 <div class="col-lg-4 col-xs mb-2 text-muted">
                                     Afficher
                                     <div class="mx-2 d-inline-block">
@@ -102,6 +144,9 @@ $rows = count_rows_in_table($table);
                                     </div>
                                     lignes
                                 </div>
+                                <!--
+                                    Bloc de la barre de recherche de colis par numéro de suivi.
+                                -->
                                 <div class="col-lg-4 col-xs mb-2 text-muted ms-auto" style="display: flex;">
                                     <div>
                                         <span>Rechercher</span>
@@ -118,6 +163,12 @@ $rows = count_rows_in_table($table);
                                         </svg>
                                     </button>
                                 </div>
+                                <!-- 
+                                    Bloc select de sélection des différents statuts possibles suivant lesquels filtrer 
+                                    l'affichage des colis. Ici un script Js facilite la soumission de la valeur à la 
+                                    sélection d'une des options. Ce script se base sur l'id du champs select et l'id du 
+                                    formulaire pour envoyer la valeur correspondante au fichier de traiment du formulaire.
+                                -->
                                 <div class="col-lg-4 col-xs ms-auto text-muted">
                                     Filtrer :
                                     <div class="ms-2 d-inline-block">
@@ -146,7 +197,9 @@ $rows = count_rows_in_table($table);
                                 </div>
                             </div>
                         </div>
-
+                        <!--
+                            Bloc d'affichage des colis
+                        -->
                         <div class="table-responsive">
                             <table class="table card-table table-vcenter text-nowrap">
                                 <thead>
@@ -164,9 +217,9 @@ $rows = count_rows_in_table($table);
                                     <?php
                                     if (isset($packages_listings) && !empty($packages_listings)) {
 
-                                        $n = 0;
-                                        $m = 0;
-                                        $en = 0;
+                                        $n = 0; //Cette variable stocke le nombre de lignes affiché lorsque la table "package" ne contient logiquement pas de colis. Donc $n restera 0
+                                        $m = 0; //Cette variable stocke le numéro de page en cours d'affichage.
+                                        $en = 0; // Cette variable stocke au fur et à mesure le nombre de lignes afficher sous forme de numérotation.
 
                                         if (isset($_SESSION['next_page']) && !empty($_SESSION['next_page'])) {
                                             $m = $_SESSION['next_page'];
@@ -180,13 +233,26 @@ $rows = count_rows_in_table($table);
 
                                         foreach ($packages_listings as $key => $package) {
 
+                                            /**
+                                             * Chaque colis a la possibilité d'appartenir à un groupe de colis. Lorsque c'est le cas, l'identifiant du groupe auquel appartient 
+                                             * le colis est associé au colis. Pour un affichage plus détaillé, il a été mis en place la possibilité pour l'utilisateur de voir 
+                                             * un aperçu du groupe auquel appartient son colis et de bien visualiser le numéro de suivi de son colis dans la liste des colis appartenant
+                                             * au groupe en question. Le contrôle suivant permet donc d'accéder au groupe de tout colis contenu dans ce dernier pour permettre l'affichage
+                                             * en clair à l'utilisateur.
+                                             */
                                             if (!empty($packages_listings[$key]["customer_package_group_id"])) {
 
-                                                //Package group tracking number
+                                                //Récupération du numéro de suivi du groupe de colis
                                                 $packages_group_tracking_number = select_packagegroup_trackingnumber($packages_listings[$key]["customer_package_group_id"])[0]['tracking_number'];
 
-                                                //All packages in a package group based on package_group_id || customer_package_group_id
+                                                /**
+                                                 * Récupération de tous les colis contenu dans le groupe. 
+                                                 * La variable $packages_ingrouplistings sera appelée plus bas pour afficher la liste de tous les colis du groupe auquel 
+                                                 * appartient le colis présentement concerné. Cette liste sera affichée dans un modal avec le numéro de suivi du colis
+                                                 * présentement concerné surligné en orange pour permettre son identification rapide par l'utilisateur.
+                                                 */
                                                 $packages_ingrouplistings = select_allpackages_forpackagegroup($packages_listings[$key]["customer_package_group_id"]);
+
                                             }
                                     ?>
                                             <tr>
@@ -245,6 +311,9 @@ $rows = count_rows_in_table($table);
                                                 <td>
                                                     <?= !empty($packages_listings[$key]["customer_package_group_id"]) ? 'Oui -> <a href = "#" data-bs-toggle="modal" data-bs-target="#' . $packages_group_tracking_number.$key . '">' . $packages_group_tracking_number . ' [ Voir ]</a>' : 'Non' ?>
 
+                                                    <!--
+                                                        Modal d'affichage des colis contenus dans un groupe de colis.
+                                                    -->
                                                     <div class="modal modal-blur fade" data-bs-backdrop='static' id="<?= !empty($packages_listings[$key]["customer_package_group_id"]) ? $packages_group_tracking_number.$key : '' ?>" tabindex="-1" role="dialog" aria-hidden="true">
                                                         <div class="modal-dialog modal-dialog-centered modal-lg modal-dialog-scrollable" role="document">
                                                             <div class="modal-content">
@@ -318,6 +387,7 @@ $rows = count_rows_in_table($table);
                                                             </div>
                                                         </div>
                                                     </div>
+
                                                 </td>
                                                 <td class="text-end">
                                                     <span class="">
@@ -350,6 +420,9 @@ $rows = count_rows_in_table($table);
                                                     </span>
                                                 </td>
                                             </tr>
+                                            <!--
+                                                Modal de confirmation de suppression de colis
+                                            -->
                                             <div class="modal modal-blur fade" id="<?= "package_deletionModal" . $key ?>" tabindex="-1" role="dialog" aria-hidden="true">
                                                 <div class="modal-dialog modal-sm modal-dialog-centered" role="document">
                                                     <div class="modal-content">
@@ -396,83 +469,131 @@ $rows = count_rows_in_table($table);
                         </div>
 
                         <div class="table-responsive card-footer d-flex align-items-center">
-                            <?php
-
-                            $s = null;
-                            $e = null;
-
-                            if (!isset($_SESSION['previous_page']) && !isset($_SESSION['next_page']) && !isset($_SESSION['actual_page'])) {
-
-                                $e = $_SESSION['packages_nb_per_page'];
-                                $s = $_SESSION['page'];
-
-                                if ($e > $rows[0]['COUNT(*)']) {
-                                    $e = $rows[0]['COUNT(*)'];
-                                }
-
-                                if (!isset($packages_listings) || empty($packages_listings)) {
-                                    $s = 'de ' . $n . ' ligne';
-                                }
-
-                            ?>
-                                <p class="m-0 text-muted">Affichage <?php if (isset($packages_listings) && !empty($packages_listings)) { ?> de la ligne <?php } ?> <span><?= $s ?></span> <?php if (isset($packages_listings) && !empty($packages_listings)) { ?> à la ligne <span><?= $en ?></span> <?php } ?> sur <span><?= $rows[0]['COUNT(*)'] ?></span> ligne(s) au total</p>
 
                             <?php
 
-                            } elseif ((isset($_SESSION['previous_page']) || isset($_SESSION['next_page']) || isset($_SESSION['actual_page'])) && $_SESSION['page'] == 2) {
+                                $s = null; //Cette variable stocke la valeur du numéro de la première ligne sur une page
 
-                                $e = $_SESSION['packages_nb_per_page'] * $_SESSION['page'];
-                                $s = $_SESSION['packages_nb_per_page'] + 1;
+                                if (!isset($_SESSION['previous_page']) && !isset($_SESSION['next_page']) && !isset($_SESSION['actual_page'])) {
 
-                                if ($e > $rows[0]['COUNT(*)']) {
-                                    $e = $rows[0]['COUNT(*)'];
+                                    $s = $_SESSION['page'];
+
+                                    if (!isset($packages_listings) || empty($packages_listings)) {
+                                        $s = 'de ' . $n . ' ligne';
+                                    }
+
+                                ?>
+
+                                    <p class="m-0 text-muted">
+                                        Affichage 
+                                        <?php if (isset($packages_listings) && !empty($packages_listings)) { 
+                                        ?> 
+                                            de la ligne 
+                                        <?php 
+                                        } 
+                                        ?> 
+                                            <span><?= $s ?></span> 
+                                        <?php if (isset($packages_listings) && !empty($packages_listings)) { 
+                                        ?> 
+                                            à la ligne <span><?= $en ?></span> 
+                                        <?php 
+                                        } 
+                                        ?>  sur <span><?= $rows[0]['COUNT(*)'] ?></span> ligne(s) au total
+                                    </p>
+
+                                <?php
+                                } 
+
+                                elseif ((isset($_SESSION['previous_page']) || isset($_SESSION['next_page']) || isset($_SESSION['actual_page'])) && $_SESSION['page'] == 2) {
+
+                                    $s = $_SESSION['packages_nb_per_page'] + 1;
+
+                                    if (!isset($packages_listings) || empty($packages_listings)) {
+                                        $s = 'de ' . $n . ' ligne';
+                                    }
+
+                                ?>
+
+                                    <p class="m-0 text-muted">
+                                        Affichage 
+                                        <?php if (isset($packages_listings) && !empty($packages_listings)) { 
+                                        ?> 
+                                            de la ligne 
+                                        <?php 
+                                        } 
+                                        ?> 
+                                            <span><?= $s ?></span> 
+                                        <?php if (isset($packages_listings) && !empty($packages_listings)) { 
+                                        ?> 
+                                            à la ligne <span><?= $en ?></span> 
+                                        <?php 
+                                        } 
+                                        ?>  sur <span><?= $rows[0]['COUNT(*)'] ?></span> ligne(s) au total
+                                    </p>
+
+                                <?php
+                                } 
+                                
+                                elseif ((isset($_SESSION['previous_page']) || isset($_SESSION['next_page']) || isset($_SESSION['actual_page'])) && $_SESSION['page'] > 2) {
+
+                                    $s = ($_SESSION['packages_nb_per_page'] * ($_SESSION['page'] - 1)) + 1;
+
+                                    if (!isset($packages_listings) || empty($packages_listings)) {
+                                        $s = 'de ' . $n . ' ligne';
+                                    }
+
+                                ?>
+
+                                    <p class="m-0 text-muted">
+                                        Affichage 
+                                        <?php if (isset($packages_listings) && !empty($packages_listings)) { 
+                                        ?> 
+                                            de la ligne 
+                                        <?php 
+                                        } 
+                                        ?> 
+                                            <span><?= $s ?></span> 
+                                        <?php if (isset($packages_listings) && !empty($packages_listings)) { 
+                                        ?> 
+                                            à la ligne <span><?= $en ?></span> 
+                                        <?php 
+                                        } 
+                                        ?>  sur <span><?= $rows[0]['COUNT(*)'] ?></span> ligne(s) au total
+                                    </p>
+
+                                <?php
+                                } 
+                                
+                                else {
+
+                                    $s = ($_SESSION['packages_nb_per_page'] * ($_SESSION['page'] - 1)) + 1;
+
+                                    if (!isset($packages_listings) || empty($packages_listings)) {
+                                        $s = 'de ' . $n . ' ligne';
+                                    }
+
+                                ?>
+
+                                    <p class="m-0 text-muted">
+                                        Affichage 
+                                        <?php if (isset($packages_listings) && !empty($packages_listings)) { 
+                                        ?> 
+                                            de la ligne 
+                                        <?php 
+                                        } 
+                                        ?> 
+                                            <span><?= $s ?></span> 
+                                        <?php if (isset($packages_listings) && !empty($packages_listings)) { 
+                                        ?> 
+                                            à la ligne <span><?= $en ?></span> 
+                                        <?php 
+                                        } 
+                                        ?>  sur <span><?= $rows[0]['COUNT(*)'] ?></span> ligne(s) au total
+                                    </p>
+
+                                <?php
                                 }
 
-                                if (!isset($packages_listings) || empty($packages_listings)) {
-                                    $s = 'de ' . $n . ' ligne';
-                                }
-
-                            ?>
-                                <p class="m-0 text-muted">Affichage <?php if (isset($packages_listings) && !empty($packages_listings)) { ?> de la ligne <?php } ?> <span><?= $s ?></span> <?php if (isset($packages_listings) && !empty($packages_listings)) { ?> à la ligne <span><?= $en ?></span> <?php } ?> sur <span><?= $rows[0]['COUNT(*)'] ?></span> ligne(s) au total</p>
-
-                            <?php
-
-                            } elseif ((isset($_SESSION['previous_page']) || isset($_SESSION['next_page']) || isset($_SESSION['actual_page'])) && $_SESSION['page'] > 2) {
-
-                                $e = $_SESSION['packages_nb_per_page'] * $_SESSION['page'];
-                                $s = ($_SESSION['packages_nb_per_page'] * ($_SESSION['page'] - 1)) + 1;
-
-                                if ($e > $rows[0]['COUNT(*)']) {
-                                    $e = $rows[0]['COUNT(*)'];
-                                }
-
-                                if (!isset($packages_listings) || empty($packages_listings)) {
-                                    $s = 'de ' . $n . ' ligne';
-                                }
-
-                            ?>
-                                <p class="m-0 text-muted">Affichage <?php if (isset($packages_listings) && !empty($packages_listings)) { ?> de la ligne <?php } ?> <span><?= $s ?></span> <?php if (isset($packages_listings) && !empty($packages_listings)) { ?> à la ligne <span><?= $en ?></span> <?php } ?> sur <span><?= $rows[0]['COUNT(*)'] ?></span> ligne(s) au total</p>
-
-                            <?php
-
-                            } else {
-
-                                $e = $_SESSION['packages_nb_per_page'] * $_SESSION['page'];
-                                $s = ($_SESSION['packages_nb_per_page'] * ($_SESSION['page'] - 1)) + 1;
-
-                                if ($e > $rows[0]['COUNT(*)']) {
-                                    $e = $rows[0]['COUNT(*)'];
-                                }
-
-                                if (!isset($packages_listings) || empty($packages_listings)) {
-                                    $s = 'de ' . $n . ' ligne';
-                                }
-
-                            ?>
-                                <p class="m-0 text-muted">Affichage <?php if (isset($packages_listings) && !empty($packages_listings)) { ?> de la ligne <?php } ?> <span><?= $s ?></span> <?php if (isset($packages_listings) && !empty($packages_listings)) { ?> à la ligne <span><?= $en ?></span> <?php } ?> sur <span><?= $rows[0]['COUNT(*)'] ?></span> ligne(s) au total</p>
-
-                            <?php
-                            }
                             ?>
 
                             <ul class="pagination m-0 ms-auto">
@@ -519,8 +640,4 @@ if (isset($_SESSION['next_page']) && $_SESSION['next_page'] == $_SESSION['page']
 
 unset($_SESSION['research']);
 
-/*if (!isset($_SESSION['research']) || !isset($_SESSION['selected_status'])) {
-    unset($_SESSION['research'], $_SESSION['selected_status']);
-}*/
-//unset($_SESSION['selected_status'], $_SESSION['select_packages_nb_per_page'], $_SESSION['next_page'], $_SESSION['previous_page'], $_SESSION['research']);
 ?>

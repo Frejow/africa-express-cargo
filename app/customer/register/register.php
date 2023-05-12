@@ -37,7 +37,7 @@ if (isset($_POST["mail"]) && !empty($_POST["mail"]) && !filter_var($_POST["mail"
     $errors["mail"] = "Entrez une addresse email valide s'il vous plaît";
 }
 
-if (!isset($_POST["pass"]) || empty($_POST["pass"]) && !check_exist_userby_email($_POST["mail"], 0)) {
+if (!isset($_POST["pass"]) || empty($_POST["pass"]) && !check_exist_fieldentry('mail', $_POST["mail"])) {
     $errors["pass"] = "Le champs du mot de passe est vide.";
 }
 
@@ -62,12 +62,16 @@ if (
     $errors["terms"] = "Veuillez cocher cette case s'il vous plaît.";
 }
 
-if (check_exist_userby_email($_POST["mail"], 0)) {
-    $errors["mail"] = "[ " . $_POST["mail"] . " ] est déjà associé à un compte. Veuillez le changer.";
+if (check_exist_fieldentry('mail', $_POST["mail"])) {
+    $errors["mail"] = "[ " . $_POST["mail"] . " ] est déjà associé à un compte.";
 }
 
-if (check_exist_userby_pseudo($_POST["pseudo"], 0)) {
-    $errors["pseudo"] = "Le nom d'utilisateur [ " . $_POST["pseudo"] . " ] a déjà été pris. Veuillez le changer.";
+if (check_exist_fieldentry('user_name', $_POST["pseudo"])) {
+    $errors["pseudo"] = "Le nom d'utilisateur [ " . $_POST["pseudo"] . " ] a déjà été pris.";
+}
+
+if (check_exist_fieldentry('phone_number', $_POST["tel"])) {
+    $errors["tel"] = "Ce numéro [ " . $_POST["tel"] . " ] appartient à un de nos utilisateur.";
 }
 
 if (isset($_POST["nom"]) && !empty($_POST["nom"])) {

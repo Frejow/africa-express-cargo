@@ -25,6 +25,10 @@
 </footer>
 </div>
 
+<!--
+    Modal d'affichage des détails d'un colis
+-->
+
 <?php
 if (isset($packages_listings) && !empty($packages_listings)) {
 
@@ -119,6 +123,10 @@ if (isset($packages_listings) && !empty($packages_listings)) {
 }
 ?>
 
+<!--
+    Modal d'affichage des détails d'un groupe de colis
+-->
+
 <?php
 if (isset($packages_group_listings) && !empty($packages_group_listings)) {
 
@@ -204,6 +212,8 @@ if (isset($packages_group_listings) && !empty($packages_group_listings)) {
     }
 }
 ?>
+
+///////////////////////////////<!--THIS MODAL NOT WORKING YET-->////////////////////////////////
 
 <?php
 if (isset($packages_ingrouplistings) && !empty($packages_ingrouplistings)) {
@@ -297,6 +307,8 @@ if (isset($packages_ingrouplistings) && !empty($packages_ingrouplistings)) {
     }
 }
 ?>
+
+///////////////////////////////<!--THIS MODAL NOT WORKING YET-->////////////////////////////////
 
 <script src="<?= PROJECT ?>public/jquery/jquery.js"></script>
 <script src="<?= PROJECT ?>public/select2/js/select2.full.js"></script>
