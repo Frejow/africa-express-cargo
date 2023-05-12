@@ -13,6 +13,48 @@ function redirect($theme, $link) {
 
 }
 
+//Fonction de sécurisation des champs d'entrées de formulaires
+function secure($data)
+{
+    $data = trim($data);
+    $data = strip_tags($data);
+    $data = stripslashes($data);
+    return $data;
+}
+
+//Fonction d'enregistrement d'utilisateur dans la table 'user' 
+function registered($name, $first_names, $phone_number, $user_name, $mail, $country, $password, $profile): bool
+{
+
+    $is_registered = false;
+
+    $database = _database_login();
+
+    $request = 'INSERT INTO user(name, first_names, phone_number, user_name, mail, country, password, profile) VALUES (:nom, :prenom, :tel, :pseudo, :mail, :country, :pass, :profile)';
+
+    $request_prepare = $database->prepare($request);
+
+    $request_execution = $request_prepare->execute(
+        [
+            'nom' => $name,
+            'prenom' => $first_names,
+            'tel' => $phone_number,
+            'pseudo' => $user_name,
+            'mail' => $mail,
+            'country' => ltrim(preg_replace('/[^\p{L}\p{N}\s]/u', "", $country)),
+            'pass' => sha1($password),
+            'profile' => $profile,
+        ]
+    );
+
+    if ($request_execution) {
+
+        $is_registered = true;
+    }
+
+    return $is_registered;
+}
+
 //Fonction d'envoi de mail
 function mailsendin(string $destination, string $recipient, string $subject, string $body): bool
 {
@@ -52,13 +94,35 @@ function mailsendin(string $destination, string $recipient, string $subject, str
     }
 }
 
-//Fonction de sécurisation des champs d'entrées de formulaires
-function secure($data)
+//Fonction de suppression de compte à l'inscription en cas d'échec de l'envoi de mail
+function back_deleted_account(int $id): bool
 {
-    $data = trim($data);
-    $data = strip_tags($data);
-    $data = stripslashes($data);
-    return $data;
+    date_default_timezone_set("Africa/Lagos");
+
+    $back_deleted_account = false;
+
+    $database = _database_login();
+
+    $request = "UPDATE user SET mail = :mail, is_active = :is_active, is_deleted = :is_deleted, updated_on = :updated_on WHERE id = :id";
+
+    $request_prepare = $database->prepare($request);
+
+    $request_execution = $request_prepare->execute(
+        [
+            'id'  => $id,
+            'mail' => 'this_mail_address_was_deleted',
+            'is_active' => 0,
+            'is_deleted' => 1,
+            'updated_on' => date('Y-m-d H:i:s')
+        ]
+    );
+
+    if ($request_execution) {
+
+        $back_deleted_account = true;
+    }
+
+    return $back_deleted_account;
 }
 
 //Fonction de vérification d'utilisateur connecté

@@ -12,13 +12,7 @@ $_SESSION['data'] = [];
 
 //Avatar Updating
 
-
 if (isset($_POST["avatar_deletion"])) {
-
-    //die (var_dump($_POST['avatar_deletion']));
-
-    //die ('dedans');
-
 
     if (update_avatar($data[0]['id'], 'null')) {
 
@@ -96,14 +90,10 @@ if (isset($_POST['pass_w']) && !empty($_POST['pass_w']) && check_password($data[
 
     $error["pass_w"] = 'La tentative de mise à jour de l\'avatar a échoué. Mot de passe erroné. Réessayer !';
 
-    //$updata ['avatar'] = 'REESSAYER';
-
 
 } elseif (isset($_POST['pass_w']) && empty($_POST['pass_w']) && !isset($_POST['avatar_deletion'])) {
 
     $error["pass_w"] = 'La tentative de mise à jour de l\'avatar a échoué. Aucun mot de passe n\'a été soumis. Réessayer !';
-
-    //$updata ['avatar'] = 'REESSAYER';
 
 }
 
@@ -158,12 +148,27 @@ if (isset($_POST['pass']) && !empty($_POST['pass']) && check_password($data[0]['
     }
 
     if (update_personal_info($data[0]['id'], $newdata['nom'], $newdata['prenoms'], $newdata['pseudo'], $newdata['pays'], $newdata['mail'], $newdata['tel'])) {
+
         if (select_user_updated_info($data[0]['id'])) {
 
             header("location:". redirect($_SESSION['theme'], PROJECT.'customer/dash/profile-settings'));
 
+        } else {
+
+            $_SESSION['personal_error'] = 'Une erreur est survenue. Réessayer, si cela persiste, veuillez nous contacter !';
+
+            header("location:". redirect($_SESSION['theme'], PROJECT.'customer/dash/profile-settings'));
+
         }
+
+    } else {
+
+        $_SESSION['personal_error'] = 'Une erreur est survenue. Réessayer, si cela persiste, veuillez nous contacter !';
+
+        header("location:". redirect($_SESSION['theme'], PROJECT.'customer/dash/profile-settings'));
+
     }
+
 } elseif (isset($_POST['pass']) && !empty($_POST['pass']) && !check_password($data[0]['id'], $_POST['pass'])) {
 
     $_SESSION['personal_error'] = 'La tentative de mise à jour des informations personnelles a échoué. Mot de passe erroné. Réessayer !';
@@ -196,21 +201,13 @@ if (isset($_POST['passw']) && !empty($_POST['passw']) && check_password($data[0]
 
             disconnected();
 
-            setcookie(
-                "psp",
-                'psp',
-                [
-                    'expires' => time() + 365 * 24 * 3600,
-                    'path' => '/',
-                    'secure' => true,
-                    'httponly' => true,
-                ]
-            );
+            setcookie('psp', 'psp', time() + 365 * 24 * 3600, '/');
 
-            setcookie('pass_data', '', time() - 3600, '/');
+            //setcookie('pass_data', '', time() - 3600, '/');
 
             header("location:" . PROJECT . "customer/login");
         }
+
     } else {
 
         $updata['passw'] = $_POST['passw'];
@@ -219,6 +216,7 @@ if (isset($_POST['passw']) && !empty($_POST['passw']) && check_password($data[0]
 
         $error['newpass'] = 'Veuillez remplir ce champs d\'un nouveau mot de passe de 08 caractères minimum.';
     }
+
 } elseif (isset($_POST['passw']) && !empty($_POST['passw']) && !check_password($data[0]['id'], $_POST['passw'])) {
 
     $updata['passw'] = $_POST['passw'];
@@ -254,7 +252,15 @@ if (isset($_POST['pass-w']) && !empty($_POST['pass-w']) && check_password($data[
         disconnected();
 
         header("location:" . PROJECT . "customer/login");
+
+    } else {
+
+        $error['pass-w'] = '';
+
+        header("location:" . PROJECT . "customer/login");
+
     }
+
 } elseif (isset($_POST['pass-w']) && !empty($_POST['pass-w']) && !check_password($data[0]['id'], $_POST['pass-w'])) {
 
     $error['pass-w'] = 'Mot de passe erroné. Veuillez réessayer !';
@@ -286,7 +292,14 @@ if (isset($_POST['pass--w']) && !empty($_POST['pass--w']) && check_password($dat
         disconnected();
 
         header("location:" . PROJECT . "customer/login");
+    } else {
+
+        $error['pass--w'] = '';
+
+        header("location:" . PROJECT . "customer/login");
+
     }
+
 } elseif (isset($_POST['pass--w']) && !empty($_POST['pass--w']) && !check_password($data[0]['id'], $_POST['pass--w'])) {
 
     $error['pass--w'] = 'Mot de passe erroné. Veuillez réessayer !';

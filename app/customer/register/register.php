@@ -79,7 +79,7 @@ if (isset($_POST["prenom"]) && !empty($_POST["prenom"])) {
 }
 
 if (isset($_POST["tel"]) && !empty($_POST["tel"])) {
-    $data["tel"] = $_POST["tel"];
+    $data["tel"] = secure($_POST["tel"]);
 }
 
 if (isset($_POST["pseudo"]) && !empty($_POST["pseudo"])) {
@@ -98,88 +98,58 @@ $data["profile"] = "CUSTOMER";
 
 if (empty($errors)) {
 
-    $database =  _database_login();
+    if (registered($data["nom"], $data["prenom"], $data["tel"], $data["pseudo"], $data["mail"], $data["country"], $_POST["pass"], $data["profile"])) {
 
-    if (is_object($database)) {
+        setcookie('user_register_data', '', time() - 3600, '/');
 
-        // Ecriture de la requête
-        $request_insertion = 'INSERT INTO user(name, first_names, phone_number, user_name, mail, country, password, profile) VALUES (:nom, :prenom, :tel, :pseudo, :mail, :country, :pass, :profile)';
+        $user_id = select_user_id($data["mail"])[0]["id"];
 
-        // Préparation
-        $request_insertion_prepare = $database->prepare($request_insertion);
+        $token = uniqid();
 
-        // Exécution ! 
-        $result = $request_insertion_prepare->execute([
-            'nom' => $data["nom"],
-            'prenom' => $data["prenom"],
-            'tel' => $data["tel"],
-            'pseudo' => $data["pseudo"],
-            'mail' => $data["mail"],
-            'country' => ltrim(preg_replace('/[^\p{L}\p{N}\s]/u', "", $_POST["country"])),
-            'pass' => sha1($_POST["pass"]),
-            'profile' => $data["profile"],
-        ]);
+        if (insert_intoken_table($user_id, 'ACCOUNT_VALIDATION', $token)) {
+            $_SESSION['account_validation'] = [];
+            $_SESSION['account_validation']['user_id'] = $user_id;
+            $_SESSION['account_validation']['token'] = $token;
+            //require_once __DIR__ . 'mailtemp.php';
+        }
+        //die;
+        $subject = 'Confirmation de compte';
+        $mailcontent = buffer_html_file('..' . PROJECT . 'app/customer/register/mailtemp.php');
 
-        if ($result) {
+        if (mailsendin($data['mail'], $data["pseudo"], $subject, $mailcontent)) {
+
+            header("location:" . PROJECT . "customer/register/true");
 
             setcookie('user_register_data', '', time() - 3600, '/');
 
-            $user_id = select_user_id($data["mail"])[0]["id"];
+        } else {
 
-            $token = uniqid();
+            if (back_deleted_account($user_id) && update_token_table($user_id)) {
 
-            if (insert_intoken_table($user_id, 'ACCOUNT_VALIDATION', $token)){
-                $_SESSION['account_validation'] = [];
-                $_SESSION['account_validation']['user_id'] = $user_id;
-                $_SESSION['account_validation']['token'] = $token;
-            }
-            //die;
-            $subject = 'Confirmation de compte';
-            $mailcontent = buffer_html_file('..'.PROJECT.'app/customer/register/mailtemp.php');
-
-            if (mailsendin($data['mail'], $data["pseudo"], $subject, $mailcontent)){
-
-                header("location:".PROJECT."customer/register/true");
-
-                setcookie('user_register_data', '', time() - 3600, '/');
-
-            } else {
-
-                deleted_account($user_id);
+                setcookie('user_register_data', json_encode($data), time() + 365 * 24 * 3600, '/');
 
                 $_SESSION['error_msg'] = 'Erreur lors du processus. Cause probable : Hors Connexion. Réessayer, si cela persiste, contactez-nous.';
 
-                header("location:".PROJECT."customer/register");
+                header("location:" . PROJECT . "customer/register");
 
             }
 
-        } else {
-
-            $_SESSION['error_msg'] = 'Oupss!!! Une erreur a été détecté lors du processus. Veuillez réessayer ou nous contacter si cela persiste.';
-
-            header("location:".PROJECT."customer/register");
-
         }
+
     } else {
 
-        $_SESSION['error_msg'] = $database;
+        $_SESSION['error_msg'] = 'Oupss!!! Une erreur a été détecté lors du processus. Veuillez réessayer ou nous contacter si cela persiste.';
 
-        header("location:".PROJECT."customer/register");
+        header("location:" . PROJECT . "customer/register");
+
     }
+
 } else {
 
     $_SESSION["register_errors"] = $errors;
 
-    setcookie(
-        "user_register_data",
-        json_encode($data),
-        [
-            'expires' => time() + 365 * 24 * 3600,
-            'path' => '/',
-            'secure' => true,
-            'httponly' => true,
-        ]
-    );
+    setcookie('user_register_data', json_encode($data), time() + 365 * 24 * 3600, '/');
 
-    header("location:".PROJECT."customer/register");
+    header("location:" . PROJECT . "customer/register");
+
 }
