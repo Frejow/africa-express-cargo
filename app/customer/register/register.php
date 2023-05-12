@@ -128,7 +128,7 @@ if (empty($errors)) {
 
                 setcookie('user_register_data', json_encode($data), time() + 365 * 24 * 3600, '/');
 
-                $_SESSION['error_msg'] = 'Erreur lors du processus. Cause probable : Hors Connexion. Réessayer, si cela persiste, contactez-nous.';
+                $_SESSION['error_msg'] = 'Erreur lors du processus. Cause probable : Appareil Hors Connexion. Vérifiez votre connexion internet et réessayer. Si cela persiste, contactez-nous.';
 
                 header("location:" . PROJECT . "customer/register");
 
