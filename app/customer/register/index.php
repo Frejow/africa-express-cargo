@@ -481,7 +481,7 @@ $countries = [
                 toast: true,
                 position: 'top-end',
                 showConfirmButton: false,
-                timer: 8000
+                timer: 10000
             });
 
             if($('.swalDefaultSuccess').length) {
