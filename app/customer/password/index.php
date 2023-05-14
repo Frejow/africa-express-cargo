@@ -1,3 +1,8 @@
+<?php
+
+$_SESSION['current_url'] = "http://{$_SERVER['HTTP_HOST']}{$_SERVER['REQUEST_URI']}";
+
+?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -94,7 +99,7 @@
     </div>
 
     <?php
-    session_destroy(); 
+    unset($_SESSION["password_error"]); 
     ?>
 
     <!--===============================================================================================-->

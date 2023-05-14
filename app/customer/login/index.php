@@ -1,7 +1,7 @@
 <?php
 
-//die (var_dump(explode('=', explode('?', $_SERVER['REQUEST_URI'])[1])[1]));
-//die (var_dump(rawurldecode(explode('=', explode('?', $_SERVER['REQUEST_URI'])[1])[1])));
+$_SESSION['current_url'] = "http://{$_SERVER['HTTP_HOST']}{$_SERVER['REQUEST_URI']}";
+//die (var_dump($_SESSION['current_url']));
 ?>
 
 <!DOCTYPE html>
@@ -138,7 +138,7 @@
         </div>
     </div>
     <?php
-    session_destroy();
+    unset($_SESSION["login_errors"]);
     ?>
     <!--===============================================================================================-->
     <script src='<?= PROJECT ?>public/vendor/jquery/jquery-3.2.1.min.js'></script>

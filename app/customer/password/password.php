@@ -10,7 +10,7 @@ if (isset($_POST['mail']) && !empty($_POST['mail'])){
 
     $data = secure($_POST["mail"]);
 
-    if (check_exist_userby_email($_POST["mail"], 0)) {
+    if (check_exist_fieldentry('mail', $_POST["mail"])) {
 
         $user_id = select_user_id($_POST["mail"])[0]["id"];
 
@@ -46,7 +46,7 @@ if (isset($_POST['mail']) && !empty($_POST['mail'])){
             header("location:".PROJECT."customer/password/true");
         }
 
-    } elseif (!check_exist_userby_email($_POST["mail"], 0)) {
+    } elseif (!check_exist_fieldentry('mail', $_POST["mail"])) {
 
         $error["mail"] = "[ " . $_POST["mail"] . " ] n'est associé à aucun compte. Vérifier votre saisie et réessayer.";
 

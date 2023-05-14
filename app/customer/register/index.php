@@ -1,5 +1,8 @@
 <?php
 
+$_SESSION['current_url'] = "http://{$_SERVER['HTTP_HOST']}{$_SERVER['REQUEST_URI']}";
+
+
 $countries = [
     "<span>&#x1F1E6;&#x1F1EB;</span>&nbsp;&nbsp;&nbsp;Afghanistan",
     "<span>&#x1F1E6;&#x1F1F1;</span>&nbsp;&nbsp;&nbsp;Albanie",
@@ -459,7 +462,7 @@ $countries = [
     </div>
 
     <?php
-    session_destroy(); 
+    unset($_SESSION["register_errors"]); 
     ?>
 
     <!--===============================================================================================-->

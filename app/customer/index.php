@@ -54,9 +54,10 @@ if (isset($_COOKIE['error_msg']) && !empty($_COOKIE['error_msg'])){
 }
 
 //Détruire le cookie de session qui stocke l'url de chaque page lorsque l'utilisateur n'est pas connecté
-if (!connected()) {
-    unset($_SESSION['current_url']);
-}  
+//if (!connected()) {
+    //unset($_SESSION['current_url']);
+//}
+
 $data = [];
 
 //Affecter la valeur de cookie de session de l'utilisateur connecté à la variable $data
