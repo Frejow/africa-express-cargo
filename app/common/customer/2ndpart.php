@@ -141,7 +141,7 @@ if (isset($packages_ingrouplistings) && !empty($packages_ingrouplistings)) {
             toast: true,
             position: 'top',
             showConfirmButton: false,
-            timer: 10000
+            timer: 20000
         });
 
         if ($('.swalDefaultSuccess').length) {

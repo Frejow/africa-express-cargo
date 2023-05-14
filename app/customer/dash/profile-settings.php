@@ -34,7 +34,7 @@ include 'app/common/customer/1stpart.php';  ?>
                             </svg>
                         </h3>
 
-                        <p class="text-muted"> Poids Maximum : 2Mo. Extensions autorisées [ PNG/JPG/JPEG/GIF ]</p>
+                        <p class="text-muted text-center"> Poids Maximum : 2Mo. Extensions autorisées [ PNG/JPG/JPEG/GIF ]</p>
 
                         <?php
 

@@ -1,7 +1,5 @@
 <?php
 
-//die (var_dump($_FILES["filesToUpload"]));
-
 $newdata = [];
 $error = [];
 $updata = [];
@@ -25,7 +23,9 @@ if (isset($_POST['pack_trackN']) && !empty($_POST['pack_trackN'])) {
 
 } else {
 
-    $newdata['pack_trackN'] = "NULL";
+    $error['pack_trackN'] = 'Ce champs est requis.';
+
+    $_SESSION['error_msg'] = 'Erreur. Champs requis a été soumis vide. Causes probables : Soit vous tentez effectivement de soumettre le formulaire avec un champs requis vide soit vous tentez une importation de fichier(s) lourds et dépassant la limite autorisée (Poids Max/Fichier : 2Mo).';
 
 }
 
@@ -58,7 +58,9 @@ if (isset($_POST['pack_descp']) && !empty($_POST['pack_descp'])) {
 
 } else {
 
-    $newdata['pack_descp'] = "NULL";
+    $error['pack_descp'] = 'Ce chamsp est requis.';
+
+    $_SESSION['error_msg'] = 'Erreur. Champs requis a été soumis vide. Causes probables : Soit vous tentez effectivement de soumettre le formulaire avec un champs requis vide soit vous tentez une importation de fichier(s) lourds et dépassant la limite autorisée (Poids Max/Fichier : 2Mo).';
 
 }
 
@@ -119,7 +121,7 @@ if (isset($_FILES["filesToUpload"]) && !empty($_FILES["filesToUpload"])) {
     
                         $rootpath = $_SERVER['DOCUMENT_ROOT'] . '/africa-express-cargo/public/images/uploads';
     
-                        $newfolder = $rootpath . '/' . $data[0]['id'] . '/packages/' . $newdata['pack_trackN'] ;
+                        $newfolder = $rootpath . '/' . $data[0]['user_name'] . '/packages/' . $newdata['pack_trackN'] ;
     
                         if (!file_exists($newfolder)) {
     
@@ -128,13 +130,13 @@ if (isset($_FILES["filesToUpload"]) && !empty($_FILES["filesToUpload"])) {
     
                         move_uploaded_file($_FILES['filesToUpload']['tmp_name'][$key], $newfolder . '/' . basename($_FILES['filesToUpload']['name'][$key]));
     
-                        $newdata["images"][$key] = PROJECT . 'public/images/uploads/' . $data[0]['id'] . '/packages/' . $newdata['pack_trackN'] . '/' . basename($_FILES['filesToUpload']['name'][$key]);
+                        $newdata["images"][$key] = PROJECT . 'public/images/uploads/' . $data[0]['user_name'] . '/packages/' . $newdata['pack_trackN'] . '/' . basename($_FILES['filesToUpload']['name'][$key]);
                     
                     } else {
 
                         $rootpath = $_SERVER['DOCUMENT_ROOT'] . '/africa-express-cargo/public/images/uploads';
     
-                        $newfolder = $rootpath . '/' . $data[0]['id'] . '/packages/' . $newdata['pack_trackN'] ;
+                        $newfolder = $rootpath . '/' . $data[0]['user_name'] . '/packages/' . $newdata['pack_trackN'] ;
                         
                         if (is_dir($newfolder)) { 
 
@@ -180,7 +182,7 @@ if (isset($_FILES["filesToUpload"]) && !empty($_FILES["filesToUpload"])) {
 
                     $rootpath = $_SERVER['DOCUMENT_ROOT'] . '/africa-express-cargo/public/images/uploads';
     
-                    $newfolder = $rootpath . '/' . $data[0]['id'] . '/packages/' . $newdata['pack_trackN'] ;
+                    $newfolder = $rootpath . '/' . $data[0]['user_name'] . '/packages/' . $newdata['pack_trackN'] ;
 
                     if (is_dir($newfolder)) { 
 

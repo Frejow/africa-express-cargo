@@ -54,7 +54,7 @@ if (isset($_POST['pass_w']) && !empty($_POST['pass_w']) && check_password($data[
     
                     $rootpath = $_SERVER["DOCUMENT_ROOT"] . PROJECT . 'public/images/uploads';
     
-                    $newfolder = $rootpath . '/' . $data[0]['id'] . '/profile/';
+                    $newfolder = $rootpath . '/' . $data[0]['user_name'] . '/profile/';
     
                     if (!file_exists($newfolder)) {
     
@@ -65,7 +65,7 @@ if (isset($_POST['pass_w']) && !empty($_POST['pass_w']) && check_password($data[
     
                     if ($move_uploaded_file) {
     
-                        $newdata["avatar"] = PROJECT . 'public/images/uploads/' . $data[0]['id'] . '/profile/' . basename($_FILES['fileToUpload']['name']);
+                        $newdata["avatar"] = PROJECT . 'public/images/uploads/' . $data[0]['user_name'] . '/profile/' . basename($_FILES['fileToUpload']['name']);
     
                     }
     
@@ -179,4 +179,3 @@ if (!empty($error)) {
     header("location:". redirect($_SESSION['theme'], PROJECT.'customer/dash/profile-settings'));
 
 }
-//die(var_dump(($_FILES['fileToUpload']['error'])));

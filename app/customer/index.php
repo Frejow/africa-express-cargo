@@ -179,13 +179,13 @@ if (isset($_SESSION["connected"]) && !empty($_SESSION["connected"])) {
 
         } else {
 
-            require_once $default_action_folder;
+            require_once 'error/404.php';
 
         }
 
     } else {
         
-        require_once $default_action_folder;
+        require_once 'error/404.php';;
     }
 
 //include 'app/common/customer/2ndpart.php';
