@@ -1,4 +1,5 @@
 <?php
+
 if (connected()) {
     $_SESSION['current_url'] = "http://{$_SERVER['HTTP_HOST']}{$_SERVER['REQUEST_URI']}";
 }
@@ -33,7 +34,7 @@ include 'app/common/customer/1stpart.php';  ?>
                             </svg>
                         </h3>
 
-                        <p class="text-muted"> Poids Maximum : 3Mo. Extensions autorisées [ PNG/JPG/JPEG/GIF ]</p>
+                        <p class="text-muted"> Poids Maximum : 2Mo. Extensions autorisées [ PNG/JPG/JPEG/GIF ]</p>
 
                         <?php
 
@@ -76,7 +77,7 @@ include 'app/common/customer/1stpart.php';  ?>
                         }
                         ?>
 
-                        <form action="<?= redirect($_SESSION['theme'], PROJECT.'customer/dash-treatment/profile-settings') ?>" class="text-center" method="post" enctype="multipart/form-data">
+                        <form action="<?= redirect($_SESSION['theme'], PROJECT . 'customer/dash-treatment/avatar-updating') ?>" class="text-center" method="post" enctype="multipart/form-data">
 
                             <div class="col mt-3">
                                 <input type="file" name="fileToUpload" id="fileToUpload" style="display: none;" onchange="updateButtonLabel()">
@@ -295,7 +296,7 @@ include 'app/common/customer/1stpart.php';  ?>
                             </div>
                         </div>
 
-                        <form class="col-lg-11" action="<?= redirect($_SESSION['theme'], PROJECT.'customer/dash-treatment/profile-settings') ?>" method="post" id="form_appear" style="display: flex; flex-direction: column; display: none;">
+                        <form class="col-lg-11" action="<?= redirect($_SESSION['theme'], PROJECT . 'customer/dash-treatment/personal-informations-updating') ?>" method="post" id="form_appear" style="display: flex; flex-direction: column; display: none;">
                             <h3 class="mt-4 text-center">Mise à jour - Informations Personnelles</h3>
                             <div class="row g-3">
                                 <div class="col-md">
@@ -420,7 +421,7 @@ include 'app/common/customer/1stpart.php';  ?>
 
                         </form>
 
-                        <form action="<?= redirect($_SESSION['theme'], PROJECT.'customer/dash-treatment/profile-settings') ?>" method="post" style="display: flex;flex-direction: column;align-items:center;">
+                        <form action="<?= redirect($_SESSION['theme'], PROJECT . 'customer/dash-treatment/password-updating') ?>" method="post" style="display: flex;flex-direction: column;align-items:center;">
 
                             <?php
 
@@ -505,8 +506,10 @@ include 'app/common/customer/1stpart.php';  ?>
                         </form>
 
                         <h3 class="mt-3">-> Section Dangereuse</h3>
+
                         <div class="row">
-                            <form action="<?= redirect($_SESSION['theme'], PROJECT.'customer/dash-treatment/profile-settings') ?>" method="post">
+
+                            <form action="<?= redirect($_SESSION['theme'], PROJECT . 'customer/dash-treatment/account-deactivation') ?>" method="post">
 
                                 <?php
 
@@ -516,32 +519,20 @@ include 'app/common/customer/1stpart.php';  ?>
                                     $error = $_SESSION["deactivation_error"];
                                 }
 
-                                if (isset($_SESSION["deletion_error"]) && !empty($_SESSION["deletion_error"])) {
-                                    $error = $_SESSION["deletion_error"];
-                                }
-
                                 ?>
 
                                 <div class="col-md text-center">
                                     <a href="#" data-bs-toggle="modal" data-bs-target="#modal-danger" class="btn btn-ghost-danger">
                                         Désactiver mon compte
                                     </a>
+                                    <?php
+                                    if (isset($error["pass-w"]) && !empty($error["pass-w"])) {
+                                        echo "<p style = 'color:red; font-size:12px;'>" . $error["pass-w"] . "</p>";
+                                    }
+                                    ?>
                                 </div>
-                                <?php
-                                if (isset($error["pass-w"]) && !empty($error["pass-w"])) {
-                                    echo "<p style = 'color:red; font-size:12px;'>" . $error["pass-w"] . "</p>";
-                                }
-                                ?>
-                                <div class="col-md text-center">
-                                    <a href="#" data-bs-toggle="modal" data-bs-target="#modal-danger1" class="btn btn-ghost-danger">
-                                        Supprimer mon compte
-                                    </a>
-                                </div>
-                                <?php
-                                if (isset($error["pass--w"]) && !empty($error["pass--w"])) {
-                                    echo "<p style = 'color:red; font-size:12px;'>" . $error["pass--w"] . "</p>";
-                                }
-                                ?>
+
+
                                 <div class="modal modal-blur fade" id="modal-danger" tabindex="-1" role="dialog" aria-hidden="true">
                                     <div class="modal-dialog modal-sm modal-dialog-centered" role="document">
                                         <div class="modal-content">
@@ -576,6 +567,30 @@ include 'app/common/customer/1stpart.php';  ?>
                                             </div>
                                         </div>
                                     </div>
+                                </div>
+
+                            </form>
+
+                            <form action="<?= redirect($_SESSION['theme'], PROJECT . 'customer/dash-treatment/account-deletion') ?>" method="post">
+
+                                <?php
+
+                                $error = [];
+
+                                if (isset($_SESSION["deletion_error"]) && !empty($_SESSION["deletion_error"])) {
+                                    $error = $_SESSION["deletion_error"];
+                                }
+
+                                ?>
+                                <div class="col-md text-center">
+                                    <a href="#" data-bs-toggle="modal" data-bs-target="#modal-danger1" class="btn btn-ghost-danger">
+                                        Supprimer mon compte
+                                    </a>
+                                    <?php
+                                    if (isset($error["pass--w"]) && !empty($error["pass--w"])) {
+                                        echo "<p style = 'color:red; font-size:12px;'>" . $error["pass--w"] . "</p>";
+                                    }
+                                    ?>
                                 </div>
 
                                 <div class="modal modal-blur fade" id="modal-danger1" tabindex="-1" role="dialog" aria-hidden="true">
@@ -613,7 +628,9 @@ include 'app/common/customer/1stpart.php';  ?>
                                         </div>
                                     </div>
                                 </div>
+
                             </form>
+
                         </div>
                     </div>
                 </div>
@@ -631,7 +648,6 @@ unset(
     $_SESSION['deactivation_error'],
     $_SESSION['deletion_error'],
     $_SESSION['data'],
-    $_SESSION['error_msg']
 );
 
 ?>

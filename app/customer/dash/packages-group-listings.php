@@ -43,7 +43,7 @@ if (isset($_SESSION['research']) && !empty($_SESSION['research'])) {
 
 $packages_group_listings = listings($table, $_SESSION['page'], $_SESSION['packages_nb_per_page'], $_SESSION['status'], strtoupper($_SESSION['search']), $data[0]['id']);
 
-$rows = count_rows_in_table($table);
+$rows = count_rows_in_table($table, $data[0]['id']);
 
 ?>
 
@@ -429,8 +429,97 @@ $rows = count_rows_in_table($table);
     </div>
 </form>
 
-<?php include 'app/common/customer/2ndpart.php';
+<!--
+    Modal d'affichage des détails d'un groupe de colis
+-->
 
+<?php
+if (isset($packages_group_listings) && !empty($packages_group_listings)) {
+
+    foreach ($packages_group_listings as $key => $packages_group) {
+
+        $packages_ingrouplistings = select_allpackages_forpackagegroup($packages_group_listings[$key]['id']);
+?>
+        <div class="modal modal-blur fade" data-bs-backdrop='static' id="<?= 'modal-packages-group-detail' . $key ?>" tabindex="-1" role="dialog" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered modal-lg modal-dialog-scrollable" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h3 class="modal-title">Détails Groupe</h3>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="datagrid">
+                            <div class="datagrid-item">
+                                <div class="datagrid-title">Nombre de Colis</div>
+                                <div class="datagrid-content"><?= sizeof($packages_ingrouplistings) ?></div>
+                            </div>
+                        </div><br>
+                        <div class="row row-deck row-cards text-center">
+                            <div class="col-12">
+                                <div class="card">
+                                    <div class="card-body border-bottom py-3">
+                                        <div class="d-flex justify-content-center">
+                                            <div class="">
+                                                <h3 class="d-inline-block">
+                                                    Colis du Groupe
+                                                </h3>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="table-responsive">
+                                        <table class="table card-table table-vcenter text-nowrap datatable">
+                                            <thead>
+                                                <tr>
+                                                    <th class="">N° de suivi</th>
+                                                    <th>Type de produits</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <?php
+                                                if (isset($packages_ingrouplistings) && !empty($packages_ingrouplistings)) {
+
+                                                    foreach ($packages_ingrouplistings as $key => $packages_ingroup) {
+                                                ?>
+                                                        <tr>
+                                                            <td>
+                                                                <?= $packages_ingrouplistings[$key]["tracking_number"] ?>
+                                                            </td>
+                                                            <td class="">
+                                                                <span></span>
+                                                                <?= !empty($packages_ingrouplistings[$key]["product_type"]) ? $packages_ingrouplistings[$key]["product_type"] : '-' ?>
+                                                            </td>
+                                                            <!--
+                                                            <td class="text-end">
+                                                                <span class="">
+                                                                    <a class="btn-link" href="" data-bs-toggle="modal" data-bs-dismiss="false" data-bs-target="<?= "#modal-packages-ingroup-detail" . $key ?>">
+                                                                        Détails
+                                                                    </a>
+                                                                </span>
+                                                            </td>
+                                                            -->
+                                                        </tr>
+                                                <?php
+
+                                                    }
+                                                }
+                                                ?>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+<?php
+
+    }
+}
+?>
+
+<?php include 'app/common/customer/2ndpart.php';
 
 if (isset($_SESSION['next_page']) && $_SESSION['next_page'] == $_SESSION['page']) {
     unset($_SESSION['next_page']);
@@ -442,8 +531,4 @@ if (isset($_SESSION['next_page']) && $_SESSION['next_page'] == $_SESSION['page']
 
 unset($_SESSION['research']);
 
-/*if (!isset($_SESSION['research']) || !isset($_SESSION['selected_status'])) {
-    unset($_SESSION['research'], $_SESSION['selected_status']);
-}*/
-//unset($_SESSION['selected_status'], $_SESSION['select_packages_nb_per_page'], $_SESSION['next_page'], $_SESSION['previous_page'], $_SESSION['research']);
 ?>

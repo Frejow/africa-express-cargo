@@ -1,11 +1,8 @@
 <?php
-    //use Dotenv\Dotenv;
 
     require_once __DIR__ . '/vendor/autoload.php';
     $dotenv = Dotenv\Dotenv::createImmutable(__DIR__);
     $dotenv -> load();
-
-    //die(var_dump($_ENV));
     
     define( 'ROOTPATH', getcwd() );
     define( 'PROJECT', $_ENV['PROJECT'] );

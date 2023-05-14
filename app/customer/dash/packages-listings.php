@@ -72,7 +72,7 @@ $packages_listings = listings($table, $_SESSION['page'], $_SESSION['packages_nb_
  * Affectation du retour de la fonction count_rows_in_table avec pour paramètre la table concernée par le listings à la 
  * variable $rows. Cette fonction retourne le nombre de lignes dans la table avec le champs is_deleted = 0
  */
-$rows = count_rows_in_table($table);
+$rows = count_rows_in_table($table, $data[0]['id']);
 
 ?>
 
@@ -627,6 +627,104 @@ $rows = count_rows_in_table($table);
         </div>
     </div>
 </form>
+
+<!--
+    Modal d'affichage des détails d'un colis
+-->
+
+<?php
+if (isset($packages_listings) && !empty($packages_listings)) {
+
+    foreach ($packages_listings as $key => $package) {
+
+?>
+        <div class="modal modal-blur fade" id="<?= 'modal-packages-detail' . $key ?>" tabindex="-1" data-bs-backdrop='static' role="dialog" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered modal-lg modal-dialog-scrollable" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h3 class="modal-title">Détails Colis</h3>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="datagrid">
+                            <div class="datagrid-item">
+                                <div class="datagrid-title">Description</div>
+                                <div class="datagrid-content">
+                                    <?= $packages_listings[$key]["description"] ?>
+                                </div>
+                            </div>
+                            <div class="datagrid-item">
+                                <div class="datagrid-title">Type d'Envoi</div>
+                                <div class="datagrid-content">
+                                    <?= !empty($packages_listings[$key]["shipping_type"]) ? $packages_listings[$key]["shipping_type"] : '-' ?>
+                                </div>
+                            </div>
+                            <div class="datagrid-item">
+                                <div class="datagrid-title">Poids Net (KG)</div>
+                                <div class="datagrid-content">
+                                    <?= !empty($packages_listings[$key]["net_weight"]) ? $packages_listings[$key]["net_weight"] : '-' ?>
+                                </div>
+                            </div>
+                            <div class="datagrid-item">
+                                <div class="datagrid-title">Poids Volumétrique (CBM)</div>
+                                <div class="datagrid-content">
+                                    <?= !empty($packages_listings[$key]["metric_weight"]) ? $packages_listings[$key]["metric_weight"] : '-' ?>
+                                </div>
+                            </div>
+                            <div class="datagrid-item">
+                                <div class="datagrid-title">Valeur (FCFA)</div>
+                                <div class="datagrid-content">
+                                    <?= !empty($packages_listings[$key]["worth"]) ? $packages_listings[$key]["worth"] : '-' ?>
+                                </div>
+                            </div>
+                            <div class="datagrid-item">
+                                <div class="datagrid-title">Nombre</div>
+                                <div class="datagrid-content">
+                                    <?= !empty($packages_listings[$key]["package_units_number"]) ? $packages_listings[$key]["package_units_number"] : '-' ?>
+                                </div>
+                            </div>
+                            <div class="datagrid-item">
+                                <div class="datagrid-title">Coût Unitaire D'Expédition (CUE)</div>
+                                <div class="datagrid-content">
+                                    <?= !empty($packages_listings[$key]["shipping_unit_cost"]) ? $packages_listings[$key]["shipping_unit_cost"] . ' / pcs' : '-' ?>
+                                </div>
+                            </div>
+                            <div class="datagrid-item">
+                                <div class="datagrid-title">Coût Expédition (CUE*Nombre)</div>
+                                <div class="datagrid-content">
+                                    <?= !empty($packages_listings[$key]["shipping_cost"]) ? $packages_listings[$key]["shipping_cost"] : '-' ?>
+                                </div>
+                            </div>
+                        </div><br>
+                        <div class="row row-cols g-3">
+                            <?php
+                            if (check_package_id_in_packages_images_tab($packages_listings[$key]["id"])) {
+                                $select_images = select_package_images($packages_listings[$key]["id"]);
+                                if (!empty($select_images)) {
+                                    foreach ($select_images as $_key => $value) {
+                            ?>
+                                        <div class="col">
+                                            <a data-fslightbox="gallery" href='<?= $select_images[$_key]['images'] ?>'>
+                                                <!-- Photo -->
+                                                <div class="img-responsive img-responsive-1x1 rounded border" style="background-image: url(<?= $select_images[$_key]['images'] ?>)"></div>
+                                            </a>
+                                        </div>
+                            <?php
+                                    }
+                                }
+                            }
+                            ?>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+<?php
+
+    }
+}
+?>
 
 <?php include 'app/common/customer/2ndpart.php';
 

@@ -749,6 +749,38 @@ function check_tracking_number(string $trackN): bool
     return $trackN_found;
 }
 
+//Fonction de suppression de dossier d'images
+function delete_dir($dir) {
+
+    if (!is_dir($dir)) {
+
+        return;
+
+    }
+
+    $contain = scandir($dir);
+
+    foreach ($contain as $key => $value) {
+
+        if ($contain[$key] != '.' && $contain[$key] != '..') {
+
+            $path = $dir . '/' . $contain[$key];
+
+            if (is_dir($path)) {
+
+                delete_dir($path);
+
+            } else {
+
+                unlink($path);
+
+            }
+        }
+    }
+
+    rmdir($dir);
+}
+
 //Fonction d'ajout de colis dans la table package
 function add_package(
     string $tracking_number,
@@ -991,20 +1023,21 @@ function listings($table, $page, $packages_nb_per_page, $status, $search, $user_
 }
 
 //Fonction de récupération du nombre de lignes d'une table
-function count_rows_in_table($table)
+function count_rows_in_table($table, $user_id)
 {
 
     $rows = [];
 
     $database = _database_login();
 
-    $request = "SELECT COUNT(*) FROM " . $table . " WHERE is_deleted = :is_deleted";
+    $request = "SELECT COUNT(*) FROM " . $table . " WHERE is_deleted = :is_deleted and user_id = :user_id";
 
     $request_prepare = $database->prepare($request);
 
     $request_execution = $request_prepare->execute(
         [
             "is_deleted" => 0,
+            "user_id" => $user_id
         ]
     );
 

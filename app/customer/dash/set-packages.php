@@ -140,6 +140,9 @@ if (isset($_SESSION["data"]) && !empty($_SESSION["data"])) {
                             <div class="row">
                                 <div class="card-body text-center">
                                     <h3 class="card-title"></h3>
+
+                                    <p class="text-muted"> Poids Maximum : 2Mo / Fichier. Extensions autorisées [ PNG/JPG/JPEG/GIF ]</p>
+
                                     <label for="importButton">
                                         <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
                                             <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
@@ -149,10 +152,23 @@ if (isset($_SESSION["data"]) && !empty($_SESSION["data"])) {
                                         </svg>
                                     </label>
                                     <input type="file" name="filesToUpload[]" id="filesToUpload" style="display:none" multiple onchange="updatebuttonLabel()">
-                                    <input type="button" class="mb-2 btn <?= isset($updata["images"]) ? 'btn-danger' : 'link-warning' ?>" value="<?php echo (isset($updata["images"]) && !empty($updata["images"])) ? $updata["images"] : "AJOUTER DES IMAGES [ MAXIMUM 04 ]" ?>" id="importButton" onclick="document.getElementById('filesToUpload').click();" />
+                                    <input type="button" class="mb-2 btn <?= isset($updata["images"]) ? 'btn-danger' : 'link-warning' ?>" 
+                                    value="<?php 
+                                    if (isset($updata["images"]) && !empty($updata["images"])) {
+                                        foreach ($updata["images"] as $key => $value) {
+                                            echo $updata["images"][$key].' ';
+                                        }
+                                    } else {
+                                        echo  "AJOUTER DES IMAGES [ MAXIMUM 03 ]";
+                                    } 
+                                    ?>" id="importButton" onclick="document.getElementById('filesToUpload').click();" />
+
                                     <?php
                                     if (isset($error["images"]) && !empty($error["images"])) {
-                                        echo "<p style = 'color:red; font-size:13px;'>" . $error["images"][0] . "</p>";
+                                        //die(var_dump($error["images"]));
+                                        foreach ($error["images"] as $key => $value) {
+                                            echo "<p style = 'color:red; font-size:13px;'>" . $error["images"][$key] . "</p>";
+                                        }
                                     }
                                     ?>
                                     <div style="display: flex;" id="preview"></div>

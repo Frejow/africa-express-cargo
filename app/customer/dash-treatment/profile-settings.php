@@ -28,7 +28,7 @@ if (isset($_POST['pass_w']) && !empty($_POST['pass_w']) && check_password($data[
 
     if (isset($_FILES["fileToUpload"]) && $_FILES["fileToUpload"]["error"] == 0) {
 
-        if ($_FILES["fileToUpload"]["size"] <= 3000000) {
+        if ($_FILES["fileToUpload"]["size"] <= 2000000) {
 
             $file_name = $_FILES["fileToUpload"]["name"];
 
@@ -38,7 +38,7 @@ if (isset($_POST['pass_w']) && !empty($_POST['pass_w']) && check_password($data[
 
             $allowed_ext = ["png", "jpg", "jpeg", "gif"];
 
-            if (in_array($file_ext, $allowed_ext)) {
+            if (in_array(strtolower($file_ext), $allowed_ext)) {
 
                 $rootpath = $_SERVER["DOCUMENT_ROOT"] . PROJECT . 'public/images/uploads';
 
@@ -52,27 +52,34 @@ if (isset($_POST['pass_w']) && !empty($_POST['pass_w']) && check_password($data[
                 $move_uploaded_file = move_uploaded_file($_FILES['fileToUpload']['tmp_name'], $newfolder . '/' . basename($_FILES['fileToUpload']['name']));
 
                 if ($move_uploaded_file) {
+
                     $newdata["avatar"] = PROJECT . 'public/images/uploads/' . $data[0]['id'] . '/profile/' . basename($_FILES['fileToUpload']['name']);
+
                 }
+
             } else {
 
                 $error["avatar"] = "L'extension de votre fichier n'est pas pris en compte. <br> Extensions autorisées [ PNG/JPG/JPEG/GIF ]";
 
                 $updata['avatar'] = $file_name;
+
             }
+
         } else {
 
             $file_name = $_FILES["fileToUpload"]["name"];
 
-            $error["avatar"] = "Fichier trop lourd. Poids maximum autorisé : 3mo";
+            $error["avatar"] = "Fichier trop lourd. Poids maximum autorisé : 2mo";
 
             $updata['avatar'] = $file_name;
         }
+        
     } else {
 
         $newdata["avatar"] = $data[0]["avatar"];
 
         $error["avatar"] = "Veuillez importer une image.";
+
     }
 
     if (isset($newdata["avatar"])) {
@@ -84,8 +91,11 @@ if (isset($_POST['pass_w']) && !empty($_POST['pass_w']) && check_password($data[
                 header("location:". redirect($_SESSION['theme'], PROJECT.'customer/dash/profile-settings'));
 
             }
+
         }
+
     }
+
 } elseif (isset($_POST['pass_w']) && !empty($_POST['pass_w']) && !check_password($data[0]['id'], $_POST['pass_w'])) {
 
     $error["pass_w"] = 'La tentative de mise à jour de l\'avatar a échoué. Mot de passe erroné. Réessayer !';

@@ -95,106 +95,230 @@ if (isset($_POST['pack_metricW']) && !empty($_POST['pack_metricW'])) {
 
 }
 
-if (isset($_FILES["filesToUpload"])) {
+if (isset($_FILES["filesToUpload"]) && !empty($_FILES["filesToUpload"])) { 
 
     $newdata['images'] = []; 
 
-    foreach ($_FILES["filesToUpload"]['error'] as $key => $value) {
+    if (sizeof($_FILES["filesToUpload"]['error']) <= 3) {
 
-        if ($_FILES["filesToUpload"]['error'][$key] == 0) {
+        foreach ($_FILES["filesToUpload"]['error'] as $key => $value) {
 
-            if ($_FILES["filesToUpload"]["size"][$key] <= 3000000) {
+            if ($_FILES["filesToUpload"]['error'][$key] == 0) {
+    
+                if ($_FILES["filesToUpload"]["size"][$key] <= 2000000) { 
+    
+                    $file_name = $_FILES["filesToUpload"]["name"][$key];
+    
+                    $file_info = pathinfo($file_name);
+    
+                    $file_ext = $file_info["extension"];
+    
+                    $allowed_ext = ["png", "jpg", "jpeg", "gif"];
+    
+                    if (in_array(strtolower($file_ext), $allowed_ext)) {
+    
+                        $rootpath = $_SERVER['DOCUMENT_ROOT'] . '/africa-express-cargo/public/images/uploads';
+    
+                        $newfolder = $rootpath . '/' . $data[0]['id'] . '/packages/' . $newdata['pack_trackN'] ;
+    
+                        if (!file_exists($newfolder)) {
+    
+                            mkdir($newfolder, 0700, true);
+                        }
+    
+                        move_uploaded_file($_FILES['filesToUpload']['tmp_name'][$key], $newfolder . '/' . basename($_FILES['filesToUpload']['name'][$key]));
+    
+                        $newdata["images"][$key] = PROJECT . 'public/images/uploads/' . $data[0]['id'] . '/packages/' . $newdata['pack_trackN'] . '/' . basename($_FILES['filesToUpload']['name'][$key]);
+                    
+                    } else {
 
-                $file_name = $_FILES["filesToUpload"]["name"][$key];
+                        $rootpath = $_SERVER['DOCUMENT_ROOT'] . '/africa-express-cargo/public/images/uploads';
+    
+                        $newfolder = $rootpath . '/' . $data[0]['id'] . '/packages/' . $newdata['pack_trackN'] ;
+                        
+                        if (is_dir($newfolder)) { 
 
-                $file_info = pathinfo($file_name);
+                            delete_dir($newfolder);
 
-                $file_ext = $file_info["extension"];
+                            $error["images"][$key] = "L'extension du fichier ".$file_name." n'est pas pris en compte. <br> Extensions autorisées [ PNG/JPG/JPEG/GIF ]";
+    
+                            $updata['images'][$key] = $file_name;
 
-                $allowed_ext = ["png", "jpg", "jpeg", "gif"];
+                            $_SESSION['set_pack_errors'] = $error;
 
-                if (in_array($file_ext, $allowed_ext)) {
+                            $_SESSION['data'] = json_encode($updata);
+
+                            $_SESSION['error_msg'] = 'Erreur niveau extension de fichier(s). Extensions autorisées [ PNG/JPG/JPEG/GIF ]';
+
+                            header("location:". redirect($_SESSION['theme'], PROJECT.'customer/dash/set-packages'));
+
+                            exit;
+
+                        } else {
+
+                            $error["images"][$key] = "L'extension du fichier ".$file_name." n'est pas pris en compte. <br> Extensions autorisées [ PNG/JPG/JPEG/GIF ]";
+    
+                            $updata['images'][$key] = $file_name;
+
+                            $_SESSION['set_pack_errors'] = $error;
+
+                            $_SESSION['data'] = json_encode($updata);
+
+                            $_SESSION['error_msg'] = 'Erreur niveau extension de fichier(s). Extensions autorisées [ PNG/JPG/JPEG/GIF ]';
+
+                            header("location:". redirect($_SESSION['theme'], PROJECT.'customer/dash/set-packages'));
+
+                            exit;
+
+                        }
+    
+                    }
+                    
+                } else {  
+
+                    $file_name = $_FILES["filesToUpload"]["name"][$key]; 
 
                     $rootpath = $_SERVER['DOCUMENT_ROOT'] . '/africa-express-cargo/public/images/uploads';
-
+    
                     $newfolder = $rootpath . '/' . $data[0]['id'] . '/packages/' . $newdata['pack_trackN'] ;
 
-                    if (!file_exists($newfolder)) {
+                    if (is_dir($newfolder)) { 
 
-                        mkdir($newfolder, 0700, true);
+                        delete_dir($newfolder);
+
+                        $error["images"][$key] = "Le fichier ".$file_name." est trop lourd. Poids maximum autorisé : 2mo";
+    
+                        $updata['images'][$key] = $file_name;
+
+                        $_SESSION['set_pack_errors'] = $error;
+
+                        $_SESSION['data'] = json_encode($updata);
+
+                        $_SESSION['error_msg'] = 'Erreur niveau poids de fichier(s). Poids maximum autorisé : 2mo';
+
+                        header("location:". redirect($_SESSION['theme'], PROJECT.'customer/dash/set-packages'));
+
+                        exit;
+
+                    } else {
+
+                        $error["images"][$key] = "Le fichier ".$file_name." est trop lourd. Poids maximum autorisé : 2mo";
+    
+                        $updata['images'][$key] = $file_name;
+
+                        $_SESSION['set_pack_errors'] = $error;
+
+                        $_SESSION['data'] = json_encode($updata);
+
+                        $_SESSION['error_msg'] = 'Erreur niveau poids de fichier(s). Poids maximum autorisé : 2mo';
+
+                        header("location:". redirect($_SESSION['theme'], PROJECT.'customer/dash/set-packages'));
+
+                        exit;
+
                     }
-
-                    move_uploaded_file($_FILES['filesToUpload']['tmp_name'][$key], $newfolder . '/' . basename($_FILES['filesToUpload']['name'][$key]));
-
-                    $newdata["images"][$key] = PROJECT . 'public/images/uploads/' . $data[0]['id'] . '/packages/' . $newdata['pack_trackN'] . '/' . basename($_FILES['filesToUpload']['name'][$key]);
-
-
-                
-                } else {
-
-                    $error["images"][$key] = "L'extension du fichier ".$file_name." n'est pas pris en compte. <br> Extensions autorisées [ PNG/JPG/JPEG/GIF ]";
-
-                    $updata['images'] = $file_name;
-
+    
                 }
-            } else {
-
-                $file_name = $_FILES["filesToUpload"]["name"][$key]; 
-
-                $error["images"][$key] = "Le fichier ".$file_name." est trop lourd. Poids maximum autorisé : 3mo";
-
-                $updata['images'] = $file_name;
-
             }
-        }
-    } //die (var_dump($_FILES["filesToUpload"]["name"]));
+        } 
+
+    } else {
+
+        $updata['images'][0] = 'AJOUTER DES IMAGES [ TROIS (03) MAXIMUM ]';
+
+        $_SESSION['data'] = json_encode($updata);
+
+        $_SESSION['error_msg'] = 'Vous essayez une importation de plus de 03 fichiers.';
+
+        header("location:". redirect($_SESSION['theme'], PROJECT.'customer/dash/set-packages'));
+
+        exit;
+
+    }
+    
 } else {
+
     $newdata['images'] = [];
+
 }
 
 
 if (empty($error)) {
 
-    if (add_package($newdata['pack_trackN'], $newdata['pack_count'], $newdata['pack_cost'], $newdata['pack_descp'], 
-    $newdata['pack_netW'], $newdata['pack_metricW'], $newdata['pack_type'], $data[0]['id'])) {
+    if (isset($_POST) && !empty($_POST)) {
+    
+        if (add_package($newdata['pack_trackN'], $newdata['pack_count'], $newdata['pack_cost'], $newdata['pack_descp'], 
+        $newdata['pack_netW'], $newdata['pack_metricW'], $newdata['pack_type'], $data[0]['id'])) {
 
-        if (!empty($newdata['images'])) {
+            if (!empty($newdata['images'])) {
 
-            for ($i = 0; $i < sizeof($newdata['images']); $i++) {
+                for ($i = 0; $i < sizeof($newdata['images']); $i++) {
 
-                if (!add_images_for_package(select_package_id($newdata['pack_trackN'])[0]['id'], $newdata['images'][$i], $data[0]['id'])) {
+                    if (!add_images_for_package(select_package_id($newdata['pack_trackN'])[0]['id'], $newdata['images'][$i], $data[0]['id'])) {
+
+                        $_SESSION['error_msg'] = 'Une erreur est survenue. Réessayer. Si cela persiste, contactez-nous.';
+
+                        $_SESSION['data'] = json_encode($updata);
+
+                        header("location:". redirect($_SESSION['theme'], PROJECT.'customer/dash/set-packages'));
+
+                        exit;
+
+                    } else {
+
+                        $_SESSION['imgs_insertion'] = 'Done';
+
+                    }
+                }
+
+                if (isset($_SESSION['imgs_insertion'])) {
+
+                    $_SESSION['success_msg'] = 'Votre colis a été ajouté avec succès';
+
+                    header("location:". redirect($_SESSION['theme'], PROJECT.'customer/dash/packages-listings'));
+
+                } else {
+
                     $_SESSION['error_msg'] = 'Une erreur est survenue. Réessayer. Si cela persiste, contactez-nous.';
 
                     $_SESSION['data'] = json_encode($updata);
 
                     header("location:". redirect($_SESSION['theme'], PROJECT.'customer/dash/set-packages'));
 
-                } else {
-
-                    $_SESSION['imgs_insertion'] = 'Done';
+                    exit;
 
                 }
-            }
 
-            if (isset($_SESSION['imgs_insertion'])) {
+            } else {
 
                 $_SESSION['success_msg'] = 'Votre colis a été ajouté avec succès';
 
                 header("location:". redirect($_SESSION['theme'], PROJECT.'customer/dash/packages-listings'));
 
             }
-        } else {
-            $_SESSION['success_msg'] = 'Votre colis a été ajouté avec succès';
 
-            header("location:". redirect($_SESSION['theme'], PROJECT.'customer/dash/packages-listings'));
+        } else {
+
+            $_SESSION['error_msg'] = 'Une erreur est survenue. Réessayer. Si cela persiste, contactez-nous.';
+
+            $_SESSION['data'] = json_encode($updata);
+
+            header("location:". redirect($_SESSION['theme'], PROJECT.'customer/dash/set-packages'));
+
+            exit;
 
         }
 
+    } else {
+
+        $_SESSION['error_msg'] = 'Une erreur est survenue. Cause probable : Importation de fichier(s) lourds et dépassant la limite autorisée (Poids Max/Fichier : 2Mo). Réessayer en respectant la limite autorisée. Contactez nous si cela persiste.';
+
+        header("location:". redirect($_SESSION['theme'], PROJECT.'customer/dash/set-packages'));
+
+        exit;
     }
     
 } elseif (!empty($error)) {
-
-    //die ('erreur');
 
     $_SESSION['data'] = json_encode($updata);
 
