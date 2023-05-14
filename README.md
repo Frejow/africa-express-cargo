@@ -13,12 +13,13 @@ Pré-requis :
 
 - Importer le fichier de la base de données situé dans le dossier : database/africa-express-cargo.sql.
 
-- Configurer la constante PROJECT dans le fichier index.php à la racine du projet en spécifiant le path de votre projet à partir du répertoire web. 
+- Configurer la variable d'environnement PROJECT dans un fichier .env créé à la racine du projet et structuré comme dans l'exemple (voir fichier .env.example) en spécifiant le path de votre projet à partir du répertoire web. 
+
 Exemple : C:\wamp64\www\africa-express-cargo. Ma constante PROJECT aura comme valeur : /africa-express-cargo/
 
-- Configurer les constantes DATABASE_NAME, DATABASE_USERNAME, DATABASE_PASSWORD dans un fichier .env structuré comme dans l'exemple (voir fichier .env.example) à la racine du projet en spécifiant les informations de la base de données.
+- Configurer les variables d'environnements DATABASE_NAME, DATABASE_USERNAME, DATABASE_PASSWORD dans le fichier .env à la racine du projet en spécifiant les informations de la base de données.
 
-- Configurer les constantes MAIL_ADDRESS, MAIL_PASSWORD dans le fichier .env à la racine du projet en spécifiant les informations de l'émetteur des mails dans l'application.
+- Configurer les variables d'environnements MAIL_ADDRESS, MAIL_PASSWORD dans le fichier .env à la racine du projet en spécifiant les informations de l'émetteur des mails dans l'application.
 
 - Lancer le projet avec la commande : php -S localhost:8081
 
