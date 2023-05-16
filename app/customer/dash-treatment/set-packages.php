@@ -25,7 +25,7 @@ if (isset($_POST['pack_trackN']) && !empty($_POST['pack_trackN'])) {
 
     $error['pack_trackN'] = 'Ce champs est requis.';
 
-    $_SESSION['error_msg'] = 'Erreur. Champs requis a été soumis vide. Causes probables : Soit vous tentez effectivement de soumettre le formulaire avec un champs requis vide soit vous tentez une importation de fichier(s) lourds et dépassant la limite autorisée (Poids Max/Fichier : 2Mo).';
+    $_SESSION['error_msg'] = 'Erreur. Champs requis soumis vide. Causes probables : Soit vous tentez effectivement de soumettre le formulaire avec un champs requis vide soit vous tentez une importation de fichier(s) lourds et dépassant la limite autorisée (Poids Max/Fichier : 2Mo).';
 
 }
 
@@ -60,7 +60,7 @@ if (isset($_POST['pack_descp']) && !empty($_POST['pack_descp'])) {
 
     $error['pack_descp'] = 'Ce chamsp est requis.';
 
-    $_SESSION['error_msg'] = 'Erreur. Champs requis a été soumis vide. Causes probables : Soit vous tentez effectivement de soumettre le formulaire avec un champs requis vide soit vous tentez une importation de fichier(s) lourds et dépassant la limite autorisée (Poids Max/Fichier : 2Mo).';
+    $_SESSION['error_msg'] = 'Erreur. Champs requis soumis vide. Causes probables : Soit vous tentez effectivement de soumettre le formulaire avec un champs requis vide soit vous tentez une importation de fichier(s) lourds et dépassant la limite autorisée (Poids Max/Fichier : 2Mo).';
 
 }
 

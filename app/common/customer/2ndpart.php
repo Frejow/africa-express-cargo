@@ -140,7 +140,7 @@ if (isset($packages_ingrouplistings) && !empty($packages_ingrouplistings)) {
         var Toast = Swal.mixin({
             toast: true,
             position: 'top',
-            showConfirmButton: false,
+            showConfirmButton: true,
             timer: 20000
         });
 

@@ -274,12 +274,13 @@ function select_user_id(string $mail)
 
     $database = _database_login();
 
-    $request = "SELECT id FROM user WHERE mail=:mail";
+    $request = "SELECT id FROM user WHERE mail=:mail and is_deleted = :is_deleted";
 
     $request_prepare = $database->prepare($request);
 
     $request_execution = $request_prepare->execute([
-        'mail' => $mail
+        'mail' => $mail,
+        'is_deleted' => 0
     ]);
 
     if ($request_execution) {
