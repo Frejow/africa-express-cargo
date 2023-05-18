@@ -104,6 +104,14 @@ if (empty($errors)) {
 
     if (registered($data["nom"], $data["prenom"], $data["tel"], $data["pseudo"], $data["mail"], $data["country"], $_POST["pass"], $data["profile"])) {
 
+        $mail_assoc_to_deleted_account = check_mail_assoc_to_deleted_account($data["mail"]);
+
+        if (isset($mail_assoc_to_deleted_account) && !empty($mail_assoc_to_deleted_account)) {
+            foreach ($mail_assoc_to_deleted_account as $key => $value) {
+                back_deleted_account($mail_assoc_to_deleted_account[$key]['id']);
+            }
+        }
+
         setcookie('user_register_data', '', time() - 3600, '/');
 
         $user_id = select_user_id($data["mail"])[0]["id"];

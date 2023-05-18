@@ -44,7 +44,7 @@ $_SESSION['current_url'] = "http://{$_SERVER['HTTP_HOST']}{$_SERVER['REQUEST_URI
                 <path d="M5 19h14a2 2 0 0 0 1.84 -2.75l-7.1 -12.25a2 2 0 0 0 -3.5 0l-7.1 12.25a2 2 0 0 0 1.75 2.75" />
             </svg>
             <h3>Echec de la vérification.</h3>
-            <div class="text-muted">Ce lien a déjà été utilisé. Il est expiré. <a href="<?= PROJECT ?>customer/login" style="color: #FFA73B;">Retour</a> </div>
+            <div class="text-muted">Ce lien a déjà été utilisé. <a href="<?= PROJECT ?>customer/login" style="color: #FFA73B;">Retour</a> </div>
             <div class="text-muted"><a href="mailto:contact.support@africa-express-cargo.com" target="_blank" style="color: #FFA73B;">Besoin d'aide ? Contactez-nous ici</a></div>
         </div>
     </div>

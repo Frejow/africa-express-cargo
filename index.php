@@ -8,7 +8,7 @@
     define( 'PROJECT', $_ENV['PROJECT'] );
     define( 'DATABASE_HOST', $_ENV['DATABASE_HOST'] );
     define( 'DATABASE_NAME', $_ENV['DATABASE_NAME'] );
-    define( 'DATABASE_USERNAME', $_ENV['DATABASE_USERNAME']);
+    define( 'DATABASE_USERNAME', $_ENV['DATABASE_USERNAME'] );
     define( 'DATABASE_PASSWORD', $_ENV['DATABASE_PASSWORD'] );
     define( 'MAIL_ADDRESS', $_ENV['MAIL_ADDRESS'] );
     define( 'MAIL_PASSWORD', $_ENV['MAIL_PASSWORD'] );

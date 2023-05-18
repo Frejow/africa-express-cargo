@@ -483,8 +483,8 @@ $countries = [
             var Toast = Swal.mixin({
                 toast: true,
                 position: 'top-end',
-                showConfirmButton: false,
-                timer: 10000
+                showConfirmButton: true,
+                timer: 20000
             });
 
             if($('.swalDefaultSuccess').length) {

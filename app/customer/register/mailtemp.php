@@ -1,13 +1,10 @@
 <?php
 
-//die (var_dump($user_id));
-
 if (isset($_SESSION['account_validation']) && !empty($_SESSION['account_validation'])){
     $user_id = $_SESSION['account_validation']['user_id'];
     $token = $_SESSION['account_validation']['token'];
+    unset($_SESSION['account_validation']);
 }
-
-unset($_SESSION['account_validation']);
 
 $url = 'http://localhost'.PROJECT.'customer/account-validation/index/{user_id}/{token}';
 

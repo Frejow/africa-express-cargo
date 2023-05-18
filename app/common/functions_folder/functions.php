@@ -103,7 +103,7 @@ function back_deleted_account(int $id): bool
 
     $database = _database_login();
 
-    $request = "UPDATE user SET mail = :mail, is_active = :is_active, is_deleted = :is_deleted, updated_on = :updated_on WHERE id = :id";
+    $request = "UPDATE user SET mail = :mail, user_name = :user_name, is_active = :is_active, is_deleted = :is_deleted, updated_on = :updated_on WHERE id = :id";
 
     $request_prepare = $database->prepare($request);
 
@@ -111,6 +111,7 @@ function back_deleted_account(int $id): bool
         [
             'id'  => $id,
             'mail' => 'this_mail_address_was_deleted',
+            'user_name' => 'this_user_name_was_deleted',
             'is_active' => 0,
             'is_deleted' => 1,
             'updated_on' => date('Y-m-d H:i:s')
@@ -123,6 +124,15 @@ function back_deleted_account(int $id): bool
     }
 
     return $back_deleted_account;
+}
+
+//Fonction de conversion de date en nombre
+function date_to_number($date)
+{
+    $date = str_replace("-", '', $date);
+    $date = str_replace(":", '', $date);
+    $date = str_replace(" ", '', $date);
+    return $date;
 }
 
 //Fonction de vérification d'utilisateur connecté
@@ -167,7 +177,7 @@ function _database_login()
 }
 
 //Fonction de vérification de valeurs d'entrée existant dans la base de données
-function check_exist_fieldentry(string $fieldtype, string $fieldentry)
+function check_exist_fieldentry(string $fieldtype, string $fieldentry): bool
 {
 
     $exist_fieldentry = false;
@@ -196,6 +206,37 @@ function check_exist_fieldentry(string $fieldtype, string $fieldentry)
     return $exist_fieldentry;
 }
 
+//Fonction de vérification d'un nouveau mail inscrit autrefois associé à un compte supprimé
+function check_mail_assoc_to_deleted_account(string $mail)
+{
+
+    $mail_assoc_to_deleted_account = [];
+
+    $database = _database_login();
+
+    $request = "SELECT * FROM user WHERE mail = :mail and is_deleted = :is_deleted";
+
+    $request_prepare = $database->prepare($request);
+
+    $request_execution = $request_prepare->execute([
+        'mail' => $mail,
+        'is_deleted' => 1
+    ]);
+
+    if ($request_execution) {
+
+        $data = $request_prepare->fetchAll(PDO::FETCH_ASSOC);
+
+        if (isset($data) && !empty($data) && is_array($data)) {
+
+            $mail_assoc_to_deleted_account = $data;
+
+        }
+    }
+
+    return $mail_assoc_to_deleted_account;
+}
+
 //Fonction de mise à jour du statut de compte (valide et actif)
 function update_account_status(int $user_id)
 {
@@ -205,16 +246,17 @@ function update_account_status(int $user_id)
 
     $database = _database_login();
 
-    $request = "UPDATE user SET is_valid_mail = :valid_mail, is_valid_account = :valid_account, is_active = :active, updated_on = :updated_on WHERE id = :user_id";
+    $request = "UPDATE user SET is_valid_mail = :valid_mail, is_valid_account = :valid_account, is_active = :active, is_deleted = :deleted, updated_on = :updated_on WHERE id = :user_id";
 
     $request_prepare = $database->prepare($request);
 
     $request_execution = $request_prepare->execute(
         [
             'user_id'  => $user_id,
-            'valid_mail' => '1',
-            'valid_account' => '1',
-            'active' => '1',
+            'valid_mail' => 1,
+            'valid_account' => 1,
+            'active' => 1,
+            'deleted' => 0,
             'updated_on' => date('Y-m-d H:i:s')
         ]
     );
@@ -295,6 +337,34 @@ function select_user_id(string $mail)
     return $user_id;
 }
 
+//Fonction de récupération de l'email et du pseudo de utilisateur
+function select_user_mail_pseudo(int $user_id)
+{
+    $mail_pseudo = [];
+
+    $database = _database_login();
+
+    $request = "SELECT mail, user_name FROM user WHERE id=:user_id and is_deleted = :is_deleted";
+
+    $request_prepare = $database->prepare($request);
+
+    $request_execution = $request_prepare->execute([
+        'user_id' => $user_id,
+        'is_deleted' => 1
+    ]);
+
+    if ($request_execution) {
+
+        $data = $request_prepare->fetchAll(PDO::FETCH_ASSOC);
+
+        if (isset($data) && !empty($data) && is_array($data)) {
+
+            $mail_pseudo = $data;
+        }
+    }
+    return $mail_pseudo;
+}
+
 //Fonction de récupération de nom utilisateur 
 function select_username(string $mail)
 {
@@ -302,12 +372,13 @@ function select_username(string $mail)
 
     $database = _database_login();
 
-    $request = "SELECT user_name FROM user WHERE mail=:mail";
+    $request = "SELECT user_name FROM user WHERE mail=:mail and is_deleted = :is_deleted";
 
     $request_prepare = $database->prepare($request);
 
     $request_execution = $request_prepare->execute([
-        'mail' => $mail
+        'mail' => $mail,
+        'is_deleted' => 0
     ]);
 
     if ($request_execution) {
@@ -320,6 +391,34 @@ function select_username(string $mail)
         }
     }
     return $user_id;
+}
+
+//Fonction de récupération des lignes de la table token où le token est non supprimé 
+function select_tokens()
+{
+    $select_tokens = [];
+
+    $database = _database_login();
+
+    $request = "SELECT * FROM token WHERE is_deleted=:is_deleted and updated_on = :updated_on";
+
+    $request_prepare = $database->prepare($request);
+
+    $request_execution = $request_prepare->execute([
+        'is_deleted' => 0,
+        'updated_on' => 'null'
+    ]);
+
+    if ($request_execution) {
+
+        $data = $request_prepare->fetchALL(PDO::FETCH_ASSOC);
+
+        if (isset($data) && !empty($data) && is_array($data)) {
+
+            $select_tokens = $data;
+        }
+    }
+    return $select_tokens;
 }
 
 //Fonction d'insertion de token dans la table token
@@ -385,6 +484,36 @@ function check_user_registered_token_info(int $user_id, string $token, string $t
     return $info_found;
 }
 
+//Fonction de récupération de la date de création et de mise à jour d'un token
+function select_token_date_info(int $user_id, string $token)
+{
+
+    $token_date_info = [];
+
+    $database = _database_login();
+
+    $request = "SELECT created, updated_on FROM token WHERE user_id=:user_id and token=:token";
+
+    $request_prepare = $database->prepare($request);
+
+    $request_execution = $request_prepare->execute([
+        'user_id' => $user_id,
+        'token' => $token,
+    ]);
+
+    if ($request_execution) {
+
+        $data = $request_prepare->fetchAll(PDO::FETCH_ASSOC);
+
+        if (isset($data) && !empty($data) && is_array($data)) {
+
+            $token_date_info = $data;
+        }
+    }
+
+    return $token_date_info;
+}
+
 //Fonction de mise à jour de la table token
 function update_token_table(int $user_id): bool
 {
@@ -394,7 +523,7 @@ function update_token_table(int $user_id): bool
 
     $database = _database_login();
 
-    $request = "UPDATE token SET is_active = :is_active, is_deleted = :is_deleted, updated_on= :updated_on WHERE user_id = :user_id";
+    $request = "UPDATE token SET is_active = :is_active, is_deleted = :is_deleted, updated_on= :updated_on WHERE user_id = :user_id and is_deleted = 0";
 
     $request_prepare = $database->prepare($request);
 

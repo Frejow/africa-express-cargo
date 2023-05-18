@@ -39,7 +39,7 @@
                 <path d="M5 19h14a2 2 0 0 0 1.84 -2.75l-7.1 -12.25a2 2 0 0 0 -3.5 0l-7.1 12.25a2 2 0 0 0 1.75 2.75" />
             </svg>
             <h3>Echec de la vérification. Les causes probables :</h3>
-            <div class="text-muted">1. Il se peut que votre compte soit déjà validé. <a href="<?= PROJECT ?>customer/login" style="color: #FFA73B;">Connectez-vous</a> pour vérifier.</div>
+            <div class="text-muted">1. Il se peut que votre compte soit déjà validé. <a href="<?= PROJECT ?>customer/login" style="color: #FFA73B;" target="_blank">Connectez-vous</a> pour vérifier.</div>
             <div class="text-muted">2. Si ce n'est le cas du point 1, il se peut alors que vous tentez une action non autorisée. <a href="<?= PROJECT ?>" style="color: #FFA73B;">Retourner à l'accueil.</a> </div>
             <div class="text-muted"><a href="mailto:contact.support@africa-express-cargo.com" target="_blank" style="color: #FFA73B;">Besoin d'aide ? Contactez-nous ici</a></div>
         </div>

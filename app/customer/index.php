@@ -6,8 +6,39 @@ session_regenerate_id(true);
 
 include "app/common/functions_folder/functions.php";
 
+//die (var_dump(select_tokens()));
 
-//include 'app/common/customer/1stpart.php';
+//Suppression des tokens après délai d'expiration de 10min
+date_default_timezone_set("Africa/Lagos");
+$current_date_time = date('Y-m-d H:i:s');
+$tokens =  select_tokens(); 
+
+if (isset($tokens) && !empty($tokens)) {
+
+    foreach ($tokens as $key => $value) {
+
+        $timegap = date_to_number($current_date_time) - date_to_number($tokens[$key]['created']); 
+
+        if ($timegap >= 1000) {
+
+            if ($tokens[$key]['type'] == 'ACCOUNT_VALIDATION') { 
+
+                if (update_token_table($tokens[$key]['user_id'])) {
+                    
+                    deleted_account($tokens[$key]['user_id']);
+                } 
+
+            } elseif ($tokens[$key]['type'] == 'RESET_PASSWORD') {
+
+                update_token_table($tokens[$key]['user_id']);
+
+            }
+
+        }
+
+    }
+
+}
 
 //Récupération du thème actif
 if (isset(explode('?', $_SERVER['REQUEST_URI'])[1])) {
@@ -53,10 +84,6 @@ if (isset($_COOKIE['error_msg']) && !empty($_COOKIE['error_msg'])){
     setcookie('error_msg', '', time() - 3600, '/');
 }
 
-//Détruire le cookie de session qui stocke l'url de chaque page lorsque l'utilisateur n'est pas connecté
-//if (!connected()) {
-    //unset($_SESSION['current_url']);
-//}
 
 $data = [];
 
@@ -64,6 +91,9 @@ $data = [];
 if (isset($_SESSION["connected"]) && !empty($_SESSION["connected"])) {
     $data = json_decode($_SESSION["connected"], true);
 } 
+
+//S'assurer de l'existence effective du compte
+
 
     $params = explode('/', $_GET['p']);
     $profile = "customer";
@@ -166,13 +196,9 @@ if (isset($_SESSION["connected"]) && !empty($_SESSION["connected"])) {
             
         }
 
-        //$resource = (isset($params[1]) && !empty($params[1])) ? $params[1] : $default_resource;
-
         $action = (isset($params[2]) && !empty($params[2])) ? $params[2] : $default_action;
 
         $action_folder = "app/" . $profile . "/" . $resource . "/" . $action . ".php";
-
-        //die(var_dump(($action_folder)));
 
         if (file_exists($action_folder)) {
 
@@ -188,5 +214,3 @@ if (isset($_SESSION["connected"]) && !empty($_SESSION["connected"])) {
         
         require_once 'error/404.php';;
     }
-
-//include 'app/common/customer/2ndpart.php';

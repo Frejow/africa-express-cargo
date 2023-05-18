@@ -44,7 +44,7 @@ $_SESSION['current_url'] = "http://{$_SERVER['HTTP_HOST']}{$_SERVER['REQUEST_URI
             <path d="M9 12l2 2l4 -4" />
         </svg>
         <h3>Cette adresse email est bien associé à un compte.</h3>
-        <div class="text-muted">Un email de changement de mot de passe vient d'être envoyé à cette adresse email. Merci de vérifier et suivre les instructions pour réinitialiser votre mot de passe.</div>
+        <div class="text-muted">Un email de changement de mot de passe vient d'être envoyé à cette adresse email. Merci de vérifier votre boite de réception ou vos spams et suivre les instructions pour réinitialiser votre mot de passe. Le lien de réinitialisation expire dans 10min à compter de maintenant.</div>
     </div>
 </div>
 

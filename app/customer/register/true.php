@@ -44,7 +44,7 @@ $_SESSION['current_url'] = "http://{$_SERVER['HTTP_HOST']}{$_SERVER['REQUEST_URI
             <path d="M9 12l2 2l4 -4" />
         </svg>
         <h3>Super !!! Vous êtes inscrit. Prochaine étape, la confirmation de votre compte.</h3>
-        <div class="text-muted">Un email de validation de compte vient d'être envoyé à votre adresse email. Merci de vérifier et valider votre compte pour continuer.</div>
+        <div class="text-muted">Un email de validation de compte vient d'être envoyé à votre adresse email. Merci de vérifier votre boite de réception ou vos spams et valider votre compte pour continuer. Le lien de validation expire dans 10min à compter de maintenant.</div>
     </div>
 </div>
 
