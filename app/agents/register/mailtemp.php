@@ -1,13 +1,3 @@
-<?php
-
-if (isset($_SESSION['agents_new_account']) && !empty($_SESSION['agents_new_account'])){
-    $first_names = $_SESSION['agents_new_account']['prenom'];
-    $name = $_SESSION['agents_new_account']['nom'];
-    unset($_SESSION['agents_new_account']);
-}
-
-?>
-
 <!doctype html>
 <html>
 
@@ -154,7 +144,7 @@ if (isset($_SESSION['agents_new_account']) && !empty($_SESSION['agents_new_accou
                     <tr>
                         <td bgcolor="#ffffff" align="left"
                             style="padding: 20px 30px 40px 30px; color: #666666; font-family: 'Lato', Helvetica, Arial, sans-serif; font-size: 18px; font-weight: 400; line-height: 25px;">
-                            <p style="margin: 0;">Un nouveau compte agent vient d'être créé<?= isset($first_names) ? ' au nom de'.$first_names.' '.$name : '' ?>. Veuillez consulter la liste des agents.</p>
+                            <p style="margin: 0;">Un nouveau compte agent vient d'être créé<?= isset($data["prenom"]) ? ' au nom de'.$data["prenom"].' '.$data["nom"] : '' ?>. Veuillez consulter la liste des agents.</p>
                         </td>
                     </tr>
                     <tr>

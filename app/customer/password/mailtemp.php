@@ -1,12 +1,6 @@
 <?php
 
-if (isset($_SESSION['reset_password']) && !empty($_SESSION['reset_password'])){
-    $user_id = $_SESSION['reset_password']['user_id'];
-    $token = $_SESSION['reset_password']['token'];
-    $username = $_SESSION['reset_password']['user_name'];
-}
-
-$url = 'http://localhost'.PROJECT.'customer/reset-password/index/{user_id}/{token}';
+$url = $_SERVER['REQUEST_SCHEME'].'://'.$_SERVER['HTTP_HOST'].PROJECT.'customer/reset-password/index/{user_id}/{token}';
 
 $url = str_replace("{user_id}", $user_id, $url);
 

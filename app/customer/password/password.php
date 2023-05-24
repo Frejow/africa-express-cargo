@@ -12,21 +12,23 @@ if (isset($_POST['mail']) && !empty($_POST['mail'])){
 
     if (check_exist_fieldentry('mail', $_POST["mail"])) {
 
-        $user_id = select_user_id($_POST["mail"])[0]["id"];
+        $user_id = select_user_id($_POST["mail"])["id"];
 
         $token = uniqid();
 
-        $username = select_username($_POST["mail"])[0]["user_name"];
+        $username = select_username($_POST["mail"])["user_name"];
 
-        if (insert_intoken_table($user_id, 'RESET_PASSWORD', $token)){
-            $_SESSION['reset_password'] = [];
-            $_SESSION['reset_password']['user_id'] = $user_id;
-            $_SESSION['reset_password']['token'] = $token;
-            $_SESSION['reset_password']['user_name'] = $username;
-        }
-        //die;
+        insert_intoken_table($user_id, 'RESET_PASSWORD', $token);
+        
         $subject = 'Réinitialisation de mot de passe';
-        $mailcontent = buffer_html_file('..'.PROJECT.'app/customer/password/mailtemp.php');
+
+        ob_start(); 
+
+        include 'app/customer/password/mailtemp.php'; 
+
+        $mailcontent = ob_get_contents(); 
+
+        ob_end_clean();
 
         if (mailsendin($_POST['mail'], $username, $subject, $mailcontent)){
 

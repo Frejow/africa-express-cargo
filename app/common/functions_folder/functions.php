@@ -1,11 +1,16 @@
 <?php
 
-// Instance d'initialisation des class PHPMailer
+/** Initialization instance of phpmailer classes */
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
 
-// Fonction de redirection basée sur le thème
-function redirect($theme, $link) {
+/** Url redirection based on theme
+ * 
+ * @param string $theme The actual theme running on the site.
+ * @param string $link The link to redirect to.
+ * @return $redirect_url The final url to redirect to, including the theme.
+ */
+function redirect(string $theme, string $link) {
 
     $redirect_url = $link.'?'.$theme;
 
@@ -13,7 +18,11 @@ function redirect($theme, $link) {
 
 }
 
-//Fonction de sécurisation des champs d'entrées de formulaires
+/** Securisation of form fields entry
+ * 
+ * @param $data The data to secure.
+ * @return string $data The final value of $data after passing the process of securisation.
+ */
 function secure($data)
 {
     $data = trim($data);
@@ -22,8 +31,19 @@ function secure($data)
     return $data;
 }
 
-//Fonction d'enregistrement d'utilisateur dans la table 'user' 
-function registered($name, $first_names, $phone_number, $user_name, $mail, $country, $password, $profile): bool
+/** User registration
+ * 
+ * @param $name The user Name.
+ * @param $first_names The user First Names.
+ * @param $phone_number The user Phone Number.
+ * @param $user_name The user Username.
+ * @param $mail The user Mail Address.
+ * @param $country The user Country.
+ * @param $password The user Password.
+ * @param $profile The user type of Profile (CUSTOMER, AGENT or ADMIN)
+ * @return bool The result.
+*/
+function registration($name, $first_names, $phone_number, $user_name, $mail, $country, $password, $profile): bool
 {
 
     $is_registered = false;
@@ -55,7 +75,14 @@ function registered($name, $first_names, $phone_number, $user_name, $mail, $coun
     return $is_registered;
 }
 
-//Fonction d'envoi de mail
+/** Mail sending
+ * 
+ * @param string $destination The destination mail address.
+ * @param string $recipient The username of the user which own the destination mail address.
+ * @param string $subject The subject.
+ * @param string $body The body.
+ * @return bool The result.
+ */
 function mailsendin(string $destination, string $recipient, string $subject, string $body): bool
 {
     // passing true in constructor enables exceptions in PHPMailer
@@ -94,7 +121,12 @@ function mailsendin(string $destination, string $recipient, string $subject, str
     }
 }
 
-//Fonction de suppression de compte à l'inscription en cas d'échec de l'envoi de mail
+/** Account deletion at registration in case of validation mail sending failed
+ * 
+ * @param int $id The user id.
+ * @param string $mail The mail address submitted by user at registration.
+ * @return bool The result.
+*/
 function back_deleted_account(int $id, string $mail): bool
 {
     date_default_timezone_set("Africa/Lagos");
@@ -127,7 +159,11 @@ function back_deleted_account(int $id, string $mail): bool
     return $back_deleted_account;
 }
 
-//Fonction de conversion de date en nombre
+/** Convert a date to number
+ * 
+ * @param $date The date to convert.
+ * @return int $date The result after conversion.
+ */
 function date_to_number($date)
 {
     $date = str_replace("-", '', $date);
@@ -136,7 +172,10 @@ function date_to_number($date)
     return $date;
 }
 
-//Fonction de vérification d'utilisateur connecté
+/** Checking user account connected
+ * 
+ * @return bool The result.
+ */
 function connected(): bool
 {
     $is_connected = false;
@@ -148,7 +187,10 @@ function connected(): bool
     return $is_connected;
 }
 
-//Fonction de déconnexion
+/** Checking user account disconnected
+ * 
+ * @return bool The result.
+ */
 function disconnected(): bool
 {
     $is_disconnected = false;
@@ -162,7 +204,10 @@ function disconnected(): bool
     return $is_disconnected;
 }
 
-//Fonction de connexion à la base de données
+/** Connect to database
+ * 
+ * @return object $database The result.
+ */
 function _database_login()
 {
 
@@ -177,7 +222,12 @@ function _database_login()
     return $database;
 }
 
-//Fonction de vérification de valeurs d'entrée existant dans la base de données
+/** Checking already exist submitted value in database
+ * 
+ * @param string $fieldtype The field type which value was submitted.
+ * @param string $fieldentry The value submitted.
+ * @return bool The result.
+ */
 function check_exist_fieldentry(string $fieldtype, string $fieldentry): bool
 {
 
@@ -207,7 +257,11 @@ function check_exist_fieldentry(string $fieldtype, string $fieldentry): bool
     return $exist_fieldentry;
 }
 
-//Fonction de vérification d'un nouveau mail inscrit autrefois associé à un compte supprimé
+/** Checking new mail address associate to old(s) deleted account(s)
+ * 
+ * @param string $mail The new mail address.
+ * @return array $mail_assoc_to_deleted_account All deleted account(s) with a mail address that match with the new one.
+ */
 function check_mail_assoc_to_deleted_account(string $mail)
 {
 
@@ -238,8 +292,12 @@ function check_mail_assoc_to_deleted_account(string $mail)
     return $mail_assoc_to_deleted_account;
 }
 
-//Fonction de mise à jour du statut de compte (valide et actif)
-function update_account_status(int $user_id)
+/** Update account status
+ * 
+ * @param int $user_id The user id.
+ * @return bool The result.
+ */
+function update_account_status(int $user_id): bool
 {
     date_default_timezone_set("Africa/Lagos");
 
@@ -270,47 +328,11 @@ function update_account_status(int $user_id)
     return $update_account_status;
 }
 
-//Fonction de temporisation de contenu html
-function buffer_html_file(string $filename)
-{
-    ob_start(); // Démarre la temporisation de sortie
-
-    include $filename; // Inclut le fichier HTML dans le tampon
-
-    $html = ob_get_contents(); // Récupère le contenu du tampon
-    ob_end_clean(); // Arrête et vide la temporisation de sortie
-
-    return $html; // Retourne le contenu du fichier HTML
-}
-
-//Fonction de récupération de token à l'inscription
-function select_register_user_token(string $mail)
-{
-    $register_user_token = [];
-
-    $database = _database_login();
-
-    $request = "SELECT token FROM user WHERE mail=:mail";
-
-    $request_prepare = $database->prepare($request);
-
-    $request_execution = $request_prepare->execute([
-        'mail' => $mail
-    ]);
-
-    if ($request_execution) {
-
-        $data = $request_prepare->fetchAll(PDO::FETCH_ASSOC);
-
-        if (isset($data) && !empty($data) && is_array($data)) {
-
-            $register_user_token = $data;
-        }
-    }
-    return $register_user_token;
-}
-
-//Fonction de récupération de l'id utilisateur
+/** Select user id by mail address 
+ * 
+ * @param string $mail The user mail address.
+ * @return array $user_id The user id.
+*/
 function select_user_id(string $mail)
 {
     $user_id = [];
@@ -328,7 +350,7 @@ function select_user_id(string $mail)
 
     if ($request_execution) {
 
-        $data = $request_prepare->fetchAll(PDO::FETCH_ASSOC);
+        $data = $request_prepare->fetch(PDO::FETCH_ASSOC);
 
         if (isset($data) && !empty($data) && is_array($data)) {
 
@@ -338,7 +360,11 @@ function select_user_id(string $mail)
     return $user_id;
 }
 
-//Fonction de récupération de l'email et du pseudo de utilisateur
+/** Select user mail and username by id 
+ * 
+ * @param int $user_id The user id.
+ * @return array $mail_pseudo The mail and the username.
+*/
 function select_user_mail_pseudo(int $user_id)
 {
     $mail_pseudo = [];
@@ -356,7 +382,7 @@ function select_user_mail_pseudo(int $user_id)
 
     if ($request_execution) {
 
-        $data = $request_prepare->fetchAll(PDO::FETCH_ASSOC);
+        $data = $request_prepare->fetch(PDO::FETCH_ASSOC);
 
         if (isset($data) && !empty($data) && is_array($data)) {
 
@@ -366,10 +392,14 @@ function select_user_mail_pseudo(int $user_id)
     return $mail_pseudo;
 }
 
-//Fonction de récupération de nom utilisateur 
+/** Select user username by mail address 
+ * 
+ * @param string $mail The mail address.
+ * @return array $user_name The username.
+*/
 function select_username(string $mail)
 {
-    $user_id = [];
+    $user_name = [];
 
     $database = _database_login();
 
@@ -384,17 +414,20 @@ function select_username(string $mail)
 
     if ($request_execution) {
 
-        $data = $request_prepare->fetchAll(PDO::FETCH_ASSOC);
+        $data = $request_prepare->fetch(PDO::FETCH_ASSOC);
 
         if (isset($data) && !empty($data) && is_array($data)) {
 
-            $user_id = $data;
+            $user_name = $data;
         }
     }
-    return $user_id;
+    return $user_name;
 }
 
-//Fonction de récupération des lignes de la table token où le token est non supprimé 
+/** Select all not deleted rows of tokens table
+ * 
+ * @return array $select_tokens All concerned rows.
+ */
 function select_tokens()
 {
     $select_tokens = [];
@@ -422,7 +455,7 @@ function select_tokens()
     return $select_tokens;
 }
 
-//Fonction d'insertion de token dans la table token
+/** Fonction d'insertion de token dans la table token */
 function insert_intoken_table(int $user_id, string $type, string $token): bool
 {
 
@@ -452,7 +485,7 @@ function insert_intoken_table(int $user_id, string $type, string $token): bool
     return $insertion;
 }
 
-//Fonction de vérification de token à la validation de compte
+/** Fonction de vérification de token à la validation de compte */
 function check_user_registered_token_info(int $user_id, string $token, string $type, int $is_active, int $is_deleted): bool
 {
 
@@ -485,7 +518,7 @@ function check_user_registered_token_info(int $user_id, string $token, string $t
     return $info_found;
 }
 
-//Fonction de récupération de la date de création et de mise à jour d'un token
+/** Fonction de récupération de la date de création et de mise à jour d'un token */
 function select_token_date_info(int $user_id, string $token)
 {
 
@@ -515,7 +548,7 @@ function select_token_date_info(int $user_id, string $token)
     return $token_date_info;
 }
 
-//Fonction de mise à jour de la table token
+/** Fonction de mise à jour de la table token */
 function update_token_table(int $user_id): bool
 {
     date_default_timezone_set("Africa/Lagos");
@@ -545,7 +578,7 @@ function update_token_table(int $user_id): bool
     return $update_token_table;
 }
 
-//Fonction de mise à jour de mot de passe
+/** Fonction de mise à jour de mot de passe */
 function update_password(string $mail, string $password): bool
 {
     date_default_timezone_set("Africa/Lagos");
@@ -575,7 +608,7 @@ function update_password(string $mail, string $password): bool
     return $update_password;
 }
 
-//Fonction de vérification des informations de l'utilisateur (email & password) à la connexion
+/** Fonction de vérification des informations de l'utilisateur (email & password) à la connexion */
 function check_exist_userby_email_and_password(string $mail, string $password, string $profile, int $is_valid_account, int $is_active, int $is_deleted): bool
 {
 
@@ -622,7 +655,7 @@ function check_exist_userby_email_and_password(string $mail, string $password, s
     return $exist_user;
 }
 
-//Fonction de vérification des informations de l'utilisateur (pseudo & password) à la connexion
+/** Fonction de vérification des informations de l'utilisateur (pseudo & password) à la connexion */
 function check_exist_userby_pseudo_and_password(string $pseudo, string $password, string $profile, int $is_valid_account, int $is_active, int $is_deleted): bool
 {
 
@@ -669,7 +702,7 @@ function check_exist_userby_pseudo_and_password(string $pseudo, string $password
     return $exist_user;
 }
 
-//Fonction de mise à jour des informations personnelles de l'utilisateur
+/** Fonction de mise à jour des informations personnelles de l'utilisateur */
 function update_personal_info(int $id, string $name, string $first_names, string $user_name, string $country, string $mail, string $phone_number): bool
 {
     date_default_timezone_set("Africa/Lagos");
@@ -703,7 +736,7 @@ function update_personal_info(int $id, string $name, string $first_names, string
     return $updating;
 }
 
-//Fonction de récupération des informations utilisateurs mises à jour 
+/** Fonction de récupération des informations utilisateurs mises à jour */
 function select_user_updated_info(int $id): bool
 {
 
@@ -734,7 +767,7 @@ function select_user_updated_info(int $id): bool
     return $selected;
 }
 
-//Fonction de vérification de mot de passe
+/** Fonction de vérification de mot de passe */
 function check_password(int $id, string $password): bool
 {
 
@@ -763,7 +796,7 @@ function check_password(int $id, string $password): bool
     return $password_found;
 }
 
-//Fonction de mise à jour d'avatar
+/** Fonction de mise à jour d'avatar */
 function update_avatar(int $id, string $avatar): bool
 {
     date_default_timezone_set("Africa/Lagos");
@@ -792,7 +825,7 @@ function update_avatar(int $id, string $avatar): bool
     return $update_avatar;
 }
 
-//Fonction de désactivation de compte
+/** Fonction de désactivation de compte */
 function deactivated_account(int $id): bool
 {
     date_default_timezone_set("Africa/Lagos");
@@ -821,7 +854,7 @@ function deactivated_account(int $id): bool
     return $update_is_active_field;
 }
 
-//Fonction de suppression de compte
+/** Fonction de suppression de compte */
 function deleted_account(int $id): bool
 {
     date_default_timezone_set("Africa/Lagos");
@@ -851,7 +884,7 @@ function deleted_account(int $id): bool
     return $update_is_deleted_field;
 }
 
-//Fonction de vérification de numéro de suivi
+/** Fonction de vérification de numéro de suivi */
 function check_tracking_number(string $trackN): bool
 {
 
@@ -880,8 +913,9 @@ function check_tracking_number(string $trackN): bool
     return $trackN_found;
 }
 
-//Fonction de suppression de dossier d'images
-function delete_dir($dir) {
+/** Fonction de suppression de dossier d'images */
+function delete_dir($dir) 
+{
 
     if (!is_dir($dir)) {
 
@@ -912,7 +946,7 @@ function delete_dir($dir) {
     rmdir($dir);
 }
 
-//Fonction d'ajout de colis dans la table package
+/** Fonction d'ajout de colis dans la table package */
 function add_package(
     string $tracking_number,
     $package_units_number,
@@ -954,7 +988,7 @@ function add_package(
     return $insertion;
 }
 
-//Fonction d'ajout d'image(s) de colis dans la table images
+/** Fonction d'ajout d'image(s) de colis dans la table images */
 function add_images_for_package(int $package_id, string $image, int $user_id): bool
 {
 
@@ -982,7 +1016,7 @@ function add_images_for_package(int $package_id, string $image, int $user_id): b
     return $insertion;
 }
 
-//Fonction de récupération de l'id d'un colis
+/** Fonction de récupération de l'id d'un colis */
 function select_package_id(string $trackN)
 {
     $package_id = [];
@@ -1009,7 +1043,7 @@ function select_package_id(string $trackN)
     return $package_id;
 }
 
-//Fonction de vérification de l'id d'un colis dans la table images
+/** Fonction de vérification de l'id d'un colis dans la table images */
 function check_package_id_in_packages_images_tab(string $package_id): bool
 {
 
@@ -1037,7 +1071,7 @@ function check_package_id_in_packages_images_tab(string $package_id): bool
     return $package_id_found;
 }
 
-//Fonction de récupération d'image(s) de colis
+/** Fonction de récupération d'image(s) de colis */
 function select_package_images(int $package_id)
 {
     $package_images = [];
@@ -1064,7 +1098,7 @@ function select_package_images(int $package_id)
     return $package_images;
 }
 
-//Fonction de listings des colis
+/** Fonction de listings des colis */
 function listings($table, $page, $packages_nb_per_page, $status, $search, $user_id)
 {
 
@@ -1153,7 +1187,7 @@ function listings($table, $page, $packages_nb_per_page, $status, $search, $user_
     return $packages_list;
 }
 
-//Fonction de récupération du nombre de lignes d'une table
+/** Fonction de récupération du nombre de lignes d'une table */
 function count_rows_in_table($table, $user_id)
 {
 

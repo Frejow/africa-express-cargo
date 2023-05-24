@@ -2,22 +2,24 @@
 
 if (isset($_POST['resend_mail']) && !empty($_POST['resend_mail'])) {
 
-    $user_mail = select_user_mail_pseudo($_POST['resend_mail'])[0]['mail'];
-    $user_pseudo = select_user_mail_pseudo($_POST['resend_mail'])[0]['user_name'];
+    $user_mail = select_user_mail_pseudo($_POST['resend_mail'])['mail'];
+    $username = select_user_mail_pseudo($_POST['resend_mail'])['user_name'];
 
     $token = uniqid();
 
-    if (insert_intoken_table($_POST['resend_mail'], 'RESET_PASSWORD', $token)){
-        $_SESSION['reset_password'] = [];
-        $_SESSION['reset_password']['user_id'] = $_POST['resend_mail'];
-        $_SESSION['reset_password']['token'] = $token;
-        $_SESSION['reset_password']['user_name'] = $user_pseudo;
-    }
-    //die;
+    insert_intoken_table($_POST['resend_mail'], 'RESET_PASSWORD', $token);
+        
     $subject = 'Réinitialisation de mot de passe';
-    $mailcontent = buffer_html_file('..'.PROJECT.'app/customer/password/mailtemp.php');
 
-    if (mailsendin($user_mail, $user_pseudo, $subject, $mailcontent)) {
+    ob_start(); 
+
+    include 'app/customer/password/mailtemp.php'; 
+
+    $mailcontent = ob_get_contents(); 
+
+    ob_end_clean();
+
+    if (mailsendin($user_mail, $username, $subject, $mailcontent)) {
 
         setcookie('success_msg', 'Mail envoyé avec succès. Vérifiez votre boite de réception ou vos spams pour valider votre compte. Ce nouveau lien expire également dans 10min à compter de maintenant.', time() + 365 * 24 * 3600, '/');
 

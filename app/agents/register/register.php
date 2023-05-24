@@ -99,7 +99,7 @@ $data["profile"] = "AGENTS";
 
 if (empty($errors)) {
 
-    if (registered($data["nom"], $data["prenom"], $data["tel"], $data["pseudo"], $data["mail"], $data["country"], $_POST["pass"], $data["profile"])) {
+    if (registration($data["nom"], $data["prenom"], $data["tel"], $data["pseudo"], $data["mail"], $data["country"], $_POST["pass"], $data["profile"])) {
 
         $mail_assoc_to_deleted_account = check_mail_assoc_to_deleted_account($data["mail"]);
 
@@ -111,12 +111,17 @@ if (empty($errors)) {
 
         setcookie('user_register_data', '', time() - 3600, '/');
     
-        $_SESSION['agents_new_account'] = [];
-        $_SESSION['agents_new_account']['prenom'] = $data["prenom"];
-        $_SESSION['agents_new_account']['nom'] = $data["nom"];
-    
         $subject = 'Nouveau compte agent en attente de validation';
-        $mailcontent = buffer_html_file('..' . PROJECT . 'app/agents/register/mailtemp.php');
+
+        $subject = 'Confirmation de compte';
+
+        ob_start(); 
+
+        include 'app/agents/register/mailtemp.php'; 
+
+        $mailcontent = ob_get_contents(); 
+
+        ob_end_clean(); 
 
         if (mailsendin(MAIL_ADDRESS, $data["prenom"].' '.$data["nom"], $subject, $mailcontent)) {
 

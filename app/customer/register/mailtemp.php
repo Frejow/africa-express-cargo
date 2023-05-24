@@ -1,12 +1,6 @@
 <?php
 
-if (isset($_SESSION['account_validation']) && !empty($_SESSION['account_validation'])){
-    $user_id = $_SESSION['account_validation']['user_id'];
-    $token = $_SESSION['account_validation']['token'];
-    unset($_SESSION['account_validation']);
-}
-
-$url = 'http://localhost'.PROJECT.'customer/account-validation/index/{user_id}/{token}';
+$url = $_SERVER['REQUEST_SCHEME'].'://'.$_SERVER['HTTP_HOST'].PROJECT.'customer/account-validation/index/{user_id}/{token}';
 
 $url = str_replace("{user_id}", $user_id, $url);
 
