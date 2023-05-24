@@ -52,9 +52,9 @@ if (isset($_POST['pass_w']) && !empty($_POST['pass_w']) && check_password($data[
     
                 if (in_array(strtolower($file_ext), $allowed_ext)) {
     
-                    $rootpath = $_SERVER["DOCUMENT_ROOT"] . PROJECT . 'public/images/uploads';
+                    $rootpath = $_SERVER["DOCUMENT_ROOT"] . PROJECT . 'public/images';
     
-                    $newfolder = $rootpath . '/' . $data[0]['user_name'] . '/profile/';
+                    $newfolder = $rootpath . '/uploads/' . $data[0]['user_name'] . '/profile/';
     
                     if (!file_exists($newfolder)) {
     

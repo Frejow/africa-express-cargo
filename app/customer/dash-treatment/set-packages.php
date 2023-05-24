@@ -119,9 +119,9 @@ if (isset($_FILES["filesToUpload"]) && !empty($_FILES["filesToUpload"])) {
     
                     if (in_array(strtolower($file_ext), $allowed_ext)) {
     
-                        $rootpath = $_SERVER['DOCUMENT_ROOT'] . '/africa-express-cargo/public/images/uploads';
+                        $rootpath = $_SERVER['DOCUMENT_ROOT'] . '/africa-express-cargo/public/images';
     
-                        $newfolder = $rootpath . '/' . $data[0]['user_name'] . '/packages/' . $newdata['pack_trackN'] ;
+                        $newfolder = $rootpath . '/uploads/' . $data[0]['user_name'] . '/packages/' . $newdata['pack_trackN'] ;
     
                         if (!file_exists($newfolder)) {
     
@@ -134,9 +134,9 @@ if (isset($_FILES["filesToUpload"]) && !empty($_FILES["filesToUpload"])) {
                     
                     } else {
 
-                        $rootpath = $_SERVER['DOCUMENT_ROOT'] . '/africa-express-cargo/public/images/uploads';
+                        $rootpath = $_SERVER['DOCUMENT_ROOT'] . '/africa-express-cargo/public/images';
     
-                        $newfolder = $rootpath . '/' . $data[0]['user_name'] . '/packages/' . $newdata['pack_trackN'] ;
+                        $newfolder = $rootpath . '/uploads/' . $data[0]['user_name'] . '/packages/' . $newdata['pack_trackN'] ;
                         
                         if (is_dir($newfolder)) { 
 
@@ -180,9 +180,9 @@ if (isset($_FILES["filesToUpload"]) && !empty($_FILES["filesToUpload"])) {
 
                     $file_name = $_FILES["filesToUpload"]["name"][$key]; 
 
-                    $rootpath = $_SERVER['DOCUMENT_ROOT'] . '/africa-express-cargo/public/images/uploads';
+                    $rootpath = $_SERVER['DOCUMENT_ROOT'] . '/africa-express-cargo/public/images';
     
-                    $newfolder = $rootpath . '/' . $data[0]['user_name'] . '/packages/' . $newdata['pack_trackN'] ;
+                    $newfolder = $rootpath . '/uploads/' . $data[0]['user_name'] . '/packages/' . $newdata['pack_trackN'] ;
 
                     if (is_dir($newfolder)) { 
 
