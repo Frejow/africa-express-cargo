@@ -1,11 +1,11 @@
 <?php
-session_start();
-//die (var_dump(explode('=', explode('?', $_SERVER['REQUEST_URI'])[1])[1]));
-//die (var_dump(rawurldecode(explode('=', explode('?', $_SERVER['REQUEST_URI'])[1])[1])));
+
+$_SESSION['current_url'] = "http://{$_SERVER['HTTP_HOST']}{$_SERVER['REQUEST_URI']}";
+
 ?>
 
 <!DOCTYPE html>
-<html lang="en">
+<html lang="fr">
 
 <head>
     <title>Africa Express Cargo | Agents</title>
@@ -35,32 +35,7 @@ session_start();
 <body>
 
     <div class="limiter">
-            <?php
-            /*
-            if (isset(explode('?', $_SERVER['REQUEST_URI'])[1]) 
-            && isset(explode('=', explode('?', $_SERVER['REQUEST_URI'])[1])[1]) 
-            && !empty(explode('=', explode('?', $_SERVER['REQUEST_URI'])[1])[1]) 
-            && explode('=', explode('?', $_SERVER['REQUEST_URI'])[1])[0] = 'success') {
-                $msg = rawurldecode(explode('=', explode('?', $_SERVER['REQUEST_URI'])[1])[1]);
-                */
-            if (isset($_SESSION['success']) && !empty($_SESSION['success'])){
-                $msg = $_SESSION['success'];
-            ?>
-                <div class="swalDefaultSuccess" role="alert">
-                </div>
-            <?php
-            }
-            ?>
-
-            <?php
-            if (isset($_GET["error"]) && !empty($_GET["error"])) {
-            ?>
-                <div class="alert alert-danger text-center" role="alert">
-                    <?= $_GET["error"]; ?>
-                </div>
-            <?php
-            }
-            ?>
+           
         <div class="container">
             <div class="wrap-login100 col">
                 <div class="login100-pic js-tilt" data-tilt>
@@ -70,27 +45,64 @@ session_start();
                 <form action="<?= PROJECT ?>agents/login/login" method="post" class="login100-form validate-form">
                     <span class="login100-form-title">
                         <i class="fa fa-sign-in"></i>
-                        Agents
+                        <?php
+                        if (isset($_COOKIE['psp']) && !empty($_COOKIE['psp'])){
+                            echo 'Reconnectez-vous avec votre nouveau mot de passe';
+                            setcookie('psp', '', time() - 3600, '/');
+                        } else {
+                            echo 'Agents';
+                        }
+                        ?>                    
                     </span>
 
-                    <div class="wrap-input100 validate-input" data-validate="">
-                        <input class="input100" type="text" name="email" placeholder="Email">
-                        <span class="focus-input100"></span>
-                        <span class="symbol-input100">
-                            <i class="fa fa-envelope" aria-hidden="true"></i>
-                        </span>
-                    </div>
+                    <?php
 
-                    <div class="wrap-input100 validate-input" data-validate="">
-                        <input class="input100" type="password" name="pass" placeholder="Mot de passe">
+                        $errors = [];
+
+                        if (isset($_SESSION["login_errors"]) && !empty($_SESSION["login_errors"])) {
+                            $errors = $_SESSION["login_errors"];
+                        }
+
+                        $data = [];
+
+                        if (isset($_COOKIE["ud"]) && !empty($_COOKIE["ud"])) {
+                            $data = json_decode($_COOKIE["ud"], true);
+                        }
+
+                        if (isset($_COOKIE["cud"]) && !empty($_COOKIE["cud"])) {
+                            $data = json_decode($_COOKIE["cud"], true);
+                        }
+
+                    ?>
+
+                    <div class="wrap-input100 validate-input" data-validate="Champs requis">
+                        <input class="input100" type="text" id="m_ps" name="m_ps" placeholder="Adresse email" value="<?php echo (isset($data["m_ps"]) && !empty($data["m_ps"])) ? $data["m_ps"] : "" ?>">
                         <span class="focus-input100"></span>
                         <span class="symbol-input100">
-                            <i class="fa fa-lock" aria-hidden="true"></i>
+                        <i class="fa fa-envelope <?= isset($errors["m_ps"])? 'text-danger' : ''?>" aria-hidden="true"></i>
                         </span>
                     </div>
+                    <?php
+                    if (isset($errors["m_ps"]) && !empty($errors["m_ps"])) {
+                        echo "<p style = 'color:red; font-size:12px;' class='float-right mr-3'>" . $errors["m_ps"] . "</p>";
+                    }
+                    ?>
+
+                    <div class="wrap-input100 validate-input" data-validate="Champs requis">
+                        <input class="input100" type="password" autocomplete="new-password" id="pass" name="pass" placeholder="Mot de passe">
+                        <span class="focus-input100"></span>
+                        <span class="symbol-input100">
+                            <i class="fa fa-lock <?= isset($errors["pass"])? 'text-danger' : ''?>" aria-hidden="true"></i>
+                        </span>
+                    </div>
+                    <?php
+                    if (isset($errors["pass"]) && !empty($errors["pass"])) {
+                        echo "<p style = 'color:red; font-size:12px;' class='float-right mr-3'>" . $errors["pass"] . "</p>";
+                    }
+                    ?>
 
                     <div class="form-check text-center">
-                        <input class="form-check-input" type="checkbox" name="remember_me" value="" id="flexCheckChecked" />
+                        <input class="form-check-input" <?= isset($_COOKIE['cud']) ? 'checked' : '' ?> type="checkbox" name="remember_me" id="flexCheckChecked" />
                         <label class="" for="flexCheckChecked" style="font-size: 14px; color: #666;">Se souvenir de moi</label>
                     </div>
 
@@ -125,7 +137,7 @@ session_start();
         </div>
     </div>
     <?php
-    session_destroy();
+    unset($_SESSION["login_errors"]);
     ?>
     <!--===============================================================================================-->
     <script src='<?= PROJECT ?>public/vendor/jquery/jquery-3.2.1.min.js'></script>
@@ -145,8 +157,8 @@ session_start();
             var Toast = Swal.mixin({
                 toast: true,
                 position: 'top-end',
-                showConfirmButton: false,
-                timer: 8000
+                showConfirmButton: true,
+                timer: 20000
             });
 
             if($('.swalDefaultSuccess').length) {

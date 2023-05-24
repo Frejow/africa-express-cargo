@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en">
+<html lang="fr">
 
 <head>
     <meta charset="utf-8" />
@@ -95,10 +95,7 @@
     }
     ?>
     <!-- CSS files -->
-    <link href='<?= PROJECT ?>public/libs/dropzone/dist/dropzone.css?202302251230' rel="stylesheet" />
     <link href='<?= PROJECT ?>public/css/tabler.min.css?202302251230' rel="stylesheet" />
-    <link href='<?= PROJECT ?>public/css/tabler-flags.min.css?202302251230' rel="stylesheet" />
-    <link href='<?= PROJECT ?>public/css/tabler-payments.min.css?202302251230' rel="stylesheet" />
     <link href='<?= PROJECT ?>public/css/tabler-vendors.min.css?202302251230' rel="stylesheet" />
     <link href='<?= PROJECT ?>public/css/demo.min.css?202302251230' rel="stylesheet" />
     <link href='<?= PROJECT ?>public/css/packstyle.css' rel="stylesheet" />
@@ -107,6 +104,7 @@
     <link href='<?= PROJECT ?>public/select2/css/select2.css' rel="stylesheet">
     <link href='<?= PROJECT ?>public/select2-bootstrap4-theme/select2-bootstrap4.css' rel="stylesheet">
     <link href='<?= PROJECT ?>public/datatables-bs4/css/dataTables.bootstrap4.css' rel="stylesheet">
+    <link href='<?= PROJECT ?>public/sweetalert2-theme-bootstrap-4/bootstrap-4.min.css' rel="stylesheet" type="text/css">
     <script src='<?= PROJECT ?>public/js/jquery/jquery-3.6.3.min.js'></script>
 
     <style>
@@ -282,7 +280,7 @@
                         <div class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
                             <a href='<?= redirect($_SESSION['theme'], PROJECT.'agents/dash/profile') ?>' class="dropdown-item">Mon Compte</a>
                             <a href='<?= redirect($_SESSION['theme'], PROJECT.'agents/dash/profile-settings') ?>' class="dropdown-item">Paramètres du compte</a>
-                            <a href="#" class="dropdown-item">Déconnexion</a>
+                            <a href='<?= redirect($_SESSION['theme'], PROJECT.'agents/logout') ?>' class="dropdown-item">Déconnexion</a>
                         </div>
                     </div>
                 </div>
@@ -576,7 +574,7 @@
                         <div class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
                             <a href='<?= redirect($_SESSION['theme'], PROJECT.'agents/dash/profile') ?>' class="dropdown-item">Mon Compte</a>
                             <a href='<?= redirect($_SESSION['theme'], PROJECT.'agents/dash/profile-settings') ?>' class="dropdown-item">Paramètres du compte</a>
-                            <a href="#" class="dropdown-item">Déconnexion</a>
+                            <a href='<?= redirect($_SESSION['theme'], PROJECT.'agents/logout') ?>' class="dropdown-item">Déconnexion</a>
                         </div>
                     </div>
                 </div>

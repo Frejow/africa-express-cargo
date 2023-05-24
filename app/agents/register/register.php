@@ -1,12 +1,5 @@
 <?php
 
-session_start();
-//die (var_dump($_GET['p']));
-//die (var_dump ('agents'));
-//die(var_dump($_POST['country']));
-
-include "app/common/functions_folder/functions.php";
-
 $_SESSION["register_errors"] = [];
 
 $errors = [];
@@ -67,11 +60,15 @@ if (
 }
 
 if (check_exist_fieldentry('mail', $_POST["mail"])) {
-    $errors["mail"] = "[ " . $_POST["mail"] . " ] est déjà associé à un compte. Veuillez le changer.";
+    $errors["mail"] = "[ " . $_POST["mail"] . " ] est déjà associé à un compte.";
 }
 
 if (check_exist_fieldentry('user_name', $_POST["pseudo"])) {
-    $errors["pseudo"] = "Le nom d'utilisateur [ " . $_POST["pseudo"] . " ] a déjà été pris. Veuillez le changer.";
+    $errors["pseudo"] = "Le nom d'utilisateur [ " . $_POST["pseudo"] . " ] a déjà été pris.";
+}
+
+if (check_exist_fieldentry('phone_number', $_POST["tel"])) {
+    $errors["tel"] = "Ce numéro [ " . $_POST["tel"] . " ] appartient à un de nos utilisateur.";
 }
 
 if (isset($_POST["nom"]) && !empty($_POST["nom"])) {
@@ -83,7 +80,7 @@ if (isset($_POST["prenom"]) && !empty($_POST["prenom"])) {
 }
 
 if (isset($_POST["tel"]) && !empty($_POST["tel"])) {
-    $data["tel"] = $_POST["tel"];
+    $data["tel"] = secure($_POST["tel"]);
 }
 
 if (isset($_POST["pseudo"]) && !empty($_POST["pseudo"])) {
@@ -98,75 +95,63 @@ if (isset($_POST["country"]) && !empty($_POST["country"])) {
     $data["country"] = $_POST["country"]; //die (var_dump($data["country"]));
 }
 
-$data["profile"] = "AGENT";
-
-setcookie(
-    "user_register_data",
-    json_encode($data),
-    [
-        'expires' => time() + 365 * 24 * 3600,
-        'path' => '/',
-        'secure' => true,
-        'httponly' => true,
-    ]
-);
+$data["profile"] = "AGENTS";
 
 if (empty($errors)) {
 
-    $database =  _database_login();
+    if (registered($data["nom"], $data["prenom"], $data["tel"], $data["pseudo"], $data["mail"], $data["country"], $_POST["pass"], $data["profile"])) {
 
-    if (is_object($database)) {
+        $mail_assoc_to_deleted_account = check_mail_assoc_to_deleted_account($data["mail"]);
 
-        // Ecriture de la requête
-        $request_insertion = 'INSERT INTO user(name, first_names, phone_number, user_name, mail, country, password, profile, token) VALUES (:nom, :prenom, :tel, :pseudo, :mail, :country, :pass, :profile, :token)';
+        if (isset($mail_assoc_to_deleted_account) && !empty($mail_assoc_to_deleted_account)) {
+            foreach ($mail_assoc_to_deleted_account as $key => $value) {
+                back_deleted_account($mail_assoc_to_deleted_account[$key]['id'], $data['mail']);
+            }
+        }
 
-        // Préparation
-        $request_insertion_prepare = $database->prepare($request_insertion);
+        setcookie('user_register_data', '', time() - 3600, '/');
+    
+        $_SESSION['agents_new_account'] = [];
+        $_SESSION['agents_new_account']['prenom'] = $data["prenom"];
+        $_SESSION['agents_new_account']['nom'] = $data["nom"];
+    
+        $subject = 'Nouveau compte agent en attente de validation';
+        $mailcontent = buffer_html_file('..' . PROJECT . 'app/agents/register/mailtemp.php');
 
-        // Exécution ! 
-        $result = $request_insertion_prepare->execute([
-            'nom' => $data["nom"],
-            'prenom' => $data["prenom"],
-            'tel' => $data["tel"],
-            'pseudo' => $data["pseudo"],
-            'mail' => $data["mail"],
-            'country' => ltrim(preg_replace('/[^\p{L}\p{N}\s]/u', " ", $_POST["country"])),
-            'pass' => sha1($_POST["pass"]),
-            'profile' => $data["profile"],
-            'token' => sha1($data["mail"]),
-        ]);
+        if (mailsendin(MAIL_ADDRESS, $data["prenom"].' '.$data["nom"], $subject, $mailcontent)) {
 
-        if ($result) {
+            header("location:" . PROJECT . "agents/register/true");
 
-            setcookie(
-                "user_register_data",
-                "",
-                [
-                    'expires' => time() + 365 * 24 * 3600,
-                    'path' => '/',
-                    'secure' => true,
-                    'httponly' => true,
-                ]
-            );
-            
-            $_SESSION['success'] = 'Inscription effectuée avec succès.';
+            setcookie('user_register_data', '', time() - 3600, '/');
 
-            header("location:".PROJECT."agents/login");
         } else {
 
-            $_SESSION['error'] = 'Oupss!!! Une erreur s\'est produite lors de l\'enregistrement de l\'utilisateur. Veuillez réessayer ou contacter l\'administrateur du site.';
+            if (back_deleted_account($user_id, $data['mail']) && update_token_table($user_id)) {
 
-            header("location:".PROJECT."agents/register");
+                setcookie('user_register_data', json_encode($data), time() + 365 * 24 * 3600, '/');
+
+                $_SESSION['error_msg'] = 'Erreur lors du processus. Cause probable : Appareil Hors Connexion. Vérifiez votre connexion internet et réessayer. Si cela persiste, contactez-nous.';
+
+                header("location:" . PROJECT . "agents/register");
+
+            }
+
         }
+
     } else {
 
-        $_SESSION['error'] = $database;
+        $_SESSION['error_msg'] = 'Oupss!!! Une erreur a été détecté lors du processus. Veuillez réessayer ou nous contacter si cela persiste.';
 
-        header("location:".PROJECT."agents/register");
+        header("location:" . PROJECT . "agents/register");
+
     }
+
 } else {
 
     $_SESSION["register_errors"] = $errors;
 
-    header("location:".PROJECT."agents/register");
+    setcookie('user_register_data', json_encode($data), time() + 365 * 24 * 3600, '/');
+
+    header("location:" . PROJECT . "agents/register");
+
 }

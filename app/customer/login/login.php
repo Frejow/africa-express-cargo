@@ -95,6 +95,62 @@ if (empty($errors)) {
         header("location:".PROJECT."customer/login");
         
     }
+    elseif (!check_exist_userby_email_and_password($_POST["m_ps"], $_POST["pass"], 'CUSTOMER', 1, 0, 0) 
+    || !check_exist_userby_pseudo_and_password($_POST["m_ps"], $_POST["pass"], 'CUSTOMER', 1, 0, 0)) {
+
+        setcookie(
+            "error_msg",
+            "Compte désactivé.",
+            [
+                'expires' => time() + 365 * 24 * 3600,
+                'path' => '/',
+                'secure' => true,
+                'httponly' => true,
+            ]
+        );
+
+        setcookie(
+            "ud",
+            json_encode($data),
+            [
+                'expires' => time() + 365 * 24 * 3600,
+                'path' => '/',
+                'secure' => true,
+                'httponly' => true,
+            ]
+        );
+
+        header("location:".PROJECT."customer/login");
+        
+    }
+    elseif (!check_exist_userby_email_and_password($_POST["m_ps"], $_POST["pass"], 'CUSTOMER', 0, 0, 0) 
+    || !check_exist_userby_pseudo_and_password($_POST["m_ps"], $_POST["pass"], 'CUSTOMER', 0, 0, 0)) {
+
+        setcookie(
+            "error_msg",
+            "Compte inactif. Consultez votre boite mail ou vos spams pour valider votre compte à partir du lien de validation qui vous a été envoyé par Africa Express Cargo.",
+            [
+                'expires' => time() + 365 * 24 * 3600,
+                'path' => '/',
+                'secure' => true,
+                'httponly' => true,
+            ]
+        );
+
+        setcookie(
+            "ud",
+            json_encode($data),
+            [
+                'expires' => time() + 365 * 24 * 3600,
+                'path' => '/',
+                'secure' => true,
+                'httponly' => true,
+            ]
+        );
+
+        header("location:".PROJECT."customer/login");
+        
+    }
 
 }
 

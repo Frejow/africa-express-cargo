@@ -1,242 +1,609 @@
-<?php include 'app/common/agents/1stpart.php' ?>
+<?php
 
-    <form action="" method="post">
-        <div class="page-header">
-            <div class="container-xl d-flex" style="justify-content: center;">
-                <div class="row g-2 align-items-center " style="flex-wrap: wrap;">
-                    <!-- Page title actions -->
-                    <div class="col-12 col-lg-auto ms-auto d-print-none">
-                        <div class="btn-list justify-content-center">
-                            <a href="<?= redirect($_SESSION['theme'], PROJECT.'agents/dash/set-noaddressee-packages') ?>" class="btn d-none text-white d-sm-inline-block btn-warning">
-                                <!-- Download SVG icon from http://tabler-icons.io/i/plus -->
-                                <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-                                    <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-                                    <path d="M12 5l0 14" />
-                                    <path d="M5 12l14 0" />
-                                </svg>
-                                Nouveau colis
-                            </a>
-                            <a href="<?= redirect($_SESSION['theme'], PROJECT.'agents/dash/set-noaddressee-packages') ?>" class="btn d-sm-none text-white btn-warning">
-                                <!-- Download SVG icon from http://tabler-icons.io/i/plus -->
-                                <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-                                    <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-                                    <path d="M12 5l0 14" />
-                                    <path d="M5 12l14 0" />
-                                </svg>
-                                Nouveau Colis
-                            </a>
-                        </div>
+//Récupération de l'url de la page
+if (connected()) {
+    $_SESSION['current_url'] = "http://{$_SERVER['HTTP_HOST']}{$_SERVER['REQUEST_URI']}";
+}
+
+//Inclure l'en-tête 
+include 'app/common/agents/1stpart.php';
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+//Initialisation des valeurs par défaut des différents paramètres de la fonction de listings
+
+//Premier paramètre, le nom de la table en base de données à lister. Table "package" pour le cas présent
+$table = "package"; 
+
+//Second paramètre, le numéro de la page. 1 par défaut
+if (!isset($_SESSION['previous_page']) && !isset($_SESSION['next_page'])) {
+    $_SESSION['page'] = 1; 
+}
+
+//Troisième paramètre, nombre de colis à afficher par page. 10 par défaut
+$_SESSION['packages_nb_per_page'] = 10; 
+
+//Quatrième paramètre, le type de statut suivant lequel filtrer la liste. "Tout Afficher" par défaut
+$_SESSION['status'] = 'Tout Afficher'; 
+
+// Cinquième paramètre, le numéro de suivi à rechercher. "UNDEFINED" par défaut dans le cas où aucune recherche n'est lancée
+$_SESSION['search'] = 'UNDEFINED'; 
+
+//Nouvelle valeur du second paramètre, le numéro de page selon le cas (page précédente)
+if (isset($_SESSION['previous_page']) && !empty($_SESSION['previous_page'])) {
+    $_SESSION['page'] = $_SESSION['previous_page']; 
+}
+
+//Nouvelle valeur du second paramètre, le numéro de page selon le cas (page suivante)
+if (isset($_SESSION['next_page']) && !empty($_SESSION['next_page'])) {
+    $_SESSION['page'] = $_SESSION['next_page']; 
+}
+
+//Nouvelle valeur du second paramètre, le numéro de page selon le cas (page actuel)
+if (isset($_SESSION['actual_page']) && !empty($_SESSION['actual_page'])) {
+    $_SESSION['page'] = $_SESSION['actual_page']; 
+}
+
+/**
+ * Nouvelle valeur du troisième paramètre, nombre de colis par page, lorsqu'un autre nombre autre que 10 est sélectionné 
+ * par l'utilisateur poiur afficher le nombre de colis par page
+ */
+if (isset($_SESSION['select_packages_nb_per_page']) && !empty($_SESSION['select_packages_nb_per_page'])) {
+    $_SESSION['packages_nb_per_page'] = $_SESSION['select_packages_nb_per_page']; 
+}
+
+/**
+ * Nouvelle valeur du quatrième paramètre, type de statut, lorsque l'utilisateur décide de filtrer la liste selon un 
+ * statut autre que celui par défaut
+ */
+if (isset($_SESSION['selected_status']) && !empty($_SESSION['selected_status'])) {
+    $_SESSION['status'] = $_SESSION['selected_status']; 
+}
+
+//Nouvelle valeur du cinquième paramètre, le numéro de suivi à rechercher dans la table "package"
+if (isset($_SESSION['research']) && !empty($_SESSION['research'])) {
+    $_SESSION['search'] = $_SESSION['research']; 
+}
+
+//Affectation du retour de la fonction listings avec les cinq paramètres suscités à la variable $packages_lisitngs
+$packages_listings = listings($table, $_SESSION['page'], $_SESSION['packages_nb_per_page'], $_SESSION['status'], strtoupper($_SESSION['search']), 0);
+
+/**
+ * Affectation du retour de la fonction count_rows_in_table avec pour paramètre la table concernée par le listings à la 
+ * variable $rows. Cette fonction retourne le nombre de lignes dans la table avec le champs is_deleted = 0
+ */
+$rows = count_rows_in_table($table, 0);
+
+?>
+
+<!--
+    Ce bloc de formulaire prend en charge le tableau de listings des colis. Toutes les possibles valeurs des différents 
+    paramètres de la fonction listings sont soumises et récupérées via la méthode POST. Ici, aucune valeur ne transite par
+    l'url.
+-->
+<form id="myForm" action="<?= redirect($_SESSION['theme'], PROJECT.'agents/dash-treatment/noaddressee-packages-listings') ?>" method="post">
+    <!-- Bouton de création de colis -->
+    <div class="page-header d-print-none">
+        <div class="container-xl d-flex" style="justify-content: center;">
+            <div class="row g-2 align-items-center " style="flex-wrap: wrap;">
+                <!-- Page title actions -->
+                <div class="col-12 col-lg-auto ms-auto d-print-none">
+                    <div class="btn-list justify-content-center">
+                        <a href="<?= redirect($_SESSION['theme'], PROJECT.'agents/dash/set-noaddressee-packages') ?>" class="btn d-none text-white d-sm-inline-block btn-warning">
+                            <!-- Download SVG icon from http://tabler-icons.io/i/plus -->
+                            <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                                <path d="M12 5l0 14" />
+                                <path d="M5 12l14 0" />
+                            </svg>
+                            Nouveau colis
+                        </a>
+                        <a href="<?= redirect($_SESSION['theme'], PROJECT.'agents/dash/set-noaddressee-packages') ?>" class="btn d-sm-none text-white btn-warning">
+                            <!-- Download SVG icon from http://tabler-icons.io/i/plus -->
+                            <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                                <path d="M12 5l0 14" />
+                                <path d="M5 12l14 0" />
+                            </svg>
+                            Nouveau Colis
+                        </a>
                     </div>
                 </div>
             </div>
         </div>
-        <div class="page-body">
-            <div class="container-xl text-center">
-                <div class="row row-deck row-cards">
-                    <div class="col-12">
-                        <div class="card">
-                            <div class="card-body border-bottom py-3">
-                                <div class="d-flex">
-                                    <div class="text-muted">
-                                        Afficher
-                                        <div class="mx-2 d-inline-block">
-                                            <input type="text" class="form-control form-control-sm" value="5" size="3" aria-label="Invoices count">
-                                        </div>
-                                        lignes
+    </div>
+    <!-- Tableau d'affichage des données de colis récupérées depuis la base de données -->
+    <div class="page-body">
+        <div class="container-xl text-center">
+            <div class="row row-deck row-cards">
+                <div class="col-12">
+                    <div class="card">
+                        <div class="card-body border-bottom py-3">
+                            <div class="row">
+                                <!-- 
+                                    Bloc select de sélection des différentes valeurs proposées pour le nombre de colis à 
+                                    afficher par page. Ici un script Js facilite la soumission de la valeur à la sélection
+                                    d'une des options. Ce script se base sur l'id du champs select et l'id du formulaire
+                                    pour envoyer la valeur correspondante au fichier de traiment du formulaire.
+                                -->
+                                <div class="col-lg-4 col-xs mb-2 text-muted">
+                                    Afficher
+                                    <div class="mx-2 d-inline-block">
+                                        <select class="form-select" name="select" id="mySelect">
+                                            <option value="10">10</option>
+                                            <option <?php if (isset($_SESSION['select_packages_nb_per_page']) && $_SESSION['select_packages_nb_per_page'] == 15) {
+                                                        echo 'selected';
+                                                    } ?> value="15">15</option>
+                                            <option <?php if (isset($_SESSION['select_packages_nb_per_page']) && $_SESSION['select_packages_nb_per_page'] == 20) {
+                                                        echo 'selected';
+                                                    } ?> value="20">20</option>
+                                            <option <?php if (isset($_SESSION['select_packages_nb_per_page']) && $_SESSION['select_packages_nb_per_page'] == 30) {
+                                                        echo 'selected';
+                                                    } ?> value="30">30</option>
+                                        </select>
                                     </div>
-                                    <div class="ms-auto text-muted">
-                                        Rechercher :
-                                        <div class="ms-2 d-inline-block">
-                                            <input type="text" class="form-control form-control-sm" aria-label="Search invoice">
-                                        </div>
+                                    lignes
+                                </div>
+                                <!--
+                                    Bloc de la barre de recherche de colis par numéro de suivi.
+                                -->
+                                <div class="col-lg-4 col-xs mb-2 text-muted ms-auto" style="display: flex;">
+                                    <div>
+                                        <span>Rechercher</span>
+                                    </div>
+
+                                    <div class="ms-2 d-inline-block">
+                                        <input type="text" name="search" class="form-control" value="<?= isset($_SESSION['research']) ? $_SESSION['research'] : '' ?>" placeholder="N° de suivi">
+                                    </div>
+                                    <button type="submit" class="btn-link link-primary">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                            <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                                            <path d="M10 10m-7 0a7 7 0 1 0 14 0a7 7 0 1 0 -14 0"></path>
+                                            <path d="M21 21l-6 -6"></path>
+                                        </svg>
+                                    </button>
+                                </div>
+                                <!-- 
+                                    Bloc select de sélection des différents statuts possibles suivant lesquels filtrer 
+                                    l'affichage des colis. Ici un script Js facilite la soumission de la valeur à la 
+                                    sélection d'une des options. Ce script se base sur l'id du champs select et l'id du 
+                                    formulaire pour envoyer la valeur correspondante au fichier de traiment du formulaire.
+                                -->
+                                <div class="col-lg-4 col-xs ms-auto text-muted">
+                                    Filtrer :
+                                    <div class="ms-2 d-inline-block">
+                                        <select class="form-select" name="statusSelect" id="mySelect2">
+                                            <option disabled selected value="">Tout Afficher</option>
+                                            <option <?php if (isset($_SESSION['selected_status']) && $_SESSION['selected_status'] == 'Tout Afficher') {
+                                                        echo 'selected';
+                                                    } ?> data-value="Tout Afficher">Tout Afficher</option>
+                                            <option <?php if (isset($_SESSION['selected_status']) && $_SESSION['selected_status'] == 'En attente...') {
+                                                        echo 'selected';
+                                                    } ?> data-value="En attente...">En attente...</option>
+                                            <option <?php if (isset($_SESSION['selected_status']) && $_SESSION['selected_status'] == 'En transit') {
+                                                        echo 'selected';
+                                                    } ?> data-value="En transit">En transit</option>
+                                            <option <?php if (isset($_SESSION['selected_status']) && $_SESSION['selected_status'] == 'Entrepôt Chine') {
+                                                        echo 'selected';
+                                                    } ?> data-value="Entrepôt Chine">Entrepôt Chine</option>
+                                            <option <?php if (isset($_SESSION['selected_status']) && $_SESSION['selected_status'] == 'Entrepôt Bénin') {
+                                                        echo 'selected';
+                                                    } ?> data-value="Entrepôt Bénin">Entrepôt Bénin</option>
+                                            <option <?php if (isset($_SESSION['selected_status']) && $_SESSION['selected_status'] == 'Livrer') {
+                                                        echo 'selected';
+                                                    } ?> data-value="Livrer">Livrer</option>
+                                        </select>
                                     </div>
                                 </div>
                             </div>
-                            <div class="table-responsive">
-                                <table class="table card-table table-vcenter text-nowrap datatable">
-                                    <thead>
-                                        <tr>
-                                            <th class="w-1"><input class="form-check-input m-0 align-middle" type="checkbox" id="check-all" aria-label="Select all invoices"></th>
-                                            <th class="">N° de suivi</th>
-                                            <th>Type de produits</th>
-                                            <th>Statut</th>
-                                            <th></th>
-                                            <th></th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr>
-                                            <td><input class="form-check-input m-0 align-middle" type="checkbox" value="BN95F621" name="checkbox" aria-label="Select invoice"></td>
-                                            <td>
-                                                BN95F621
-                                            </td>
-                                            <td class="">
-                                                <span></span>
-                                                A batterie
-                                            </td>
-                                            <td>
-                                                <span class="badge bg-success me-1"></span> Livrer Au Client
-                                            </td>
-                                            <td class="text-end">
-                                                <span class="">
-                                                    <a class="btn-link" href="" data-bs-toggle="modal" data-bs-target="#modal-packages-detail">
-                                                        Détails
-                                                    </a>
-                                                </span>
-                                            </td>
-                                            <td class="text-end">
-                                                <span class="">
-                                                    <a class="btn-link link-warning" href="<?= redirect($_SESSION['theme'], PROJECT.'agents/dash/edit-noaddressee-packages') ?>">
-                                                        Modifier
-                                                    </a>
-                                                </span>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td><input class="form-check-input m-0 align-middle" name="checkbox1" value="FX956J21" type="checkbox" aria-label="Select invoice"></td>
-                                            <td>
-                                                FX956J21
-                                            </td>
-                                            <td>
-                                                <span class=""></span>
-                                                Mixte
-                                            </td>
-                                            <td>
-                                                <span class="badge bg-warning me-1"></span> En transit
-                                            </td>
-                                            <td class="text-end">
-                                                <span class="">
-                                                    <a class="btn-link" href="" data-bs-toggle="modal" data-bs-target="#modal-packages-detail">
-                                                        Détails
-                                                    </a>
-                                                </span>
-                                            </td>
-                                            <td class="text-end">
-                                                <span class="">
-                                                    <a class="btn-link link-warning" href="" data-bs-toggle="modal" data-bs-target="">
-                                                        Modifier
-                                                    </a>
-                                                </span>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td><input class="form-check-input m-0 align-middle" name="checkbox2" value="YT95V621" type="checkbox" aria-label="Select invoice"></td>
-                                            <td>
-                                                YT95V621
-                                            </td>
-                                            <td>
-                                                <span class=""></span>
-                                                Normal
-                                            </td>
-                                            <td>
-                                                <span class="badge bg-primary me-1"></span> Entrepôt Chine
-                                            </td>
-                                            <td class="text-end">
-                                                <span class="">
-                                                    <a class="btn-link" href="" data-bs-toggle="modal" data-bs-target="#modal-packages-detail">
-                                                        Détails
-                                                    </a>
-                                                </span>
-                                            </td>
-                                            <td class="text-end">
-                                                <span class="">
-                                                    <a class="btn-link link-warning" href="" data-bs-toggle="modal" data-bs-target="">
-                                                        Modifier
-                                                    </a>
-                                                </span>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td><input class="form-check-input m-0 align-middle" name="checkbox3" value="ML95F421" type="checkbox" aria-label="Select invoice"></td>
-                                            <td>
-                                                ML95F421
-                                            </td>
-                                            <td>
-                                                <span class=""></span>
-                                                Normal
-                                            </td>
-                                            <td>
-                                                <span class="badge bg-secondary me-1"></span> Entrepôt Bénin
-                                            </td>
-                                            <td class="text-end">
-                                                <span class="">
-                                                    <a class="btn-link" href="" data-bs-toggle="modal" data-bs-target="#modal-packages-detail">
-                                                        Détails
-                                                    </a>
-                                                </span>
-                                            </td>
-                                            <td class="text-end">
-                                                <span class="">
-                                                    <a class="btn-link link-warning" href="" data-bs-toggle="modal" data-bs-target="">
-                                                        Modifier
-                                                    </a>
-                                                </span>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td><input class="form-check-input m-0 align-middle" name="checkbox4" value="KR95Y621" type="checkbox" aria-label="Select invoice"></td>
-                                            <td>
-                                                KR95Y621
-                                            </td>
-                                            <td>
-                                                <span class=""></span>
-                                                A batterie
-                                            </td>
-                                            <td>
-                                                <span class="badge bg-danger me-1"></span> Non reçu
-                                            </td>
-                                            <td class="text-end">
-                                                <span class="">
-                                                    <a class="btn-link" href="" data-bs-toggle="modal" data-bs-target="#modal-packages-detail">
-                                                        Détails
-                                                    </a>
-                                                </span>
-                                            </td>
-                                            <td class="text-end">
-                                                <span class="">
-                                                    <a class="btn-link link-warning" href="" data-bs-toggle="modal" data-bs-target="">
-                                                        Modifier
-                                                    </a>
-                                                </span>
-                                            </td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </div>
-                            <div class="card-footer d-flex align-items-center">
-                                <p class="m-0 text-muted">Affichage <span>1</span> à <span>5</span> sur <span>20</span> lignes</p>
-                                <ul class="pagination m-0 ms-auto">
-                                    <li class="page-item disabled">
-                                        <a class="page-link" href="#" tabindex="-1" aria-disabled="true">
-                                            <!-- Download SVG icon from http://tabler-icons.io/i/chevron-left -->
-                                            <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-                                                <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-                                                <path d="M15 6l-6 6l6 6" />
-                                            </svg>
-                                            précédent
-                                        </a>
-                                    </li>
-                                    <li class="page-item"><a class="page-link" href="#">1</a></li>
-                                    <li class="page-item active"><a class="page-link" href="#">2</a></li>
-                                    <li class="page-item"><a class="page-link" href="#">3</a></li>
-                                    <li class="page-item"><a class="page-link" href="#">4</a></li>
-                                    <li class="page-item"><a class="page-link" href="#">5</a></li>
-                                    <li class="page-item">
-                                        <a class="page-link" href="#">
-                                            suivant <!-- Download SVG icon from http://tabler-icons.io/i/chevron-right -->
-                                            <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-                                                <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-                                                <path d="M9 6l6 6l-6 6" />
-                                            </svg>
-                                        </a>
-                                    </li>
-                                </ul>
-                            </div>
+                        </div>
+                        <!--
+                            Bloc d'affichage des colis
+                        -->
+                        <div class="table-responsive">
+                            <table class="table card-table table-vcenter text-nowrap">
+                                <thead>
+                                    <tr>
+                                        <th class="w-1">#<input class="form-check-input m-0 align-middle row-check" type="checkbox" id="check-all" aria-label="Select all invoices"></th>
+                                        <th class="">N° de suivi</th>
+                                        <th>Type de produits</th>
+                                        <th>Statut</th>
+                                        <th></th>
+                                        <th></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <?php
+                                    if (isset($packages_listings) && !empty($packages_listings)) {
+
+                                        $n = 0; //Cette variable stocke le nombre de lignes affiché lorsque la table "package" ne contient logiquement pas de colis. Donc $n restera 0
+                                        $m = 0; //Cette variable stocke le numéro de page en cours d'affichage.
+                                        $en = 0; // Cette variable stocke au fur et à mesure le nombre de lignes afficher sous forme de numérotation.
+
+                                        if (isset($_SESSION['next_page']) && !empty($_SESSION['next_page'])) {
+                                            $m = $_SESSION['next_page'];
+                                        }
+                                        if (isset($_SESSION['previous_page']) && !empty($_SESSION['previous_page'])) {
+                                            $m = $_SESSION['previous_page'];
+                                        }
+                                        if (isset($_SESSION['actual_page']) && !empty($_SESSION['actual_page'])) {
+                                            $m = $_SESSION['actual_page'];
+                                        }
+
+                                        foreach ($packages_listings as $key => $package) {
+
+                                            /**
+                                             * Chaque colis a la possibilité d'appartenir à un groupe de colis. Lorsque c'est le cas, l'identifiant du groupe auquel appartient 
+                                             * le colis est associé au colis. Pour un affichage plus détaillé, il a été mis en place la possibilité pour l'utilisateur de voir 
+                                             * un aperçu du groupe auquel appartient son colis et de bien visualiser le numéro de suivi de son colis dans la liste des colis appartenant
+                                             * au groupe en question. Le contrôle suivant permet donc d'accéder au groupe de tout colis contenu dans ce dernier pour permettre l'affichage
+                                             * en clair à l'utilisateur.
+                                             */
+                                            if (!empty($packages_listings[$key]["customer_package_group_id"])) {
+
+                                                //Récupération du numéro de suivi du groupe de colis
+                                                $packages_group_tracking_number = select_packagegroup_trackingnumber($packages_listings[$key]["customer_package_group_id"])[0]['tracking_number'];
+
+                                                /**
+                                                 * Récupération de tous les colis contenu dans le groupe. 
+                                                 * La variable $packages_ingrouplistings sera appelée plus bas pour afficher la liste de tous les colis du groupe auquel 
+                                                 * appartient le colis présentement concerné. Cette liste sera affichée dans un modal avec le numéro de suivi du colis
+                                                 * présentement concerné surligné en orange pour permettre son identification rapide par l'utilisateur.
+                                                 */
+                                                $packages_ingrouplistings = select_allpackages_forpackagegroup($packages_listings[$key]["customer_package_group_id"]);
+
+                                            }
+                                    ?>
+                                            <tr>
+                                                <td>
+                                                    <?php
+
+                                                    if ($_SESSION['page'] == 1) {
+
+                                                        $en = $key + 1;
+
+                                                        echo $en;
+                                                    } elseif ($_SESSION['page'] == 2) {
+
+                                                        $en = $_SESSION['packages_nb_per_page'] + $key + 1;
+
+                                                        echo $en;
+                                                    } elseif ($_SESSION['page'] > 2 && $m > 2) {
+
+                                                        $en = ($_SESSION['packages_nb_per_page'] * ($m - 1)) + $key + 1;
+
+                                                        echo $en;
+                                                    } else {
+
+                                                        $en = ($_SESSION['packages_nb_per_page'] * ($m - 1)) + $key + 1;
+
+                                                        echo $en;
+                                                    }
+
+                                                    ?><input class="form-check-input m-0 align-middle row-check" type="checkbox" value="BN95F621" name="checkbox" aria-label="Select invoice"></td>
+                                                <td>
+                                                    <?= $packages_listings[$key]["tracking_number"] ?>
+                                                </td>
+                                                <td class="">
+                                                    <span></span>
+
+                                                    <?= !empty($packages_listings[$key]["product_type"]) ? $packages_listings[$key]["product_type"] : '-' ?>
+                                                </td>
+                                                <td>
+                                                    <span class="badge 
+                                                    <?php if ($packages_listings[$key]["status"] == 'En attente...') {
+                                                        echo 'bg-secondary';
+                                                    } elseif ($packages_listings[$key]["status"] == 'En transit') {
+                                                        echo 'bg-primary';
+                                                    } elseif ($packages_listings[$key]["status"] == 'Entrepôt Chine') {
+                                                        echo 'bg-danger';
+                                                    } elseif ($packages_listings[$key]["status"] == 'Entrepôt Bénin') {
+                                                        echo 'bg-warning';
+                                                    } elseif ($packages_listings[$key]["status"] == 'Livrer') {
+                                                        echo 'bg-success';
+                                                    }
+                                                    ?>
+                                                    me-1"></span>
+
+                                                    <?= $packages_listings[$key]["status"] ?>
+                                                </td>         
+                                                <td class="text-end">
+                                                    <span class="">
+                                                        <a class="btn-link" href="" data-bs-toggle="modal" data-bs-target="<?= '#modal-packages-detail' . $key ?>">
+                                                            Détails
+                                                        </a>
+                                                    </span>
+                                                </td> 
+                                                <td class="text-end">
+                                                    <span class="">
+                                                        <a class="btn-link link-warning" href='<?= redirect($_SESSION['theme'], PROJECT.'agents/dash/edit-packages') ?>'>
+                                                            Modifier
+                                                        </a>
+                                                    </span>
+                                                </td>
+                                            </tr>
+                                        <?php
+                                        }
+                                        $n = $key + 1;
+                                    } else {
+                                        $n = 0;
+                                        ?>
+                                        <tr>Aucun élément trouvé</tr>
+                                    <?php
+                                    }
+                                    ?>
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <div class="table-responsive card-footer d-flex align-items-center">
+
+                            <?php
+
+                                $s = null; //Cette variable stocke la valeur du numéro de la première ligne sur une page
+
+                                if (!isset($_SESSION['previous_page']) && !isset($_SESSION['next_page']) && !isset($_SESSION['actual_page'])) {
+
+                                    $s = $_SESSION['page'];
+
+                                    if (!isset($packages_listings) || empty($packages_listings)) {
+                                        $s = 'de ' . $n . ' ligne';
+                                    }
+
+                                ?>
+
+                                    <p class="m-0 text-muted">
+                                        Affichage 
+                                        <?php if (isset($packages_listings) && !empty($packages_listings)) { 
+                                        ?> 
+                                            de la ligne 
+                                        <?php 
+                                        } 
+                                        ?> 
+                                            <span><?= $s ?></span> 
+                                        <?php if (isset($packages_listings) && !empty($packages_listings)) { 
+                                        ?> 
+                                            à la ligne <span><?= $en ?></span> 
+                                        <?php 
+                                        } 
+                                        ?>  sur <span><?= $rows[0]['COUNT(*)'] ?></span> ligne(s) au total
+                                    </p>
+
+                                <?php
+                                } 
+
+                                elseif ((isset($_SESSION['previous_page']) || isset($_SESSION['next_page']) || isset($_SESSION['actual_page'])) && $_SESSION['page'] == 2) {
+
+                                    $s = $_SESSION['packages_nb_per_page'] + 1;
+
+                                    if (!isset($packages_listings) || empty($packages_listings)) {
+                                        $s = 'de ' . $n . ' ligne';
+                                    }
+
+                                ?>
+
+                                    <p class="m-0 text-muted">
+                                        Affichage 
+                                        <?php if (isset($packages_listings) && !empty($packages_listings)) { 
+                                        ?> 
+                                            de la ligne 
+                                        <?php 
+                                        } 
+                                        ?> 
+                                            <span><?= $s ?></span> 
+                                        <?php if (isset($packages_listings) && !empty($packages_listings)) { 
+                                        ?> 
+                                            à la ligne <span><?= $en ?></span> 
+                                        <?php 
+                                        } 
+                                        ?>  sur <span><?= $rows[0]['COUNT(*)'] ?></span> ligne(s) au total
+                                    </p>
+
+                                <?php
+                                } 
+                                
+                                elseif ((isset($_SESSION['previous_page']) || isset($_SESSION['next_page']) || isset($_SESSION['actual_page'])) && $_SESSION['page'] > 2) {
+
+                                    $s = ($_SESSION['packages_nb_per_page'] * ($_SESSION['page'] - 1)) + 1;
+
+                                    if (!isset($packages_listings) || empty($packages_listings)) {
+                                        $s = 'de ' . $n . ' ligne';
+                                    }
+
+                                ?>
+
+                                    <p class="m-0 text-muted">
+                                        Affichage 
+                                        <?php if (isset($packages_listings) && !empty($packages_listings)) { 
+                                        ?> 
+                                            de la ligne 
+                                        <?php 
+                                        } 
+                                        ?> 
+                                            <span><?= $s ?></span> 
+                                        <?php if (isset($packages_listings) && !empty($packages_listings)) { 
+                                        ?> 
+                                            à la ligne <span><?= $en ?></span> 
+                                        <?php 
+                                        } 
+                                        ?>  sur <span><?= $rows[0]['COUNT(*)'] ?></span> ligne(s) au total
+                                    </p>
+
+                                <?php
+                                } 
+                                
+                                else {
+
+                                    $s = ($_SESSION['packages_nb_per_page'] * ($_SESSION['page'] - 1)) + 1;
+
+                                    if (!isset($packages_listings) || empty($packages_listings)) {
+                                        $s = 'de ' . $n . ' ligne';
+                                    }
+
+                                ?>
+
+                                    <p class="m-0 text-muted">
+                                        Affichage 
+                                        <?php if (isset($packages_listings) && !empty($packages_listings)) { 
+                                        ?> 
+                                            de la ligne 
+                                        <?php 
+                                        } 
+                                        ?> 
+                                            <span><?= $s ?></span> 
+                                        <?php if (isset($packages_listings) && !empty($packages_listings)) { 
+                                        ?> 
+                                            à la ligne <span><?= $en ?></span> 
+                                        <?php 
+                                        } 
+                                        ?>  sur <span><?= $rows[0]['COUNT(*)'] ?></span> ligne(s) au total
+                                    </p>
+
+                                <?php
+                                }
+
+                            ?>
+
+                            <ul class="pagination m-0 ms-auto">
+                                <li class="page-item <?= ($_SESSION['page'] == 1) ? "disabled" : "" ?>">
+                                    <button type="submit" name="previous" value="<?= $_SESSION['page'] - 1 ?>" class="page-link">
+                                        <!-- Download SVG icon from http://tabler-icons.io/i/chevron-left -->
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                            <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                                            <path d="M15 6l-6 6l6 6" />
+                                        </svg>
+                                        précédent
+                                    </button>
+                                </li>
+                                <li class="page-item page-link active"><?= $_SESSION['page'] ?></li>
+                                <li class="page-item <?php if (!isset($packages_listings) || empty($packages_listings)) {
+                                                            echo 'disabled';
+                                                        } ?>">
+                                    <button type="submit" name="next" value="<?= $_SESSION['page'] + 1 ?>" class="page-link">
+                                        suivant <!-- Download SVG icon from http://tabler-icons.io/i/chevron-right -->
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                            <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                                            <path d="M9 6l6 6l-6 6" />
+                                        </svg>
+                                    </button>
+                                </li>
+                            </ul>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-    </form>
+    </div>
+</form>
 
-<?php include 'app/common/agents/2ndpart.php' ?>
+<!--
+    Modal d'affichage des détails d'un colis
+-->
+
+<?php
+if (isset($packages_listings) && !empty($packages_listings)) {
+
+    foreach ($packages_listings as $key => $package) {
+
+?>
+        <div class="modal modal-blur fade" id="<?= 'modal-packages-detail' . $key ?>" tabindex="-1" data-bs-backdrop='static' role="dialog" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered modal-lg modal-dialog-scrollable" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h3 class="modal-title">Détails Colis</h3>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="datagrid">
+                            <div class="datagrid-item">
+                                <div class="datagrid-title">Description</div>
+                                <div class="datagrid-content">
+                                    <?= $packages_listings[$key]["description"] ?>
+                                </div>
+                            </div>
+                            <div class="datagrid-item">
+                                <div class="datagrid-title">Type d'Envoi</div>
+                                <div class="datagrid-content">
+                                    <?= !empty($packages_listings[$key]["shipping_type"]) ? $packages_listings[$key]["shipping_type"] : '-' ?>
+                                </div>
+                            </div>
+                            <div class="datagrid-item">
+                                <div class="datagrid-title">Poids Net (KG)</div>
+                                <div class="datagrid-content">
+                                    <?= !empty($packages_listings[$key]["net_weight"]) ? $packages_listings[$key]["net_weight"] : '-' ?>
+                                </div>
+                            </div>
+                            <div class="datagrid-item">
+                                <div class="datagrid-title">Poids Volumétrique (CBM)</div>
+                                <div class="datagrid-content">
+                                    <?= !empty($packages_listings[$key]["metric_weight"]) ? $packages_listings[$key]["metric_weight"] : '-' ?>
+                                </div>
+                            </div>
+                            <div class="datagrid-item">
+                                <div class="datagrid-title">Valeur (FCFA)</div>
+                                <div class="datagrid-content">
+                                    <?= !empty($packages_listings[$key]["worth"]) ? $packages_listings[$key]["worth"] : '-' ?>
+                                </div>
+                            </div>
+                            <div class="datagrid-item">
+                                <div class="datagrid-title">Nombre</div>
+                                <div class="datagrid-content">
+                                    <?= !empty($packages_listings[$key]["package_units_number"]) ? $packages_listings[$key]["package_units_number"] : '-' ?>
+                                </div>
+                            </div>
+                            <div class="datagrid-item">
+                                <div class="datagrid-title">Coût Unitaire D'Expédition (CUE)</div>
+                                <div class="datagrid-content">
+                                    <?= !empty($packages_listings[$key]["shipping_unit_cost"]) ? $packages_listings[$key]["shipping_unit_cost"] . ' / pcs' : '-' ?>
+                                </div>
+                            </div>
+                            <div class="datagrid-item">
+                                <div class="datagrid-title">Coût Expédition (CUE*Nombre)</div>
+                                <div class="datagrid-content">
+                                    <?= !empty($packages_listings[$key]["shipping_cost"]) ? $packages_listings[$key]["shipping_cost"] : '-' ?>
+                                </div>
+                            </div>
+                        </div><br>
+                        <div class="row row-cols g-3">
+                            <?php
+                            if (check_package_id_in_packages_images_tab($packages_listings[$key]["id"])) {
+                                $select_images = select_package_images($packages_listings[$key]["id"]);
+                                if (!empty($select_images)) {
+                                    foreach ($select_images as $_key => $value) {
+                            ?>
+                                        <div class="col">
+                                            <a data-fslightbox="gallery" href='<?= $select_images[$_key]['images'] ?>'>
+                                                <!-- Photo -->
+                                                <div class="img-responsive img-responsive-1x1 rounded border" style="background-image: url(<?= $select_images[$_key]['images'] ?>)"></div>
+                                            </a>
+                                        </div>
+                            <?php
+                                    }
+                                }
+                            }
+                            ?>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+<?php
+
+    }
+}
+?>
+
+<?php include 'app/common/agents/2ndpart.php';
+
+if (isset($_SESSION['next_page']) && $_SESSION['next_page'] == $_SESSION['page']) {
+    unset($_SESSION['next_page']);
+} elseif (isset($_SESSION['previous_page']) && $_SESSION['previous_page'] == $_SESSION['page']) {
+    unset($_SESSION['previous_page']);
+} elseif (isset($_SESSION['actual_page']) && $_SESSION['actual_page'] == $_SESSION['page']) {
+    unset($_SESSION['actual_page']);
+}
+
+unset($_SESSION['research']);
+
+?>

@@ -95,7 +95,7 @@ function mailsendin(string $destination, string $recipient, string $subject, str
 }
 
 //Fonction de suppression de compte à l'inscription en cas d'échec de l'envoi de mail
-function back_deleted_account(int $id): bool
+function back_deleted_account(int $id, string $mail): bool
 {
     date_default_timezone_set("Africa/Lagos");
 
@@ -103,15 +103,16 @@ function back_deleted_account(int $id): bool
 
     $database = _database_login();
 
-    $request = "UPDATE user SET mail = :mail, user_name = :user_name, is_active = :is_active, is_deleted = :is_deleted, updated_on = :updated_on WHERE id = :id";
+    $request = "UPDATE user SET mail = :mail, user_name = :user_name, phone_number = :phone_number, is_active = :is_active, is_deleted = :is_deleted, updated_on = :updated_on WHERE id = :id";
 
     $request_prepare = $database->prepare($request);
 
     $request_execution = $request_prepare->execute(
         [
             'id'  => $id,
-            'mail' => 'this_mail_address_was_deleted',
+            'mail' => $mail.'_was_deleted',
             'user_name' => 'this_user_name_was_deleted',
+            'phone_number' => 'this_user_phone_number_was_deleted',
             'is_active' => 0,
             'is_deleted' => 1,
             'updated_on' => date('Y-m-d H:i:s')

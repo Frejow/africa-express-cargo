@@ -305,6 +305,34 @@
     <!-- Core -->
     <script src="<?= PROJECT ?>public/js/tabler.js?202302251230" defer></script>
     <script src="<?= PROJECT ?>public/js/demo.js?202302251230" defer></script>
+    <script src='<?= PROJECT ?>public/sweetalert2/sweetalert2.min.js'></script>
+
+    <!--toast-->
+
+    <script>
+        $(function() {
+            var Toast = Swal.mixin({
+                toast: true,
+                position: 'top',
+                showConfirmButton: true,
+                timer: 20000
+            });
+
+            if ($('.swalDefaultSuccess').length) {
+                Toast.fire({
+                    icon: 'success',
+                    title: '<?= $msg ?>'
+                });
+            }
+
+            if ($('.swalDefaultError').length) {
+                Toast.fire({
+                    icon: 'error',
+                    title: '<?= $msg ?>'
+                });
+            }
+        });
+    </script>
 
     <script>
         // @formatter:off

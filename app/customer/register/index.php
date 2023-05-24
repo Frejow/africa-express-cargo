@@ -2,7 +2,6 @@
 
 $_SESSION['current_url'] = "http://{$_SERVER['HTTP_HOST']}{$_SERVER['REQUEST_URI']}";
 
-
 $countries = [
     "<span>&#x1F1E6;&#x1F1EB;</span>&nbsp;&nbsp;&nbsp;Afghanistan",
     "<span>&#x1F1E6;&#x1F1F1;</span>&nbsp;&nbsp;&nbsp;Albanie",
@@ -235,15 +234,7 @@ $countries = [
 <body>
 
     <div class="limiter">
-            <?php
-            if (isset($_SESSION['error'])) {
-                $msg = $_SESSION['error'];
-            ?>
-                <div class="swalDefaultError" role="alert">
-                </div>
-            <?php
-            }
-            ?>
+            
         <div class="container-login100">
             <div class="wrap-register100">
                 

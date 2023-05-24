@@ -1,14 +1,35 @@
-<?php include 'app/common/agents/1stpart.php' ?>
+<?php
+if (connected()) {
+    $_SESSION['current_url'] = "http://{$_SERVER['HTTP_HOST']}{$_SERVER['REQUEST_URI']}";
+}
+
+include 'app/common/agents/1stpart.php'; ?>
 
 <div class="page-header d-print-none">
     <div class="container-xl">
         <div class="row g-2 align-items-center">
             <div class="col-auto">
-                <span class="avatar avatar-lg rounded" style="background-image: url(<?= PROJECT ?>public/images/jow-p.jpg)"></span>
+                <a href="" class="modal-fade" data-bs-toggle="modal" data-bs-target="#previousimage">
+                    <span class="avatar avatar-lg rounded" style="background-image: url(<?= $data[0]['avatar'] == 'null' ? PROJECT . 'public/images/default-user-profile.jpg' : $data[0]['avatar'] ?>)"></span>
+                </a>
+                <?php
+                    if ($data[0]['avatar'] != 'null') {
+                    ?>
+                        <div class="modal fade" id="previousimage">
+                            <div class="modal-dialog modal-dialog-centered modal-fullscreen-sm-down">
+                                <div class="modal-content">
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                    <img class="" src="<?= $data[0]['avatar'] == 'null' ? PROJECT . 'public/images/default-user-profile.jpg' : $data[0]['avatar'] ?>" alt="User profile picture">
+                                </div>
+                            </div>
+                        </div>
+                    <?php
+                    }
+                ?>
             </div>
             <div class="col">
-                <h1 class="fw-bold">Jow Doe</h1>
-                <div class="my-2">@jow_doe
+                <h1 class="fw-bold"><?= $data[0]['first_names'] . ' ' . $data[0]['name'] ?></h1>
+                <div class="my-2"><?= '@' . $data[0]['user_name'] ?>
                 </div>
                 <div class="list-inline list-inline-dots text-muted">
                     <div class="list-inline-item">
@@ -19,7 +40,7 @@
                             <path d="M9 4l0 13" />
                             <path d="M15 7l0 13" />
                         </svg>
-                        Cotonou, Bénin
+                        <?= $data[0]['country'] ?>
                     </div>
                     <div class="list-inline-item">
                         <!-- Download SVG icon from http://tabler-icons.io/i/mail -->
@@ -28,37 +49,20 @@
                             <path d="M3 5m0 2a2 2 0 0 1 2 -2h14a2 2 0 0 1 2 2v10a2 2 0 0 1 -2 2h-14a2 2 0 0 1 -2 -2z" />
                             <path d="M3 7l9 6l9 -6" />
                         </svg>
-                        <a href="#" class="text-reset">jow.doe@outlook.com</a>
+                        <?= $data[0]['mail'] ?>
                     </div>
                 </div>
             </div>
             <div class="col-auto ms-auto">
                 <div class="btn-list">
-                    <a href="#" class="btn btn-icon" aria-label="Button">
-                        <!-- Download SVG icon from http://tabler-icons.io/i/dots -->
-                        <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-                            <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-                            <path d="M5 12m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0" />
-                            <path d="M12 12m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0" />
-                            <path d="M19 12m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0" />
-                        </svg>
-                    </a>
-                    <a href="#" class="btn btn-icon" aria-label="Button">
-                        <!-- Download SVG icon from http://tabler-icons.io/i/message -->
-                        <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-                            <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-                            <path d="M4 21v-13a3 3 0 0 1 3 -3h10a3 3 0 0 1 3 3v6a3 3 0 0 1 -3 3h-9l-4 4" />
-                            <path d="M8 9l8 0" />
-                            <path d="M8 13l6 0" />
-                        </svg>
-                    </a>
-                    <a href="#" class="btn btn-primary">
+                    <a href="<?= redirect($_SESSION['theme'], PROJECT.'customer/dash/profile-settings') ?>" class="btn btn-primary">
                         <!-- Download SVG icon from http://tabler-icons.io/i/check -->
                         <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
                             <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-                            <path d="M5 12l5 5l10 -10" />
+                            <path d="M10.325 4.317c.426 -1.756 2.924 -1.756 3.35 0a1.724 1.724 0 0 0 2.573 1.066c1.543 -.94 3.31 .826 2.37 2.37a1.724 1.724 0 0 0 1.065 2.572c1.756 .426 1.756 2.924 0 3.35a1.724 1.724 0 0 0 -1.066 2.573c.94 1.543 -.826 3.31 -2.37 2.37a1.724 1.724 0 0 0 -2.572 1.065c-.426 1.756 -2.924 1.756 -3.35 0a1.724 1.724 0 0 0 -2.573 -1.066c-1.543 .94 -3.31 -.826 -2.37 -2.37a1.724 1.724 0 0 0 -1.065 -2.572c-1.756 -.426 -1.756 -2.924 0 -3.35a1.724 1.724 0 0 0 1.066 -2.573c-.94 -1.543 .826 -3.31 2.37 -2.37c1 .608 2.296 .07 2.572 -1.065z" />
+                            <path d="M12 12m-3 0a3 3 0 1 0 6 0a3 3 0 1 0 -6 0" />
                         </svg>
-                        Following
+                        Paramètres et Autres détails
                     </a>
                 </div>
             </div>
@@ -72,34 +76,37 @@
             <div class="col">
                 <ul class="timeline">
                     <li class="timeline-event">
-                        <div class="timeline-event-icon bg-twitter-lt"><!-- Download SVG icon from http://tabler-icons.io/i/brand-twitter -->
+                        <div class="timeline-event-icon bg-twitter-lt">
                             <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-                                <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-                                <path d="M22 4.01c-1 .49 -1.98 .689 -3 .99c-1.121 -1.265 -2.783 -1.335 -4.38 -.737s-2.643 2.06 -2.62 3.737v1c-3.245 .083 -6.135 -1.395 -8 -4c0 0 -4.182 7.433 4 11c-1.872 1.247 -3.739 2.088 -6 2c3.308 1.803 6.913 2.423 10.034 1.517c3.58 -1.04 6.522 -3.723 7.651 -7.742a13.84 13.84 0 0 0 .497 -3.753c0 -.249 1.51 -2.772 1.818 -4.013z" />
+                                <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                                <path d="M4 5m0 2a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v12a2 2 0 0 1 -2 2h-12a2 2 0 0 1 -2 -2z"></path>
+                                <path d="M16 3l0 4"></path>
+                                <path d="M8 3l0 4"></path>
+                                <path d="M4 11l16 0"></path>
+                                <path d="M10 16l4 0"></path>
+                                <path d="M12 14l0 4"></path>
                             </svg>
                         </div>
                         <div class="card timeline-event-card">
                             <div class="card-body">
-                                <div class="text-muted float-end">10 hrs ago</div>
-                                <h4>+1150 Followers</h4>
+                                <h4>Date de création</h4>
                                 <p class="text-muted">You’re getting more and more followers, keep it up!</p>
                             </div>
                         </div>
                     </li>
                     <li class="timeline-event">
-                        <div class="timeline-event-icon"><!-- Download SVG icon from http://tabler-icons.io/i/briefcase -->
+                        <div class="timeline-event-icon bg-twitter-lt">
                             <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-                                <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-                                <path d="M3 7m0 2a2 2 0 0 1 2 -2h14a2 2 0 0 1 2 2v9a2 2 0 0 1 -2 2h-14a2 2 0 0 1 -2 -2z" />
-                                <path d="M8 7v-2a2 2 0 0 1 2 -2h4a2 2 0 0 1 2 2v2" />
-                                <path d="M12 12l0 .01" />
-                                <path d="M3 13a20 20 0 0 0 18 0" />
+                                <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                                <path d="M8 10v-7l-2 2"></path>
+                                <path d="M6 16a2 2 0 1 1 4 0c0 .591 -.601 1.46 -1 2l-3 3h4"></path>
+                                <path d="M15 14a2 2 0 1 0 2 -2a2 2 0 1 0 -2 -2"></path>
+                                <path d="M6.5 10h3"></path>
                             </svg>
                         </div>
                         <div class="card timeline-event-card">
                             <div class="card-body">
-                                <div class="text-muted float-end">2 hrs ago</div>
-                                <h4>+3 New Products were added!</h4>
+                                <h4>Nombre de colis créé à ce jour</h4>
                                 <p class="text-muted">Congratulations!</p>
                             </div>
                         </div>
@@ -208,74 +215,7 @@
                     </li>
                 </ul>
             </div>
-            <div class="col-lg-4">
-                <div class="row row-cards">
-                    <div class="col-12">
-                        <div class="card">
-                            <div class="card-body">
-                                <div class="card-title">Informations Personnelles</div>
-                                <div class="mb-2">
-                                    <!-- Download SVG icon from http://tabler-icons.io/i/home -->
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="icon me-2 text-muted" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-                                        <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-                                        <path d="M5 12l-2 0l9 -9l9 9l-2 0" />
-                                        <path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-7" />
-                                        <path d="M9 21v-6a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v6" />
-                                    </svg>
-                                    Domicilié à: <strong>Cotonou</strong>
-                                </div>
-                                <div class="mb-2">
-                                    <!-- Download SVG icon from http://tabler-icons.io/i/map-pin -->
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="icon me-2 text-muted" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-                                        <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-                                        <path d="M12 11m-3 0a3 3 0 1 0 6 0a3 3 0 1 0 -6 0" />
-                                        <path d="M17.657 16.657l-4.243 4.243a2 2 0 0 1 -2.827 0l-4.244 -4.243a8 8 0 1 1 11.314 0z" />
-                                    </svg>
-                                    Pays: <strong><span class=""></span>
-                                        Bénin</strong>
-                                </div>
-                                <div class="mb-2">
-                                    <!-- Download SVG icon from http://tabler-icons.io/i/calendar -->
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="icon me-2 text-muted" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-                                        <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-                                        <path d="M4 5m0 2a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v12a2 2 0 0 1 -2 2h-12a2 2 0 0 1 -2 -2z" />
-                                        <path d="M16 3l0 4" />
-                                        <path d="M8 3l0 4" />
-                                        <path d="M4 11l16 0" />
-                                        <path d="M11 15l1 0" />
-                                        <path d="M12 15l0 3" />
-                                    </svg>
-                                    Birth date: <strong>13/01/1985</strong>
-                                </div>
-                                <div>
-                                    <!-- Download SVG icon from http://tabler-icons.io/i/clock -->
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="icon me-2 text-muted" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-                                        <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-                                        <path d="M12 12m-9 0a9 9 0 1 0 18 0a9 9 0 1 0 -18 0" />
-                                        <path d="M12 7l0 5l3 3" />
-                                    </svg>
-                                    Time zone: <strong>Europe/Ljubljana</strong>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-12">
-                        <div class="card">
-                            <div class="card-body">
-                                <h2 class="card-title">About Me</h2>
-                                <div>
-                                    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Accusantium aliquid beatae eaque eius
-                                        esse fugit, hic id illo itaque modi molestias nemo perferendis quae rerum soluta. Blanditiis
-                                        laborum minima molestiae molestias nemo nesciunt nisi pariatur quae sapiente ut. Aut consectetur
-                                        doloremque, error impedit, ipsum labore laboriosam minima non omnis perspiciatis possimus
-                                        praesentium provident quo recusandae suscipit tempore totam.
-                                    </p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
+            
         </div>
     </div>
 </div>

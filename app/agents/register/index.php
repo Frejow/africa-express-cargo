@@ -1,6 +1,6 @@
 <?php
 
-session_start();
+$_SESSION['current_url'] = "http://{$_SERVER['HTTP_HOST']}{$_SERVER['REQUEST_URI']}";
 
 $countries = [
     "<span>&#x1F1E6;&#x1F1EB;</span>&nbsp;&nbsp;&nbsp;Afghanistan",
@@ -235,18 +235,7 @@ $countries = [
 <body>
 
     <div class="limiter">
-            <?php
-            if (isset(explode('?', $_SERVER['REQUEST_URI'])[1]) 
-            && isset(explode('=', explode('?', $_SERVER['REQUEST_URI'])[1])[1]) 
-            && !empty(explode('=', explode('?', $_SERVER['REQUEST_URI'])[1])[1]) 
-            && explode('=', explode('?', $_SERVER['REQUEST_URI'])[1])[0] = 'error') {
-                $msg = rawurldecode(explode('=', explode('?', $_SERVER['REQUEST_URI'])[1])[1]);
-            ?>
-                <div class="swalDefaultError" role="alert">
-                </div>
-            <?php
-            }
-            ?>
+           
         <div class="container-login100">
             <div class="wrap-register100">
                 
@@ -263,6 +252,8 @@ $countries = [
 
                         if (isset($_SESSION["register_errors"]) && !empty($_SESSION["register_errors"])) {
                             $errors = $_SESSION["register_errors"];
+                        } else {
+                            setcookie('user_register_data', '', time() - 3600, '/');
                         }
 
                         $data = [];
@@ -270,6 +261,8 @@ $countries = [
                         if (isset($_COOKIE["user_register_data"]) && !empty($_COOKIE["user_register_data"])) {
                             $data = json_decode($_COOKIE["user_register_data"], true);
                         }
+
+                        //die (var_dump($data));
 
                         ?>
 
@@ -459,9 +452,11 @@ $countries = [
             </div>
         </div>
     </div>
+
     <?php
-    session_destroy();
+    unset($_SESSION["register_errors"]); 
     ?>
+
     <!--===============================================================================================-->
     <script src='<?= PROJECT ?>public/vendor/jquery/jquery-3.2.1.min.js'></script>
     <!--===============================================================================================-->
@@ -480,8 +475,8 @@ $countries = [
             var Toast = Swal.mixin({
                 toast: true,
                 position: 'top-end',
-                showConfirmButton: false,
-                timer: 8000
+                showConfirmButton: true,
+                timer: 20000
             });
 
             if($('.swalDefaultSuccess').length) {

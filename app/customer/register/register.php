@@ -1,7 +1,4 @@
 <?php
-//die (var_dump($_GET['p']));
-//die (var_dump ('customer'));
-//die(var_dump($_POST['country']));
 
 $_SESSION["register_errors"] = [];
 
@@ -108,7 +105,7 @@ if (empty($errors)) {
 
         if (isset($mail_assoc_to_deleted_account) && !empty($mail_assoc_to_deleted_account)) {
             foreach ($mail_assoc_to_deleted_account as $key => $value) {
-                back_deleted_account($mail_assoc_to_deleted_account[$key]['id']);
+                back_deleted_account($mail_assoc_to_deleted_account[$key]['id'], $data['mail']);
             }
         }
 
@@ -136,7 +133,7 @@ if (empty($errors)) {
 
         } else {
 
-            if (back_deleted_account($user_id) && update_token_table($user_id)) {
+            if (back_deleted_account($user_id, $data['mail']) && update_token_table($user_id)) {
 
                 setcookie('user_register_data', json_encode($data), time() + 365 * 24 * 3600, '/');
 

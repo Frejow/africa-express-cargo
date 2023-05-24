@@ -1,6 +1,6 @@
 <?php include 'app/common/agents/1stpart.php' ?>
 
-<form action="" method="post" class="mt-3">
+<form action="<?= redirect($_SESSION['theme'], PROJECT.'agents/dash-treatment/set-noaddressee-packages') ?>" method="post" class="mt-3">
     <div class="page-body">
         <div class="container-xl">
             <div class="row row-deck row-cards">

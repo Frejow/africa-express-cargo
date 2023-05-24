@@ -94,7 +94,6 @@ if (isset($_SESSION["connected"]) && !empty($_SESSION["connected"])) {
 
 //S'assurer de l'existence effective du compte
 
-
     $params = explode('/', $_GET['p']);
     $profile = "customer";
     $default_resource = "login";
