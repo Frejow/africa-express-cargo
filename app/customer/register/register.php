@@ -72,11 +72,11 @@ if (check_exist_fieldentry('phone_number', $_POST["tel"])) {
 }
 
 if (isset($_POST["nom"]) && !empty($_POST["nom"])) {
-    $data["nom"] = secure($_POST["nom"]);
+    $data["nom"] = strtoupper(secure($_POST["nom"]));
 }
 
 if (isset($_POST["prenom"]) && !empty($_POST["prenom"])) {
-    $data["prenom"] = secure($_POST["prenom"]);
+    $data["prenom"] = ucfirst(secure($_POST["prenom"]));
 }
 
 if (isset($_POST["tel"]) && !empty($_POST["tel"])) {
