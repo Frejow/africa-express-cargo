@@ -111,7 +111,7 @@ if (empty($errors)) {
 
         setcookie('user_register_data', '', time() - 3600, '/');
     
-        $subject = 'Nouveau compte agent en attente de validation';
+        $subject = 'NOUVEAU COMPTE AGENT EN ATTENTE DE VALIDATION';
 
         ob_start(); 
 
