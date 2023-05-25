@@ -8,7 +8,7 @@ include 'app/common/auth/1stpart.php';
 
 <body>
 
-    <form action="<?= PROJECT.'customer/reset-password/link-expiredtreat' ?>" method="post">
+    <form action="<?= PROJECT.'agents/reset-password/link-expiredtreat' ?>" method="post">
         <div class="">
             <div class="modal-status bg-danger"></div>
             <div class="modal-body text-center py-4">

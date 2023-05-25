@@ -17,8 +17,8 @@ include 'app/common/auth/1stpart.php';
             <path d="M12 12m-9 0a9 9 0 1 0 18 0a9 9 0 1 0 -18 0" />
             <path d="M9 12l2 2l4 -4" />
         </svg>
-        <h3>Super !!! Vous êtes inscrit. Vous recevrez un mail après examen et validation de votre compte.</h3>
-        <div class="text-muted">Si vous ne recevez pas de mail dans l'heure qui suit, <a href="mailto:contact.support@africa-express-cargo.com" target="_blank" >contactez-nous ici</a></div>
+        <h3>Cette adresse email est bien associé à un compte.</h3>
+        <div class="text-muted">Un email de changement de mot de passe vient d'être envoyé à cette adresse email. Merci de vérifier votre boite de réception ou vos spams et suivre les instructions pour réinitialiser votre mot de passe. Le lien de réinitialisation expire dans 10min à compter de maintenant.</div>
     </div>
 </div>
 

@@ -203,11 +203,11 @@ if (isset($_SESSION["connected"]) && !empty($_SESSION["connected"])) {
 
         } else {
 
-            require_once 'error/404.php';
+            require_once '404/index.php';
 
         }
 
     } else {
         
-        require_once 'error/404.php';;
+        require_once '404/index.php';;
     }
