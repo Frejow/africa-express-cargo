@@ -1,32 +1,10 @@
-<!doctype html>
-<html lang="fr">
+<?php
 
-<head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
-    <title>Lien expiré</title>
-    <!-- CSS files -->
-    <link href='<?= PROJECT ?>public/css/tabler.min.css?202302251230' rel="stylesheet" />
-    <link href='<?= PROJECT ?>public/css/tabler-vendors.min.css?202302251230' rel="stylesheet" />
-    <link href='<?= PROJECT ?>public/css/demo.min.css?202302251230' rel="stylesheet" />
-    <link href='<?= PROJECT ?>public/images/aec_favicon.png' type="image/x-icon" rel="shortcut icon">
-    <link href='<?= PROJECT ?>public/css/fontawesome-free/css/all.min.css' rel="stylesheet" />
-    <script src='<?= PROJECT ?>public/js/jquery/jquery-3.6.3.min.js'></script>
-    <link rel="stylesheet" type="text/css" href='<?= PROJECT ?>public/sweetalert2-theme-bootstrap-4/bootstrap-4.min.css'>
+$_SESSION['current_url'] = "http://{$_SERVER['HTTP_HOST']}{$_SERVER['REQUEST_URI']}";
 
-    <style>
-        @import url('https://rsms.me/inter/inter.css');
+include 'app/common/auth/1stpart.php';
 
-        :root {
-            --tblr-font-sans-serif: 'Inter Var', -apple-system, BlinkMacSystemFont, San Francisco, Segoe UI, Roboto, Helvetica Neue, sans-serif;
-        }
-
-        body {
-            font-feature-settings: "cv03", "cv04", "cv11";
-        }
-    </style>
-</head>
+?>
 
 <body>
 
@@ -48,36 +26,8 @@
         </div>
     </form>
 
-    <script src="<?= PROJECT ?>public/jquery/jquery.js"></script>
-    <script src="<?= PROJECT ?>public/js/tabler.js?202302251230" defer></script>
-    <script src="<?= PROJECT ?>public/js/demo.js?202302251230" defer></script>
-    <script src='<?= PROJECT ?>public/sweetalert2/sweetalert2.min.js'></script>
-
-    <script>
-        $(function() {
-            var Toast = Swal.mixin({
-                toast: true,
-                position: 'top-end',
-                showConfirmButton: true,
-                timer: 20000
-            });
-
-            if($('.swalDefaultSuccess').length) {
-                Toast.fire({
-                    icon: 'success',
-                    title: '<?= $msg ?>'
-                });
-            }
-            
-            if($('.swalDefaultError').length) {
-                Toast.fire({
-                    icon: 'error',
-                    title: '<?= $msg ?>'
-                });
-            }
-        });
-    </script>
-
 </body>
+
+<?php include 'app/common/auth/2ndpart.php'; ?>
 
 </html>

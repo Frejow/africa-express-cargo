@@ -1,11 +1,9 @@
 <?php
-//die (var_dump($_SERVER['QUERY_STRING']));
-//die (var_dump($_SERVER));
-//die (var_dump($params[2]));
+
 ?>
 
 <!doctype html>
-<html lang="en">
+<html lang="fr">
 
 <head>
     <meta charset="utf-8" />

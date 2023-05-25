@@ -4,7 +4,7 @@ session_start();
 
 session_regenerate_id(true);
 
-include "app/common/functions_folder/functions.php";
+include "app/common/functions.php";
 
 //Suppression des tokens après délai d'expiration de 10min
 date_default_timezone_set("Africa/Lagos");

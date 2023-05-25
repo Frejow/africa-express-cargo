@@ -95,7 +95,7 @@ if (isset($_POST["country"]) && !empty($_POST["country"])) {
     $data["country"] = $_POST["country"]; //die (var_dump($data["country"]));
 }
 
-$data["profile"] = "AGENTS";
+$data["profile"] = "AGENT";
 
 if (empty($errors)) {
 

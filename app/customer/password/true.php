@@ -2,35 +2,9 @@
 
 $_SESSION['current_url'] = "http://{$_SERVER['HTTP_HOST']}{$_SERVER['REQUEST_URI']}";
 
+include 'app/common/auth/1stpart.php';
+
 ?>
-<!doctype html>
-<html lang="fr">
-
-<head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
-    <title>Mot de passe oublié</title>
-    <!-- CSS files -->
-    <link href='<?= PROJECT ?>public/css/tabler.min.css?202302251230' rel="stylesheet" />
-    <link href='<?= PROJECT ?>public/css/tabler-vendors.min.css?202302251230' rel="stylesheet" />
-    <link href='<?= PROJECT ?>public/css/demo.min.css?202302251230' rel="stylesheet" />
-    <link href='<?= PROJECT ?>public/images/aec_favicon.png' type="image/x-icon" rel="shortcut icon">
-    <link href='<?= PROJECT ?>public/css/fontawesome-free/css/all.min.css' rel="stylesheet" />
-    <script src='<?= PROJECT ?>public/js/jquery/jquery-3.6.3.min.js'></script>
-
-    <style>
-        @import url('https://rsms.me/inter/inter.css');
-
-        :root {
-            --tblr-font-sans-serif: 'Inter Var', -apple-system, BlinkMacSystemFont, San Francisco, Segoe UI, Roboto, Helvetica Neue, sans-serif;
-        }
-
-        body {
-            font-feature-settings: "cv03", "cv04", "cv11";
-        }
-    </style>
-</head>
 
 <body>
 
@@ -48,10 +22,8 @@ $_SESSION['current_url'] = "http://{$_SERVER['HTTP_HOST']}{$_SERVER['REQUEST_URI
     </div>
 </div>
 
-    <script src="<?= PROJECT ?>public/jquery/jquery.js"></script>
-    <script src="<?= PROJECT ?>public/js/tabler.js?202302251230" defer></script>
-    <script src="<?= PROJECT ?>public/js/demo.js?202302251230" defer></script>
-
 </body>
+
+<?php include 'app/common/auth/2ndpart.php'; ?>
 
 </html>

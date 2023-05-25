@@ -2,33 +2,10 @@
 
 $_SESSION['current_url'] = "http://{$_SERVER['HTTP_HOST']}{$_SERVER['REQUEST_URI']}";
 
+include 'app/common/auth/1stpart.php';
+
 ?>
-<!DOCTYPE html>
-<html lang="en">
 
-<head>
-    <title>Africa Express Cargo | Mot de passe oublié</title>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-
-    <!--===============================================================================================-->
-    <link rel="shortcut icon" href="<?= PROJECT ?>public/images/aec_favicon.png" type="image/x-icon">
-    <!--===============================================================================================-->
-    <link rel="stylesheet" type="text/css" href='<?= PROJECT ?>public/vendor/bootstrap/css/bootstrap.min.css'>
-    <!--===============================================================================================-->
-    <link rel="stylesheet" type="text/css" href='<?= PROJECT ?>public/fonts/font-awesome-4.7.0/css/font-awesome.min.css'>
-    <!--===============================================================================================-->
-    <link rel="stylesheet" type="text/css" href='<?= PROJECT ?>public/vendor/animate/animate.css'>
-    <!--===============================================================================================-->
-    <link rel="stylesheet" type="text/css" href='<?= PROJECT ?>public/vendor/css-hamburgers/hamburgers.min.css'>
-    <!--===============================================================================================-->
-    <link rel="stylesheet" type="text/css" href='<?= PROJECT ?>public/vendor/select2/select2.min.css'>
-    <!--===============================================================================================-->
-    <link rel="stylesheet" type="text/css" href='<?= PROJECT ?>public/css/util.css'>
-    <link rel="stylesheet" type="text/css" href='<?= PROJECT ?>public/css/main.css'>
-    <!--===============================================================================================-->
-
-</head>
 
 <body>
 
@@ -102,24 +79,8 @@ $_SESSION['current_url'] = "http://{$_SERVER['HTTP_HOST']}{$_SERVER['REQUEST_URI
     unset($_SESSION["password_error"]); 
     ?>
 
-    <!--===============================================================================================-->
-    <script src='<?= PROJECT ?>public/vendor/jquery/jquery-3.2.1.min.js'></script>
-    <!--===============================================================================================-->
-    <script src='<?= PROJECT ?>public/vendor/bootstrap/js/popper.js'></script>
-    <script src='<?= PROJECT ?>public/vendor/bootstrap/js/bootstrap.min.js'></script>
-    <!--===============================================================================================-->
-    <script src='<?= PROJECT ?>public/vendor/select2/select2.min.js'></script>
-    <!--===============================================================================================-->
-    <script src='<?= PROJECT ?>public/vendor/tilt/tilt.jquery.min.js'></script>
-    <!--===============================================================================================-->
-    <script src='<?= PROJECT ?>public/js/main.js'></script>
-
-    <script>
-        $('.js-tilt').tilt({
-            scale: 1.1
-        })
-    </script>
-
 </body>
+
+<?php include 'app/common/auth/2ndpart.php'; ?>
 
 </html>

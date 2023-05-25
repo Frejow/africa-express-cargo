@@ -20,8 +20,8 @@ if (!isset($_POST["pass"]) || empty($_POST["pass"])) {
 
 if (empty($errors)) {
 
-    if (check_exist_userby_email_and_password($_POST["m_ps"], $_POST["pass"], 'AGENTS', 1, 1, 0) 
-    || check_exist_userby_pseudo_and_password($_POST["m_ps"], $_POST["pass"], 'AGENTS', 1, 1, 0)) {
+    if (check_exist_userby_email_and_password($_POST["m_ps"], $_POST["pass"], 'AGENT', 1, 1, 0) 
+    || check_exist_userby_pseudo_and_password($_POST["m_ps"], $_POST["pass"], 'AGENT', 1, 1, 0)) {
 
         if (isset($_POST["remember_me"]) && !empty($_POST["remember_me"])){
         
@@ -67,8 +67,8 @@ if (empty($errors)) {
         setcookie('ud', '', time() - 3600, '/');
 
     }
-    elseif (!check_exist_userby_email_and_password($_POST["m_ps"], $_POST["pass"], 'AGENTS', 1, 1, 0) 
-    || !check_exist_userby_pseudo_and_password($_POST["m_ps"], $_POST["pass"], 'AGENTS', 1, 1, 0)) {
+    elseif (!check_exist_userby_email_and_password($_POST["m_ps"], $_POST["pass"], 'AGENT', 1, 1, 0) 
+    || !check_exist_userby_pseudo_and_password($_POST["m_ps"], $_POST["pass"], 'AGENT', 1, 1, 0)) {
 
         setcookie(
             "error_msg",
@@ -95,8 +95,8 @@ if (empty($errors)) {
         header("location:".PROJECT."agents/login");
         
     }
-    elseif (!check_exist_userby_email_and_password($_POST["m_ps"], $_POST["pass"], 'AGENTS', 1, 0, 0) 
-    || !check_exist_userby_pseudo_and_password($_POST["m_ps"], $_POST["pass"], 'AGENTS', 1, 0, 0)) {
+    elseif (!check_exist_userby_email_and_password($_POST["m_ps"], $_POST["pass"], 'AGENT', 1, 0, 0) 
+    || !check_exist_userby_pseudo_and_password($_POST["m_ps"], $_POST["pass"], 'AGENT', 1, 0, 0)) {
 
         setcookie(
             "error_msg",
@@ -123,8 +123,8 @@ if (empty($errors)) {
         header("location:".PROJECT."agents/login");
         
     }
-    elseif (!check_exist_userby_email_and_password($_POST["m_ps"], $_POST["pass"], 'AGENTS', 0, 0, 0) 
-    || !check_exist_userby_pseudo_and_password($_POST["m_ps"], $_POST["pass"], 'AGENTS', 0, 0, 0)) {
+    elseif (!check_exist_userby_email_and_password($_POST["m_ps"], $_POST["pass"], 'AGENT', 0, 0, 0) 
+    || !check_exist_userby_pseudo_and_password($_POST["m_ps"], $_POST["pass"], 'AGENT', 0, 0, 0)) {
 
         setcookie(
             "error_msg",
