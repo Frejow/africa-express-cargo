@@ -2,7 +2,7 @@
 
 //Récupération de l'url de la page
 if (connected()) {
-    $_SESSION['current_url'] = "http://{$_SERVER['HTTP_HOST']}{$_SERVER['REQUEST_URI']}";
+    $_SESSION['current_url'] = "{$_SERVER['REQUEST_SCHEME']}://{$_SERVER['HTTP_HOST']}{$_SERVER['REQUEST_URI']}";
 }
 
 //Inclure l'en-tête 
@@ -242,7 +242,7 @@ $rows = count_rows_in_table($table, 0);
                                             if (!empty($packages_listings[$key]["customer_package_group_id"])) {
 
                                                 //Récupération du numéro de suivi du groupe de colis
-                                                $packages_group_tracking_number = select_packagegroup_trackingnumber($packages_listings[$key]["customer_package_group_id"])['tracking_number'];
+                                                $packages_group_tracking_number = get_packages_group_tracking_number($packages_listings[$key]["customer_package_group_id"])['tracking_number'];
 
                                                 /**
                                                  * Récupération de tous les colis contenu dans le groupe. 
@@ -250,7 +250,7 @@ $rows = count_rows_in_table($table, 0);
                                                  * appartient le colis présentement concerné. Cette liste sera affichée dans un modal avec le numéro de suivi du colis
                                                  * présentement concerné surligné en orange pour permettre son identification rapide par l'utilisateur.
                                                  */
-                                                $packages_ingrouplistings = select_allpackages_forpackagegroup($packages_listings[$key]["customer_package_group_id"]);
+                                                $packages_ingrouplistings = get_all_packages_linked_to_specific_packages_group($packages_listings[$key]["customer_package_group_id"]);
 
                                             }
                                     ?>
@@ -567,7 +567,7 @@ if (isset($packages_listings) && !empty($packages_listings)) {
                         <div class="row row-cols g-3">
                             <?php
                             if (check_package_id_in_packages_images_tab($packages_listings[$key]["id"])) {
-                                $select_images = select_package_images($packages_listings[$key]["id"]);
+                                $select_images = get_package_images($packages_listings[$key]["id"]);
                                 if (!empty($select_images)) {
                                     foreach ($select_images as $_key => $value) {
                             ?>

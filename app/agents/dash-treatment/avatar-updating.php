@@ -8,9 +8,9 @@ $_SESSION['data'] = [];
 
 if (isset($_POST["avatar_deletion"])) {
 
-    if (update_avatar($data[0]['id'], 'null')) {
+    if (update_avatar($data['id'], 'null')) {
 
-        if (select_user_updated_info($data[0]['id'])) {
+        if (get_user_personal_inf($data['id'])) {
 
             $_SESSION['success_msg'] = 'Mise à jour effectuée avec succès';
 
@@ -34,7 +34,7 @@ if (isset($_POST["avatar_deletion"])) {
 
 }
 
-if (isset($_POST['pass_w']) && !empty($_POST['pass_w']) && check_password($data[0]['id'], $_POST['pass_w'])) {
+if (isset($_POST['pass_w']) && !empty($_POST['pass_w']) && check_submitted_password($data['id'], $_POST['pass_w'])) {
 
     if (isset($_FILES["fileToUpload"]) && !empty($_FILES['fileToUpload'])) {
 
@@ -54,7 +54,7 @@ if (isset($_POST['pass_w']) && !empty($_POST['pass_w']) && check_password($data[
     
                     $rootpath = $_SERVER["DOCUMENT_ROOT"] . PROJECT . 'public/images';
     
-                    $newfolder = $rootpath . '/uploads/' . $data[0]['user_name'] . '/profile/';
+                    $newfolder = $rootpath . '/uploads/' . $data['user_name'] . '/profile/';
     
                     if (!file_exists($newfolder)) {
     
@@ -65,7 +65,7 @@ if (isset($_POST['pass_w']) && !empty($_POST['pass_w']) && check_password($data[
     
                     if ($move_uploaded_file) {
     
-                        $newdata["avatar"] = PROJECT . 'public/images/uploads/' . $data[0]['user_name'] . '/profile/' . basename($_FILES['fileToUpload']['name']);
+                        $newdata["avatar"] = PROJECT . 'public/images/uploads/' . $data['user_name'] . '/profile/' . basename($_FILES['fileToUpload']['name']);
     
                     }
     
@@ -100,7 +100,7 @@ if (isset($_POST['pass_w']) && !empty($_POST['pass_w']) && check_password($data[
         
     } else {
 
-        $newdata["avatar"] = $data[0]["avatar"];
+        $newdata["avatar"] = $data["avatar"];
 
         $error["avatar"] = "Veuillez importer une image.";
 
@@ -112,9 +112,9 @@ if (isset($_POST['pass_w']) && !empty($_POST['pass_w']) && check_password($data[
 
         if (isset($_POST) && !empty($_POST)) {
 
-            if (update_avatar($data[0]['id'], $newdata['avatar'])) {
+            if (update_avatar($data['id'], $newdata['avatar'])) {
 
-                if (select_user_updated_info($data[0]['id'])) {
+                if (get_user_personal_inf($data['id'])) {
     
                     $_SESSION['success_msg'] = 'Mise à jour effectuée avec succès';
     
@@ -148,7 +148,7 @@ if (isset($_POST['pass_w']) && !empty($_POST['pass_w']) && check_password($data[
 
     }
 
-} elseif (isset($_POST['pass_w']) && !empty($_POST['pass_w']) && !check_password($data[0]['id'], $_POST['pass_w'])) {
+} elseif (isset($_POST['pass_w']) && !empty($_POST['pass_w']) && !check_submitted_password($data['id'], $_POST['pass_w'])) {
 
     $error["pass_w"] = 'La tentative de mise à jour de l\'avatar a échoué. Mot de passe erroné. Réessayer !';
 

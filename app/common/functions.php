@@ -8,6 +8,7 @@ use PHPMailer\PHPMailer\Exception;
  * 
  * @param string $theme The actual theme running on the site.
  * @param string $link The link to redirect to.
+ * 
  * @return $redirect_url The final url to redirect to, including the theme.
  */
 function redirect(string $theme, string $link) {
@@ -21,6 +22,7 @@ function redirect(string $theme, string $link) {
 /** Securisation of form fields entry
  * 
  * @param $data The data to secure.
+ * 
  * @return string $data The final value of $data after passing the process of securisation.
  */
 function secure($data)
@@ -41,6 +43,7 @@ function secure($data)
  * @param $country The user Country.
  * @param $password The user Password.
  * @param $profile The user type of Profile (CUSTOMER, AGENT or ADMIN)
+ * 
  * @return bool The result.
 */
 function registration($name, $first_names, $phone_number, $user_name, $mail, $country, $password, $profile): bool
@@ -81,6 +84,7 @@ function registration($name, $first_names, $phone_number, $user_name, $mail, $co
  * @param string $recipient The username of the user which own the destination mail address.
  * @param string $subject The subject.
  * @param string $body The body.
+ * 
  * @return bool The result.
  */
 function mailsendin(string $destination, string $recipient, string $subject, string $body): bool
@@ -125,6 +129,7 @@ function mailsendin(string $destination, string $recipient, string $subject, str
  * 
  * @param int $id The user id.
  * @param string $mail The mail address submitted by user at registration.
+ * 
  * @return bool The result.
 */
 function back_deleted_account(int $id, string $mail): bool
@@ -162,6 +167,7 @@ function back_deleted_account(int $id, string $mail): bool
 /** Convert a date to number
  * 
  * @param $date The date to convert.
+ * 
  * @return int $date The result after conversion.
  */
 function date_to_number($date)
@@ -226,6 +232,7 @@ function _database_login()
  * 
  * @param string $fieldtype The field type which value was submitted.
  * @param string $fieldentry The value submitted.
+ * 
  * @return bool The result.
  */
 function check_exist_fieldentry(string $fieldtype, string $fieldentry): bool
@@ -260,6 +267,7 @@ function check_exist_fieldentry(string $fieldtype, string $fieldentry): bool
 /** Check new mail address associate to old(s) deleted account(s)
  * 
  * @param string $mail The new mail address.
+ * 
  * @return array $mail_assoc_to_deleted_account All deleted account(s) with a mail address that match with the new one.
  */
 function check_mail_assoc_to_deleted_account(string $mail)
@@ -295,6 +303,7 @@ function check_mail_assoc_to_deleted_account(string $mail)
 /** Update account status
  * 
  * @param int $user_id The user id.
+ * 
  * @return bool The result.
  */
 function update_account_status(int $user_id): bool
@@ -331,9 +340,10 @@ function update_account_status(int $user_id): bool
 /** Get user id by mail address 
  * 
  * @param string $mail The user mail address.
+ * 
  * @return array $user_id The user id.
 */
-function select_user_id(string $mail)
+function get_user_id(string $mail)
 {
     $user_id = [];
 
@@ -363,9 +373,10 @@ function select_user_id(string $mail)
 /** Get user mail and username by id 
  * 
  * @param int $user_id The user id.
+ * 
  * @return array $mail_pseudo The mail and the username.
 */
-function select_user_mail_pseudo(int $user_id)
+function get_user_mail_and_username(int $user_id)
 {
     $mail_pseudo = [];
 
@@ -395,9 +406,10 @@ function select_user_mail_pseudo(int $user_id)
 /** Get user username by mail address 
  * 
  * @param string $mail The mail address.
+ * 
  * @return array $user_name The username.
 */
-function select_username(string $mail)
+function get_username(string $mail)
 {
     $user_name = [];
 
@@ -426,11 +438,11 @@ function select_username(string $mail)
 
 /** Get all not deleted rows of tokens table
  * 
- * @return array $select_tokens All concerned rows.
+ * @return array $get_all_active_tokens All concerned rows.
  */
-function select_tokens()
+function get_all_active_tokens()
 {
-    $select_tokens = [];
+    $get_all_active_tokens = [];
 
     $database = _database_login();
 
@@ -449,10 +461,10 @@ function select_tokens()
 
         if (isset($data) && !empty($data) && is_array($data)) {
 
-            $select_tokens = $data;
+            $get_all_active_tokens = $data;
         }
     }
-    return $select_tokens;
+    return $get_all_active_tokens;
 }
 
 /** Token insertion
@@ -460,9 +472,10 @@ function select_tokens()
  * @param int $user_id The user id.
  * @param string $type The type of token.
  * @param string $token The token.
+ * 
  * @return bool The result.
  */
-function insert_intoken_table(int $user_id, string $type, string $token): bool
+function insert_token_in_token_table(int $user_id, string $type, string $token): bool
 {
 
     $insertion = false;
@@ -498,9 +511,10 @@ function insert_intoken_table(int $user_id, string $type, string $token): bool
  * @param string $type The type of token.
  * @param int $is_active The active status of the token.
  * @param int $is_deleted The delete status of the token.
+ * 
  * @return bool The result.
  */
-function check_user_registered_token_info(int $user_id, string $token, string $type, int $is_active, int $is_deleted): bool
+function check_user_registered_token_inf(int $user_id, string $token, string $type, int $is_active, int $is_deleted): bool
 {
 
     $info_found = false;
@@ -536,9 +550,10 @@ function check_user_registered_token_info(int $user_id, string $token, string $t
  * 
  * @param int $user_id The user id.
  * @param string $token The token.
+ * 
  * @return array $token_date_info The creation date and the update date
  */
-function select_token_date_info(int $user_id, string $token)
+function get_token_date_inf(int $user_id, string $token)
 {
 
     $token_date_info = [];
@@ -570,6 +585,7 @@ function select_token_date_info(int $user_id, string $token)
 /** Update token table
  * 
  * @param int $user_id The user id.
+ * 
  * @return bool The result.
  */
 function update_token_table(int $user_id): bool
@@ -605,6 +621,7 @@ function update_token_table(int $user_id): bool
  * 
  * @param string $mail The mail address.
  * @param string $password The password.
+ * 
  * @return bool The result.
  */
 function update_password(string $mail, string $password): bool
@@ -636,7 +653,7 @@ function update_password(string $mail, string $password): bool
     return $update_password;
 }
 
-/** Check informations submitted by user at login (mail & password)
+/** Check informations submitted by user at login (email & password)
  * 
  * @param string $mail The mail address.
  * @param string $password The password.
@@ -644,12 +661,13 @@ function update_password(string $mail, string $password): bool
  * @param int $is_valid_account The valid account status of the user.
  * @param int $is_active The active status of the user.
  * @param int $is_deleted The delete status of the user.
- * @return bool The result.
+ * 
+ * @return array It contain the user personal informations.
  */
-function check_exist_userby_email_and_password(string $mail, string $password, string $profile, int $is_valid_account, int $is_active, int $is_deleted): bool
+function retrieve_userby_email_and_password(string $mail, string $password, string $profile, int $is_valid_account, int $is_active, int $is_deleted)
 {
 
-    $exist_user = false;
+    $values = [];
 
     $database = _database_login();
 
@@ -668,17 +686,15 @@ function check_exist_userby_email_and_password(string $mail, string $password, s
 
     if ($request_execution) {
 
-        $data = $request_prepare->fetchAll(PDO::FETCH_ASSOC);
+        $data = $request_prepare->fetch(PDO::FETCH_ASSOC);
 
         if (isset($data) && !empty($data) && is_array($data)) {
 
-            $_SESSION['connected'] = json_encode($data);
-
-            $exist_user = true;
+            $values = json_encode($data);
         }
     }
 
-    return $exist_user;
+    return $values;
 }
 
 /** Check informations submitted by user at login (username & password)
@@ -689,12 +705,13 @@ function check_exist_userby_email_and_password(string $mail, string $password, s
  * @param int $is_valid_account The valid account status of the user.
  * @param int $is_active The active status of the user.
  * @param int $is_deleted The delete status of the user.
- * @return bool The result.
+ * 
+ * @return array It contain the user personal informations.
  */
-function check_exist_userby_pseudo_and_password(string $pseudo, string $password, string $profile, int $is_valid_account, int $is_active, int $is_deleted): bool
+function retrieve_userby_pseudo_and_password(string $pseudo, string $password, string $profile, int $is_valid_account, int $is_active, int $is_deleted)
 {
 
-    $exist_user = false;
+    $values = [];
 
     $database = _database_login();
 
@@ -710,20 +727,19 @@ function check_exist_userby_pseudo_and_password(string $pseudo, string $password
         'is_active' => $is_active,
         'is_deleted' => $is_deleted
     ]);
-
+    
     if ($request_execution) {
 
-        $data = $request_prepare->fetchAll(PDO::FETCH_ASSOC);
+        $data = $request_prepare->fetch(PDO::FETCH_ASSOC);
 
         if (isset($data) && !empty($data) && is_array($data)) {
 
-            $_SESSION['connected'] = json_encode($data);
+            $values = json_encode($data); 
 
-            $exist_user = true;
         }
     }
 
-    return $exist_user;
+    return $values;
 }
 
 /** Update user personal informations 
@@ -735,9 +751,10 @@ function check_exist_userby_pseudo_and_password(string $pseudo, string $password
  * @param string $country The user Country.
  * @param string $mail The user Mail Address.
  * @param string $phone_number The user Phone Number.
+ * 
  * @return bool The result.
 */
-function update_personal_info(int $id, string $name, string $first_names, string $user_name, string $country, string $mail, string $phone_number): bool
+function update_personal_inf(int $id, string $name, string $first_names, string $user_name, string $country, string $mail, string $phone_number): bool
 {
     date_default_timezone_set("Africa/Lagos");
 
@@ -773,9 +790,10 @@ function update_personal_info(int $id, string $name, string $first_names, string
 /** Get user informations after update
  * 
  * @param int $id The user id.
+ * 
  * @return bool The result.
  */
-function select_user_updated_info(int $id): bool
+function get_user_personal_inf(int $id): bool
 {
 
     $selected = false;
@@ -792,7 +810,7 @@ function select_user_updated_info(int $id): bool
 
     if ($request_execution) {
 
-        $data = $request_prepare->fetchAll(PDO::FETCH_ASSOC);
+        $data = $request_prepare->fetch(PDO::FETCH_ASSOC);
 
         if (isset($data) && !empty($data) && is_array($data)) {
 
@@ -809,9 +827,10 @@ function select_user_updated_info(int $id): bool
  * 
  * @param int $id The user id.
  * @param string $password The password submitted by user.
+ * 
  * @return bool The result.
  */
-function check_password(int $id, string $password): bool
+function check_submitted_password(int $id, string $password): bool
 {
 
     $password_found = false;
@@ -829,7 +848,7 @@ function check_password(int $id, string $password): bool
 
     if ($request_execution) {
 
-        $data = $request_prepare->fetchAll(PDO::FETCH_ASSOC);
+        $data = $request_prepare->fetch(PDO::FETCH_ASSOC);
 
         if (isset($data) && !empty($data) && is_array($data)) {
             $password_found = true;
@@ -843,6 +862,7 @@ function check_password(int $id, string $password): bool
  * 
  * @param int $id The user id.
  * @param string $avatar The path to avatar.
+ * 
  * @return bool The result.
  */
 function update_avatar(int $id, string $avatar): bool
@@ -876,6 +896,7 @@ function update_avatar(int $id, string $avatar): bool
 /** Account deactivation
  * 
  * @param int $id The user id.
+ * 
  * @return bool The result.
  */
 function deactivated_account(int $id): bool
@@ -909,6 +930,7 @@ function deactivated_account(int $id): bool
 /** Account deletion 
  * 
  * @param int $id The user id.
+ * 
  * @return bool The result.
 */
 function deleted_account(int $id): bool
@@ -943,6 +965,7 @@ function deleted_account(int $id): bool
 /** Check tracking number
  * 
  * @param string $trackN The tracking number.
+ * 
  * @return bool The result.
  */
 function check_tracking_number(string $trackN): bool
@@ -1019,6 +1042,7 @@ function delete_dir($dir)
  * @param $volumetric_weight Package volumetric weight.
  * @param $product_type Product type according to package nature.
  * @param int $user_id The user id.
+ * 
  * @return bool The result.
  */
 function add_package(
@@ -1067,6 +1091,7 @@ function add_package(
  * @param int $package_id The package id.
  * @param string $image The image path.
  * @param int $user_id The user id.
+ * 
  * @return bool The result.
  */
 function add_images_for_package(int $package_id, string $image, int $user_id): bool
@@ -1099,9 +1124,10 @@ function add_images_for_package(int $package_id, string $image, int $user_id): b
 /** Get Package id by tracking number
  * 
  * @param string $trackN The package tracking number.
+ * 
  * @return array $package_id The package id.
  */
-function select_package_id(string $trackN)
+function get_package_id(string $trackN)
 {
     $package_id = [];
 
@@ -1130,6 +1156,7 @@ function select_package_id(string $trackN)
 /** Check package id in packages_images table
  * 
  * @param string $package_id Package id.
+ * 
  * @return bool The result.
  */
 function check_package_id_in_packages_images_tab(string $package_id): bool
@@ -1162,9 +1189,10 @@ function check_package_id_in_packages_images_tab(string $package_id): bool
 /** Get package images
  * 
  * @param int $package_id Package id.
+ * 
  * @return array $packages_images All images provide for this package.
  */
-function select_package_images(int $package_id)
+function get_package_images(int $package_id)
 {
     $package_images = [];
 
@@ -1198,6 +1226,7 @@ function select_package_images(int $package_id)
  * @param string $status Package status
  * @param string $search The value of search field. 
  * @param int $user_id The user id.
+ * 
  * @return array $list All packages list based on the provide values of the function parameters.
  */
 function listings(string $table, int $page, int $packages_nb_per_page, string $status, string $search, int $user_id)
@@ -1292,6 +1321,7 @@ function listings(string $table, int $page, int $packages_nb_per_page, string $s
  * 
  * @param string $table The name of table.
  * @param int $user_id.
+ * 
  * @return array $rows The number of rows.
  */
 function count_rows_in_table(string $table, int $user_id)
@@ -1326,9 +1356,10 @@ function count_rows_in_table(string $table, int $user_id)
  * 
  * @param string $tracking_number Package or packages group tracking_number.
  * @param string $table The name of the table.
+ * 
  * @return bool The result.
  */
-function deleted_package_or_packagegroup(string $tracking_number, string $table): bool
+function deleted_package_or_packages_group(string $tracking_number, string $table): bool
 {
     date_default_timezone_set("Africa/Lagos");
 
@@ -1360,9 +1391,10 @@ function deleted_package_or_packagegroup(string $tracking_number, string $table)
 /** Listing of all unlinked packages to a packages group 
  * 
  * @param int $user_id The user id.
+ * 
  * @return array $packages_listing All packages concerned.
 */
-function packages_listing_in_selectfield(int $user_id)
+function packages_listing_in_select_field(int $user_id)
 {
 
     $packages_listing = [];
@@ -1395,9 +1427,10 @@ function packages_listing_in_selectfield(int $user_id)
  * 
  * @param string $tracking_number Packages group tracking number.
  * @param int $user_id The user id.
+ * 
  * @return bool The result.
  */
-function insert_select_incustomerpackagegroup_table(string $tracking_number, int $user_id): bool
+function insert_new_packages_group_and_get_id(string $tracking_number, int $user_id): bool
 {
 
     $insertselect = false;
@@ -1429,7 +1462,7 @@ function insert_select_incustomerpackagegroup_table(string $tracking_number, int
 
         if ($selectrequest_execution) {
 
-            $data = $selectrequest_prepare->fetchAll(PDO::FETCH_ASSOC);
+            $data = $selectrequest_prepare->fetch(PDO::FETCH_ASSOC);
 
             if (isset($data) && !empty($data) && is_array($data)) {
 
@@ -1447,6 +1480,7 @@ function insert_select_incustomerpackagegroup_table(string $tracking_number, int
  * 
  * @param int $customer_package_group_id Packages group id.
  * @param string $package_tracking_number Package tracking number.
+ * 
  * @return bool The result.
  */
 function link_specific_packages_group_to_package(int $customer_package_group_id, string $package_tracking_number): bool
@@ -1481,6 +1515,7 @@ function link_specific_packages_group_to_package(int $customer_package_group_id,
  * 
  * @param int $customer_package_group_id Packages group id.
  * @param string $tracking_number Package tracking number.
+ * 
  * @return bool The result.
  */
 function unlink_specific_packages_group_of_package(string $customer_package_group_id, string $tracking_number): bool
@@ -1514,9 +1549,10 @@ function unlink_specific_packages_group_of_package(string $customer_package_grou
 /** Get packages group tracking number
  * 
  * @param int $package_group_id Packages group id.
+ * 
  * @return array $packagegroup_trackingnumber The tracking number. 
  */
-function select_packagegroup_trackingnumber(int $package_group_id)
+function get_packages_group_tracking_number(int $package_group_id)
 {
     $packagegroup_trackingnumber = [];
 
@@ -1545,9 +1581,10 @@ function select_packagegroup_trackingnumber(int $package_group_id)
 /** Get all tracking numbers of all packages in a packages group
  * 
  * @param int $package_group_id Packages group id.
+ * 
  * @return array $allpackages_inpackagegroup All packages concerned.
  */
-function select_allpackages_forpackagegroup(int $package_group_id)
+function get_all_packages_linked_to_specific_packages_group(int $package_group_id)
 {
     $allpackages_inpackagegroup = [];
 
@@ -1578,6 +1615,7 @@ function select_allpackages_forpackagegroup(int $package_group_id)
  * 
  * @param int $customer_package_group_id Packages group id.
  * @param string $tracking_number Package tracking number.
+ * 
  * @return bool The result.
  */
 function unlink_specific_packages_group_ofAll_packages(int $customer_package_group_id): bool

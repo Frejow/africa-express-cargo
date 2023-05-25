@@ -1,6 +1,6 @@
 <?php
 if (connected()) {
-    $_SESSION['current_url'] = "http://{$_SERVER['HTTP_HOST']}{$_SERVER['REQUEST_URI']}";
+    $_SESSION['current_url'] = "{$_SERVER['REQUEST_SCHEME']}://{$_SERVER['HTTP_HOST']}{$_SERVER['REQUEST_URI']}";
 }
 
 include 'app/common/agents/1stpart.php'; ?>
@@ -10,16 +10,16 @@ include 'app/common/agents/1stpart.php'; ?>
         <div class="row g-2 align-items-center">
             <div class="col-auto">
                 <a href="" class="modal-fade" data-bs-toggle="modal" data-bs-target="#previousimage">
-                    <span class="avatar avatar-lg rounded" style="background-image: url(<?= $data[0]['avatar'] == 'null' ? PROJECT . 'public/images/default-user-profile.jpg' : $data[0]['avatar'] ?>)"></span>
+                    <span class="avatar avatar-lg rounded" style="background-image: url(<?= $data['avatar'] == 'null' ? PROJECT . 'public/images/default-user-profile.jpg' : $data['avatar'] ?>)"></span>
                 </a>
                 <?php
-                    if ($data[0]['avatar'] != 'null') {
+                    if ($data['avatar'] != 'null') {
                     ?>
                         <div class="modal fade" id="previousimage">
                             <div class="modal-dialog modal-dialog-centered modal-fullscreen-sm-down">
                                 <div class="modal-content">
                                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                    <img class="" src="<?= $data[0]['avatar'] == 'null' ? PROJECT . 'public/images/default-user-profile.jpg' : $data[0]['avatar'] ?>" alt="User profile picture">
+                                    <img class="" src="<?= $data['avatar'] == 'null' ? PROJECT . 'public/images/default-user-profile.jpg' : $data['avatar'] ?>" alt="User profile picture">
                                 </div>
                             </div>
                         </div>
@@ -28,8 +28,8 @@ include 'app/common/agents/1stpart.php'; ?>
                 ?>
             </div>
             <div class="col">
-                <h1 class="fw-bold"><?= $data[0]['first_names'] . ' ' . $data[0]['name'] ?></h1>
-                <div class="my-2"><?= '@' . $data[0]['user_name'] ?>
+                <h1 class="fw-bold"><?= $data['first_names'] . ' ' . $data['name'] ?></h1>
+                <div class="my-2"><?= '@' . $data['user_name'] ?>
                 </div>
                 <div class="list-inline list-inline-dots text-muted">
                     <div class="list-inline-item">
@@ -40,7 +40,7 @@ include 'app/common/agents/1stpart.php'; ?>
                             <path d="M9 4l0 13" />
                             <path d="M15 7l0 13" />
                         </svg>
-                        <?= $data[0]['country'] ?>
+                        <?= $data['country'] ?>
                     </div>
                     <div class="list-inline-item">
                         <!-- Download SVG icon from http://tabler-icons.io/i/mail -->
@@ -49,7 +49,7 @@ include 'app/common/agents/1stpart.php'; ?>
                             <path d="M3 5m0 2a2 2 0 0 1 2 -2h14a2 2 0 0 1 2 2v10a2 2 0 0 1 -2 2h-14a2 2 0 0 1 -2 -2z" />
                             <path d="M3 7l9 6l9 -6" />
                         </svg>
-                        <?= $data[0]['mail'] ?>
+                        <?= $data['mail'] ?>
                     </div>
                 </div>
             </div>

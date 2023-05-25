@@ -12,13 +12,13 @@ if (isset($_POST['mail']) && !empty($_POST['mail'])){
 
     if (check_exist_fieldentry('mail', $_POST["mail"])) {
 
-        $user_id = select_user_id($_POST["mail"])["id"];
+        $user_id = get_user_id($_POST["mail"])["id"];
 
         $token = uniqid();
 
-        $username = select_username($_POST["mail"])["user_name"];
+        $username = get_username($_POST["mail"])["user_name"];
 
-        insert_intoken_table($user_id, 'RESET_PASSWORD', $token);
+        insert_token_in_token_table($user_id, 'RESET_PASSWORD', $token);
         
         $subject = 'Réinitialisation de mot de passe';
 

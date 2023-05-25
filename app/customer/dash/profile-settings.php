@@ -1,7 +1,7 @@
 <?php
 
 if (connected()) {
-    $_SESSION['current_url'] = "http://{$_SERVER['HTTP_HOST']}{$_SERVER['REQUEST_URI']}";
+    $_SESSION['current_url'] = "{$_SERVER['REQUEST_SCHEME']}://{$_SERVER['HTTP_HOST']}{$_SERVER['REQUEST_URI']}";
 }
 
 include 'app/common/customer/1stpart.php';  ?>
@@ -53,17 +53,17 @@ include 'app/common/customer/1stpart.php';  ?>
                         ?>
                         <div class="row align-items-center">
                             <a href="" class="modal-fade" data-bs-toggle="modal" data-bs-target="#previous-image">
-                                <div class="col-auto"><span class="avatar avatar-xl" style='background-image: url("<?= $data[0]['avatar'] == 'null' ? PROJECT . 'public/images/default-user-profile.jpg' : $data[0]['avatar'] ?>");'></span>
+                                <div class="col-auto"><span class="avatar avatar-xl" style='background-image: url("<?= $data['avatar'] == 'null' ? PROJECT . 'public/images/default-user-profile.jpg' : $data['avatar'] ?>");'></span>
                                 </div>
                             </a>
                             <?php
-                            if ($data[0]['avatar'] != 'null') {
+                            if ($data['avatar'] != 'null') {
                             ?>
                                 <div class="modal fade" id="previous-image">
                                     <div class="modal-dialog modal-dialog-centered modal-fullscreen-sm-down">
                                         <div class="modal-content">
                                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                            <img class="" src="<?= $data[0]['avatar'] == 'null' ? PROJECT . 'public/images/default-user-profile.jpg' : $data[0]['avatar'] ?>" alt="User profile picture">
+                                            <img class="" src="<?= $data['avatar'] == 'null' ? PROJECT . 'public/images/default-user-profile.jpg' : $data['avatar'] ?>" alt="User profile picture">
                                         </div>
                                     </div>
                                 </div>
@@ -83,7 +83,7 @@ include 'app/common/customer/1stpart.php';  ?>
                                 <input type="file" name="fileToUpload" id="fileToUpload" style="display: none;" onchange="updateButtonLabel()">
 
                                 <?php
-                                if ($data[0]['avatar'] != 'null') {
+                                if ($data['avatar'] != 'null') {
                                 ?>
                                     <div class="col-md text-center">
                                         <label for="importbutton">
@@ -101,7 +101,7 @@ include 'app/common/customer/1stpart.php';  ?>
                                 ?>
 
                                 <?php
-                                if ($data[0]['avatar'] == 'null') {
+                                if ($data['avatar'] == 'null') {
                                 ?>
                                     <div class="col-md text-center">
                                         <label for="importbutton">
@@ -125,7 +125,7 @@ include 'app/common/customer/1stpart.php';  ?>
                                 ?>
 
                                 <?php
-                                if ($data[0]['avatar'] == 'null') {
+                                if ($data['avatar'] == 'null') {
                                 ?>
                                     <div class="col-md mt-3">
                                         <a href="#" class="btn link-warning" data-bs-toggle="modal" data-bs-target="#modal-warning1" style="text-decoration: none;" name="submit">Mettre à jour Avatar</a>
@@ -137,7 +137,7 @@ include 'app/common/customer/1stpart.php';  ?>
                             </div>
 
                             <?php
-                            if ($data[0]['avatar'] != 'null') {
+                            if ($data['avatar'] != 'null') {
                             ?>
                                 <div class="row mt-3 text-center">
                                     <div class="col-md mb-1">
@@ -213,7 +213,7 @@ include 'app/common/customer/1stpart.php';  ?>
                                     <div>
                                         <div class="row g-2">
                                             <div class="col">
-                                                <input disabled type="text" class="form-control focon" id="input-field-username" value="<?= $data[0]['name'] ?>">
+                                                <input disabled type="text" class="form-control focon" id="input-field-username" value="<?= $data['name'] ?>">
                                             </div>
                                         </div>
                                     </div>
@@ -223,7 +223,7 @@ include 'app/common/customer/1stpart.php';  ?>
                                     <div>
                                         <div class="row g-2">
                                             <div class="col">
-                                                <input disabled type="text" class="form-control focon" id="input-field-username" value="<?= $data[0]['first_names'] ?>">
+                                                <input disabled type="text" class="form-control focon" id="input-field-username" value="<?= $data['first_names'] ?>">
                                             </div>
                                         </div>
                                     </div>
@@ -233,7 +233,7 @@ include 'app/common/customer/1stpart.php';  ?>
                                     <div>
                                         <div class="row g-2">
                                             <div class="col">
-                                                <input disabled type="text" class="form-control focon" id="input-field-username" value="<?= $data[0]['user_name'] ?>">
+                                                <input disabled type="text" class="form-control focon" id="input-field-username" value="<?= $data['user_name'] ?>">
                                             </div>
                                         </div>
                                     </div>
@@ -245,7 +245,7 @@ include 'app/common/customer/1stpart.php';  ?>
                                     <div>
                                         <div class="row g-2">
                                             <div class="col">
-                                                <input disabled type="text" class="form-control focon" id="input-field-location" value="<?= $data[0]['country'] ?>">
+                                                <input disabled type="text" class="form-control focon" id="input-field-location" value="<?= $data['country'] ?>">
                                             </div>
                                         </div>
                                     </div>
@@ -256,7 +256,7 @@ include 'app/common/customer/1stpart.php';  ?>
                                     <div>
                                         <div class="row g-2">
                                             <div class="col">
-                                                <input disabled type="text" class="form-control focon" id="input-field-mail" value="<?= $data[0]['mail'] ?>">
+                                                <input disabled type="text" class="form-control focon" id="input-field-mail" value="<?= $data['mail'] ?>">
                                             </div>
                                         </div>
                                     </div>
@@ -266,7 +266,7 @@ include 'app/common/customer/1stpart.php';  ?>
                                     <div>
                                         <div class="row g-2">
                                             <div class="col">
-                                                <input disabled type="text" class="form-control focon" id="input-field-phone" value="<?= $data[0]['phone_number'] ?>">
+                                                <input disabled type="text" class="form-control focon" id="input-field-phone" value="<?= $data['phone_number'] ?>">
                                             </div>
                                         </div>
                                     </div>
@@ -304,7 +304,7 @@ include 'app/common/customer/1stpart.php';  ?>
                                     <div>
                                         <div class="row g-2">
                                             <div class="col">
-                                                <input type="text" class="form-control" name="nom" id="input-field-username" value="<?= $data[0]['name'] ?>">
+                                                <input type="text" class="form-control" name="nom" id="input-field-username" value="<?= $data['name'] ?>">
                                             </div>
                                         </div>
                                     </div>
@@ -314,7 +314,7 @@ include 'app/common/customer/1stpart.php';  ?>
                                     <div>
                                         <div class="row g-2">
                                             <div class="col">
-                                                <input type="text" class="form-control" name="prenoms" id="input-field-username" value="<?= $data[0]['first_names'] ?>">
+                                                <input type="text" class="form-control" name="prenoms" id="input-field-username" value="<?= $data['first_names'] ?>">
                                             </div>
                                         </div>
                                     </div>
@@ -324,7 +324,7 @@ include 'app/common/customer/1stpart.php';  ?>
                                     <div>
                                         <div class="row g-2">
                                             <div class="col">
-                                                <input type="text" class="form-control" name="pseudo" id="input-field-username" value="<?= $data[0]['user_name'] ?>">
+                                                <input type="text" class="form-control" name="pseudo" id="input-field-username" value="<?= $data['user_name'] ?>">
                                             </div>
                                         </div>
                                     </div>
@@ -336,7 +336,7 @@ include 'app/common/customer/1stpart.php';  ?>
                                     <div>
                                         <div class="row g-2">
                                             <div class="col">
-                                                <input type="text" class="form-control focon" name="pays" id="input-field-location" value="<?= $data[0]['country'] ?>">
+                                                <input type="text" class="form-control focon" name="pays" id="input-field-location" value="<?= $data['country'] ?>">
                                             </div>
                                         </div>
                                     </div>
@@ -355,7 +355,7 @@ include 'app/common/customer/1stpart.php';  ?>
                                     <div>
                                         <div class="row g-2">
                                             <div class="col">
-                                                <input disabled type="email" class="form-control focon" name="mail" id="input-field-mail" value="<?= $data[0]['mail'] ?>">
+                                                <input disabled type="email" class="form-control focon" name="mail" id="input-field-mail" value="<?= $data['mail'] ?>">
                                             </div>
                                         </div>
                                     </div>
@@ -365,7 +365,7 @@ include 'app/common/customer/1stpart.php';  ?>
                                     <div>
                                         <div class="row g-2">
                                             <div class="col">
-                                                <input type="text" class="form-control focon" name="tel" id="input-field-phone" value="<?= $data[0]['phone_number'] ?>">
+                                                <input type="text" class="form-control focon" name="tel" id="input-field-phone" value="<?= $data['phone_number'] ?>">
                                             </div>
                                         </div>
                                     </div>

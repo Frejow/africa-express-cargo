@@ -14,9 +14,9 @@ $_SESSION['data'] = [];
 
 if (isset($_POST["avatar_deletion"])) {
 
-    if (update_avatar($data[0]['id'], 'null')) {
+    if (update_avatar($data['id'], 'null')) {
 
-        if (select_user_updated_info($data[0]['id'])) {
+        if (get_user_personal_inf($data['id'])) {
 
             header("location:". redirect($_SESSION['theme'], PROJECT.'customer/dash/profile-settings'));
 
@@ -24,7 +24,7 @@ if (isset($_POST["avatar_deletion"])) {
     }
 }
 
-if (isset($_POST['pass_w']) && !empty($_POST['pass_w']) && check_password($data[0]['id'], $_POST['pass_w'])) {
+if (isset($_POST['pass_w']) && !empty($_POST['pass_w']) && check_submitted_password($data['id'], $_POST['pass_w'])) {
 
     if (isset($_FILES["fileToUpload"]) && $_FILES["fileToUpload"]["error"] == 0) {
 
@@ -42,7 +42,7 @@ if (isset($_POST['pass_w']) && !empty($_POST['pass_w']) && check_password($data[
 
                 $rootpath = $_SERVER["DOCUMENT_ROOT"] . PROJECT . 'public/images/uploads';
 
-                $newfolder = $rootpath . '/' . $data[0]['id'] . '/profile/';
+                $newfolder = $rootpath . '/' . $data['id'] . '/profile/';
 
                 if (!file_exists($newfolder)) {
 
@@ -53,7 +53,7 @@ if (isset($_POST['pass_w']) && !empty($_POST['pass_w']) && check_password($data[
 
                 if ($move_uploaded_file) {
 
-                    $newdata["avatar"] = PROJECT . 'public/images/uploads/' . $data[0]['id'] . '/profile/' . basename($_FILES['fileToUpload']['name']);
+                    $newdata["avatar"] = PROJECT . 'public/images/uploads/' . $data['id'] . '/profile/' . basename($_FILES['fileToUpload']['name']);
 
                 }
 
@@ -76,7 +76,7 @@ if (isset($_POST['pass_w']) && !empty($_POST['pass_w']) && check_password($data[
         
     } else {
 
-        $newdata["avatar"] = $data[0]["avatar"];
+        $newdata["avatar"] = $data["avatar"];
 
         $error["avatar"] = "Veuillez importer une image.";
 
@@ -84,9 +84,9 @@ if (isset($_POST['pass_w']) && !empty($_POST['pass_w']) && check_password($data[
 
     if (isset($newdata["avatar"])) {
 
-        if (update_avatar($data[0]['id'], $newdata['avatar'])) {
+        if (update_avatar($data['id'], $newdata['avatar'])) {
 
-            if (select_user_updated_info($data[0]['id'])) {
+            if (get_user_personal_inf($data['id'])) {
 
                 header("location:". redirect($_SESSION['theme'], PROJECT.'customer/dash/profile-settings'));
 
@@ -96,7 +96,7 @@ if (isset($_POST['pass_w']) && !empty($_POST['pass_w']) && check_password($data[
 
     }
 
-} elseif (isset($_POST['pass_w']) && !empty($_POST['pass_w']) && !check_password($data[0]['id'], $_POST['pass_w'])) {
+} elseif (isset($_POST['pass_w']) && !empty($_POST['pass_w']) && !check_submitted_password($data['id'], $_POST['pass_w'])) {
 
     $error["pass_w"] = 'La tentative de mise à jour de l\'avatar a échoué. Mot de passe erroné. Réessayer !';
 
@@ -123,43 +123,43 @@ if (!empty($error)) {
 
 //Personal Informations
 
-if (isset($_POST['pass']) && !empty($_POST['pass']) && check_password($data[0]['id'], $_POST['pass'])) {
+if (isset($_POST['pass']) && !empty($_POST['pass']) && check_submitted_password($data['id'], $_POST['pass'])) {
 
-    if (isset($_POST['nom']) && !empty($_POST['nom']) && $_POST['nom'] != $data[0]['name']) {
+    if (isset($_POST['nom']) && !empty($_POST['nom']) && $_POST['nom'] != $data['name']) {
         $newdata['nom'] = secure($_POST['nom']);
     } else {
-        $newdata['nom'] = $data[0]['name'];
+        $newdata['nom'] = $data['name'];
     }
 
-    if (isset($_POST['prenoms']) && !empty($_POST['prenoms']) && $_POST['prenoms'] != $data[0]['first_names']) {
+    if (isset($_POST['prenoms']) && !empty($_POST['prenoms']) && $_POST['prenoms'] != $data['first_names']) {
         $newdata['prenoms'] = secure($_POST['prenoms']);
     } else {
-        $newdata['prenoms'] = $data[0]['first_names'];
+        $newdata['prenoms'] = $data['first_names'];
     }
 
-    if (isset($_POST['pseudo']) && !empty($_POST['pseudo']) && $_POST['pseudo'] != $data[0]['user_name']) {
+    if (isset($_POST['pseudo']) && !empty($_POST['pseudo']) && $_POST['pseudo'] != $data['user_name']) {
         $newdata['pseudo'] = secure($_POST['pseudo']);
     } else {
-        $newdata['pseudo'] = $data[0]['user_name'];
+        $newdata['pseudo'] = $data['user_name'];
     }
 
-    if (isset($_POST['pays']) && !empty($_POST['pays']) && $_POST['pays'] != $data[0]['country']) {
+    if (isset($_POST['pays']) && !empty($_POST['pays']) && $_POST['pays'] != $data['country']) {
         $newdata['pays'] = secure($_POST['pays']);
     } else {
-        $newdata['pays'] = $data[0]['country'];
+        $newdata['pays'] = $data['country'];
     }
 
-    $newdata['mail'] = $data[0]['mail'];
+    $newdata['mail'] = $data['mail'];
 
-    if (isset($_POST['tel']) && !empty($_POST['tel']) && $_POST['tel'] != $data[0]['phone_number']) {
+    if (isset($_POST['tel']) && !empty($_POST['tel']) && $_POST['tel'] != $data['phone_number']) {
         $newdata['tel'] = secure($_POST['tel']);
     } else {
-        $newdata['tel'] = $data[0]['phone_number'];
+        $newdata['tel'] = $data['phone_number'];
     }
 
-    if (update_personal_info($data[0]['id'], $newdata['nom'], $newdata['prenoms'], $newdata['pseudo'], $newdata['pays'], $newdata['mail'], $newdata['tel'])) {
+    if (update_personal_inf($data['id'], $newdata['nom'], $newdata['prenoms'], $newdata['pseudo'], $newdata['pays'], $newdata['mail'], $newdata['tel'])) {
 
-        if (select_user_updated_info($data[0]['id'])) {
+        if (get_user_personal_inf($data['id'])) {
 
             header("location:". redirect($_SESSION['theme'], PROJECT.'customer/dash/profile-settings'));
 
@@ -179,7 +179,7 @@ if (isset($_POST['pass']) && !empty($_POST['pass']) && check_password($data[0]['
 
     }
 
-} elseif (isset($_POST['pass']) && !empty($_POST['pass']) && !check_password($data[0]['id'], $_POST['pass'])) {
+} elseif (isset($_POST['pass']) && !empty($_POST['pass']) && !check_submitted_password($data['id'], $_POST['pass'])) {
 
     $_SESSION['personal_error'] = 'La tentative de mise à jour des informations personnelles a échoué. Mot de passe erroné. Réessayer !';
 
@@ -199,13 +199,13 @@ if (isset($_POST['pass']) && !empty($_POST['pass']) && check_password($data[0]['
 
 //Password Updating
 
-if (isset($_POST['passw']) && !empty($_POST['passw']) && check_password($data[0]['id'], $_POST['passw'])) {
+if (isset($_POST['passw']) && !empty($_POST['passw']) && check_submitted_password($data['id'], $_POST['passw'])) {
 
     if (isset($_POST['newpass']) && !empty($_POST['newpass']) && strlen(secure($_POST["newpass"])) >= 8) {
 
         $newdata['newpass'] = $_POST['newpass'];
 
-        if (update_password($data[0]['mail'], sha1($newdata['newpass']))) {
+        if (update_password($data['mail'], sha1($newdata['newpass']))) {
 
             setcookie('crl', $_SESSION['current_url'], time() + 365 * 24 * 3600, '/');
 
@@ -227,7 +227,7 @@ if (isset($_POST['passw']) && !empty($_POST['passw']) && check_password($data[0]
         $error['newpass'] = 'Veuillez remplir ce champs d\'un nouveau mot de passe de 08 caractères minimum.';
     }
 
-} elseif (isset($_POST['passw']) && !empty($_POST['passw']) && !check_password($data[0]['id'], $_POST['passw'])) {
+} elseif (isset($_POST['passw']) && !empty($_POST['passw']) && !check_submitted_password($data['id'], $_POST['passw'])) {
 
     $updata['passw'] = $_POST['passw'];
 
@@ -255,9 +255,9 @@ if (!empty($error)) {
 
 //Deactivation
 
-if (isset($_POST['pass-w']) && !empty($_POST['pass-w']) && check_password($data[0]['id'], $_POST['pass-w'])) {
+if (isset($_POST['pass-w']) && !empty($_POST['pass-w']) && check_submitted_password($data['id'], $_POST['pass-w'])) {
 
-    if (deactivated_account($data[0]['id'])) {
+    if (deactivated_account($data['id'])) {
 
         disconnected();
 
@@ -271,7 +271,7 @@ if (isset($_POST['pass-w']) && !empty($_POST['pass-w']) && check_password($data[
 
     }
 
-} elseif (isset($_POST['pass-w']) && !empty($_POST['pass-w']) && !check_password($data[0]['id'], $_POST['pass-w'])) {
+} elseif (isset($_POST['pass-w']) && !empty($_POST['pass-w']) && !check_submitted_password($data['id'], $_POST['pass-w'])) {
 
     $error['pass-w'] = 'Mot de passe erroné. Veuillez réessayer !';
 
@@ -295,9 +295,9 @@ if (!empty($error)) {
 
 //Deletion
 
-if (isset($_POST['pass--w']) && !empty($_POST['pass--w']) && check_password($data[0]['id'], $_POST['pass--w'])) {
+if (isset($_POST['pass--w']) && !empty($_POST['pass--w']) && check_submitted_password($data['id'], $_POST['pass--w'])) {
 
-    if (deleted_account($data[0]['id'])) {
+    if (deleted_account($data['id'])) {
 
         disconnected();
 
@@ -310,7 +310,7 @@ if (isset($_POST['pass--w']) && !empty($_POST['pass--w']) && check_password($dat
 
     }
 
-} elseif (isset($_POST['pass--w']) && !empty($_POST['pass--w']) && !check_password($data[0]['id'], $_POST['pass--w'])) {
+} elseif (isset($_POST['pass--w']) && !empty($_POST['pass--w']) && !check_submitted_password($data['id'], $_POST['pass--w'])) {
 
     $error['pass--w'] = 'Mot de passe erroné. Veuillez réessayer !';
 

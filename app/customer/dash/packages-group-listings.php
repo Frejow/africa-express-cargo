@@ -1,6 +1,6 @@
 <?php
 if (connected()) {
-    $_SESSION['current_url'] = "http://{$_SERVER['HTTP_HOST']}{$_SERVER['REQUEST_URI']}";
+    $_SESSION['current_url'] = "{$_SERVER['REQUEST_SCHEME']}://{$_SERVER['HTTP_HOST']}{$_SERVER['REQUEST_URI']}";
 }
 
 include 'app/common/customer/1stpart.php';
@@ -41,9 +41,9 @@ if (isset($_SESSION['research']) && !empty($_SESSION['research'])) {
     $_SESSION['search'] = $_SESSION['research'];
 }
 
-$packages_group_listings = listings($table, $_SESSION['page'], $_SESSION['packages_nb_per_page'], $_SESSION['status'], strtoupper($_SESSION['search']), $data[0]['id']);
+$packages_group_listings = listings($table, $_SESSION['page'], $_SESSION['packages_nb_per_page'], $_SESSION['status'], strtoupper($_SESSION['search']), $data['id']);
 
-$rows = count_rows_in_table($table, $data[0]['id']);
+$rows = count_rows_in_table($table, $data['id']);
 
 ?>
 
@@ -180,7 +180,7 @@ $rows = count_rows_in_table($table, $data[0]['id']);
 
                                         foreach ($packages_group_listings as $key => $packages_group) {
 
-                                            $packages_ingrouplistings = select_allpackages_forpackagegroup($packages_group_listings[$key]['id']);
+                                            $packages_ingrouplistings = get_all_packages_linked_to_specific_packages_group($packages_group_listings[$key]['id']);
 
                                             if (sizeof($packages_ingrouplistings) >= 1) {
 
@@ -302,7 +302,7 @@ $rows = count_rows_in_table($table, $data[0]['id']);
                                                 </div>
                                         <?php
                                             } else {
-                                                deleted_package_or_packagegroup($packages_group_listings[$key]["tracking_number"], 'customer_package_group');
+                                                deleted_package_or_packages_group($packages_group_listings[$key]["tracking_number"], 'customer_package_group');
                                             }
                                         }
                                         $n = $key + 1;
@@ -417,7 +417,7 @@ if (isset($packages_group_listings) && !empty($packages_group_listings)) {
 
     foreach ($packages_group_listings as $key => $packages_group) {
 
-        $packages_ingrouplistings = select_allpackages_forpackagegroup($packages_group_listings[$key]['id']);
+        $packages_ingrouplistings = get_all_packages_linked_to_specific_packages_group($packages_group_listings[$key]['id']);
 ?>
         <div class="modal modal-blur fade" data-bs-backdrop='static' id="<?= 'modal-packages-group-detail' . $key ?>" tabindex="-1" role="dialog" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered modal-lg modal-dialog-scrollable" role="document">

@@ -9,7 +9,7 @@ include "app/common/functions.php";
 //Suppression des tokens après délai d'expiration de 10min
 date_default_timezone_set("Africa/Lagos");
 $current_date_time = date('Y-m-d H:i:s');
-$tokens =  select_tokens(); 
+$tokens =  get_all_active_tokens(); 
 
 if (isset($tokens) && !empty($tokens)) {
 

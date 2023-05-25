@@ -1,6 +1,6 @@
 <?php
 
-$_SESSION['current_url'] = "http://{$_SERVER['HTTP_HOST']}{$_SERVER['REQUEST_URI']}";
+$_SESSION['current_url'] = "{$_SERVER['REQUEST_SCHEME']}://{$_SERVER['HTTP_HOST']}{$_SERVER['REQUEST_URI']}";
 
 $countries = [
     "<span>&#x1F1E6;&#x1F1EB;</span>&nbsp;&nbsp;&nbsp;Afghanistan",

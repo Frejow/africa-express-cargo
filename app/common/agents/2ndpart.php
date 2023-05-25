@@ -314,7 +314,7 @@
             var Toast = Swal.mixin({
                 toast: true,
                 position: 'top',
-                showConfirmButton: true,
+                showConfirmButton: false,
                 timer: 20000
             });
 

@@ -1,6 +1,6 @@
 <?php
 if (connected()) {
-    $_SESSION['current_url'] = "http://{$_SERVER['HTTP_HOST']}{$_SERVER['REQUEST_URI']}";
+    $_SESSION['current_url'] = "{$_SERVER['REQUEST_SCHEME']}://{$_SERVER['HTTP_HOST']}{$_SERVER['REQUEST_URI']}";
 }
 
 include 'app/common/customer/1stpart.php'; ?>
@@ -61,7 +61,7 @@ include 'app/common/customer/1stpart.php'; ?>
                                 <tbody>
                                     <?php
 
-                                    $packages_ingrouplistings = select_allpackages_forpackagegroup($_SESSION['packages_group_id']);
+                                    $packages_ingrouplistings = get_all_packages_linked_to_specific_packages_group($_SESSION['packages_group_id']);
 
                                     if (isset($packages_ingrouplistings) && !empty($packages_ingrouplistings)) {
 

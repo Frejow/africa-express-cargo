@@ -4,7 +4,7 @@ if (isset($_GET['p']) && !empty($_GET['p'])) {
 
     $params = explode('/', $_GET['p']);
 
-    if (check_user_registered_token_info($params[3], $params[4], "RESET_PASSWORD", 1, 0)){
+    if (check_user_registered_token_inf($params[3], $params[4], "RESET_PASSWORD", 1, 0)){
 
         if (update_token_table($params[3])){
 
@@ -14,8 +14,8 @@ if (isset($_GET['p']) && !empty($_GET['p'])) {
         
     } else {
 
-        $token_created_at = select_token_date_info($params[3], $params[4])['created'];
-        $token_updated_on = select_token_date_info($params[3], $params[4])['updated_on'];
+        $token_created_at = get_token_date_inf($params[3], $params[4])['created'];
+        $token_updated_on = get_token_date_inf($params[3], $params[4])['updated_on'];
 
         if (date_to_number($token_updated_on) - date_to_number($token_created_at) < 1002) {
 

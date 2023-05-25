@@ -1,6 +1,6 @@
 <?php
 
-$_SESSION['current_url'] = "http://{$_SERVER['HTTP_HOST']}{$_SERVER['REQUEST_URI']}";
+$_SESSION['current_url'] = "{$_SERVER['REQUEST_SCHEME']}://{$_SERVER['HTTP_HOST']}{$_SERVER['REQUEST_URI']}";
 
 include 'app/common/auth/1stpart.php';
 
@@ -51,7 +51,7 @@ include 'app/common/auth/1stpart.php';
 
                     <!--<label for="m_ps" class="ml-3">Email ou Nom d'Utilisateur<span class="text-danger">*</span></label>-->
                     <div class="wrap-input100 validate-input" data-validate="Champs requis">
-                        <input class="input100" type="text" id="m_ps" name="m_ps" placeholder="Adresse email" value="<?php echo (isset($data["m_ps"]) && !empty($data["m_ps"])) ? $data["m_ps"] : "" ?>">
+                        <input class="input100" type="text" id="m_ps" name="m_ps" placeholder="Email ou Nom d'utilisateur" value="<?php echo (isset($data["m_ps"]) && !empty($data["m_ps"])) ? $data["m_ps"] : "" ?>">
                         <span class="focus-input100"></span>
                         <span class="symbol-input100">
                             <i class="fa fa-envelope <?= isset($errors["m_ps"])? 'text-danger' : ''?>" aria-hidden="true"></i>
@@ -65,7 +65,7 @@ include 'app/common/auth/1stpart.php';
 
                     <!--<label for="pass" class="ml-3">Mot de passe<span class="text-danger">*</span></label>-->
                     <div class="wrap-input100 validate-input" data-validate="Champs requis">
-                        <input class="input100" type="password" autocomplete="new-password" id="pass" name="pass" placeholder="Mot de passe">
+                        <input class="input100" type="password" id="pass" autocomplete="new-password" name="pass" placeholder="Mot de passe" value="<?php echo (isset($data["pass"]) && !empty($data["pass"])) ? $data["pass"] : "" ?>">
                         <span class="focus-input100"></span>
                         <span class="symbol-input100">
                             <i class="fa fa-lock <?= isset($errors["pass"])? 'text-danger' : ''?>" aria-hidden="true"></i>

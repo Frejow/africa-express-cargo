@@ -121,7 +121,7 @@ if (isset($_FILES["filesToUpload"]) && !empty($_FILES["filesToUpload"])) {
     
                         $rootpath = $_SERVER['DOCUMENT_ROOT'] . '/africa-express-cargo/public/images/uploads';
     
-                        $newfolder = $rootpath . '/' . $data[0]['user_name'] . '/packages/' . $newdata['pack_trackN'] ;
+                        $newfolder = $rootpath . '/' . $data['user_name'] . '/packages/' . $newdata['pack_trackN'] ;
     
                         if (!file_exists($newfolder)) {
     
@@ -130,13 +130,13 @@ if (isset($_FILES["filesToUpload"]) && !empty($_FILES["filesToUpload"])) {
     
                         move_uploaded_file($_FILES['filesToUpload']['tmp_name'][$key], $newfolder . '/' . basename($_FILES['filesToUpload']['name'][$key]));
     
-                        $newdata["images"][$key] = PROJECT . 'public/images/uploads/' . $data[0]['user_name'] . '/packages/' . $newdata['pack_trackN'] . '/' . basename($_FILES['filesToUpload']['name'][$key]);
+                        $newdata["images"][$key] = PROJECT . 'public/images/uploads/' . $data['user_name'] . '/packages/' . $newdata['pack_trackN'] . '/' . basename($_FILES['filesToUpload']['name'][$key]);
                     
                     } else {
 
                         $rootpath = $_SERVER['DOCUMENT_ROOT'] . '/africa-express-cargo/public/images/uploads';
     
-                        $newfolder = $rootpath . '/' . $data[0]['user_name'] . '/packages/' . $newdata['pack_trackN'] ;
+                        $newfolder = $rootpath . '/' . $data['user_name'] . '/packages/' . $newdata['pack_trackN'] ;
                         
                         if (is_dir($newfolder)) { 
 
@@ -182,7 +182,7 @@ if (isset($_FILES["filesToUpload"]) && !empty($_FILES["filesToUpload"])) {
 
                     $rootpath = $_SERVER['DOCUMENT_ROOT'] . '/africa-express-cargo/public/images/uploads';
     
-                    $newfolder = $rootpath . '/' . $data[0]['user_name'] . '/packages/' . $newdata['pack_trackN'] ;
+                    $newfolder = $rootpath . '/' . $data['user_name'] . '/packages/' . $newdata['pack_trackN'] ;
 
                     if (is_dir($newfolder)) { 
 
@@ -250,13 +250,13 @@ if (empty($error)) {
     if (isset($_POST) && !empty($_POST)) {
     
         if (add_package($newdata['pack_trackN'], $newdata['pack_count'], $newdata['pack_cost'], $newdata['pack_descp'], 
-        $newdata['pack_netW'], $newdata['pack_metricW'], $newdata['pack_type'], $data[0]['id'])) {
+        $newdata['pack_netW'], $newdata['pack_metricW'], $newdata['pack_type'], $data['id'])) {
 
             if (!empty($newdata['images'])) {
 
                 for ($i = 0; $i < sizeof($newdata['images']); $i++) {
 
-                    if (!add_images_for_package(select_package_id($newdata['pack_trackN'])['id'], $newdata['images'][$i], $data[0]['id'])) {
+                    if (!add_images_for_package(get_package_id($newdata['pack_trackN'])['id'], $newdata['images'][$i], $data['id'])) {
 
                         $_SESSION['error_msg'] = 'Une erreur est survenue. Réessayer. Si cela persiste, contactez-nous.';
 

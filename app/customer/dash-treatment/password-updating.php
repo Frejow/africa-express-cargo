@@ -6,13 +6,13 @@ $updata = [];
 $_SESSION['password_error'] = [];
 $_SESSION['data'] = [];
 
-if (isset($_POST['passw']) && !empty($_POST['passw']) && check_password($data[0]['id'], $_POST['passw'])) {
+if (isset($_POST['passw']) && !empty($_POST['passw']) && check_submitted_password($data['id'], $_POST['passw'])) {
 
     if (isset($_POST['newpass']) && !empty($_POST['newpass']) && strlen(secure($_POST["newpass"])) >= 8) {
 
         $newdata['newpass'] = $_POST['newpass'];
 
-        if (update_password($data[0]['mail'], sha1($newdata['newpass']))) {
+        if (update_password($data['mail'], sha1($newdata['newpass']))) {
 
             setcookie('crl', $_SESSION['current_url'], time() + 365 * 24 * 3600, '/');
 
@@ -43,7 +43,7 @@ if (isset($_POST['passw']) && !empty($_POST['passw']) && check_password($data[0]
 
     }
 
-} elseif (isset($_POST['passw']) && !empty($_POST['passw']) && !check_password($data[0]['id'], $_POST['passw'])) {
+} elseif (isset($_POST['passw']) && !empty($_POST['passw']) && !check_submitted_password($data['id'], $_POST['passw'])) {
 
     $updata['passw'] = $_POST['passw'];
 

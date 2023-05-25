@@ -1,6 +1,6 @@
 <?php 
 if (connected()) {
-    $_SESSION['current_url'] = "http://{$_SERVER['HTTP_HOST']}{$_SERVER['REQUEST_URI']}";
+    $_SESSION['current_url'] = "{$_SERVER['REQUEST_SCHEME']}://{$_SERVER['HTTP_HOST']}{$_SERVER['REQUEST_URI']}";
 }
 
 include 'app/common/customer/1stpart.php'; 
@@ -32,7 +32,7 @@ if (isset($_SESSION["set_pack_group_errors"]) && !empty($_SESSION["set_pack_grou
                                 <div class="">
                                     <select class="form-select select2bs4" multiple="multiple" required name="packSelect[]" data-placeholder="Selectionnez colis" style="width: 100%;">
                                     <?php
-                                    $packages_listing = packages_listing_in_selectfield($data[0]['id']);
+                                    $packages_listing = packages_listing_in_select_field($data['id']);
                                     if (isset($packages_listing) && !empty($packages_listing)) {
                                         foreach ($packages_listing as $key => $value) {
                                     ?>

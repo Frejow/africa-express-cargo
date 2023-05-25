@@ -46,7 +46,7 @@ if (isset($_POST["pass"]) && !empty($_POST["pass"]) && strlen(secure($_POST["pas
     $errors["repass"] = "Entrez votre mot de passe à nouveau.";
 }
 
-if ((isset($_POST["repass"]) && !empty($_POST["repass"]) && strlen(secure($_POST["pass"])) >= 8 && $_POST["repass"] != $_POST["pass"])) {
+if ((isset($_POST["repass"]) && !empty($_POST["repass"]) && strlen(secure($_POST["pass"])) >= 8 && secure($_POST["repass"]) != secure($_POST["pass"]))) {
     $errors["repass"] = "Mot de passe erroné. Entrez le mot de passe du précédent champs";
 }
 
@@ -95,11 +95,19 @@ if (isset($_POST["country"]) && !empty($_POST["country"])) {
     $data["country"] = $_POST["country"]; //die (var_dump($data["country"]));
 }
 
+if (isset($_POST["pass"]) && !empty($_POST["pass"]) && strlen(secure($_POST["pass"])) >= 8) {
+    $data["pass"] = secure($_POST["pass"]);
+}
+
+if ((isset($_POST["repass"]) && !empty($_POST["repass"]) && strlen(secure($_POST["pass"])) >= 8 && secure($_POST["repass"]) == secure($_POST["pass"]))) {
+    $data["repass"] = secure($_POST["repass"]);
+}
+
 $data["profile"] = "CUSTOMER";
 
 if (empty($errors)) {
 
-    if (registration($data["nom"], $data["prenom"], $data["tel"], $data["pseudo"], $data["mail"], $data["country"], $_POST["pass"], $data["profile"])) {
+    if (registration($data["nom"], $data["prenom"], $data["tel"], $data["pseudo"], $data["mail"], $data["country"], $data["pass"], $data["profile"])) {
 
         $mail_assoc_to_deleted_account = check_mail_assoc_to_deleted_account($data["mail"]);
 
@@ -111,11 +119,11 @@ if (empty($errors)) {
 
         setcookie('user_register_data', '', time() - 3600, '/');
 
-        $user_id = select_user_id($data["mail"])["id"];
+        $user_id = get_user_id($data["mail"])["id"];
 
         $token = uniqid();
 
-        insert_intoken_table($user_id, 'ACCOUNT_VALIDATION', $token);
+        insert_token_in_token_table($user_id, 'ACCOUNT_VALIDATION', $token);
 
         $subject = 'Confirmation de compte';
 

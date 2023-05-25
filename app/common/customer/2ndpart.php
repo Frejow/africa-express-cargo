@@ -94,7 +94,7 @@ if (isset($packages_ingrouplistings) && !empty($packages_ingrouplistings)) {
                         <div class="row row-cols g-3">
                             <?php
                             if (check_package_id_in_packages_images_tab($packages_ingrouplistings[$key]["id"])) {
-                                $select_images = select_package_images($packages_ingrouplistings[$key]["id"]);
+                                $select_images = get_package_images($packages_ingrouplistings[$key]["id"]);
                                 if (!empty($select_images)) {
                                     foreach ($select_images as $_key => $value) {
                             ?>
@@ -140,7 +140,7 @@ if (isset($packages_ingrouplistings) && !empty($packages_ingrouplistings)) {
         var Toast = Swal.mixin({
             toast: true,
             position: 'top',
-            showConfirmButton: true,
+            showConfirmButton: false,
             timer: 20000
         });
 

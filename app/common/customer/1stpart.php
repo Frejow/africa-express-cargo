@@ -365,10 +365,10 @@
                     </div>
                     <div class="nav-item dropdown">
                         <a href="#" class="nav-link d-flex lh-1 text-reset p-0" data-bs-toggle="dropdown" aria-label="Open user menu">
-                            <span class="avatar avatar-sm" style="background-image: url(<?= $data[0]['avatar'] == 'null' ? PROJECT . 'public/images/default-user-profile.jpg' : $data[0]['avatar'] ?>)"></span>
+                            <span class="avatar avatar-sm" style="background-image: url(<?= $data['avatar'] == 'null' ? PROJECT . 'public/images/default-user-profile.jpg' : $data['avatar'] ?>)"></span>
                             <div class="d-none d-xl-block ps-2">
-                                <div><?= $data[0]['first_names'] . ' ' . $data[0]['name'] ?></div>
-                                <div class="mt-1 small text-muted"><?= '@' . $data[0]['user_name'] ?></div>
+                                <div><?= $data['first_names'] . ' ' . $data['name'] ?></div>
+                                <div class="mt-1 small text-muted"><?= '@' . $data['user_name'] ?></div>
                             </div>
                         </a>
                         <div class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
