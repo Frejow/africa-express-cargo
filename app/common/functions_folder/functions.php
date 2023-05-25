@@ -172,7 +172,7 @@ function date_to_number($date)
     return $date;
 }
 
-/** Checking user account connected
+/** Check user account connected
  * 
  * @return bool The result.
  */
@@ -187,7 +187,7 @@ function connected(): bool
     return $is_connected;
 }
 
-/** Checking user account disconnected
+/** Check user account disconnected
  * 
  * @return bool The result.
  */
@@ -222,7 +222,7 @@ function _database_login()
     return $database;
 }
 
-/** Checking already exist submitted value in database
+/** Check already exist submitted value in database
  * 
  * @param string $fieldtype The field type which value was submitted.
  * @param string $fieldentry The value submitted.
@@ -257,7 +257,7 @@ function check_exist_fieldentry(string $fieldtype, string $fieldentry): bool
     return $exist_fieldentry;
 }
 
-/** Checking new mail address associate to old(s) deleted account(s)
+/** Check new mail address associate to old(s) deleted account(s)
  * 
  * @param string $mail The new mail address.
  * @return array $mail_assoc_to_deleted_account All deleted account(s) with a mail address that match with the new one.
@@ -328,7 +328,7 @@ function update_account_status(int $user_id): bool
     return $update_account_status;
 }
 
-/** Select user id by mail address 
+/** Get user id by mail address 
  * 
  * @param string $mail The user mail address.
  * @return array $user_id The user id.
@@ -360,7 +360,7 @@ function select_user_id(string $mail)
     return $user_id;
 }
 
-/** Select user mail and username by id 
+/** Get user mail and username by id 
  * 
  * @param int $user_id The user id.
  * @return array $mail_pseudo The mail and the username.
@@ -392,7 +392,7 @@ function select_user_mail_pseudo(int $user_id)
     return $mail_pseudo;
 }
 
-/** Select user username by mail address 
+/** Get user username by mail address 
  * 
  * @param string $mail The mail address.
  * @return array $user_name The username.
@@ -424,7 +424,7 @@ function select_username(string $mail)
     return $user_name;
 }
 
-/** Select all not deleted rows of tokens table
+/** Get all not deleted rows of tokens table
  * 
  * @return array $select_tokens All concerned rows.
  */
@@ -455,7 +455,13 @@ function select_tokens()
     return $select_tokens;
 }
 
-/** Fonction d'insertion de token dans la table token */
+/** Token insertion
+ * 
+ * @param int $user_id The user id.
+ * @param string $type The type of token.
+ * @param string $token The token.
+ * @return bool The result.
+ */
 function insert_intoken_table(int $user_id, string $type, string $token): bool
 {
 
@@ -485,7 +491,15 @@ function insert_intoken_table(int $user_id, string $type, string $token): bool
     return $insertion;
 }
 
-/** Fonction de vérification de token à la validation de compte */
+/** Check if token still valid
+ * 
+ * @param int $user_id The user id.
+ * @param string $token The token.
+ * @param string $type The type of token.
+ * @param int $is_active The active status of the token.
+ * @param int $is_deleted The delete status of the token.
+ * @return bool The result.
+ */
 function check_user_registered_token_info(int $user_id, string $token, string $type, int $is_active, int $is_deleted): bool
 {
 
@@ -518,7 +532,12 @@ function check_user_registered_token_info(int $user_id, string $token, string $t
     return $info_found;
 }
 
-/** Fonction de récupération de la date de création et de mise à jour d'un token */
+/** Get token creation date and update date
+ * 
+ * @param int $user_id The user id.
+ * @param string $token The token.
+ * @return array $token_date_info The creation date and the update date
+ */
 function select_token_date_info(int $user_id, string $token)
 {
 
@@ -537,7 +556,7 @@ function select_token_date_info(int $user_id, string $token)
 
     if ($request_execution) {
 
-        $data = $request_prepare->fetchAll(PDO::FETCH_ASSOC);
+        $data = $request_prepare->fetch(PDO::FETCH_ASSOC);
 
         if (isset($data) && !empty($data) && is_array($data)) {
 
@@ -548,7 +567,11 @@ function select_token_date_info(int $user_id, string $token)
     return $token_date_info;
 }
 
-/** Fonction de mise à jour de la table token */
+/** Update token table
+ * 
+ * @param int $user_id The user id.
+ * @return bool The result.
+ */
 function update_token_table(int $user_id): bool
 {
     date_default_timezone_set("Africa/Lagos");
@@ -578,7 +601,12 @@ function update_token_table(int $user_id): bool
     return $update_token_table;
 }
 
-/** Fonction de mise à jour de mot de passe */
+/** Update password
+ * 
+ * @param string $mail The mail address.
+ * @param string $password The password.
+ * @return bool The result.
+ */
 function update_password(string $mail, string $password): bool
 {
     date_default_timezone_set("Africa/Lagos");
@@ -608,7 +636,16 @@ function update_password(string $mail, string $password): bool
     return $update_password;
 }
 
-/** Fonction de vérification des informations de l'utilisateur (email & password) à la connexion */
+/** Check informations submitted by user at login (mail & password)
+ * 
+ * @param string $mail The mail address.
+ * @param string $password The password.
+ * @param string $profile The profile type (CUSTOMER, AGENT or ADMIN).
+ * @param int $is_valid_account The valid account status of the user.
+ * @param int $is_active The active status of the user.
+ * @param int $is_deleted The delete status of the user.
+ * @return bool The result.
+ */
 function check_exist_userby_email_and_password(string $mail, string $password, string $profile, int $is_valid_account, int $is_active, int $is_deleted): bool
 {
 
@@ -637,17 +674,6 @@ function check_exist_userby_email_and_password(string $mail, string $password, s
 
             $_SESSION['connected'] = json_encode($data);
 
-            /*setcookie(
-                "connected_user",
-                json_encode($data),
-                [
-                    'expires' => time() + 365 * 24 * 3600,
-                    'path' => '/',
-                    'secure' => true,
-                    'httponly' => true,
-                ]
-            );*/
-
             $exist_user = true;
         }
     }
@@ -655,7 +681,16 @@ function check_exist_userby_email_and_password(string $mail, string $password, s
     return $exist_user;
 }
 
-/** Fonction de vérification des informations de l'utilisateur (pseudo & password) à la connexion */
+/** Check informations submitted by user at login (username & password)
+ * 
+ * @param string $pseudo The username.
+ * @param string $password The password.
+ * @param string $profile The profile type (CUSTOMER, AGENT or ADMIN).
+ * @param int $is_valid_account The valid account status of the user.
+ * @param int $is_active The active status of the user.
+ * @param int $is_deleted The delete status of the user.
+ * @return bool The result.
+ */
 function check_exist_userby_pseudo_and_password(string $pseudo, string $password, string $profile, int $is_valid_account, int $is_active, int $is_deleted): bool
 {
 
@@ -684,17 +719,6 @@ function check_exist_userby_pseudo_and_password(string $pseudo, string $password
 
             $_SESSION['connected'] = json_encode($data);
 
-            /*setcookie(
-                "connected_user",
-                json_encode($data),
-                [
-                    'expires' => time() + 365 * 24 * 3600,
-                    'path' => '/',
-                    'secure' => true,
-                    'httponly' => true,
-                ]
-            );*/
-
             $exist_user = true;
         }
     }
@@ -702,7 +726,17 @@ function check_exist_userby_pseudo_and_password(string $pseudo, string $password
     return $exist_user;
 }
 
-/** Fonction de mise à jour des informations personnelles de l'utilisateur */
+/** Update user personal informations 
+ * 
+ * @param int $id The user id.
+ * @param string $name The user Name.
+ * @param string $first_names The user First Names.
+ * @param string $user_name The user Username.
+ * @param string $country The user Country.
+ * @param string $mail The user Mail Address.
+ * @param string $phone_number The user Phone Number.
+ * @return bool The result.
+*/
 function update_personal_info(int $id, string $name, string $first_names, string $user_name, string $country, string $mail, string $phone_number): bool
 {
     date_default_timezone_set("Africa/Lagos");
@@ -736,7 +770,11 @@ function update_personal_info(int $id, string $name, string $first_names, string
     return $updating;
 }
 
-/** Fonction de récupération des informations utilisateurs mises à jour */
+/** Get user informations after update
+ * 
+ * @param int $id The user id.
+ * @return bool The result.
+ */
 function select_user_updated_info(int $id): bool
 {
 
@@ -767,7 +805,12 @@ function select_user_updated_info(int $id): bool
     return $selected;
 }
 
-/** Fonction de vérification de mot de passe */
+/** Check user password
+ * 
+ * @param int $id The user id.
+ * @param string $password The password submitted by user.
+ * @return bool The result.
+ */
 function check_password(int $id, string $password): bool
 {
 
@@ -796,7 +839,12 @@ function check_password(int $id, string $password): bool
     return $password_found;
 }
 
-/** Fonction de mise à jour d'avatar */
+/** Update avatar
+ * 
+ * @param int $id The user id.
+ * @param string $avatar The path to avatar.
+ * @return bool The result.
+ */
 function update_avatar(int $id, string $avatar): bool
 {
     date_default_timezone_set("Africa/Lagos");
@@ -825,7 +873,11 @@ function update_avatar(int $id, string $avatar): bool
     return $update_avatar;
 }
 
-/** Fonction de désactivation de compte */
+/** Account deactivation
+ * 
+ * @param int $id The user id.
+ * @return bool The result.
+ */
 function deactivated_account(int $id): bool
 {
     date_default_timezone_set("Africa/Lagos");
@@ -854,7 +906,11 @@ function deactivated_account(int $id): bool
     return $update_is_active_field;
 }
 
-/** Fonction de suppression de compte */
+/** Account deletion 
+ * 
+ * @param int $id The user id.
+ * @return bool The result.
+*/
 function deleted_account(int $id): bool
 {
     date_default_timezone_set("Africa/Lagos");
@@ -884,7 +940,11 @@ function deleted_account(int $id): bool
     return $update_is_deleted_field;
 }
 
-/** Fonction de vérification de numéro de suivi */
+/** Check tracking number
+ * 
+ * @param string $trackN The tracking number.
+ * @return bool The result.
+ */
 function check_tracking_number(string $trackN): bool
 {
 
@@ -913,7 +973,10 @@ function check_tracking_number(string $trackN): bool
     return $trackN_found;
 }
 
-/** Fonction de suppression de dossier d'images */
+/** Folder deletion
+ * 
+ * @param $dir The folder path.
+ */
 function delete_dir($dir) 
 {
 
@@ -946,7 +1009,18 @@ function delete_dir($dir)
     rmdir($dir);
 }
 
-/** Fonction d'ajout de colis dans la table package */
+/** Add package
+ * 
+ * @param string $tracking_number The package tracking number.
+ * @param $package_units_number The number of packages.
+ * @param $worth The package worth in term of amount.
+ * @param string $description Package description.
+ * @param $net_weight Package net weight.
+ * @param $volumetric_weight Package volumetric weight.
+ * @param $product_type Product type according to package nature.
+ * @param int $user_id The user id.
+ * @return bool The result.
+ */
 function add_package(
     string $tracking_number,
     $package_units_number,
@@ -988,7 +1062,13 @@ function add_package(
     return $insertion;
 }
 
-/** Fonction d'ajout d'image(s) de colis dans la table images */
+/** Add package image in packages_images table
+ * 
+ * @param int $package_id The package id.
+ * @param string $image The image path.
+ * @param int $user_id The user id.
+ * @return bool The result.
+ */
 function add_images_for_package(int $package_id, string $image, int $user_id): bool
 {
 
@@ -1016,7 +1096,11 @@ function add_images_for_package(int $package_id, string $image, int $user_id): b
     return $insertion;
 }
 
-/** Fonction de récupération de l'id d'un colis */
+/** Get Package id by tracking number
+ * 
+ * @param string $trackN The package tracking number.
+ * @return array $package_id The package id.
+ */
 function select_package_id(string $trackN)
 {
     $package_id = [];
@@ -1033,7 +1117,7 @@ function select_package_id(string $trackN)
 
     if ($request_execution) {
 
-        $data = $request_prepare->fetchAll(PDO::FETCH_ASSOC);
+        $data = $request_prepare->fetch(PDO::FETCH_ASSOC);
 
         if (isset($data) && !empty($data) && is_array($data)) {
 
@@ -1043,7 +1127,11 @@ function select_package_id(string $trackN)
     return $package_id;
 }
 
-/** Fonction de vérification de l'id d'un colis dans la table images */
+/** Check package id in packages_images table
+ * 
+ * @param string $package_id Package id.
+ * @return bool The result.
+ */
 function check_package_id_in_packages_images_tab(string $package_id): bool
 {
 
@@ -1071,7 +1159,11 @@ function check_package_id_in_packages_images_tab(string $package_id): bool
     return $package_id_found;
 }
 
-/** Fonction de récupération d'image(s) de colis */
+/** Get package images
+ * 
+ * @param int $package_id Package id.
+ * @return array $packages_images All images provide for this package.
+ */
 function select_package_images(int $package_id)
 {
     $package_images = [];
@@ -1098,11 +1190,20 @@ function select_package_images(int $package_id)
     return $package_images;
 }
 
-/** Fonction de listings des colis */
-function listings($table, $page, $packages_nb_per_page, $status, $search, $user_id)
+/** Listing packages or packages group
+ * 
+ * @param string $table The name of table.
+ * @param int $page The page number.
+ * @param int $packages_nb_per_page Packages number to show per page.
+ * @param string $status Package status
+ * @param string $search The value of search field. 
+ * @param int $user_id The user id.
+ * @return array $list All packages list based on the provide values of the function parameters.
+ */
+function listings(string $table, int $page, int $packages_nb_per_page, string $status, string $search, int $user_id)
 {
 
-    $packages_list = [];
+    $list = [];
 
     $database = _database_login();
 
@@ -1180,15 +1281,20 @@ function listings($table, $page, $packages_nb_per_page, $status, $search, $user_
 
         if (isset($data) && !empty($data) && is_array($data)) {
 
-            $packages_list = $data;
+            $list = $data;
         }
     }
 
-    return $packages_list;
+    return $list;
 }
 
-/** Fonction de récupération du nombre de lignes d'une table */
-function count_rows_in_table($table, $user_id)
+/** Number of rows in a package or packages group table
+ * 
+ * @param string $table The name of table.
+ * @param int $user_id.
+ * @return array $rows The number of rows.
+ */
+function count_rows_in_table(string $table, int $user_id)
 {
 
     $rows = [];
@@ -1208,7 +1314,7 @@ function count_rows_in_table($table, $user_id)
 
     if ($request_execution) {
 
-        $data = $request_prepare->fetchAll(PDO::FETCH_ASSOC);
+        $data = $request_prepare->fetch(PDO::FETCH_ASSOC);
 
         $rows = $data;
     }
@@ -1216,7 +1322,12 @@ function count_rows_in_table($table, $user_id)
     return $rows;
 }
 
-//Fonction de suppression de colis ou de groupe de colis
+/** Package or packages group deletion
+ * 
+ * @param string $tracking_number Package or packages group tracking_number.
+ * @param string $table The name of the table.
+ * @return bool The result.
+ */
 function deleted_package_or_packagegroup(string $tracking_number, string $table): bool
 {
     date_default_timezone_set("Africa/Lagos");
@@ -1246,37 +1357,12 @@ function deleted_package_or_packagegroup(string $tracking_number, string $table)
     return $update_is_deleted_field;
 }
 
-//Fonction de mise à jour du champs 'customer_package_group_id' dans la table package
-function update_customer_package_group_id(string $customer_package_group_id, string $tracking_number): bool
-{
-    date_default_timezone_set("Africa/Lagos");
-
-    $update_customer_package_group_id = false;
-
-    $database = _database_login();
-
-    $request = "UPDATE package SET customer_package_group_id = NULL, updated_on= :updated_on WHERE customer_package_group_id = :customer_package_group_id and tracking_number = :tracking_number";
-
-    $request_prepare = $database->prepare($request);
-
-    $request_execution = $request_prepare->execute(
-        [
-            'customer_package_group_id' => $customer_package_group_id,
-            'tracking_number' => $tracking_number,
-            'updated_on' => date('Y-m-d H:i:s')
-        ]
-    );
-
-    if ($request_execution) {
-
-        $update_customer_package_group_id = true;
-    }
-
-    return $update_customer_package_group_id;
-}
-
-//Fonction de listings des colis éligibles à la sélection pour groupe de colis
-function packages_listing_in_selectfield($user_id)
+/** Listing of all unlinked packages to a packages group 
+ * 
+ * @param int $user_id The user id.
+ * @return array $packages_listing All packages concerned.
+*/
+function packages_listing_in_selectfield(int $user_id)
 {
 
     $packages_listing = [];
@@ -1305,9 +1391,11 @@ function packages_listing_in_selectfield($user_id)
     return $packages_listing;
 }
 
-/**
- * Fonction d'insertion de numéro de suivi de groupe de colis dans la table 'customer_package_group' et de récupération
- *  de l'id du groupe de colis
+/** Insert packages group in 'customer_package_group' table and get the packages group id
+ * 
+ * @param string $tracking_number Packages group tracking number.
+ * @param int $user_id The user id.
+ * @return bool The result.
  */
 function insert_select_incustomerpackagegroup_table(string $tracking_number, int $user_id): bool
 {
@@ -1355,12 +1443,17 @@ function insert_select_incustomerpackagegroup_table(string $tracking_number, int
     return $insertselect;
 }
 
-//Fonction de mise à jour du champs 'customer_package_group_id' pour un colis dans la table 'package'
-function update_customerpackagegroupid_field_inpackage_table(int $customer_package_group_id, string $package_tracking_number): bool
+/** Link packages group to package
+ * 
+ * @param int $customer_package_group_id Packages group id.
+ * @param string $package_tracking_number Package tracking number.
+ * @return bool The result.
+ */
+function link_specific_packages_group_to_package(int $customer_package_group_id, string $package_tracking_number): bool
 {
     date_default_timezone_set("Africa/Lagos");
 
-    $update = false;
+    $link_specific_packages_group_to_package = false;
 
     $database = _database_login();
 
@@ -1378,13 +1471,51 @@ function update_customerpackagegroupid_field_inpackage_table(int $customer_packa
 
     if ($request_execution) {
 
-        $update = true;
+        $link_specific_packages_group_to_package = true;
     }
 
-    return $update;
+    return $link_specific_packages_group_to_package;
 }
 
-//Fonction de récupération du numéro de suivi d'un groupe de colis
+/** Unlink packages group to package
+ * 
+ * @param int $customer_package_group_id Packages group id.
+ * @param string $tracking_number Package tracking number.
+ * @return bool The result.
+ */
+function unlink_specific_packages_group_of_package(string $customer_package_group_id, string $tracking_number): bool
+{
+    date_default_timezone_set("Africa/Lagos");
+
+    $unlink_specific_packages_group_of_package = false;
+
+    $database = _database_login();
+
+    $request = "UPDATE package SET customer_package_group_id = NULL, updated_on= :updated_on WHERE customer_package_group_id = :customer_package_group_id and tracking_number = :tracking_number";
+
+    $request_prepare = $database->prepare($request);
+
+    $request_execution = $request_prepare->execute(
+        [
+            'customer_package_group_id' => $customer_package_group_id,
+            'tracking_number' => $tracking_number,
+            'updated_on' => date('Y-m-d H:i:s')
+        ]
+    );
+
+    if ($request_execution) {
+
+        $unlink_specific_packages_group_of_package = true;
+    }
+
+    return $unlink_specific_packages_group_of_package;
+}
+
+/** Get packages group tracking number
+ * 
+ * @param int $package_group_id Packages group id.
+ * @return array $packagegroup_trackingnumber The tracking number. 
+ */
 function select_packagegroup_trackingnumber(int $package_group_id)
 {
     $packagegroup_trackingnumber = [];
@@ -1401,7 +1532,7 @@ function select_packagegroup_trackingnumber(int $package_group_id)
 
     if ($request_execution) {
 
-        $data = $request_prepare->fetchAll(PDO::FETCH_ASSOC);
+        $data = $request_prepare->fetch(PDO::FETCH_ASSOC);
 
         if (isset($data) && !empty($data) && is_array($data)) {
 
@@ -1411,10 +1542,14 @@ function select_packagegroup_trackingnumber(int $package_group_id)
     return $packagegroup_trackingnumber;
 }
 
-//Fonction de récupération des numéros de suivi des colis d'un groupe de colis
+/** Get all tracking numbers of all packages in a packages group
+ * 
+ * @param int $package_group_id Packages group id.
+ * @return array $allpackages_inpackagegroup All packages concerned.
+ */
 function select_allpackages_forpackagegroup(int $package_group_id)
 {
-    $allpackages_forpackagegroup = [];
+    $allpackages_inpackagegroup = [];
 
     $database = _database_login();
 
@@ -1433,18 +1568,23 @@ function select_allpackages_forpackagegroup(int $package_group_id)
 
         if (isset($data) && !empty($data) && is_array($data)) {
 
-            $allpackages_forpackagegroup = $data;
+            $allpackages_inpackagegroup = $data;
         }
     }
-    return $allpackages_forpackagegroup;
+    return $allpackages_inpackagegroup;
 }
 
-//Fonction de mise à jour du champs 'customer_package_group_id' dans la table 'package'
-function update_customer_package_group_id_inpackagetable(string $customer_package_group_id): bool
+/** Unlink packages group to all packages concerned according to packages group id
+ * 
+ * @param int $customer_package_group_id Packages group id.
+ * @param string $tracking_number Package tracking number.
+ * @return bool The result.
+ */
+function unlink_specific_packages_group_ofAll_packages(int $customer_package_group_id): bool
 {
     date_default_timezone_set("Africa/Lagos");
 
-    $update_customer_package_group_id = false;
+    $unlink_specific_packages_group_ofAll_packages = false;
 
     $database = _database_login();
 
@@ -1461,8 +1601,8 @@ function update_customer_package_group_id_inpackagetable(string $customer_packag
 
     if ($request_execution) {
 
-        $update_customer_package_group_id = true;
+        $unlink_specific_packages_group_ofAll_packages = true;
     }
 
-    return $update_customer_package_group_id;
+    return $unlink_specific_packages_group_ofAll_packages;
 }

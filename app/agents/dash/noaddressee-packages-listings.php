@@ -242,7 +242,7 @@ $rows = count_rows_in_table($table, 0);
                                             if (!empty($packages_listings[$key]["customer_package_group_id"])) {
 
                                                 //Récupération du numéro de suivi du groupe de colis
-                                                $packages_group_tracking_number = select_packagegroup_trackingnumber($packages_listings[$key]["customer_package_group_id"])[0]['tracking_number'];
+                                                $packages_group_tracking_number = select_packagegroup_trackingnumber($packages_listings[$key]["customer_package_group_id"])['tracking_number'];
 
                                                 /**
                                                  * Récupération de tous les colis contenu dans le groupe. 
@@ -366,7 +366,7 @@ $rows = count_rows_in_table($table, 0);
                                             à la ligne <span><?= $en ?></span> 
                                         <?php 
                                         } 
-                                        ?>  sur <span><?= $rows[0]['COUNT(*)'] ?></span> ligne(s) au total
+                                        ?>  sur <span><?= $rows['COUNT(*)'] ?></span> ligne(s) au total
                                     </p>
 
                                 <?php
@@ -396,7 +396,7 @@ $rows = count_rows_in_table($table, 0);
                                             à la ligne <span><?= $en ?></span> 
                                         <?php 
                                         } 
-                                        ?>  sur <span><?= $rows[0]['COUNT(*)'] ?></span> ligne(s) au total
+                                        ?>  sur <span><?= $rows['COUNT(*)'] ?></span> ligne(s) au total
                                     </p>
 
                                 <?php
@@ -426,7 +426,7 @@ $rows = count_rows_in_table($table, 0);
                                             à la ligne <span><?= $en ?></span> 
                                         <?php 
                                         } 
-                                        ?>  sur <span><?= $rows[0]['COUNT(*)'] ?></span> ligne(s) au total
+                                        ?>  sur <span><?= $rows['COUNT(*)'] ?></span> ligne(s) au total
                                     </p>
 
                                 <?php
@@ -456,7 +456,7 @@ $rows = count_rows_in_table($table, 0);
                                             à la ligne <span><?= $en ?></span> 
                                         <?php 
                                         } 
-                                        ?>  sur <span><?= $rows[0]['COUNT(*)'] ?></span> ligne(s) au total
+                                        ?>  sur <span><?= $rows['COUNT(*)'] ?></span> ligne(s) au total
                                     </p>
 
                                 <?php

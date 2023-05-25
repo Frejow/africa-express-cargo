@@ -25,8 +25,8 @@ if (isset($_GET['p']) && !empty($_GET['p'])) {
         
     } else {
 
-        $token_created_at = select_token_date_info($params[3], $params[4])[0]['created'];
-        $token_updated_on = select_token_date_info($params[3], $params[4])[0]['updated_on'];
+        $token_created_at = select_token_date_info($params[3], $params[4])['created'];
+        $token_updated_on = select_token_date_info($params[3], $params[4])['updated_on'];
 
         if (date_to_number($token_updated_on) - date_to_number($token_created_at) < 1002) {
 

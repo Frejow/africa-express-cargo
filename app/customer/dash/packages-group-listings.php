@@ -321,77 +321,56 @@ $rows = count_rows_in_table($table, $data[0]['id']);
                             <?php
 
                             $s = null;
-                            $e = null;
 
                             if (!isset($_SESSION['previous_page']) && !isset($_SESSION['next_page']) && !isset($_SESSION['actual_page'])) {
 
-                                $e = $_SESSION['packages_nb_per_page'];
                                 $s = $_SESSION['page'];
-
-                                if ($e > $rows[0]['COUNT(*)']) {
-                                    $e = $rows[0]['COUNT(*)'];
-                                }
 
                                 if (!isset($packages_group_listings) || empty($packages_group_listings)) {
                                     $s = 'de ' . $n . ' ligne';
                                 }
 
                             ?>
-                                <p class="m-0 text-muted">Affichage <?php if (isset($packages_group_listings) && !empty($packages_group_listings)) { ?> de la ligne <?php } ?> <span><?= $s ?></span> <?php if (isset($packages_group_listings) && !empty($packages_group_listings)) { ?> à la ligne <span><?= $en ?></span> <?php } ?> sur <span><?= $rows[0]['COUNT(*)'] ?></span> ligne(s) au total</p>
+                                <p class="m-0 text-muted">Affichage <?php if (isset($packages_group_listings) && !empty($packages_group_listings)) { ?> de la ligne <?php } ?> <span><?= $s ?></span> <?php if (isset($packages_group_listings) && !empty($packages_group_listings)) { ?> à la ligne <span><?= $en ?></span> <?php } ?> sur <span><?= $rows['COUNT(*)'] ?></span> ligne(s) au total</p>
 
                             <?php
 
                             } elseif ((isset($_SESSION['previous_page']) || isset($_SESSION['next_page']) || isset($_SESSION['actual_page'])) && $_SESSION['page'] == 2) {
 
-                                $e = $_SESSION['packages_nb_per_page'] * $_SESSION['page'];
                                 $s = $_SESSION['packages_nb_per_page'] + 1;
-
-                                if ($e > $rows[0]['COUNT(*)']) {
-                                    $e = $rows[0]['COUNT(*)'];
-                                }
 
                                 if (!isset($packages_group_listings) || empty($packages_group_listings)) {
                                     $s = 'de ' . $n . ' ligne';
                                 }
 
                             ?>
-                                <p class="m-0 text-muted">Affichage <?php if (isset($packages_group_listings) && !empty($packages_group_listings)) { ?> de la ligne <?php } ?> <span><?= $s ?></span> <?php if (isset($packages_group_listings) && !empty($packages_group_listings)) { ?> à la ligne <span><?= $en ?></span> <?php } ?> sur <span><?= $rows[0]['COUNT(*)'] ?></span> ligne(s) au total</p>
+                                <p class="m-0 text-muted">Affichage <?php if (isset($packages_group_listings) && !empty($packages_group_listings)) { ?> de la ligne <?php } ?> <span><?= $s ?></span> <?php if (isset($packages_group_listings) && !empty($packages_group_listings)) { ?> à la ligne <span><?= $en ?></span> <?php } ?> sur <span><?= $rows['COUNT(*)'] ?></span> ligne(s) au total</p>
 
                             <?php
 
                             } elseif ((isset($_SESSION['previous_page']) || isset($_SESSION['next_page']) || isset($_SESSION['actual_page'])) && $_SESSION['page'] > 2) {
 
-                                $e = $_SESSION['packages_nb_per_page'] * $_SESSION['page'];
                                 $s = ($_SESSION['packages_nb_per_page'] * ($_SESSION['page'] - 1)) + 1;
-
-                                if ($e > $rows[0]['COUNT(*)']) {
-                                    $e = $rows[0]['COUNT(*)'];
-                                }
 
                                 if (!isset($packages_group_listings) || empty($packages_group_listings)) {
                                     $s = 'de ' . $n . ' ligne';
                                 }
 
                             ?>
-                                <p class="m-0 text-muted">Affichage <?php if (isset($packages_group_listings) && !empty($packages_group_listings)) { ?> de la ligne <?php } ?> <span><?= $s ?></span> <?php if (isset($packages_group_listings) && !empty($packages_group_listings)) { ?> à la ligne <span><?= $en ?></span> <?php } ?> sur <span><?= $rows[0]['COUNT(*)'] ?></span> ligne(s) au total</p>
+                                <p class="m-0 text-muted">Affichage <?php if (isset($packages_group_listings) && !empty($packages_group_listings)) { ?> de la ligne <?php } ?> <span><?= $s ?></span> <?php if (isset($packages_group_listings) && !empty($packages_group_listings)) { ?> à la ligne <span><?= $en ?></span> <?php } ?> sur <span><?= $rows['COUNT(*)'] ?></span> ligne(s) au total</p>
 
                             <?php
 
                             } else {
 
-                                $e = $_SESSION['packages_nb_per_page'] * $_SESSION['page'];
                                 $s = ($_SESSION['packages_nb_per_page'] * ($_SESSION['page'] - 1)) + 1;
-
-                                if ($e > $rows[0]['COUNT(*)']) {
-                                    $e = $rows[0]['COUNT(*)'];
-                                }
 
                                 if (!isset($packages_group_listings) || empty($packages_group_listings)) {
                                     $s = 'de ' . $n . ' ligne';
                                 }
 
                             ?>
-                                <p class="m-0 text-muted">Affichage <?php if (isset($packages_group_listings) && !empty($packages_group_listings)) { ?> de la ligne <?php } ?> <span><?= $s ?></span> <?php if (isset($packages_group_listings) && !empty($packages_group_listings)) { ?> à la ligne <span><?= $en ?></span> <?php } ?> sur <span><?= $rows[0]['COUNT(*)'] ?></span> ligne(s) au total</p>
+                                <p class="m-0 text-muted">Affichage <?php if (isset($packages_group_listings) && !empty($packages_group_listings)) { ?> de la ligne <?php } ?> <span><?= $s ?></span> <?php if (isset($packages_group_listings) && !empty($packages_group_listings)) { ?> à la ligne <span><?= $en ?></span> <?php } ?> sur <span><?= $rows['COUNT(*)'] ?></span> ligne(s) au total</p>
 
                             <?php
                             }

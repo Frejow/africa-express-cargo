@@ -256,7 +256,7 @@ if (empty($error)) {
 
                 for ($i = 0; $i < sizeof($newdata['images']); $i++) {
 
-                    if (!add_images_for_package(select_package_id($newdata['pack_trackN'])[0]['id'], $newdata['images'][$i], $data[0]['id'])) {
+                    if (!add_images_for_package(select_package_id($newdata['pack_trackN'])['id'], $newdata['images'][$i], $data[0]['id'])) {
 
                         $_SESSION['error_msg'] = 'Une erreur est survenue. Réessayer. Si cela persiste, contactez-nous.';
 

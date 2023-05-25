@@ -112,7 +112,7 @@ if (isset($_POST['package_deletion']) && !empty($_POST['package_deletion'])) {
 
         if (deleted_package_or_packagegroup(explode('&', $_POST['package_deletion'])[0], 'package')) {
 
-            if (update_customer_package_group_id(explode('&', $_POST['package_deletion'])[1], explode('&', $_POST['package_deletion'])[0])) {
+            if (unlink_specific_packages_group_of_package(explode('&', $_POST['package_deletion'])[1], explode('&', $_POST['package_deletion'])[0])) {
 
                 $_SESSION['success_msg'] = 'Votre colis N°'. explode('&', $_POST['package_deletion'])[0] .' a été supprimé avec succès';
     

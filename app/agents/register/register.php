@@ -113,8 +113,6 @@ if (empty($errors)) {
     
         $subject = 'Nouveau compte agent en attente de validation';
 
-        $subject = 'Confirmation de compte';
-
         ob_start(); 
 
         include 'app/agents/register/mailtemp.php'; 
@@ -123,7 +121,7 @@ if (empty($errors)) {
 
         ob_end_clean(); 
 
-        if (mailsendin(MAIL_ADDRESS, $data["prenom"].' '.$data["nom"], $subject, $mailcontent)) {
+        if (mailsendin(MAIL_ADDRESS, 'Africa Express Cargo', $subject, $mailcontent)) {
 
             header("location:" . PROJECT . "agents/register/true");
 
