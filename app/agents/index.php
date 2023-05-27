@@ -46,6 +46,7 @@ if (isset(explode('?', $_SERVER['REQUEST_URI'])[1])) {
 }
 
 //Section toast
+
 if (isset($_SESSION['success_msg']) && !empty($_SESSION['success_msg'])) {
     $msg = $_SESSION['success_msg'];
 ?>
@@ -195,7 +196,7 @@ if (isset($_SESSION["connected"]) && !empty($_SESSION["connected"])) {
 
         $action = (isset($params[2]) && !empty($params[2])) ? $params[2] : $default_action;
 
-        $action_folder = "app/" . $profile . "/" . $resource . "/" . $action . ".php";
+        $action_folder = "app/" . $profile . "/" . $resource . "/" . $action . ".php"; //die(var_dump($action_folder));
 
         if (file_exists($action_folder)) {
 
@@ -203,11 +204,11 @@ if (isset($_SESSION["connected"]) && !empty($_SESSION["connected"])) {
 
         } else {
 
-            require_once 'error/404.php';
+            require_once '404/index.php';
 
         }
 
     } else {
         
-        require_once 'error/404.php';;
+        require_once '404/index.php';;
     }

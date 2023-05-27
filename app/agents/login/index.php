@@ -9,43 +9,43 @@ include 'app/common/auth/1stpart.php';
 <body>
 
     <div class="limiter">
-           
+
         <div class="container">
             <div class="wrap-login100 col">
                 <div class="login100-pic js-tilt" data-tilt>
                     <img src='<?= PROJECT ?>public/images/a_e_c.jpg' alt="">
                 </div>
 
-                <form action="<?= PROJECT ?>agents/login/login" method="post" class="login100-form validate-form">
+                <form id="login" class="login100-form validate-form">
                     <span class="login100-form-title">
                         <i class="fa fa-sign-in"></i>
                         <?php
-                        if (isset($_COOKIE['psp']) && !empty($_COOKIE['psp'])){
+                        if (isset($_COOKIE['psp']) && !empty($_COOKIE['psp'])) {
                             echo 'Reconnectez-vous avec votre nouveau mot de passe';
                             setcookie('psp', '', time() - 3600, '/');
                         } else {
                             echo 'Agents';
                         }
-                        ?>                    
+                        ?>
                     </span>
 
                     <?php
 
-                        $errors = [];
+                    $errors = [];
 
-                        if (isset($_SESSION["login_errors"]) && !empty($_SESSION["login_errors"])) {
-                            $errors = $_SESSION["login_errors"];
-                        }
+                    if (isset($_SESSION["login_errors"]) && !empty($_SESSION["login_errors"])) {
+                        $errors = $_SESSION["login_errors"];
+                    }
 
-                        $data = [];
+                    $data = [];
 
-                        if (isset($_COOKIE["ud"]) && !empty($_COOKIE["ud"])) {
-                            $data = json_decode($_COOKIE["ud"], true);
-                        }
+                    if (isset($_COOKIE["ud"]) && !empty($_COOKIE["ud"])) {
+                        $data = json_decode($_COOKIE["ud"], true);
+                    }
 
-                        if (isset($_COOKIE["cud"]) && !empty($_COOKIE["cud"])) {
-                            $data = json_decode($_COOKIE["cud"], true);
-                        }
+                    if (isset($_COOKIE["cud"]) && !empty($_COOKIE["cud"])) {
+                        $data = json_decode($_COOKIE["cud"], true);
+                    }
 
                     ?>
 
@@ -53,7 +53,7 @@ include 'app/common/auth/1stpart.php';
                         <input class="input100" type="text" id="m_ps" name="m_ps" placeholder="Adresse email" value="<?php echo (isset($data["m_ps"]) && !empty($data["m_ps"])) ? $data["m_ps"] : "" ?>">
                         <span class="focus-input100"></span>
                         <span class="symbol-input100">
-                        <i class="fa fa-envelope <?= isset($errors["m_ps"])? 'text-danger' : ''?>" aria-hidden="true"></i>
+                            <i class="fa fa-envelope <?= isset($errors["m_ps"]) ? 'text-danger' : '' ?>" aria-hidden="true"></i>
                         </span>
                     </div>
                     <?php
@@ -66,7 +66,7 @@ include 'app/common/auth/1stpart.php';
                         <input class="input100" type="password" autocomplete="new-password" id="pass" name="pass" placeholder="Mot de passe">
                         <span class="focus-input100"></span>
                         <span class="symbol-input100">
-                            <i class="fa fa-lock <?= isset($errors["pass"])? 'text-danger' : ''?>" aria-hidden="true"></i>
+                            <i class="fa fa-lock <?= isset($errors["pass"]) ? 'text-danger' : '' ?>" aria-hidden="true"></i>
                         </span>
                     </div>
                     <?php
@@ -113,6 +113,11 @@ include 'app/common/auth/1stpart.php';
     <?php
     unset($_SESSION["login_errors"]);
     ?>
+
+    <script>
+        
+    </script>
+
 
 </body>
 

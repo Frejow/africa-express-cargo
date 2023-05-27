@@ -4,7 +4,9 @@ if (connected()) {
     $_SESSION['current_url'] = "{$_SERVER['REQUEST_SCHEME']}://{$_SERVER['HTTP_HOST']}{$_SERVER['REQUEST_URI']}";
 }
 
-include 'app/common/agents/1stpart.php';  ?>
+include 'app/common/agents/1stpart.php';  
+//die(var_dump($data));
+?>
 
 <div class="page-header d-print-none">
     <div class="container-xl">

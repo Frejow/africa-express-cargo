@@ -9,7 +9,7 @@ if (isset($_POST['resend_mail']) && !empty($_POST['resend_mail'])) {
 
     insert_token_in_token_table($_POST['resend_mail'], 'ACCOUNT_VALIDATION', $token);
 
-    $subject = 'Confirmation de compte';
+    $subject = 'CONFIRMATION DE COMPTE';
 
     ob_start(); 
 

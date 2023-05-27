@@ -1,6 +1,6 @@
 <?php
 session_start();
-include "app/common/functions_folder/functions.php";
+include "app/common/functions.php";
 //die(var_dump(connected()));
 
 ?>

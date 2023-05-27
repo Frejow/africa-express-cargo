@@ -67,6 +67,7 @@
     <link href='<?= PROJECT ?>public/css/util.css' rel="stylesheet" type="text/css">
     <link href='<?= PROJECT ?>public/css/main.css' rel="stylesheet" type="text/css">
     <script src='<?= PROJECT ?>public/js/jquery/jquery-3.6.3.min.js'></script>
+    <script src='<?= PROJECT ?>public/js/ajax.js'></script>
     <?php
     }
     ?>

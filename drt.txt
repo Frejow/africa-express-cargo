@@ -1,0 +1,165 @@
+$_SESSION["login_errors"] = [];
+
+$errors = [];
+
+$data = [];
+
+if (!isset($_POST["m_ps"]) || empty($_POST["m_ps"])) {
+    $errors["m_ps"] = "Ce champs est requis.";
+}
+
+if (isset($_POST["m_ps"]) && !empty($_POST["m_ps"])) {
+    $data["m_ps"] = (secure($_POST["m_ps"]));
+}
+
+if (!isset($_POST["pass"]) || empty($_POST["pass"])) {
+    $errors["pass"] = "Le champs du mot de passe est requis.";
+}
+
+if (isset($_POST["pass"]) && !empty($_POST["pass"])) {
+    $data["pass"] = secure($_POST["pass"]);
+}
+
+if (empty($errors)) {
+
+    $checkby_mail_password = retrieve_userby_email_and_password($_POST["m_ps"], $_POST["pass"], 'AGENT', 1, 1, 0);
+    $checkby_username_password = retrieve_userby_pseudo_and_password($_POST["m_ps"], $_POST["pass"], 'AGENT', 1, 1, 0);
+
+    if (!empty($checkby_mail_password) || !empty($checkby_username_password)) {
+
+        if (!empty($checkby_mail_password)) {
+
+            $_SESSION['connected'] = $checkby_mail_password;
+
+        } elseif (!empty($checkby_username_password)) {
+
+            $_SESSION['connected'] = $checkby_username_password;
+            
+        }
+
+        if (isset($_POST["remember_me"]) && !empty($_POST["remember_me"])){
+
+            setcookie('cud', json_encode($data), time() + 365 * 24 * 3600, '/');
+        
+        } else {
+            setcookie('cud', '', time() - 3600, '/');
+        }
+
+        if (isset($_COOKIE['thm'])) {
+
+            $_SESSION['success_msg'] = 'Authentification réussie';
+
+            header("location:".PROJECT."agents/dash/noaddressee-packages-listings".$_COOKIE['thm']);
+
+            setcookie('thm', '', time() - 3600, '/');
+
+        } elseif (isset($_COOKIE['crl'])) {
+
+            $_SESSION['success_msg'] = 'Authentification réussie';
+
+            header("location:".$_COOKIE['crl']);
+
+            setcookie('crl', '', time() - 3600, '/');
+
+        } else {
+            
+            $_SESSION['success_msg'] = 'Authentification réussie';
+
+            header("location:".PROJECT."agents/dash/noaddressee-packages-listings?theme=light");
+
+        }
+        
+        setcookie('ud', '', time() - 3600, '/');
+
+    }
+    elseif (empty($checkby_mail_password) || empty($checkby_username_password)) {
+
+        $_SESSION['error_msg'] = 'Adresse email ou mot de passe incorrect. Réessayer';
+
+        setcookie('ud', json_encode($data), time() + 365 * 24 * 3600, '/');
+
+        header("location:".PROJECT."agents/login");
+        
+    }
+    
+}
+
+else {
+
+    $_SESSION["login_errors"] = $errors;
+
+    setcookie('ud', json_encode($data), time() + 365 * 24 * 3600, '/');
+    
+    header("location:".PROJECT."agents/login");
+
+}
+
+
+
+success: function(response) {
+                        if (response.success) {
+
+                            event.preventDefault();
+
+                            var jsonData = {
+                                success: response.message
+                            };
+
+                            $.ajax({
+                                url: '<?= PROJECT ?>agents/login/login',
+                                method: 'POST',
+                                data: JSON.stringify(jsonData),
+                                contentType: 'application/json',
+                                success: function() {
+                                    console.log('Données JSON envoyées avec succès.');
+                                },
+                                error: function(xhr, status, error) {
+                                    console.log('Erreur lors de l\'envoi des données JSON : ' + error);
+                                }
+                            });
+
+                            window.location.href = response.redirectUrl;
+
+                        } else {
+
+                            event.preventDefault();
+
+                            var jsonData = {
+                                error: response.message
+                            };
+
+                            $.ajax({
+                                url: '<?= PROJECT ?>agents/login/login',
+                                method: 'POST',
+                                data: JSON.stringify(jsonData),
+                                contentType: 'application/json',
+                                success: function() {
+                                    console.log('Données JSON envoyées avec succès.');
+                                },
+                                error: function(xhr, status, error) {
+                                    console.log('Erreur lors de l\'envoi des données JSON : ' + error);
+                                }
+                            });
+
+                        }
+                    },
+
+                    error: function(xhr, status, error) {
+                        console.log(error);
+                    }
+
+
+
+$jsonData = json_decode(file_get_contents('php://input'), true);
+
+if ($jsonData) {
+
+    if (!empty($jsonData['success'])) {
+        $_SESSION['success_msg'] = $jsonData['success'];
+    }
+    
+    if (!empty($jsonData['error'])) {
+        $_SESSION['error_msg'] = $jsonData['error'];
+    }
+exit;
+}

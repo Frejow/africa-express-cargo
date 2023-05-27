@@ -23,14 +23,14 @@
             if($('.swalDefaultSuccess').length) {
                 Toast.fire({
                     icon: 'success',
-                    title: '<?= $msg ?>'
+                    title: msg
                 });
             }
             
             if($('.swalDefaultError').length) {
                 Toast.fire({
                     icon: 'error',
-                    title: '<?= $msg ?>'
+                    title: msg
                 });
             }
         });

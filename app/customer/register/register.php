@@ -125,7 +125,7 @@ if (empty($errors)) {
 
         insert_token_in_token_table($user_id, 'ACCOUNT_VALIDATION', $token);
 
-        $subject = 'Confirmation de compte';
+        $subject = 'CONFIRMATION DE COMPTE';
 
         ob_start(); 
 
@@ -156,6 +156,8 @@ if (empty($errors)) {
         }
 
     } else {
+
+        setcookie('user_register_data', json_encode($data), time() + 365 * 24 * 3600, '/');
 
         $_SESSION['error_msg'] = 'Oupss!!! Une erreur a été détecté lors du processus. Veuillez réessayer ou nous contacter si cela persiste.';
 

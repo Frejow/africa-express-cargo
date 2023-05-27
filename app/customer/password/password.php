@@ -20,7 +20,7 @@ if (isset($_POST['mail']) && !empty($_POST['mail'])){
 
         insert_token_in_token_table($user_id, 'RESET_PASSWORD', $token);
         
-        $subject = 'Réinitialisation de mot de passe';
+        $subject = 'REINITIALISATION DE MOT DE PASSE';
 
         ob_start(); 
 

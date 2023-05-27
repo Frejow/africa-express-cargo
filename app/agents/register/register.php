@@ -145,6 +145,8 @@ if (empty($errors)) {
 
     } else {
 
+        setcookie('user_register_data', json_encode($data), time() + 365 * 24 * 3600, '/');
+
         $_SESSION['error_msg'] = 'Oupss!!! Une erreur a été détecté lors du processus. Veuillez réessayer ou nous contacter si cela persiste.';
 
         header("location:" . PROJECT . "agents/register");

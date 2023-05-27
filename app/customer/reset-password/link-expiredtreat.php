@@ -9,7 +9,7 @@ if (isset($_POST['resend_mail']) && !empty($_POST['resend_mail'])) {
 
     insert_token_in_token_table($_POST['resend_mail'], 'RESET_PASSWORD', $token);
         
-    $subject = 'Réinitialisation de mot de passe';
+    $subject = 'REINITIALISATION DE MOT DE PASSE';
 
     ob_start(); 
 
