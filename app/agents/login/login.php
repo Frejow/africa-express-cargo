@@ -4,7 +4,6 @@ $errors = '';
 $access = $_POST["m_ps"];
 $password = $_POST["pass"];
 
-
 if (empty($access) || empty($password)) {
     $errors = 'Les deux champs sont requis.';
 }
@@ -40,10 +39,12 @@ if (!empty($errors)) {
 } else {
     
     $theme = '?theme=light';
-    if (isset($_COOKIE['thm'])) { $theme = $_COOKIE['thm']; }
+
+    if (!empty($_COOKIE['thm'])) { $theme = $_COOKIE['thm']; }
 
     $redirectUrl = PROJECT.'agents/dash/noaddressee-packages-listings'.$theme;
-    if (isset($_COOKIE['crl'])) { $redirectUrl = $_COOKIE['crl']; }
+
+    if (!empty($_COOKIE['crl'])) { $redirectUrl = $_COOKIE['crl']; }
 
   $response = array('success' => true, 'message' => 'Authentification réussie', 'redirectUrl' => $redirectUrl);
 

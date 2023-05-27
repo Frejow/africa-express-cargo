@@ -10,7 +10,7 @@ $(document).ready(function() {
             method: 'POST',
             data: {
                 m_ps: m_ps,
-                pass: pass
+                pass: pass,
             },
             dataType: 'json',
             success: function(response) {

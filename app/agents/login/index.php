@@ -20,8 +20,8 @@ include 'app/common/auth/1stpart.php';
                     <span class="login100-form-title">
                         <i class="fa fa-sign-in"></i>
                         <?php
-                        if (isset($_COOKIE['psp']) && !empty($_COOKIE['psp'])) {
-                            echo 'Reconnectez-vous avec votre nouveau mot de passe';
+                        if (!empty($_COOKIE['psp'])) {
+                            echo 'Reconnectez-vous';
                             setcookie('psp', '', time() - 3600, '/');
                         } else {
                             echo 'Agents';
@@ -29,55 +29,20 @@ include 'app/common/auth/1stpart.php';
                         ?>
                     </span>
 
-                    <?php
-
-                    $errors = [];
-
-                    if (isset($_SESSION["login_errors"]) && !empty($_SESSION["login_errors"])) {
-                        $errors = $_SESSION["login_errors"];
-                    }
-
-                    $data = [];
-
-                    if (isset($_COOKIE["ud"]) && !empty($_COOKIE["ud"])) {
-                        $data = json_decode($_COOKIE["ud"], true);
-                    }
-
-                    if (isset($_COOKIE["cud"]) && !empty($_COOKIE["cud"])) {
-                        $data = json_decode($_COOKIE["cud"], true);
-                    }
-
-                    ?>
-
                     <div class="wrap-input100 validate-input" data-validate="Champs requis">
-                        <input class="input100" type="text" id="m_ps" name="m_ps" placeholder="Adresse email" value="<?php echo (isset($data["m_ps"]) && !empty($data["m_ps"])) ? $data["m_ps"] : "" ?>">
+                        <input class="input100" type="text" id="m_ps" name="m_ps" placeholder="Email ou Nom d'Utilisateur" value="<?= !empty($_COOKIE['cud']) ? $_COOKIE['cud'] : '' ?>">
                         <span class="focus-input100"></span>
                         <span class="symbol-input100">
-                            <i class="fa fa-envelope <?= isset($errors["m_ps"]) ? 'text-danger' : '' ?>" aria-hidden="true"></i>
+                            <i class="fa fa-envelope" aria-hidden="true"></i>
                         </span>
                     </div>
-                    <?php
-                    if (isset($errors["m_ps"]) && !empty($errors["m_ps"])) {
-                        echo "<p style = 'color:red; font-size:12px;' class='float-right mr-3'>" . $errors["m_ps"] . "</p>";
-                    }
-                    ?>
 
                     <div class="wrap-input100 validate-input" data-validate="Champs requis">
                         <input class="input100" type="password" autocomplete="new-password" id="pass" name="pass" placeholder="Mot de passe">
                         <span class="focus-input100"></span>
                         <span class="symbol-input100">
-                            <i class="fa fa-lock <?= isset($errors["pass"]) ? 'text-danger' : '' ?>" aria-hidden="true"></i>
+                            <i class="fa fa-lock" aria-hidden="true"></i>
                         </span>
-                    </div>
-                    <?php
-                    if (isset($errors["pass"]) && !empty($errors["pass"])) {
-                        echo "<p style = 'color:red; font-size:12px;' class='float-right mr-3'>" . $errors["pass"] . "</p>";
-                    }
-                    ?>
-
-                    <div class="form-check text-center">
-                        <input class="form-check-input" <?= isset($_COOKIE['cud']) ? 'checked' : '' ?> type="checkbox" name="remember_me" id="flexCheckChecked" />
-                        <label class="" for="flexCheckChecked" style="font-size: 14px; color: #666;">Se souvenir de moi</label>
                     </div>
 
                     <div class="container-login100-form-btn">
@@ -110,14 +75,6 @@ include 'app/common/auth/1stpart.php';
             </div>
         </div>
     </div>
-    <?php
-    unset($_SESSION["login_errors"]);
-    ?>
-
-    <script>
-        
-    </script>
-
 
 </body>
 
