@@ -215,66 +215,36 @@ $countries = [
             <div class="wrap-register100">
                 
                 <div>
-                    <form action="<?= PROJECT ?>agents/register/register" method="post" class="login100-form" style="width: 100%;">
+                    <form id="register" class="login100-form validate-form" style="width: 100%;">
                         <span class="login100-form-title">
                             <i class="fa fa-user-plus"></i>
                             Agents
                         </span>
 
-                        <?php
-
-                        $errors = [];
-
-                        if (isset($_SESSION["register_errors"]) && !empty($_SESSION["register_errors"])) {
-                            $errors = $_SESSION["register_errors"];
-                        } else {
-                            setcookie('user_register_data', '', time() - 3600, '/');
-                        }
-
-                        $data = [];
-
-                        if (isset($_COOKIE["user_register_data"]) && !empty($_COOKIE["user_register_data"])) {
-                            $data = json_decode($_COOKIE["user_register_data"], true);
-                        }
-
-                        //die (var_dump($data));
-
-                        ?>
-
                         <div class="row">
 
                             <div class="col-lg-6">
                                 <label for="nom" class="ml-3">Nom<span class="text-danger">*</span></label>
-                                <div class="wrap-input100">
-                                    <input class="input100" type="text" name="nom" id="nom" placeholder="Nom" value="<?php echo (isset($data["nom"]) && !empty($data["nom"])) ? $data["nom"] : "" ?>">
+                                <div class="wrap-input100 validate-input" data-validate="Champs requis">
+                                    <input class="input100" type="text" name="nom" id="nom" placeholder="Nom">
                                     <span class="focus-input100"></span>
                                     <span class="symbol-input100">
-                                        <i class="fa fa-user <?= isset($errors["nom"])? 'text-danger' : ''?>" aria-hidden="true"></i>
+                                        <i class="fa fa-user" aria-hidden="true"></i>
                                     </span>
                                 </div>
-                                <?php
-                                if (isset($errors["nom"]) && !empty($errors["nom"])) {
-                                    echo "<p style = 'color:red; font-size:12px;' class='float-right mr-3'>" . $errors["nom"] . "</p>";
-                                }
-                                ?>
                             </div>
 
 
 
                             <div class="col-lg-6">
                                 <label for="prenom" class="ml-3">Prénoms<span class="text-danger">*</span></label>
-                                <div class="wrap-input100">
-                                    <input class="input100" type="text" id="prenom" name="prenom" placeholder="Prénoms" value="<?php echo (isset($data["prenom"]) && !empty($data["prenom"])) ? $data["prenom"] : "" ?>">
+                                <div class="wrap-input100 validate-input" data-validate="Champs requis">
+                                    <input class="input100" type="text" id="prenom" name="prenom" placeholder="Prénoms">
                                     <span class="focus-input100"></span>
                                     <span class="symbol-input100">
-                                        <i class="fa fa-user <?= isset($errors["prenom"])? 'text-danger' : ''?>" aria-hidden="true"></i>
+                                        <i class="fa fa-user" aria-hidden="true"></i>
                                     </span>
-                                </div> 
-                                <?php
-                                if (isset($errors["prenom"]) && !empty($errors["prenom"])) {
-                                    echo "<p style = 'color:red; font-size:12px;' class='float-right mr-3'>" . $errors["prenom"] . "</p>";
-                                }
-                                ?>                              
+                                </div>                              
                             </div>
 
                         </div>
@@ -282,35 +252,25 @@ $countries = [
                         <div class="row">
 
                             <div class="col-lg-6">
-                                <label for="pseudo" class="ml-3">Nom d'Utilisateur<span class="text-danger">*</span></label>
-                                <div class="wrap-input100">
-                                    <input class="input100" type="text" id="pseudo" name="pseudo" placeholder="Nom d'utilisateur" value="<?php echo (isset($data["pseudo"]) && !empty($data["pseudo"])) ? $data["pseudo"] : "" ?>">
+                                <label for="mail" class="ml-3">Adresse Email<span class="text-danger">*</span></label> 
+                                <div class="wrap-input100 validate-input" data-validate="Champs requis">
+                                    <input class="input100" type="" id="mail" name="mail" placeholder="Email">
                                     <span class="focus-input100"></span>
                                     <span class="symbol-input100">
-                                        <i class="fa fa-user <?= isset($errors["pseudo"])? 'text-danger' : ''?>" aria-hidden="true"></i>
+                                        <i class="fa fa-envelope" aria-hidden="true"></i>
                                     </span>
                                 </div>  
-                                <?php
-                                if (isset($errors["pseudo"]) && !empty($errors["pseudo"])) {
-                                    echo "<p style = 'color:red; font-size:12px;' class='float-right mr-3'>" . $errors["pseudo"] . "</p>";
-                                }
-                                ?>                           
                             </div>
 
                             <div class="col-lg-6">
-                                <label for="mail" class="ml-3">Adresse Email<span class="text-danger">*</span></label> 
-                                <div class="wrap-input100">
-                                    <input class="input100" type="email" id="mail" name="mail" placeholder="Email" value="<?php echo (isset($data["mail"]) && !empty($data["mail"])) ? $data["mail"] : "" ?>">
+                                <label for="pseudo" class="ml-3">Nom d'Utilisateur<span class="text-danger">*</span></label>
+                                <div class="wrap-input100 validate-input" data-validate="Champs requis">
+                                    <input class="input100" type="text" id="pseudo" name="pseudo" placeholder="Nom d'utilisateur">
                                     <span class="focus-input100"></span>
                                     <span class="symbol-input100">
-                                        <i class="fa fa-envelope <?= isset($errors["mail"])? 'text-danger' : ''?>" aria-hidden="true"></i>
+                                        <i class="fa fa-user" aria-hidden="true"></i>
                                     </span>
-                                </div> 
-                                <?php
-                                if (isset($errors["mail"]) && !empty($errors["mail"])) {
-                                    echo "<p style = 'color:red; font-size:12px;' class='float-right mr-3'>" . $errors["mail"] . "</p>";
-                                }
-                                ?>  
+                                </div>                           
                             </div>
 
                         </div>
@@ -319,25 +279,20 @@ $countries = [
 
                             <div class="col-lg-6">
                                 <label for="tel" class="ml-3">Numéro de téléphone<span class="text-danger">*</span></label>
-                                <div class="wrap-input100">
-                                    <input class="input100" type="tel" id="tel" name="tel" placeholder="Numéro de téléphone" value="<?php echo (isset($data["tel"]) && !empty($data["tel"])) ? $data["tel"] : "" ?>">
+                                <div class="wrap-input100 validate-input" data-validate="Champs requis">
+                                    <input class="input100" type="tel" id="tel" name="tel" placeholder="Numéro de téléphone">
                                     <span class="focus-input100"></span>
                                     <span class="symbol-input100">
-                                        <i class="fa fa-phone <?= isset($errors["tel"])? 'text-danger' : ''?>" aria-hidden="true"></i>
+                                        <i class="fa fa-phone" aria-hidden="true"></i>
                                     </span>
-                                </div>  
-                                <?php
-                                if (isset($errors["tel"]) && !empty($errors["tel"])) {
-                                    echo "<p style = 'color:red; font-size:12px;' class='float-right mr-3'>" . $errors["tel"] . "</p>";
-                                }
-                                ?>                              
+                                </div>                              
                             </div>
 
                             <div class="col-lg-6">
                                 <label for="country" class="ml-3">Pays<span class="text-danger">*</span></label>
-                                <div class="wrap-input100">
+                                <div class="wrap-input100" data-validate="Champs requis">
                                     <input type="hidden" class="input100">
-                                    <select class="input100" id="country" name="country" value="<?php echo (isset($data["country"]) && !empty($data["country"])) ? $data["country"] : "" ?>">
+                                    <select class="input100" id="country" name="country">
                                         <option selected><span>&#x1F1E7;&#x1F1EF;</span>&nbsp;&nbsp;&nbsp;Bénin</option>
                                         <?php
                                         foreach ($countries as $key => $value) {
@@ -349,14 +304,9 @@ $countries = [
                                     </select>
                                     <span class="focus-input100"></span>
                                     <span class="symbol-input100">
-                                        <i class="fa fa-flag <?= isset($errors["country"])? 'text-danger' : ''?>" aria-hidden="true"></i>
+                                        <i class="fa fa-flag" aria-hidden="true"></i>
                                     </span>
-                                </div> 
-                                <?php
-                                if (isset($errors["country"]) && !empty($errors["country"])) {
-                                    echo "<p style = 'color:red; font-size:12px;' class='float-right mr-3'>" . $errors["country"] . "</p>";
-                                }
-                                ?> 
+                                </div>
                             </div>
 
                         </div>
@@ -365,52 +315,33 @@ $countries = [
 
                             <div class="col-lg-6">
                                 <label for="pass" class="ml-3">Mot de passe<span class="text-danger">*</span></label>
-                                <div class="wrap-input100">
-                                    <input class="input100" type="password" id="pass" name="pass" placeholder="Mot de passe" value="<?php echo (isset($data["pass"]) && !empty($data["pass"])) ? $data["pass"] : "" ?>">
+                                <div class="wrap-input100 validate-input" data-validate="Champs requis">
+                                    <input class="input100" type="password" id="pass" name="pass" placeholder="Mot de passe">
                                     <span class="focus-input100"></span>
                                     <span class="symbol-input100">
-                                        <i class="fa fa-lock <?= isset($errors["pass"])? 'text-danger' : ''?>" aria-hidden="true"></i>
+                                        <i class="fa fa-lock" aria-hidden="true"></i>
                                     </span>
-                                </div> 
-                                <?php
-                                if (isset($errors["pass"]) && !empty($errors["pass"])) {
-                                    echo "<p style = 'color:red; font-size:12px;' class='float-right mr-3'>" . $errors["pass"] . "</p>";
-                                }
-                                ?> 
+                                </div>
                             </div>
 
                             <div class="col-lg-6">
                                 <label for="repass" class="ml-3">Confirmez mot de passe<span class="text-danger">*</span></label>
-                                <div class="wrap-input100">
-                                    <input class="input100" type="password" id="repass" name="repass" placeholder="Confirmez mot de passe" value="<?php echo (isset($data["repass"]) && !empty($data["repass"])) ? $data["repass"] : "" ?>">
+                                <div class="wrap-input100 validate-input" data-validate="Champs requis">
+                                    <input class="input100" type="password" id="repass" name="repass" placeholder="Confirmez mot de passe">
                                     <span class="focus-input100"></span>
                                     <span class="symbol-input100">
-                                        <i class="fa fa-lock <?= isset($errors["repass"])? 'text-danger' : ''?>" aria-hidden="true"></i>
+                                        <i class="fa fa-lock" aria-hidden="true"></i>
                                     </span>
-                                </div>  
-                                <?php
-                                if (isset($errors["repass"]) && !empty($errors["repass"])) {
-                                    echo "<p style = 'color:red; font-size:12px;' class='float-right mr-3'>" . $errors["repass"] . "</p>";
-                                }
-                                ?> 
+                                </div> 
                             </div>
 
                         </div>
-
-                        <div class="form-check ml-5">
-                            <input class="form-check-input" type="checkbox" name="terms" value="" id="flexCheckChecked" />
-                            <label class="" for="flexCheckChecked">J'accepte les termes<span class="text-danger">*</span></label>
-                        </div>
-
-                        <?php
-                        if (isset($errors["terms"]) && !empty($errors["terms"])) {
-                            echo "<p style = 'color:red; font-size:12px;' class='ml-3'>" . $errors["terms"] . "</p>";
-                        }
-                        ?>
+                        <p class="text-center mt-3">En cliquant sur le bouton, vous acceptez automatiquement nos <a href="#"> <strong>termes et conditions</strong></a>.</p>
 
                         <div class="container-login100-form-btn">
-                            <button type="submit" class="login100-form-btn" style="width : 50%;">
-                                Je m'inscris
+                            <button type="submit" id="submitButton" class="login100-form-btn" style="width : 50%;">
+                                <span>Je m'inscris</span>
+                                <span class="loader"></span>
                             </button>
                         </div>
 

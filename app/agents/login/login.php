@@ -27,7 +27,7 @@ if (!empty($access) && !empty($password)) {
 
     } elseif (empty($checkby_mail_password) || empty($checkby_username_password)) {
 
-        $errors = 'Adresse email ou mot de passe incorrect. Réessayer';
+        $errors = 'Identifiant incorrect, mot de passe incorrect, compte inactif ou inexistant.';
 
     }
 }
@@ -53,4 +53,3 @@ if (!empty($errors)) {
 header('Content-Type: application/json');
 echo json_encode($response);
 
-?>

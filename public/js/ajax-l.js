@@ -5,6 +5,12 @@ $(document).ready(function() {
         var m_ps = $('#m_ps').val();
         var pass = $('#pass').val();
 
+        var $submitButton = $('#submitButton');
+        var $loader = $submitButton.find('.loader');
+
+        $submitButton.attr('disabled', true);
+        $loader.addClass('show');
+
         $.ajax({
             url: 'login/login',
             method: 'POST',
@@ -35,9 +41,15 @@ $(document).ready(function() {
                         text: response.message
                     });
                 }
+
+                $submitButton.attr('disabled', false);
+                $loader.removeClass('show');
             },
             error: function(xhr, status, error) {
                 console.log('Erreur lors de la requête AJAX : ' + error);
+
+                $submitButton.attr('disabled', false);
+                $loader.removeClass('show');
             }
         });
     });

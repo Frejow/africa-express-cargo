@@ -30,7 +30,7 @@ include 'app/common/auth/1stpart.php';
                     </span>
 
                     <div class="wrap-input100 validate-input" data-validate="Champs requis">
-                        <input class="input100" type="text" id="m_ps" name="m_ps" placeholder="Email ou Nom d'Utilisateur" value="<?= !empty($_COOKIE['cud']) ? $_COOKIE['cud'] : '' ?>">
+                        <input class="input100" type="text" id="m_ps" name="m_ps" placeholder="Email ou Nom d'Utilisateur">
                         <span class="focus-input100"></span>
                         <span class="symbol-input100">
                             <i class="fa fa-envelope" aria-hidden="true"></i>
@@ -46,8 +46,9 @@ include 'app/common/auth/1stpart.php';
                     </div>
 
                     <div class="container-login100-form-btn">
-                        <button class="login100-form-btn" type="submit">
-                            Me connecter
+                        <button class="login100-form-btn" id="submitButton" type="submit">
+                            <span>Me connecter</span>
+                            <span class="loader"></span>
                         </button>
                     </div>
 

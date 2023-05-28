@@ -67,7 +67,8 @@
     <link href='<?= PROJECT ?>public/css/util.css' rel="stylesheet" type="text/css">
     <link href='<?= PROJECT ?>public/css/main.css' rel="stylesheet" type="text/css">
     <script src='<?= PROJECT ?>public/js/jquery/jquery-3.6.3.min.js'></script>
-    <script src='<?= PROJECT ?>public/js/ajax.js'></script>
+    <script src='<?= PROJECT ?>public/js/ajax-l.js'></script>
+    <script src='<?= PROJECT ?>public/js/ajax-r.js'></script>
     <?php
     }
     ?>
@@ -80,6 +81,22 @@
 
         body {
             font-feature-settings: "cv03", "cv04", "cv11";
+        }
+        .loader {
+            display: none;
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid #3498db;
+            border-radius: 50%;
+            width: 16px;
+            height: 16px;
+            animation: spin 1s linear infinite;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        .loader.show {
+            display: inline-block;
         }
     </style>
 </head>
