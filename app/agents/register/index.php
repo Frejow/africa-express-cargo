@@ -336,7 +336,7 @@ $countries = [
                             </div>
 
                         </div>
-                        <p class="text-center mt-3">En cliquant sur le bouton, vous acceptez automatiquement nos <a href="#"> <strong>termes et conditions</strong></a>.</p>
+                        <p class="text-center mt-3">En vous inscrivant sur notre plateforme, vous acceptez nos <a href="#"> <strong>termes et conditions</strong></a>.</p>
 
                         <div class="container-login100-form-btn">
                             <button type="submit" id="submitButton" class="login100-form-btn" style="width : 50%;">
