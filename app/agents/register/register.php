@@ -2,21 +2,13 @@
 
 $errors = '';
 
-$name = secure($_POST["nom"]);
-$fnames = secure($_POST["prenom"]);
-$pseudo = secure($_POST["pseudo"]);
-$country = secure($_POST["country"]);
-$tel = secure($_POST["tel"]);
-$mail = secure($_POST["mail"]);
-$pass = secure($_POST["pass"]);
-$repass = secure($_POST["repass"]);
-$profile = "AGENT";
+secure(extract($_POST));
 
-if (empty($name) || empty($fnames) || empty($pseudo) || empty($mail) || empty($country) || empty($tel) || empty($pass)) {
+if (empty($nom) || empty($prenom) || empty($pseudo) || empty($mail) || empty($country) || empty($tel) || empty($pass)) {
     $errors = "Tous les champs sont requis.";
 }
 
-if (isset($pass) && !empty($pass) && strlen(secure($pass)) >= 8 && empty($repass)) {
+if (isset($pass) && !empty($pass) && strlen($pass) >= 8 && empty($repass)) {
     $errors = "Le champs Confirmez mot de passe est requis.";
 }
 
@@ -24,11 +16,11 @@ if (isset($mail) && !empty($mail) && !filter_var($mail, FILTER_VALIDATE_EMAIL)) 
     $errors = "Entrez une addresse email valide s'il vous plaît.";
 }
 
-if (isset($pass) && !empty($pass) && strlen(secure($pass)) < 8) {
+if (isset($pass) && !empty($pass) && strlen($pass) < 8) {
     $errors = "Le champs Mot de passe doit contenir minimum 8 caractères. Les espaces ne sont pas pris en compte.";
 }
 
-if ((isset($repass) && !empty($repass) && strlen(secure($pass)) >= 8 && $repass != $pass)) {
+if ((isset($repass) && !empty($repass) && strlen($pass) >= 8 && $repass != $pass)) {
     $errors = "Le champs Confirmez mot de passe doit recevoir le même mot de passe que celui du champs Mot de passe.";
 }
 
@@ -48,7 +40,7 @@ if (filter_var($mail, FILTER_VALIDATE_EMAIL)) {
 
 if (empty($errors)) {
 
-    if (registration($name, $fnames, $tel, $pseudo, $mail, $country, $pass, $profile)) {
+    if (registration($nom, $prenom, $tel, $pseudo, $mail, $country, $pass, $profile)) {
 
         $mail_assoc_to_deleted_account = check_mail_assoc_to_deleted_account($mail);
 

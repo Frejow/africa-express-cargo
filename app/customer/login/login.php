@@ -31,11 +31,11 @@ if (empty($errors)) {
 
         if (!empty($checkby_mail_password)) {
 
-            $_SESSION['connected'] = $checkby_mail_password;
+            $_SESSION['connected_customer'] = $checkby_mail_password;
 
         } elseif (!empty($checkby_username_password)) {
 
-            $_SESSION['connected'] = $checkby_username_password;
+            $_SESSION['connected_customer'] = $checkby_username_password;
             
         }
 

@@ -147,14 +147,16 @@ if (isset($packages_ingrouplistings) && !empty($packages_ingrouplistings)) {
         if ($('.swalDefaultSuccess').length) {
             Toast.fire({
                 icon: 'success',
-                title: '<?= $msg ?>'
+                title: 'Succès'
+                text: '<?= $msg ?>'
             });
         }
 
         if ($('.swalDefaultError').length) {
             Toast.fire({
                 icon: 'error',
-                title: '<?= $msg ?>'
+                title: 'Erreur'
+                text: '<?= $msg ?>'
             });
         }
     });

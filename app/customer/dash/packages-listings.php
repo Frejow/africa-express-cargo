@@ -1,10 +1,4 @@
 <?php
-
-//Récupération de l'url de la page
-if (connected()) {
-    $_SESSION['current_url'] = "{$_SERVER['REQUEST_SCHEME']}://{$_SERVER['HTTP_HOST']}{$_SERVER['REQUEST_URI']}";
-}
-
 //Inclure l'en-tête 
 include 'app/common/customer/1stpart.php';
 

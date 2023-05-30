@@ -1,7 +1,7 @@
 <?php
-
+//Récupération de l'url de la page
+$_SESSION['admin_current_url'] = "{$_SERVER['REQUEST_SCHEME']}://{$_SERVER['HTTP_HOST']}{$_SERVER['REQUEST_URI']}";
 ?>
-
 <!doctype html>
 <html lang="fr">
 

@@ -163,3 +163,13 @@ if ($jsonData) {
     }
 exit;
 }
+
+
+$redirectUrl = $_SESSION['current_url'];
+
+                $response = array('success' => false, 'message' => 'Un compte est déjà connecté.', 'redirectUrl' => $redirectUrl);
+
+                //header("location:" . $_SESSION['current_url']);
+                header('Content-Type: application/json');
+                echo json_encode($response);
+                exit;

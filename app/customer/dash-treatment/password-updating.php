@@ -14,7 +14,7 @@ if (isset($_POST['passw']) && !empty($_POST['passw']) && check_submitted_passwor
 
         if (update_password($data['mail'], sha1($newdata['newpass']))) {
 
-            setcookie('crl', $_SESSION['current_url'], time() + 365 * 24 * 3600, '/');
+            setcookie('crl', $_SESSION['customer_current_url'], time() + 365 * 24 * 3600, '/');
 
             disconnected();
 

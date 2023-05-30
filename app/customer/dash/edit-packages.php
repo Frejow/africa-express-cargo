@@ -1,9 +1,4 @@
-<?php 
-if (connected()) {
-    $_SESSION['current_url'] = "{$_SERVER['REQUEST_SCHEME']}://{$_SERVER['HTTP_HOST']}{$_SERVER['REQUEST_URI']}";
-}
-
-include 'app/common/customer/1stpart.php'; ?>
+<?php include 'app/common/customer/1stpart.php'; ?>
 
 <form action="" method="post" class="mt-3">
     <div class="page-body">

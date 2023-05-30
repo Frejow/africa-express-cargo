@@ -1,3 +1,13 @@
+<?php
+//Récupération de l'url de la page
+if (!empty($params[0]) && $params[0] == 'customer') {
+    $_SESSION['customer_current_url'] = "{$_SERVER['REQUEST_SCHEME']}://{$_SERVER['HTTP_HOST']}{$_SERVER['REQUEST_URI']}";
+} elseif (!empty($params[0]) && $params[0] == 'agents') {
+    $_SESSION['agent_current_url'] = "{$_SERVER['REQUEST_SCHEME']}://{$_SERVER['HTTP_HOST']}{$_SERVER['REQUEST_URI']}";
+} elseif (!empty($params[0]) && $params[0] == 'admin') {
+    $_SESSION['admin_current_url'] = "{$_SERVER['REQUEST_SCHEME']}://{$_SERVER['HTTP_HOST']}{$_SERVER['REQUEST_URI']}";
+} 
+?>
 <!doctype html>
 <html lang="fr">
 

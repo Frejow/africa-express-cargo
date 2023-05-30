@@ -87,8 +87,8 @@ if (isset($_COOKIE['error_msg']) && !empty($_COOKIE['error_msg'])){
 $data = [];
 
 //Affecter la valeur de cookie de session de l'utilisateur connecté à la variable $data
-if (isset($_SESSION["connected"]) && !empty($_SESSION["connected"])) {
-    $data = json_decode($_SESSION["connected"], true);
+if (isset($_SESSION["connected_agent"]) && !empty($_SESSION["connected_agent"])) {
+    $data = json_decode($_SESSION["connected_agent"], true);
 } 
 
 //S'assurer de l'existence effective du compte
@@ -106,7 +106,7 @@ if (isset($_SESSION["connected"]) && !empty($_SESSION["connected"])) {
 
             if (($params[1] == 'dash')) {
 
-                if (connected()){
+                if (!empty($_SESSION['connected_agent'])){
 
                     $resource = $params[1];
 
@@ -124,7 +124,7 @@ if (isset($_SESSION["connected"]) && !empty($_SESSION["connected"])) {
 
             } elseif (($params[1] == 'logout')) {
 
-                if (connected()) {
+                if (!empty($_SESSION['connected_agent'])) {
 
                     $resource = $params[1];
 
@@ -144,7 +144,7 @@ if (isset($_SESSION["connected"]) && !empty($_SESSION["connected"])) {
 
             elseif (($params[1] == 'dash-treatment')) {
 
-                if (connected()){
+                if (!empty($_SESSION['connected_agent'])){
 
                     $resource = $params[1];
 
@@ -164,9 +164,9 @@ if (isset($_SESSION["connected"]) && !empty($_SESSION["connected"])) {
             
             elseif (($params[1] != 'dash' && $params[1] != 'logout' && $params[1] != 'dash-treatment')) {
 
-                if (connected()) {
+                if (!empty($_SESSION['connected_agent'])) {
 
-                    header("location:".$_SESSION['current_url']);
+                    header("location:".$_SESSION['agent_current_url']);
 
                 } else {
 
@@ -178,9 +178,9 @@ if (isset($_SESSION["connected"]) && !empty($_SESSION["connected"])) {
             
         } else {
 
-            if (connected()) {
+            if (!empty($_SESSION['connected_agent'])) {
 
-                header("location:".$_SESSION['current_url']);
+                header("location:".$_SESSION['agent_current_url']);
 
             } else {
 

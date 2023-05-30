@@ -1,11 +1,6 @@
 <?php
-//die (var_dump($_SERVER['QUERY_STRING']));
-//die (var_dump($_SERVER));
-//die (var_dump(explode('/', $_SERVER['REQUEST_URI'])[5]));
-//die (var_dump($params[2]));
-//if (!isset($params[3])){
-//$_SERVER['REQUEST_URI'] = $_SERVER['REDIRECT_URL'].'#';
-//}
+//Récupération de l'url de la page
+$_SESSION['customer_current_url'] = "{$_SERVER['REQUEST_SCHEME']}://{$_SERVER['HTTP_HOST']}{$_SERVER['REQUEST_URI']}";
 ?>
 <!doctype html>
 <html lang="fr">
