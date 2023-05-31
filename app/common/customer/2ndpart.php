@@ -147,7 +147,7 @@ if (isset($packages_ingrouplistings) && !empty($packages_ingrouplistings)) {
         if ($('.swalDefaultSuccess').length) {
             Toast.fire({
                 icon: 'success',
-                title: 'Succès'
+                title: 'Succès',
                 text: '<?= $msg ?>'
             });
         }
@@ -155,7 +155,7 @@ if (isset($packages_ingrouplistings) && !empty($packages_ingrouplistings)) {
         if ($('.swalDefaultError').length) {
             Toast.fire({
                 icon: 'error',
-                title: 'Erreur'
+                title: 'Erreur',
                 text: '<?= $msg ?>'
             });
         }

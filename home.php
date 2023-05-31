@@ -1,8 +1,5 @@
 <?php
 session_start();
-include "app/common/functions.php";
-//die(var_dump(connected()));
-
 ?>
 
 
@@ -47,7 +44,7 @@ include "app/common/functions.php";
             <span class="navbar-toggler-icon"></span>
          </button>
          <?php
-         if (!connected()) {
+         if (empty($_SESSION['connected_customer']) && empty($_SESSION['connected_agent']) && empty($_SESSION['connected_admin'])) {
          ?>
          <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav mr-auto">
@@ -83,10 +80,7 @@ include "app/common/functions.php";
             <span style="font-size:36px;cursor:pointer; color: #fff" onclick="openNav()"><img src="public/images/toggle-icon.png" style="height: 30px;"></span>
          </div>
          <?php
-         }
-         ?>
-         <?php
-         if (connected()) {
+         }else {
          ?>
          <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav mr-auto">

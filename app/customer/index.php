@@ -6,6 +6,10 @@ session_regenerate_id(true);
 
 include "app/common/functions.php";
 
+if(!empty($_SESSION['customer_current_url'])) {
+    $_SESSION['current_url'] = $_SESSION['customer_current_url'];
+}
+
 //Suppression des tokens après délai d'expiration de 10min
 date_default_timezone_set("Africa/Lagos");
 $current_date_time = date('Y-m-d H:i:s');

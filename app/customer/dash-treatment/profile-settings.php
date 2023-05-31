@@ -16,7 +16,9 @@ if (isset($_POST["avatar_deletion"])) {
 
     if (update_avatar($data['id'], 'null')) {
 
-        if (get_user_personal_inf($data['id'])) {
+        if (!empty(get_user_personal_inf($data['id']))) {
+
+            $_SESSION['connected_customer'] = get_user_personal_inf($data['id']);
 
             header("location:". redirect($_SESSION['theme'], PROJECT.'customer/dash/profile-settings'));
 
@@ -86,7 +88,9 @@ if (isset($_POST['pass_w']) && !empty($_POST['pass_w']) && check_submitted_passw
 
         if (update_avatar($data['id'], $newdata['avatar'])) {
 
-            if (get_user_personal_inf($data['id'])) {
+            if (!empty(get_user_personal_inf($data['id']))) {
+
+                $_SESSION['connected_customer'] = get_user_personal_inf($data['id']);
 
                 header("location:". redirect($_SESSION['theme'], PROJECT.'customer/dash/profile-settings'));
 
@@ -159,7 +163,9 @@ if (isset($_POST['pass']) && !empty($_POST['pass']) && check_submitted_password(
 
     if (update_personal_inf($data['id'], $newdata['nom'], $newdata['prenoms'], $newdata['pseudo'], $newdata['pays'], $newdata['mail'], $newdata['tel'])) {
 
-        if (get_user_personal_inf($data['id'])) {
+        if (!empty(get_user_personal_inf($data['id']))) {
+
+            $_SESSION['connected_customer'] = get_user_personal_inf($data['id']);
 
             header("location:". redirect($_SESSION['theme'], PROJECT.'customer/dash/profile-settings'));
 

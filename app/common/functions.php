@@ -791,12 +791,12 @@ function update_personal_inf(int $id, string $name, string $first_names, string 
  * 
  * @param int $id The user id.
  * 
- * @return bool The result.
+ * @return array $selected Updated user informations.
  */
-function get_user_personal_inf(int $id): bool
+function get_user_personal_inf(int $id)
 {
 
-    $selected = false;
+    $selected = [];
 
     $database = _database_login();
 
@@ -814,9 +814,7 @@ function get_user_personal_inf(int $id): bool
 
         if (isset($data) && !empty($data) && is_array($data)) {
 
-            $_SESSION['connected'] = json_encode($data);
-
-            $selected = true;
+            $selected = json_encode($data);
         }
     }
 

@@ -42,7 +42,9 @@ if (isset($_POST['pass']) && !empty($_POST['pass']) && check_submitted_password(
 
     if (update_personal_inf($data['id'], $newdata['nom'], $newdata['prenoms'], $newdata['pseudo'], $newdata['pays'], $newdata['mail'], $newdata['tel'])) {
 
-        if (get_user_personal_inf($data['id'])) {
+        if (!empty(get_user_personal_inf($data['id']))) {
+
+            $_SESSION['connected_agent'] = get_user_personal_inf($data['id']);
 
             $_SESSION['success_msg'] = 'Mise à jour effectuée avec succès';
 

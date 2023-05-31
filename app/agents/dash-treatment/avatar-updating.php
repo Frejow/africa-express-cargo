@@ -10,7 +10,9 @@ if (isset($_POST["avatar_deletion"])) {
 
     if (update_avatar($data['id'], 'null')) {
 
-        if (get_user_personal_inf($data['id'])) {
+        if (!empty(get_user_personal_inf($data['id']))) {
+
+            $_SESSION['connected_agent'] = get_user_personal_inf($data['id']);
 
             $_SESSION['success_msg'] = 'Mise à jour effectuée avec succès';
 

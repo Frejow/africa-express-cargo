@@ -1,41 +1,41 @@
 <?php
 
-    require_once __DIR__ . '/vendor/autoload.php';
-    $dotenv = Dotenv\Dotenv::createImmutable(__DIR__);
-    $dotenv -> load();
-    
-    define( 'ROOTPATH', getcwd() );
-    define( 'PROJECT', $_ENV['PROJECT'] );
-    define( 'DATABASE_HOST', $_ENV['DATABASE_HOST'] );
-    define( 'DATABASE_NAME', $_ENV['DATABASE_NAME'] );
-    define( 'DATABASE_USERNAME', $_ENV['DATABASE_USERNAME'] );
-    define( 'DATABASE_PASSWORD', $_ENV['DATABASE_PASSWORD'] );
-    define( 'MAIL_ADDRESS', $_ENV['MAIL_ADDRESS'] );
-    define( 'MAIL_PASSWORD', $_ENV['MAIL_PASSWORD'] );
+require_once __DIR__ . '/vendor/autoload.php';
+$dotenv = Dotenv\Dotenv::createImmutable(__DIR__);
+$dotenv->load();
 
-    $default_profile = "customer";
-    $default_profile_folder = "app/customer/index.php";
-    $params = [];
+define('ROOTPATH', getcwd());
+define('PROJECT', $_ENV['PROJECT']);
+define('DATABASE_HOST', $_ENV['DATABASE_HOST']);
+define('DATABASE_NAME', $_ENV['DATABASE_NAME']);
+define('DATABASE_USERNAME', $_ENV['DATABASE_USERNAME']);
+define('DATABASE_PASSWORD', $_ENV['DATABASE_PASSWORD']);
+define('MAIL_ADDRESS', $_ENV['MAIL_ADDRESS']);
+define('MAIL_PASSWORD', $_ENV['MAIL_PASSWORD']);
 
-    if (isset($_GET['p']) && !empty($_GET['p'])) {
+$default_profile = "customer";
+$default_profile_folder = "app/customer/index.php";
+$params = [];
 
-        $params = explode('/', $_GET['p']);
+if (isset($_GET['p']) && !empty($_GET['p'])) {
 
-        $profile = (isset($params[0]) && !empty($params[0])) ? $params[0] : $default_profile;
+$params = explode('/', $_GET['p']);
 
-        $profile_folder = "app/" . $profile . "/index.php";
+$profile = (isset($params[0]) && !empty($params[0])) ? $params[0] : $default_profile;
 
-        if (file_exists($profile_folder)) {
+$profile_folder = "app/" . $profile . "/index.php";
 
-            include $profile_folder;
+if (file_exists($profile_folder)) {
 
-        } else {
+include $profile_folder;
 
-            include $default_profile_folder;
+} else {
 
-        }
-    } else {
+include $default_profile_folder;
 
-        include 'home.php';
+}
+} else {
 
-    }
+include 'home.php';
+
+}

@@ -23,7 +23,7 @@
             if($('.swalDefaultSuccess').length) {
                 Toast.fire({
                     icon: 'success',
-                    title: 'Succès'
+                    title: 'Succès',
                     text: '<?= $msg ?>'
                 });
             }
@@ -31,7 +31,7 @@
             if($('.swalDefaultError').length) {
                 Toast.fire({
                     icon: 'error',
-                    title: 'Erreur'
+                    title: 'Erreur',
                     text: '<?= $msg ?>'
                 });
             }
