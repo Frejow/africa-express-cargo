@@ -537,20 +537,7 @@ button {
     font-size: 40px;
     color: #1c1c1c;
     font-weight: bold;
-    text-align: right;
     padding-top: 40px;
-}
-
-.cycles_text:after {
-    content: '';
-    position: absolute;
-    width: 140px;
-    height: 1px;
-    background-color: #325662;
-    left: 0px;
-    right: initial;
-    margin: 0 auto;
-    top: 70px;
 }
 
 .lorem_text {

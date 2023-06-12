@@ -10,8 +10,8 @@ if (empty($m_ps) || empty($pass)) {
 
 if (!empty($m_ps) && !empty($pass)) {
 
-    $checkby_mail_password = retrieve_userby_email_and_password($m_ps, $pass, 'AGENT', 1, 1, 0);
-    $checkby_username_password = retrieve_userby_pseudo_and_password($m_ps, $pass, 'AGENT', 1, 1, 0);
+    $checkby_mail_password = retrieveUserbyEmailAndPassword($m_ps, $pass, 'AGENT', 1, 1, 0);
+    $checkby_username_password = retrieveUserbyPseudoAndPassword($m_ps, $pass, 'AGENT', 1, 1, 0);
 
     if (!empty($checkby_mail_password) || !empty($checkby_username_password)) {
 

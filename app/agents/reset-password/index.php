@@ -4,9 +4,9 @@ if (isset($_GET['p']) && !empty($_GET['p'])) {
 
     $params = explode('/', $_GET['p']);
 
-    if (check_user_registered_token_inf($params[3], $params[4], "RESET_PASSWORD", 1, 0)){
+    if (checkUserRegisteredTokenInf($params[3], $params[4], "RESET_PASSWORD", 1, 0)){
 
-        if (update_token_table($params[3])){
+        if (updateTokenTable($params[3])){
 
             header("location:".PROJECT."agents/password/reset-password");
 
@@ -14,10 +14,10 @@ if (isset($_GET['p']) && !empty($_GET['p'])) {
         
     } else {
 
-        $token_created_at = get_token_date_inf($params[3], $params[4])['created'];
-        $token_updated_on = get_token_date_inf($params[3], $params[4])['updated_on'];
+        $token_created_at = getTokenDateInf($params[3], $params[4])['created'];
+        $token_updated_on = getTokenDateInf($params[3], $params[4])['updated_on'];
 
-        if (date_to_number($token_updated_on) - date_to_number($token_created_at) < 1002) {
+        if (dateToNumber($token_updated_on) - dateToNumber($token_created_at) < 1002) {
 
             include 'checking-failed.php';
 

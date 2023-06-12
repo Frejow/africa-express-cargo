@@ -107,9 +107,9 @@ if (isset($_POST['package_group_deletion']) && !empty($_POST['package_group_dele
 
     //die (var_dump($_POST['package_deletion']));
     
-    if (deleted_package_or_packages_group(explode('&',$_POST['package_group_deletion'])[0], 'customer_package_group')) {
+    if (deletedPackageOrPackagesGroup(explode('&',$_POST['package_group_deletion'])[0], 'customer_package_group')) {
 
-        if (unlink_specific_packages_group_ofAll_packages(explode('&',$_POST['package_group_deletion'])[1])) {
+        if (unlinkSpecificPackagesGroupOfAllPackages(explode('&',$_POST['package_group_deletion'])[1])) {
 
             $_SESSION['success_msg'] = 'Le groupe de colis N°'. explode('&',$_POST['package_group_deletion'])[0] .' a été supprimé avec succès';
 

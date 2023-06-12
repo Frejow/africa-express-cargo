@@ -207,7 +207,7 @@ session_start();
                   </div>
                </div>
                <div class="col-md-6">
-                  <h1 class="cycles_text">Mordern <br>Cycle</h1>
+                  <h1 class="cycles_text">Modern Cycle</h1>
                   <p class="lorem_text">It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters</p>
                   <div class="btn_main">
                      <div class="buy_bt"><a href="#">Buy Now</a></div>
@@ -217,7 +217,7 @@ session_start();
             </div>
          </div>
          <div class="read_btn_main">
-            <div class="read_bt"><a href="#">Read More</a></div>
+            <div class="read_bt"><a href="#">Lire plus</a></div>
          </div>
       </div>
    </div>
@@ -231,7 +231,7 @@ session_start();
          <div class="about_main">
             <img src="public/images/img-5.png" class="image_5">
          </div>
-         <div class="read_bt_1"><a href="#">Read More</a></div>
+         <div class="read_bt_1"><a href="#">Lire plus</a></div>
       </div>
    </div>
    <!-- about section end -->
@@ -242,7 +242,7 @@ session_start();
             <div class="carousel-item active">
                <div class="container">
                   <div class="client_main">
-                     <h1 class="client_taital">Says Customers</h1>
+                     <h1 class="client_taital">Avis Client</h1>
                      <div class="client_section_2">
                         <div class="client_left">
                            <div><img src="public/images/client-img.png" class="client_img"></div>
@@ -259,7 +259,7 @@ session_start();
             <div class="carousel-item">
                <div class="container">
                   <div class="client_main">
-                     <h1 class="client_taital">Says Customers</h1>
+                     <h1 class="client_taital">Avis Client</h1>
                      <div class="client_section_2">
                         <div class="client_left">
                            <div><img src="public/images/client-img.png" class="client_img"></div>
@@ -276,7 +276,7 @@ session_start();
             <div class="carousel-item">
                <div class="container">
                   <div class="client_main">
-                     <h1 class="client_taital">Says Customers</h1>
+                     <h1 class="client_taital">Avis Client</h1>
                      <div class="client_section_2">
                         <div class="client_left">
                            <div><img src="public/images/client-img.png" class="client_img"></div>
@@ -303,7 +303,7 @@ session_start();
    <!-- news section start -->
    <div class="news_section layout_padding">
       <div class="container">
-         <h1 class="news_taital">News</h1>
+         <h1 class="news_taital">Blog</h1>
          <p class="news_text">It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using </p>
          <div class="news_section_2 layout_padding">
             <div class="row">
@@ -346,22 +346,22 @@ session_start();
    <div class="contact_section layout_padding" id="contact">
       <div class="container">
          <div class="contact_main">
-            <h1 class="request_text">A Call Back</h1>
+            <h1 class="request_text">Nous Contacter</h1>
             <form action="/action_page.php">
                <div class="form-group">
-                  <input type="text" class="email-bt" placeholder="Name" name="Name">
+                  <input type="text" class="email-bt" placeholder="Nom" name="Name">
                </div>
                <div class="form-group">
-                  <input type="text" class="email-bt" placeholder="Email" name="Name">
+                  <input type="text" class="email-bt" placeholder="Adresse email" name="Name">
                </div>
                <div class="form-group">
-                  <input type="text" class="email-bt" placeholder="Phone Number" name="Email">
+                  <input type="text" class="email-bt" placeholder="Téléphone" name="Email">
                </div>
                <div class="form-group">
-                  <textarea class="massage-bt" placeholder="Message" rows="5" id="comment" name="Massage"></textarea>
+                  <textarea class="massage-bt" placeholder="Message" rows="5" id="comment" name="MEssage"></textarea>
                </div>
             </form>
-            <div class="send_btn"><a href="#">SEND</a></div>
+            <div class="send_btn"><a href="#">ENVOYER</a></div>
          </div>
       </div>
    </div>
@@ -378,9 +378,9 @@ session_start();
                </div>
             </div>
             <div class="col-lg-4 col-sm-12">
-               <div class="call_text"><a href="#"><img src="public/images/map-icon.png"><span class="padding_left_0">Page when looking at its layou</span></a></div>
-               <div class="call_text"><a href="#"><img src="public/images/call-icon.png"><span class="padding_left_0">Call Now +01 123467890</span></a></div>
-               <div class="call_text"><a href="#"><img src="public/images/mail-icon.png"><span class="padding_left_0">demo@gmail.com</span></a></div>
+               <div class="call_text"><a href="#"><img src="public/images/map-icon.png"><span class="padding_left_0">Houéyihô</span></a></div>
+               <div class="call_text"><a href="#"><img src="public/images/call-icon.png"><span class="padding_left_0">Appelez maintenant au +229 97969594</span></a></div>
+               <div class="call_text"><a href="#"><img src="public/images/mail-icon.png"><span class="padding_left_0">express.africa.cargo@gmail.com</span></a></div>
                <div class="social_icon">
                   <ul>
                      <li><a href="#"><img src="public/images/fb-icon1.png"></a></li>
@@ -389,8 +389,8 @@ session_start();
                      <li><a href="#"><img src="public/images/instagram-icon.png"></a></li>
                   </ul>
                </div>
-               <input type="text" class="email_text" placeholder="Enter Your Email" name="Enter Your Email">
-               <div class="subscribe_bt"><a href="#">Subscribe</a></div>
+               <input type="text" class="email_text" placeholder="Adresse email" name="Enter Your Email">
+               <div class="subscribe_bt"><a href="#">S'abonner</a></div>
             </div>
          </div>
       </div>

@@ -25,15 +25,15 @@ if ((isset($repass) && !empty($repass) && strlen($pass) >= 8 && $repass != $pass
 }
 
 if (filter_var($mail, FILTER_VALIDATE_EMAIL)) {
-    if (check_exist_fieldentry('mail', $mail)) {
+    if (checkExistFieldEntry('mail', $mail)) {
         $errors = "L'adresse email " . $mail . " est déjà associé à un compte.";
     }
     
-    if (check_exist_fieldentry('user_name', $pseudo) && !check_exist_fieldentry('mail', $mail)) {
+    if (checkExistFieldEntry('user_name', $pseudo) && !checkExistFieldEntry('mail', $mail)) {
         $errors = "Le nom d'utilisateur " . $pseudo . " a déjà été pris.";
     }
     
-    if (check_exist_fieldentry('phone_number', $tel) && !check_exist_fieldentry('user_name', $pseudo) && !check_exist_fieldentry('mail', $mail)) {
+    if (checkExistFieldEntry('phone_number', $tel) && !checkExistFieldEntry('user_name', $pseudo) && !checkExistFieldEntry('mail', $mail)) {
         $errors = "Ce numéro " . $tel . " appartient à un de nos utilisateur.";
     }
 }
@@ -42,13 +42,13 @@ if (empty($errors)) {
 
     if (registration($nom, $prenom, $tel, $pseudo, $mail, $country, $pass, $profile)) {
 
-        $mail_assoc_to_deleted_account = check_mail_assoc_to_deleted_account($mail);
+        $mail_assoc_to_deleted_account = checkMailAssocToDeletedAccount($mail);
 
         if (isset($mail_assoc_to_deleted_account) && !empty($mail_assoc_to_deleted_account)) {
 
             foreach ($mail_assoc_to_deleted_account as $key => $value) {
 
-                back_deleted_account($mail_assoc_to_deleted_account[$key]['id'], $mail);
+                backDeletedAccount($mail_assoc_to_deleted_account[$key]['id'], $mail);
 
             }
         }
@@ -63,15 +63,15 @@ if (empty($errors)) {
 
         ob_end_clean(); 
 
-        if (mailsendin(MAIL_ADDRESS, 'Africa Express Cargo', $subject, $mailcontent)) {
+        if (mailSendin(MAIL_ADDRESS, 'Africa Express Cargo', $subject, $mailcontent)) {
 
             $response = array('success' => true, 'message' => 'Super !!! Vous êtes inscrit. Vous recevrez un mail après examen et validation de votre compte. Si vous ne recevez pas de mail dans 1h, contactez nous à cette adresse : contact.support@africa-express-cargo.com');
 
         } else {
             
-            $user_id = get_user_id($mail)['id'];
+            $user_id = getUserId($mail)['id'];
 
-            if (back_deleted_account($user_id, $mail) && update_token_table($user_id)) {
+            if (backDeletedAccount($user_id, $mail) && updateTokenTable($user_id)) {
 
                 $response = array('success' => false, 'message' => 'Cause probable : Appareil Hors Connexion. Vérifiez votre connexion internet et réessayer. Si cela persiste, contactez-nous.');
 

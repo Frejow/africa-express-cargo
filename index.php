@@ -17,11 +17,11 @@ $default_profile = "customer";
 $default_profile_folder = "app/customer/index.php";
 $params = [];
 
-if (isset($_GET['p']) && !empty($_GET['p'])) {
+if (!empty($_GET['p'])) {
 
 $params = explode('/', $_GET['p']);
 
-$profile = (isset($params[0]) && !empty($params[0])) ? $params[0] : $default_profile;
+$profile = (!empty($params[0])) ? $params[0] : $default_profile;
 
 $profile_folder = "app/" . $profile . "/index.php";
 

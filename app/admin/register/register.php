@@ -41,7 +41,7 @@ if (isset($_POST["mail"]) && !empty($_POST["mail"]) && !filter_var($_POST["mail"
     $errors["mail"] = "Entrez une addresse email valide s'il vous plaît";
 }
 
-if (!isset($_POST["pass"]) || empty($_POST["pass"]) && !check_exist_fieldentry('mail',$_POST["mail"])) {
+if (!isset($_POST["pass"]) || empty($_POST["pass"]) && !checkExistFieldEntry('mail',$_POST["mail"])) {
     $errors["pass"] = "Le champs du mot de passe est vide.";
 }
 
@@ -66,11 +66,11 @@ if (
     $errors["terms"] = "Veuillez cocher cette case s'il vous plaît.";
 }
 
-if (check_exist_fieldentry('mail',$_POST["mail"])) {
+if (checkExistFieldEntry('mail',$_POST["mail"])) {
     $errors["mail"] = "[ " . $_POST["mail"] . " ] est déjà associé à un compte. Veuillez le changer.";
 }
 
-if (check_exist_fieldentry('user_name',$_POST["pseudo"])) {
+if (checkExistFieldEntry('user_name',$_POST["pseudo"])) {
     $errors["pseudo"] = "Le nom d'utilisateur [ " . $_POST["pseudo"] . " ] a déjà été pris. Veuillez le changer.";
 }
 
@@ -113,7 +113,7 @@ setcookie(
 
 if (empty($errors)) {
 
-    $database =  _database_login();
+    $database =  databaseLogin();
 
     if (is_object($database)) {
 

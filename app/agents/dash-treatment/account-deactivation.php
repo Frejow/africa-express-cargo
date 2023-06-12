@@ -7,9 +7,9 @@ $_SESSION['deactivation_error'] = [];
 $_SESSION['data'] = [];
 
 
-if (isset($_POST['pass-w']) && !empty($_POST['pass-w']) && check_submitted_password($data['id'], $_POST['pass-w'])) {
+if (isset($_POST['pass-w']) && !empty($_POST['pass-w']) && checkSubmittedPassword($data['id'], $_POST['pass-w'])) {
 
-    if (deactivated_account($data['id'])) {
+    if (deactivatedAccount($data['id'])) {
 
         disconnected();
 
@@ -25,7 +25,7 @@ if (isset($_POST['pass-w']) && !empty($_POST['pass-w']) && check_submitted_passw
 
     }
 
-} elseif (isset($_POST['pass-w']) && !empty($_POST['pass-w']) && !check_submitted_password($data['id'], $_POST['pass-w'])) {
+} elseif (isset($_POST['pass-w']) && !empty($_POST['pass-w']) && !checkSubmittedPassword($data['id'], $_POST['pass-w'])) {
 
     $error['pass-w'] = 'Mot de passe erroné. Veuillez réessayer !';
 

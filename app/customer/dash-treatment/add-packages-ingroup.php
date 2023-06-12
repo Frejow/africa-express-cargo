@@ -10,7 +10,7 @@ if (isset($_POST['add-pack-ingrp']) && !empty($_POST['add-pack-ingrp'])) {
 
         foreach ($_POST['packSelect'] as $key => $value) {
 
-            if (!link_specific_packages_group_to_package($_POST['add-pack-ingrp'], $_POST['packSelect'][$key])) {
+            if (!linkSpecificPackagesGroupToPackage($_POST['add-pack-ingrp'], $_POST['packSelect'][$key])) {
 
                 $_SESSION['error_msg'] = 'Un problème est survenu lors du processus. Réessayer. Si cela persiste, contactez nous.';
 

@@ -56,7 +56,7 @@
                                 <tbody>
                                     <?php
 
-                                    $packages_ingrouplistings = get_all_packages_linked_to_specific_packages_group($_SESSION['packages_group_id']);
+                                    $packages_ingrouplistings = getAllPackagesLinkedToSpecificPackagesGroup($_SESSION['packages_group_id']);
 
                                     if (isset($packages_ingrouplistings) && !empty($packages_ingrouplistings)) {
 

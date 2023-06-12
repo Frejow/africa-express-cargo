@@ -10,11 +10,11 @@ if (isset($_POST['set-pack-grp']) && !empty($_POST['set-pack-grp'])) {
 
         //if (sizeof($_POST['packSelect']) >= 2) {
 
-            if (insert_new_packages_group_and_get_id($_POST['set-pack-grp'], $data['id'])) {
+            if (insertNewPackagesGroupAndGetId($_POST['set-pack-grp'], $data['id'])) {
 
                 foreach ($_POST['packSelect'] as $key => $value) {
     
-                    if(!link_specific_packages_group_to_package($_SESSION['nowcreated_packagegroup_id']['id'], $_POST['packSelect'][$key])) {
+                    if(!linkSpecificPackagesGroupToPackage($_SESSION['nowcreated_packagegroup_id']['id'], $_POST['packSelect'][$key])) {
 
                         $_SESSION['error_msg'] = 'Un problème est survenu lors de la création du groupe. Réessayer. Si cela persiste, contactez nous.';
 

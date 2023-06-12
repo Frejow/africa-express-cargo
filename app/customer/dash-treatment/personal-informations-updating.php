@@ -6,7 +6,7 @@ $updata = [];
 $_SESSION['personal_error'] = [];
 $_SESSION['data'] = [];
 
-if (isset($_POST['pass']) && !empty($_POST['pass']) && check_submitted_password($data['id'], $_POST['pass'])) {
+if (isset($_POST['pass']) && !empty($_POST['pass']) && checkSubmittedPassword($data['id'], $_POST['pass'])) {
 
     if (isset($_POST['nom']) && !empty($_POST['nom']) && $_POST['nom'] != $data['name']) {
         $newdata['nom'] = secure($_POST['nom']);
@@ -40,11 +40,11 @@ if (isset($_POST['pass']) && !empty($_POST['pass']) && check_submitted_password(
         $newdata['tel'] = $data['phone_number'];
     }
 
-    if (update_personal_inf($data['id'], $newdata['nom'], $newdata['prenoms'], $newdata['pseudo'], $newdata['pays'], $newdata['mail'], $newdata['tel'])) {
+    if (updatePersonalInf($data['id'], $newdata['nom'], $newdata['prenoms'], $newdata['pseudo'], $newdata['pays'], $newdata['mail'], $newdata['tel'])) {
 
-        if (!empty(get_user_personal_inf($data['id']))) {
+        if (!empty(getUserPersonalInf($data['id']))) {
 
-            $_SESSION['connected_customer'] = get_user_personal_inf($data['id']);
+            $_SESSION['connected_customer'] = getUserPersonalInf($data['id']);
 
             $_SESSION['success_msg'] = 'Mise à jour effectuée avec succès';
 
@@ -70,7 +70,7 @@ if (isset($_POST['pass']) && !empty($_POST['pass']) && check_submitted_password(
 
     }
 
-} elseif (isset($_POST['pass']) && !empty($_POST['pass']) && !check_submitted_password($data['id'], $_POST['pass'])) {
+} elseif (isset($_POST['pass']) && !empty($_POST['pass']) && !checkSubmittedPassword($data['id'], $_POST['pass'])) {
 
     $_SESSION['personal_error'] = 'La tentative de mise à jour des informations personnelles a échoué. Mot de passe erroné. Réessayer !';
 

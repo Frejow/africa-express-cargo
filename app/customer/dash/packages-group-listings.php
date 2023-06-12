@@ -39,7 +39,7 @@ if (isset($_SESSION['research']) && !empty($_SESSION['research'])) {
 
 $packages_group_listings = listings($table, $_SESSION['page'], $_SESSION['packages_nb_per_page'], $_SESSION['status'], strtoupper($_SESSION['search']), $data['id']);
 
-$rows = count_rows_in_table($table, $data['id']);
+$rows = countRowsInTable($table, $data['id']);
 
 ?>
 
@@ -176,7 +176,7 @@ $rows = count_rows_in_table($table, $data['id']);
 
                                         foreach ($packages_group_listings as $key => $packages_group) {
 
-                                            $packages_ingrouplistings = get_all_packages_linked_to_specific_packages_group($packages_group_listings[$key]['id']);
+                                            $packages_ingrouplistings = getAllPackagesLinkedToSpecificPackagesGroup($packages_group_listings[$key]['id']);
 
                                             if (sizeof($packages_ingrouplistings) >= 1) {
 
@@ -298,7 +298,7 @@ $rows = count_rows_in_table($table, $data['id']);
                                                 </div>
                                         <?php
                                             } else {
-                                                deleted_package_or_packages_group($packages_group_listings[$key]["tracking_number"], 'customer_package_group');
+                                                deletedPackageOrPackagesGroup($packages_group_listings[$key]["tracking_number"], 'customer_package_group');
                                             }
                                         }
                                         $n = $key + 1;
@@ -413,7 +413,7 @@ if (isset($packages_group_listings) && !empty($packages_group_listings)) {
 
     foreach ($packages_group_listings as $key => $packages_group) {
 
-        $packages_ingrouplistings = get_all_packages_linked_to_specific_packages_group($packages_group_listings[$key]['id']);
+        $packages_ingrouplistings = getAllPackagesLinkedToSpecificPackagesGroup($packages_group_listings[$key]['id']);
 ?>
         <div class="modal modal-blur fade" data-bs-backdrop='static' id="<?= 'modal-packages-group-detail' . $key ?>" tabindex="-1" role="dialog" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered modal-lg modal-dialog-scrollable" role="document">

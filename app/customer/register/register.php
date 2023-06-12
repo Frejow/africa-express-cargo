@@ -34,7 +34,7 @@ if (isset($_POST["mail"]) && !empty($_POST["mail"]) && !filter_var($_POST["mail"
     $errors["mail"] = "Entrez une addresse email valide s'il vous plaît";
 }
 
-if (!isset($_POST["pass"]) || empty($_POST["pass"]) && !check_exist_fieldentry('mail', $_POST["mail"])) {
+if (!isset($_POST["pass"]) || empty($_POST["pass"]) && !checkExistFieldEntry('mail', $_POST["mail"])) {
     $errors["pass"] = "Le champs du mot de passe est vide.";
 }
 
@@ -59,15 +59,15 @@ if (
     $errors["terms"] = "Veuillez cocher cette case s'il vous plaît.";
 }
 
-if (check_exist_fieldentry('mail', $_POST["mail"])) {
+if (checkExistFieldEntry('mail', $_POST["mail"])) {
     $errors["mail"] = "[ " . $_POST["mail"] . " ] est déjà associé à un compte.";
 }
 
-if (check_exist_fieldentry('user_name', $_POST["pseudo"])) {
+if (checkExistFieldEntry('user_name', $_POST["pseudo"])) {
     $errors["pseudo"] = "Le nom d'utilisateur [ " . $_POST["pseudo"] . " ] a déjà été pris.";
 }
 
-if (check_exist_fieldentry('phone_number', $_POST["tel"])) {
+if (checkExistFieldEntry('phone_number', $_POST["tel"])) {
     $errors["tel"] = "Ce numéro [ " . $_POST["tel"] . " ] appartient à un de nos utilisateur.";
 }
 
@@ -109,21 +109,21 @@ if (empty($errors)) {
 
     if (registration($data["nom"], $data["prenom"], $data["tel"], $data["pseudo"], $data["mail"], $data["country"], $data["pass"], $data["profile"])) {
 
-        $mail_assoc_to_deleted_account = check_mail_assoc_to_deleted_account($data["mail"]);
+        $mail_assoc_to_deleted_account = checkMailAssocToDeletedAccount($data["mail"]);
 
         if (isset($mail_assoc_to_deleted_account) && !empty($mail_assoc_to_deleted_account)) {
             foreach ($mail_assoc_to_deleted_account as $key => $value) {
-                back_deleted_account($mail_assoc_to_deleted_account[$key]['id'], $data['mail']);
+                backDeletedAccount($mail_assoc_to_deleted_account[$key]['id'], $data['mail']);
             }
         }
 
         setcookie('user_register_data', '', time() - 3600, '/');
 
-        $user_id = get_user_id($data["mail"])["id"];
+        $user_id = getUserId($data["mail"])["id"];
 
         $token = uniqid();
 
-        insert_token_in_token_table($user_id, 'ACCOUNT_VALIDATION', $token);
+        insertTokenInTokenTable($user_id, 'ACCOUNT_VALIDATION', $token);
 
         $subject = 'CONFIRMATION DE COMPTE';
 
@@ -135,7 +135,7 @@ if (empty($errors)) {
 
         ob_end_clean(); 
 
-        if (mailsendin($data['mail'], $data["pseudo"], $subject, $mailcontent)) {
+        if (mailSendin($data['mail'], $data["pseudo"], $subject, $mailcontent)) {
 
             header("location:" . PROJECT . "customer/register/true");
 
@@ -143,7 +143,7 @@ if (empty($errors)) {
 
         } else {
 
-            if (back_deleted_account($user_id, $data['mail']) && update_token_table($user_id)) {
+            if (backDeletedAccount($user_id, $data['mail']) && updateTokenTable($user_id)) {
 
                 setcookie('user_register_data', json_encode($data), time() + 365 * 24 * 3600, '/');
 

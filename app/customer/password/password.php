@@ -10,15 +10,15 @@ if (isset($_POST['mail']) && !empty($_POST['mail'])){
 
     $data = secure($_POST["mail"]);
 
-    if (check_exist_fieldentry('mail', $_POST["mail"])) {
+    if (checkExistFieldEntry('mail', $_POST["mail"])) {
 
-        $user_id = get_user_id($_POST["mail"])["id"];
+        $user_id = getUserId($_POST["mail"])["id"];
 
         $token = uniqid();
 
-        $username = get_username($_POST["mail"])["user_name"];
+        $username = getUsername($_POST["mail"])["user_name"];
 
-        insert_token_in_token_table($user_id, 'RESET_PASSWORD', $token);
+        insertTokenInTokenTable($user_id, 'RESET_PASSWORD', $token);
         
         $subject = 'REINITIALISATION DE MOT DE PASSE';
 
@@ -30,7 +30,7 @@ if (isset($_POST['mail']) && !empty($_POST['mail'])){
 
         ob_end_clean();
 
-        if (mailsendin($_POST['mail'], $username, $subject, $mailcontent)){
+        if (mailSendin($_POST['mail'], $username, $subject, $mailcontent)){
 
             $data = secure($_POST["mail"]);
 
@@ -48,7 +48,7 @@ if (isset($_POST['mail']) && !empty($_POST['mail'])){
             header("location:".PROJECT."customer/password/true");
         }
 
-    } elseif (!check_exist_fieldentry('mail', $_POST["mail"])) {
+    } elseif (!checkExistFieldEntry('mail', $_POST["mail"])) {
 
         $error["mail"] = "[ " . $_POST["mail"] . " ] n'est associé à aucun compte. Vérifier votre saisie et réessayer.";
 

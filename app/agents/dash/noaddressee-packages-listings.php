@@ -69,10 +69,10 @@ if (isset($_SESSION['research']) && !empty($_SESSION['research'])) {
 $packages_listings = listings($table, $_SESSION['page'], $_SESSION['packages_nb_per_page'], $_SESSION['status'], strtoupper($_SESSION['search']), 0);
 
 /**
- * Affectation du retour de la fonction count_rows_in_table avec pour paramètre la table concernée par le listings à la 
+ * Affectation du retour de la fonction countRowsInTable avec pour paramètre la table concernée par le listings à la 
  * variable $rows. Cette fonction retourne le nombre de lignes dans la table avec le champs is_deleted = 0
  */
-$rows = count_rows_in_table($table, 0);
+$rows = countRowsInTable($table, 0);
 
 ?>
 
@@ -242,7 +242,7 @@ $rows = count_rows_in_table($table, 0);
                                             if (!empty($packages_listings[$key]["customer_package_group_id"])) {
 
                                                 //Récupération du numéro de suivi du groupe de colis
-                                                $packages_group_tracking_number = get_packages_group_tracking_number($packages_listings[$key]["customer_package_group_id"])['tracking_number'];
+                                                $packages_group_tracking_number = getPackagesGroupTrackingNumber($packages_listings[$key]["customer_package_group_id"])['tracking_number'];
 
                                                 /**
                                                  * Récupération de tous les colis contenu dans le groupe. 
@@ -250,7 +250,7 @@ $rows = count_rows_in_table($table, 0);
                                                  * appartient le colis présentement concerné. Cette liste sera affichée dans un modal avec le numéro de suivi du colis
                                                  * présentement concerné surligné en orange pour permettre son identification rapide par l'utilisateur.
                                                  */
-                                                $packages_ingrouplistings = get_all_packages_linked_to_specific_packages_group($packages_listings[$key]["customer_package_group_id"]);
+                                                $packages_ingrouplistings = getAllPackagesLinkedToSpecificPackagesGroup($packages_listings[$key]["customer_package_group_id"]);
 
                                             }
                                     ?>
@@ -566,8 +566,8 @@ if (isset($packages_listings) && !empty($packages_listings)) {
                         </div><br>
                         <div class="row row-cols g-3">
                             <?php
-                            if (check_package_id_in_packages_images_tab($packages_listings[$key]["id"])) {
-                                $select_images = get_package_images($packages_listings[$key]["id"]);
+                            if (checkPackageIdInPackagesImagesTab($packages_listings[$key]["id"])) {
+                                $select_images = getPackageImages($packages_listings[$key]["id"]);
                                 if (!empty($select_images)) {
                                     foreach ($select_images as $_key => $value) {
                             ?>

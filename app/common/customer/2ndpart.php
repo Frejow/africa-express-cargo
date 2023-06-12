@@ -93,8 +93,8 @@ if (isset($packages_ingrouplistings) && !empty($packages_ingrouplistings)) {
                         </div><br>
                         <div class="row row-cols g-3">
                             <?php
-                            if (check_package_id_in_packages_images_tab($packages_ingrouplistings[$key]["id"])) {
-                                $select_images = get_package_images($packages_ingrouplistings[$key]["id"]);
+                            if (checkPackageIdInPackagesImagesTab($packages_ingrouplistings[$key]["id"])) {
+                                $select_images = getPackageImages($packages_ingrouplistings[$key]["id"]);
                                 if (!empty($select_images)) {
                                     foreach ($select_images as $_key => $value) {
                             ?>

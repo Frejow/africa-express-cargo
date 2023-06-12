@@ -6,33 +6,36 @@ session_regenerate_id(true);
 
 include "app/common/functions.php";
 
-if (!empty($_SESSION['agent_current_url'])) {
-    $_SESSION['current_url'] = $_SESSION['agent_current_url'];
+//Récupération du thème actif
+if (isset(explode('?', $_SERVER['REQUEST_URI'])[1])) {
+    $_SESSION ['theme'] = explode('?', $_SERVER['REQUEST_URI'])[1];
+} else {
+    $_SESSION ['theme'] = 'theme=light';
 }
 
 //Suppression des tokens après délai d'expiration de 10min
 date_default_timezone_set("Africa/Lagos");
 $current_date_time = date('Y-m-d H:i:s');
-$tokens =  get_all_active_tokens(); 
+//$tokens =  get_all_active_tokens();
 
-if (isset($tokens) && !empty($tokens)) {
+if (!empty($tokens)) {
 
     foreach ($tokens as $key => $value) {
 
-        $timegap = date_to_number($current_date_time) - date_to_number($tokens[$key]['created']); 
+        $timegap = dateToNumber($current_date_time) - dateToNumber($value['created']);
 
         if ($timegap >= 1000) {
 
-            if ($tokens[$key]['type'] == 'ACCOUNT_VALIDATION') { 
+            if ($value['type'] == 'ACCOUNT_VALIDATION') {
 
-                if (update_token_table($tokens[$key]['user_id'])) {
-                    
-                    deleted_account($tokens[$key]['user_id']);
-                } 
+                if (updateTokenTable($value['user_id'])) {
 
-            } elseif ($tokens[$key]['type'] == 'RESET_PASSWORD') {
+                    deletedAccount($value['user_id']);
+                }
 
-                update_token_table($tokens[$key]['user_id']);
+            } elseif ($value['type'] == 'RESET_PASSWORD') {
+
+                updateTokenTable($value['user_id']);
 
             }
 
@@ -42,16 +45,13 @@ if (isset($tokens) && !empty($tokens)) {
 
 }
 
-//Récupération du thème actif
-if (isset(explode('?', $_SERVER['REQUEST_URI'])[1])) {
-    $_SESSION ['theme'] = explode('?', $_SERVER['REQUEST_URI'])[1];
-} else {
-    $_SESSION ['theme'] = 'theme=light';
+if (!empty($_SESSION['agent_current_url'])) {
+    $_SESSION['current_url'] = $_SESSION['agent_current_url'];
 }
 
 //Section toast
 
-if (isset($_SESSION['success_msg']) && !empty($_SESSION['success_msg'])) {
+if (!empty($_SESSION['success_msg'])) {
     $msg = $_SESSION['success_msg'];
 ?>
     <div class="swalDefaultSuccess" role="alert">
@@ -60,7 +60,7 @@ if (isset($_SESSION['success_msg']) && !empty($_SESSION['success_msg'])) {
     unset($_SESSION['success_msg']);
 }
 
-if (isset($_SESSION['error_msg']) && !empty($_SESSION['error_msg'])) {
+if (!empty($_SESSION['error_msg'])) {
     $msg = $_SESSION['error_msg'];
 ?>
     <div class="swalDefaultError" role="alert">
@@ -69,7 +69,7 @@ if (isset($_SESSION['error_msg']) && !empty($_SESSION['error_msg'])) {
     unset($_SESSION['error_msg']);
 }
 
-if (isset($_COOKIE['success_msg']) && !empty($_COOKIE['success_msg'])){
+if (!empty($_COOKIE['success_msg'])){
     $msg = $_COOKIE['success_msg'];
 ?>
     <div class="swalDefaultSuccess" role="alert">
@@ -78,7 +78,7 @@ if (isset($_COOKIE['success_msg']) && !empty($_COOKIE['success_msg'])){
     setcookie('success_msg', '', time() - 3600, '/');
 }
 
-if (isset($_COOKIE['error_msg']) && !empty($_COOKIE['error_msg'])){
+if (!empty($_COOKIE['error_msg'])){
     $msg = $_COOKIE['error_msg'];
 ?>
     <div class="swalDefaultError" role="alert">
@@ -91,7 +91,7 @@ if (isset($_COOKIE['error_msg']) && !empty($_COOKIE['error_msg'])){
 $data = [];
 
 //Affecter la valeur de cookie de session de l'utilisateur connecté à la variable $data
-if (isset($_SESSION["connected_agent"]) && !empty($_SESSION["connected_agent"])) {
+if (!empty($_SESSION["connected_agent"])) {
     $data = json_decode($_SESSION["connected_agent"], true);
 } 
 
@@ -104,7 +104,7 @@ if (isset($_SESSION["connected_agent"]) && !empty($_SESSION["connected_agent"]))
 
     $default_action_folder = "app/" . $profile . "/" . $default_resource . "/" . $default_action . ".php";
 
-    if (isset($_GET['p']) && !empty($_GET['p'])) {
+    if (!empty($_GET['p'])) {
 
         if (isset($params[1]) && !empty($params[1])) {
 
@@ -164,8 +164,8 @@ if (isset($_SESSION["connected_agent"]) && !empty($_SESSION["connected_agent"]))
 
                 }
 
-            } 
-            
+            }
+
             elseif (($params[1] != 'dash' && $params[1] != 'logout' && $params[1] != 'dash-treatment')) {
 
                 if (!empty($_SESSION['connected_agent'])) {
@@ -179,7 +179,7 @@ if (isset($_SESSION["connected_agent"]) && !empty($_SESSION["connected_agent"]))
                 }
 
             }
-            
+
         } else {
 
             if (!empty($_SESSION['connected_agent'])) {
@@ -191,11 +191,11 @@ if (isset($_SESSION["connected_agent"]) && !empty($_SESSION["connected_agent"]))
                 $resource = $default_resource;
 
                 header("location:".PROJECT."agents/login");
-    
+
                 exit;
 
             }
-            
+
         }
 
         $action = (isset($params[2]) && !empty($params[2])) ? $params[2] : $default_action;

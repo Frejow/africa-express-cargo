@@ -9,7 +9,7 @@ $_SESSION['success_msg'] = [];
 
 if (isset($_POST['pack_trackN']) && !empty($_POST['pack_trackN'])) {
 
-    if (!check_tracking_number(secure(strtoupper($_POST['pack_trackN'])))) {
+    if (!checkTrackingNumber(secure(strtoupper($_POST['pack_trackN'])))) {
 
         $newdata['pack_trackN'] = secure(strtoupper($_POST['pack_trackN']));
 
@@ -140,7 +140,7 @@ if (isset($_FILES["filesToUpload"]) && !empty($_FILES["filesToUpload"])) {
                         
                         if (is_dir($newfolder)) { 
 
-                            delete_dir($newfolder);
+                            deleteDir($newfolder);
 
                             $error["images"][$key] = "L'extension du fichier ".$file_name." n'est pas pris en compte. <br> Extensions autorisées [ PNG/JPG/JPEG/GIF ]";
     
@@ -186,7 +186,7 @@ if (isset($_FILES["filesToUpload"]) && !empty($_FILES["filesToUpload"])) {
 
                     if (is_dir($newfolder)) { 
 
-                        delete_dir($newfolder);
+                        deleteDir($newfolder);
 
                         $error["images"][$key] = "Le fichier ".$file_name." est trop lourd. Poids maximum autorisé : 2mo";
     
@@ -249,14 +249,14 @@ if (empty($error)) {
 
     if (isset($_POST) && !empty($_POST)) {
     
-        if (add_package($newdata['pack_trackN'], $newdata['pack_count'], $newdata['pack_cost'], $newdata['pack_descp'], 
+        if (addPackage($newdata['pack_trackN'], $newdata['pack_count'], $newdata['pack_cost'], $newdata['pack_descp'], 
         $newdata['pack_netW'], $newdata['pack_metricW'], $newdata['pack_type'], $data['id'])) {
 
             if (!empty($newdata['images'])) {
 
                 for ($i = 0; $i < sizeof($newdata['images']); $i++) {
 
-                    if (!add_images_for_package(get_package_id($newdata['pack_trackN'])['id'], $newdata['images'][$i], $data['id'])) {
+                    if (!addImagesForPackage(getPackageId($newdata['pack_trackN'])['id'], $newdata['images'][$i], $data['id'])) {
 
                         $_SESSION['error_msg'] = 'Une erreur est survenue. Réessayer. Si cela persiste, contactez-nous.';
 

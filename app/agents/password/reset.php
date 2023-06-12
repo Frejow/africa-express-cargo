@@ -23,7 +23,7 @@ if ((isset($_POST["repass"]) && !empty($_POST["repass"]) && strlen(secure($_POST
 if (empty($errors)) {
 
     if (isset($_COOKIE["passdata"]) && !empty($_COOKIE["passdata"])) {
-        if (update_password($_COOKIE["passdata"], sha1($_POST['pass']))){
+        if (updatePassword($_COOKIE["passdata"], sha1($_POST['pass']))){
             setcookie(
                 "success_msg",
                 'Mot de passe changer avec succès. Vous pouvez vous connecter.',

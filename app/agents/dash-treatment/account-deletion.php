@@ -7,9 +7,9 @@ $_SESSION['deletion_error'] = [];
 $_SESSION['data'] = [];
 
 
-if (isset($_POST['pass--w']) && !empty($_POST['pass--w']) && check_submitted_password($data['id'], $_POST['pass--w'])) {
+if (isset($_POST['pass--w']) && !empty($_POST['pass--w']) && checkSubmittedPassword($data['id'], $_POST['pass--w'])) {
 
-    if (deleted_account($data['id'])) {
+    if (deletedAccount($data['id'])) {
 
         disconnected();
 
@@ -25,7 +25,7 @@ if (isset($_POST['pass--w']) && !empty($_POST['pass--w']) && check_submitted_pas
 
     }
 
-} elseif (isset($_POST['pass--w']) && !empty($_POST['pass--w']) && !check_submitted_password($data['id'], $_POST['pass--w'])) {
+} elseif (isset($_POST['pass--w']) && !empty($_POST['pass--w']) && !checkSubmittedPassword($data['id'], $_POST['pass--w'])) {
 
     $error['pass--w'] = 'Mot de passe erroné. Veuillez réessayer !';
 
