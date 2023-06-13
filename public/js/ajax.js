@@ -115,4 +115,101 @@ $(document).ready(function() {
             }
         });
     });
+
+    $('#password').submit(function(event) {
+        event.preventDefault();
+
+        var mail = $('#mail').val();
+
+        $submitButton.attr('disabled', true);
+        $loader.addClass('show');
+
+        $.ajax({
+            url: 'password/password',
+            method: 'POST',
+            data: {
+                mail: mail,
+            },
+            dataType: 'json',
+            success: function(response) {
+                var Toast = Swal.mixin({
+                    toast: true,
+                    position: 'top-end',
+                    showConfirmButton: false,
+                });
+                if (response.success) {
+                    Toast.fire({
+                        icon: 'success',
+                        title: 'Succès',
+                        text: response.message
+                    })
+                } else {
+                    Toast.fire({
+                        icon: 'error',
+                        title: 'Erreur',
+                        text: response.message
+                    });
+                }
+
+                $submitButton.attr('disabled', false);
+                $loader.removeClass('show');
+            },
+            error: function(xhr, status, error) {
+                console.log('Erreur lors de la requête AJAX : ' + error);
+
+                $submitButton.attr('disabled', false);
+                $loader.removeClass('show');
+            }
+        });
+    });
+
+    $('#resetPassword').submit(function(event) {
+        event.preventDefault();
+
+        var pass = $('#pass').val();
+        var repass = $('#repass').val();
+
+        $submitButton.attr('disabled', true);
+        $loader.addClass('show');
+
+        $.ajax({
+            url: 'reset',
+            method: 'POST',
+            data: {
+                pass: pass,
+                repass: repass
+            },
+            dataType: 'json',
+            success: function(response) {
+                var Toast = Swal.mixin({
+                    toast: true,
+                    position: 'top-end',
+                    showConfirmButton: false,
+                });
+                if (response.success) {
+                    Toast.fire({
+                        icon: 'success',
+                        title: 'Succès',
+                        text: response.message
+                    })
+                } else {
+                    Toast.fire({
+                        icon: 'error',
+                        title: 'Erreur',
+                        text: response.message
+                    });
+                }
+
+                $submitButton.attr('disabled', false);
+                $loader.removeClass('show');
+            },
+            error: function(xhr, status, error) {
+                console.log('Erreur lors de la requête AJAX : ' + error);
+
+                $submitButton.attr('disabled', false);
+                $loader.removeClass('show');
+            }
+        });
+    });
+
 });

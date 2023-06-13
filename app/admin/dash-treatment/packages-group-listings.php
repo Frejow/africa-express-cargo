@@ -3,12 +3,9 @@
 //Pagination
 
 if (isset($_POST['previous'])) {
+    //die (var_dump($_SESSION['previous_page']));
 
     $_SESSION['previous_page'] = $_POST['previous'];
-
-    header("location:". redirect($_SESSION['theme'], PROJECT.'customer/dash/packages-group-listings'));
-
-} else {
 
     header("location:". redirect($_SESSION['theme'], PROJECT.'customer/dash/packages-group-listings'));
 
@@ -21,11 +18,7 @@ if (isset($_POST['next'])) {
     if (isset($_SESSION['next_page'])) {
         header("location:". redirect($_SESSION['theme'], PROJECT.'customer/dash/packages-group-listings'));
     }
-} else {
-
-    header("location:". redirect($_SESSION['theme'], PROJECT.'customer/dash/packages-group-listings'));
-
-}
+} 
 
 //Pagination
 
@@ -35,11 +28,16 @@ if (isset($_POST['next'])) {
 
 if (isset($_POST['statusSelect']) && !empty($_POST['statusSelect'])) {
 
+    //die (var_dump($_POST['statusSelect']));
+    //$_SESSION['actual_page'] = $_SESSION['page'];
+
     if ($_SESSION['status'] == $_POST['statusSelect']) {
 
         header("location:". redirect($_SESSION['theme'], PROJECT.'customer/dash/packages-group-listings'));
 
     } else {
+
+        //$_SESSION['actual_page'] = $_SESSION['page'];
 
         $_SESSION['selected_status'] = $_POST['statusSelect'];
 
@@ -50,11 +48,7 @@ if (isset($_POST['statusSelect']) && !empty($_POST['statusSelect'])) {
         }
     }
     
-} else {
-
-    header("location:". redirect($_SESSION['theme'], PROJECT.'customer/dash/packages-group-listings'));
-
-}
+} 
 
 //Filter
 
@@ -63,7 +57,7 @@ if (isset($_POST['statusSelect']) && !empty($_POST['statusSelect'])) {
 //Research
 
 if (isset($_POST['search']) && !empty($_POST['search'])) {
-    
+    //die ('dedans');
     $_SESSION['research'] = secure($_POST['search']);
 
     if (isset($_SESSION['research'])) {
@@ -71,7 +65,7 @@ if (isset($_POST['search']) && !empty($_POST['search'])) {
         header("location:". redirect($_SESSION['theme'], PROJECT.'customer/dash/packages-group-listings'));
 
     }
-
+//die ('dedans');
 } else {
 
     header("location:". redirect($_SESSION['theme'], PROJECT.'customer/dash/packages-group-listings'));
@@ -101,11 +95,7 @@ if (isset($_POST['select'])) {
         
     }
     
-} else {
-
-    header("location:". redirect($_SESSION['theme'], PROJECT.'customer/dash/packages-group-listings'));
-
-}
+} 
 
 //Entries
 
@@ -114,6 +104,8 @@ if (isset($_POST['select'])) {
 //Package group deletion
 
 if (isset($_POST['package_group_deletion']) && !empty($_POST['package_group_deletion'])) {
+
+    //die (var_dump($_POST['package_deletion']));
     
     if (deletedPackageOrPackagesGroup(explode('&',$_POST['package_group_deletion'])[0], 'customer_package_group')) {
 
@@ -126,11 +118,7 @@ if (isset($_POST['package_group_deletion']) && !empty($_POST['package_group_dele
         }
 
     }
-} else {
-
-    header("location:". redirect($_SESSION['theme'], PROJECT.'customer/dash/packages-group-listings'));
-
-}
+} 
 
 //Package group deletion
 
@@ -143,10 +131,6 @@ if (isset($_POST['packages_group_edition']) && !empty($_POST['packages_group_edi
     $_SESSION['packages_group_tracking_number'] = explode('&',$_POST['packages_group_edition'])[0];
 
     $_SESSION['packages_group_id'] = explode('&',$_POST['packages_group_edition'])[1];
-
-    header("location:". redirect($_SESSION['theme'], PROJECT.'customer/dash/edit-packages-group'));
-
-} else {
 
     header("location:". redirect($_SESSION['theme'], PROJECT.'customer/dash/edit-packages-group'));
 

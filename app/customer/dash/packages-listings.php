@@ -198,7 +198,7 @@ $rows = countRowsInTable($table, $data['id']);
                         -->
                         <div class="table-responsive">
                             <table class="table card-table table-vcenter text-nowrap">
-                                <thead>
+                                <thead class="text-center">
                                     <tr>
                                         <th class="w-1">#<input class="form-check-input m-0 align-middle row-check" type="checkbox" id="check-all" aria-label="Select all invoices"></th>
                                         <th class="">N° de suivi</th>
@@ -210,7 +210,7 @@ $rows = countRowsInTable($table, $data['id']);
                                         <th></th>
                                     </tr>
                                 </thead>
-                                <tbody>
+                                <tbody class="text-center">
                                     <?php
                                     if (!empty($packages_listings)) {
 
@@ -300,7 +300,7 @@ $rows = countRowsInTable($table, $data['id']);
                                                     } elseif ($package["status"] == 'Livrer') {
                                                         echo 'bg-teal-lt';
                                                     } elseif ($package["status"] == 'Livrer et Confirmer') {
-                                                        echo 'bg-success-lt';
+                                                        echo 'bg-success';
                                                     }
                                                     ?>
                                                     me-1"><?= $package["status"] ?></span>
@@ -353,11 +353,10 @@ $rows = countRowsInTable($table, $data['id']);
                                                                                             ?>
                                                                                                     <tr>
                                                                                                         <td>
-                                                                                                            <?= $packages_ingrouplistings[$_key]["tracking_number"] == $package["tracking_number"] ? '<span class="badge bg-orange">' . $packages_ingrouplistings[$_key]["tracking_number"] . '</span>' : $packages_ingrouplistings[$_key]["tracking_number"] ?>
+                                                                                                            <?= $packages_ingroup["tracking_number"] == $package["tracking_number"] ? '<span class="badge bg-orange">' . $packages_ingrouplistings[$_key]["tracking_number"] . '</span>' : $packages_ingrouplistings[$_key]["tracking_number"] ?>
                                                                                                         </td>
-                                                                                                        <td class="">
-                                                                                                            <span></span>
-                                                                                                            <?= !empty($packages_ingrouplistings[$_key]["product_type"]) ? $packages_ingrouplistings[$_key]["product_type"] : '-' ?>
+                                                                                                        <td>
+                                                                                                            <?= !empty($packages_ingroup["product_type"]) ? $packages_ingroup["product_type"] : '-' ?>
                                                                                                         </td>
                                                                                                         <!--
                                                                                                         <td class="text-end">
@@ -405,7 +404,7 @@ $rows = countRowsInTable($table, $data['id']);
                                                 <td class="text-end">
                                                     <span class="">
                                                         <a class="btn-link link-danger
-                                                        <?php if ($package["status"] === 'En attente...') {
+                                                        <?php if ($package["status"] === 'En attente...' || $package["status"] === 'Livrer et Confirmer') {
                                                             echo '';
                                                         } else {
                                                             echo 'disabled text-muted';
@@ -421,8 +420,19 @@ $rows = countRowsInTable($table, $data['id']);
                                                         <?php
                                                         if ($package['status'] == 'Livrer') {
                                                         ?>
-                                                            <a class="btn btn-ghost-primary" href="#" data-bs-toggle="modal" data-bs-target="<?= "#confirmModal" . $key ?>">
-                                                                Confirmer réception
+                                                            <a class="bg-success badge-blink btn" href="#" data-bs-toggle="modal" data-bs-target="<?= "#confirmModal" . $key ?>">
+                                                                <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="10" height="10" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                                                    <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                                                                    <path d="M8 13v-8.5a1.5 1.5 0 0 1 3 0v7.5"></path>
+                                                                    <path d="M11 11.5v-2a1.5 1.5 0 0 1 3 0v2.5"></path>
+                                                                    <path d="M14 10.5a1.5 1.5 0 0 1 3 0v1.5"></path>
+                                                                    <path d="M17 11.5a1.5 1.5 0 0 1 3 0v4.5a6 6 0 0 1 -6 6h-2h.208a6 6 0 0 1 -5.012 -2.7l-.196 -.3c-.312 -.479 -1.407 -2.388 -3.286 -5.728a1.5 1.5 0 0 1 .536 -2.022a1.867 1.867 0 0 1 2.28 .28l1.47 1.47"></path>
+                                                                    <path d="M5 3l-1 -1"></path>
+                                                                    <path d="M4 7h-1"></path>
+                                                                    <path d="M14 3l1 -1"></path>
+                                                                    <path d="M15 6h1"></path>
+                                                                </svg>
+                                                                Confirmer Réception
                                                             </a>
                                                         <?php
                                                         }
@@ -455,7 +465,7 @@ $rows = countRowsInTable($table, $data['id']);
                                                                     <div class="col"><a href="#" class="btn w-100" data-bs-dismiss="modal">
                                                                             Annuler
                                                                         </a></div>
-                                                                    <div class="col"><button type="submit" name="package_deletion" value="<?= empty($package["customer_package_group_id"]) ? $package["tracking_number"] : $package["tracking_number"] . '&' . $package["customer_package_group_id"] ?>" class="btn btn-danger w-100" data-bs-dismiss="modal">
+                                                                    <div class="col"><button type="submit" name="package_deletion" value="<?= empty($package["customer_package_group_id"]) ? $package["status"] . '&' . $package["tracking_number"] : $package["status"] . '&' . $package["tracking_number"] . '&' . $package["customer_package_group_id"] ?>" class="btn btn-danger w-100" data-bs-dismiss="modal">
                                                                             Confirmer
                                                                         </button></div>
                                                                 </div>
@@ -742,7 +752,7 @@ if (isset($packages_listings) && !empty($packages_listings)) {
                                     foreach ($select_images as $_key => $value) {
                             ?>
                                         <div class="col">
-                                            <a data-fslightbox="gallery" href='<?= $select_images[$_key]['images'] ?>'>
+                                            <a data-fslightbox="gallery" href='<?= $value['images'] ?>'>
                                                 <!-- Photo -->
                                                 <div class="img-responsive img-responsive-1x1 rounded border" style="background-image: url(<?= $select_images[$_key]['images'] ?>)"></div>
                                             </a>

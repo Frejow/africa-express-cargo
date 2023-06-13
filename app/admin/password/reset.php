@@ -28,7 +28,7 @@ if (empty($errors)) {
     
             setcookie('passdata', '', time() - 3600, '/');
 
-            $response = array('success' => true, 'message' => 'Mot de passe changer avec succès.', 'redirectUrl' => PROJECT."agents/login");
+            $response = array('success' => true, 'message' => 'Mot de passe changer avec succès.', 'redirectUrl' => PROJECT."admin/login");
 
         }
 

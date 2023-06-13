@@ -1,26 +1,36 @@
 <?php
 
-$_SESSION["password_error"] = [];
+$errors = '';
 
-$error = [];
+secure(extract($_POST));
 
-$data = '';
+if (empty($mail)) {
 
-if (isset($_POST['mail']) && !empty($_POST['mail'])){
+    $errors = "Le champs email est requis";
+    
+} else {
 
-    $data = secure($_POST["mail"]);
+    if (!checkExistFieldEntry('mail', $mail)) {
 
-    if (checkExistFieldEntry('mail', $_POST["mail"])) {
+        $errors = $mail . " n'est associé à aucun compte. Vérifier votre saisie et réessayer.";
 
-        $user_id = getUserId($_POST["mail"])["id"];
+    }
+
+}
+
+if (empty($errors)){
+
+    if (checkExistFieldEntry('mail', $mail)) {
+
+        $user_id = getUserId($mail)["id"];
 
         $token = uniqid();
 
-        $username = getUsername($_POST["mail"])["user_name"];
+        $username = getUsername($mail)["user_name"];
 
         insertTokenInTokenTable($user_id, 'RESET_PASSWORD', $token);
         
-        $subject = 'REINITIALISATION DE MOT DE PASSE';
+        $subject = 'Réinitialisation de mot de passe';
 
         ob_start(); 
 
@@ -30,49 +40,21 @@ if (isset($_POST['mail']) && !empty($_POST['mail'])){
 
         ob_end_clean();
 
-        if (mailSendin($_POST['mail'], $username, $subject, $mailcontent)){
+        if (mailSendin($mail, $username, $subject, $mailcontent)){
 
-            $data = secure($_POST["mail"]);
+            setcookie('passdata', $mail, time() + 365 * 24 * 3600, '/');
 
-            setcookie(
-                "passdata",
-                $data,
-                [
-                    'expires' => time() + 365 * 24 * 3600,
-                    'path' => '/',
-                    'secure' => true,
-                    'httponly' => true,
-                ]
-            );
+            $response = array('success' => true, 'message' => 'Un mail a été envoyé à votre adresse. Vérifier votre boite de réception ou vos spams et suivre les instructions pour réinitialiser votre mot de passe. Le lien de réinitialisation expire dans 10min.');
 
-            header("location:".PROJECT."customer/password/true");
         }
 
-    } elseif (!checkExistFieldEntry('mail', $_POST["mail"])) {
-
-        $error["mail"] = "[ " . $_POST["mail"] . " ] n'est associé à aucun compte. Vérifier votre saisie et réessayer.";
-
     }
+
 } else {
 
-    $error["mail"] = "Ce champs est requis";
+    $response = array('success' => false, 'message' => $errors);
 
 }
 
-if (!empty($error)){
-
-    setcookie(
-    "user_passdata",
-    $data,
-    [
-        'expires' => time() + 365 * 24 * 3600,
-        'path' => '/',
-        'secure' => true,
-        'httponly' => true,
-    ]
-    );
-
-    $_SESSION["password_error"] = $error;
-
-    header("location:".PROJECT."customer/password");
-}
+header('Content-Type: application/json');
+echo json_encode($response);

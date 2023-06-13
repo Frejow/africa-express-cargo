@@ -20,15 +20,15 @@
                 timer: 20000
             });
 
-            if($('.swalDefaultSuccess').length) {
+            if ($('.swalDefaultSuccess').length) {
                 Toast.fire({
                     icon: 'success',
                     title: 'Succès',
                     text: '<?= $msg ?>'
                 });
             }
-            
-            if($('.swalDefaultError').length) {
+
+            if ($('.swalDefaultError').length) {
                 Toast.fire({
                     icon: 'error',
                     title: 'Erreur',
@@ -42,4 +42,17 @@
         $('.js-tilt').tilt({
             scale: 1.1
         })
+    </script>
+
+    <script>
+        function activeButton() {
+            var boxChecked = document.getElementById("myBox");
+            var button = document.getElementById("submitButton");
+
+            if (boxChecked.checked) {
+                button.disabled = false; // Activer le bouton
+            } else {
+                button.disabled = true; // Désactiver le bouton
+            }
+        }
     </script>

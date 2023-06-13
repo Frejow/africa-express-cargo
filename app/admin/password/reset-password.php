@@ -37,13 +37,13 @@
                     </div>
 
                     <div class="text-center p-t-15">
-                        <a class="txt2" href="<?= PROJECT ?>customer/register">
+                        <a class="txt2" href="<?= PROJECT ?>admin/register">
                             S'inscrire
                         </a>
                     </div>
 
                     <div class="text-center p-t-2">
-                        <a class="txt2" href="<?= PROJECT ?>customer/login">
+                        <a class="txt2" href="<?= PROJECT ?>admin/login">
                             Se connecter
                         </a>
                     </div>

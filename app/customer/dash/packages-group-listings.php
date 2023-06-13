@@ -43,14 +43,14 @@ $rows = countRowsInTable($table, $data['id']);
 
 ?>
 
-<form id="myForm" action="<?= redirect($_SESSION['theme'], PROJECT.'customer/dash-treatment/packages-group-listings') ?>" method="post">
+<form id="myForm" action="<?= redirect($_SESSION['theme'], PROJECT . 'customer/dash-treatment/packages-group-listings') ?>" method="post">
     <div class="page-header d-print-none">
         <div class="container-xl d-flex" style="justify-content: center;">
             <div class="row g-2 align-items-center " style="flex-wrap: wrap;">
                 <!-- Page title actions -->
                 <div class="col-12 col-lg-auto ms-auto d-print-none">
                     <div class="btn-list justify-content-center">
-                        <a href="<?= redirect($_SESSION['theme'], PROJECT.'customer/dash/set-packages-group') ?>" class="btn d-none text-white d-sm-inline-block btn-warning">
+                        <a href="<?= redirect($_SESSION['theme'], PROJECT . 'customer/dash/set-packages-group') ?>" class="btn d-none text-white d-sm-inline-block btn-warning">
                             <!-- Download SVG icon from http://tabler-icons.io/i/plus -->
                             <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
                                 <path stroke="none" d="M0 0h24v24H0z" fill="none" />
@@ -59,7 +59,7 @@ $rows = countRowsInTable($table, $data['id']);
                             </svg>
                             Créer un groupe de colis
                         </a>
-                        <a href="<?= redirect($_SESSION['theme'], PROJECT.'customer/dash/set-packages-group') ?>" class="btn d-sm-none text-white btn-warning">
+                        <a href="<?= redirect($_SESSION['theme'], PROJECT . 'customer/dash/set-packages-group') ?>" class="btn d-sm-none text-white btn-warning">
                             <!-- Download SVG icon from http://tabler-icons.io/i/plus -->
                             <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
                                 <path stroke="none" d="M0 0h24v24H0z" fill="none" />
@@ -118,7 +118,6 @@ $rows = countRowsInTable($table, $data['id']);
                                     Filtrer :
                                     <div class="ms-2 d-inline-block">
                                         <select class="form-select" name="statusSelect" id="mySelect2">
-                                            <option disabled selected value="">Tout Afficher</option>
                                             <option <?php if (isset($_SESSION['selected_status']) && $_SESSION['selected_status'] == 'Tout Afficher') {
                                                         echo 'selected';
                                                     } ?> data-value="Tout Afficher">Tout Afficher</option>
@@ -137,6 +136,9 @@ $rows = countRowsInTable($table, $data['id']);
                                             <option <?php if (isset($_SESSION['selected_status']) && $_SESSION['selected_status'] == 'Livrer') {
                                                         echo 'selected';
                                                     } ?> data-value="Livrer">Livrer</option>
+                                            <option <?php if (isset($_SESSION['selected_status']) && $_SESSION['selected_status'] == 'Livrer et Confirmer') {
+                                                        echo 'selected';
+                                                    } ?> data-value="Livrer et Confirmer">Livrer et Confirmer</option>
                                         </select>
                                     </div>
                                 </div>
@@ -241,15 +243,15 @@ $rows = countRowsInTable($table, $data['id']);
                                                             </a>
                                                         </span>
                                                     </td>
-                                                    
-                                                <td class="text-end">
-                                                    <span class="">
-                                                        <button class="btn-link link-warning" name="packages_group_edition" value="<?= $packages_group_listings[$key]["tracking_number"].'&'.$packages_group_listings[$key]["id"] ?>" type="submit">
-                                                            Modifier
-                                                        </button>
-                                                    </span>
-                                                </td>
-                                                
+
+                                                    <td class="text-end">
+                                                        <span class="">
+                                                            <button class="btn-link link-warning" name="packages_group_edition" value="<?= $packages_group_listings[$key]["tracking_number"] . '&' . $packages_group_listings[$key]["id"] ?>" type="submit">
+                                                                Modifier
+                                                            </button>
+                                                        </span>
+                                                    </td>
+
                                                     <td class="text-end">
                                                         <span class="">
                                                             <a class="btn-link link-danger
@@ -287,7 +289,7 @@ $rows = countRowsInTable($table, $data['id']);
                                                                         <div class="col"><a href="#" class="btn w-100" data-bs-dismiss="modal">
                                                                                 Annuler
                                                                             </a></div>
-                                                                        <div class="col"><button type="submit" name="package_group_deletion" value="<?= $packages_group_listings[$key]["tracking_number"].'&'.$packages_group_listings[$key]["id"] ?>" class="btn btn-danger w-100" data-bs-dismiss="modal">
+                                                                        <div class="col"><button type="submit" name="package_group_deletion" value="<?= $packages_group_listings[$key]["tracking_number"] . '&' . $packages_group_listings[$key]["id"] ?>" class="btn btn-danger w-100" data-bs-dismiss="modal">
                                                                                 Confirmer
                                                                             </button></div>
                                                                     </div>
@@ -447,6 +449,7 @@ if (isset($packages_group_listings) && !empty($packages_group_listings)) {
                                                 <tr>
                                                     <th class="">N° de suivi</th>
                                                     <th>Type de produits</th>
+                                                    <th>Statut</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
@@ -457,11 +460,30 @@ if (isset($packages_group_listings) && !empty($packages_group_listings)) {
                                                 ?>
                                                         <tr>
                                                             <td>
-                                                                <?= $packages_ingrouplistings[$key]["tracking_number"] ?>
+                                                                <?= $packages_ingroup["tracking_number"] ?>
                                                             </td>
                                                             <td class="">
                                                                 <span></span>
-                                                                <?= !empty($packages_ingrouplistings[$key]["product_type"]) ? $packages_ingrouplistings[$key]["product_type"] : '-' ?>
+                                                                <?= !empty($packages_ingroup["product_type"]) ? $packages_ingroup["product_type"] : '-' ?>
+                                                            </td>
+                                                            <td>
+                                                                <span class="badge
+                                                                    <?php if ($packages_ingroup["status"] == 'En attente...') {
+                                                                        echo 'bg-danger-lt';
+                                                                    } elseif ($packages_ingroup["status"] == 'En transit') {
+                                                                        echo 'bg-primary-lt';
+                                                                    } elseif ($packages_ingroup["status"] == 'Entrepôt Chine') {
+                                                                        echo 'bg-secondary-lt';
+                                                                    } elseif ($packages_ingroup["status"] == 'Entrepôt Bénin') {
+                                                                        echo 'bg-warning-lt';
+                                                                    } elseif ($packages_ingroup["status"] == 'Livrer') {
+                                                                        echo 'bg-teal-lt';
+                                                                    } elseif ($packages_ingroup["status"] == 'Livrer et Confirmer') {
+                                                                        echo 'bg-success';
+                                                                    }
+                                                                    ?>
+                                                                    me-1"><?= $packages_ingroup["status"] ?>
+                                                                </span>
                                                             </td>
                                                             <!--
                                                             <td class="text-end">

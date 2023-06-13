@@ -34,7 +34,7 @@ if (empty($errors)){
 
         ob_start(); 
 
-        include 'app/agents/password/mailtemp.php'; 
+        include 'app/admin/password/mailtemp.php'; 
 
         $mailcontent = ob_get_contents(); 
 
@@ -44,7 +44,7 @@ if (empty($errors)){
 
             setcookie('passdata', $mail, time() + 365 * 24 * 3600, '/');
 
-            $response = array('success' => true, 'message' => 'Un email de changement de mot de passe a été envoyé à votre adresse email. Vérifier votre boite de réception ou vos spams et suivre les instructions pour réinitialiser votre mot de passe. Le lien de réinitialisation expire dans 10min.');
+            $response = array('success' => true, 'message' => 'Un email a été envoyé à votre adresse email. Vérifier votre boite de réception ou vos spams et suivre les instructions pour réinitialiser votre mot de passe. Le lien de réinitialisation expire dans 10min.');
 
         }
 

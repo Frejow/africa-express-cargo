@@ -333,6 +333,7 @@ $countries = [
                             </div>
 
                         </div>
+                        
                         <p class="text-center mt-3">En vous inscrivant sur notre plateforme, vous acceptez nos <a href="#"> <strong>termes et conditions</strong></a>.</p>
 
                         <div class="container-login100-form-btn">
@@ -354,11 +355,7 @@ $countries = [
 
             </div>
         </div>
-    </div>
-
-    <?php
-    unset($_SESSION["register_errors"]); 
-    ?>
+    </div>  
 
 </body>
 

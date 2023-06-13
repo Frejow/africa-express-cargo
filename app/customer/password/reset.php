@@ -1,50 +1,44 @@
 <?php
 
-$_SESSION["reset_errors"] = [];
+$errors = '';
 
-$errors = [];
+extract($_POST);
 
-if (!isset($_POST["pass"]) || empty($_POST["pass"])) {
-    $errors["pass"] = "Le champs du mot de passe est vide.";
+if (empty($pass) || empty($repass)) {
+    $errors = "Les deux champs sont requis.";
 }
 
-if (isset($_POST["pass"]) && !empty($_POST["pass"]) && strlen(secure($_POST["pass"])) < 8) {
-    $errors["pass"] = "Le champs doit contenir minimum 8 caractères. Les espaces ne sont pas pris en compte.";
+if (!empty($pass) && strlen(secure($pass)) < 8) {
+    $errors = "Le champs Nouveau mot de passe doit contenir minimum 8 caractères. Les espaces ne sont pas pris en compte.";
 }
 
-if (isset($_POST["pass"]) && !empty($_POST["pass"]) && strlen(secure($_POST["pass"])) >= 8 && empty($_POST["repass"])) {
-    $errors["repass"] = "Entrez votre mot de passe à nouveau.";
+if (!empty($pass) && strlen(secure($pass)) >= 8 && empty($repass)) {
+    $errors = "Entrez votre mot de passe à nouveau dans le champs Confirmer mot de passe.";
 }
 
-if ((isset($_POST["repass"]) && !empty($_POST["repass"]) && strlen(secure($_POST["pass"])) >= 8 && $_POST["repass"] != $_POST["pass"])) {
-    $errors["repass"] = "Mot de passe erroné. Entrez le mot de passe du précédent champs";
+if ((!empty($repass) && strlen(secure($pass)) >= 8 && $repass != $pass)) {
+    $errors = "Mot de passe du champs Confirmer mot de passe erroné. Entrez le mot de passe du précédent champs.";
 }
 
 if (empty($errors)) {
 
-    if (isset($_COOKIE["passdata"]) && !empty($_COOKIE["passdata"])) {
-        if (updatePassword($_COOKIE["passdata"], sha1($_POST['pass']))){
-            setcookie(
-                "success_msg",
-                'Mot de passe changer avec succès. Vous pouvez vous connecter.',
-                [
-                    'expires' => time() + 365 * 24 * 3600,
-                    'path' => '/',
-                    'secure' => true,
-                    'httponly' => true,
-                ]
-            );
-            setcookie('user_passdata', '', time() - 3600, '/');
+    if (!empty($_COOKIE["passdata"])) {
 
+        if (updatePassword($_COOKIE["passdata"], sha1($pass))){
+    
             setcookie('passdata', '', time() - 3600, '/');
 
-            header("location:".PROJECT."customer/login");
+            $response = array('success' => true, 'message' => 'Mot de passe changer avec succès.', 'redirectUrl' => PROJECT."customer/login");
+
         }
+
     }
 
 } else {
 
-    $_SESSION["reset_errors"] = $errors;
+    $response = array('success' => false, 'message' => $errors);
 
-    header("location:".PROJECT."customer/password/reset-password");
 }
+
+header('Content-Type: application/json');
+echo json_encode($response);

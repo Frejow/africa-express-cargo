@@ -1,172 +1,97 @@
 <?php
 
-session_start();
-//die (var_dump($_GET['p']));
-//die (var_dump ('admin'));
-//die(var_dump($_POST['country']));
+$errors = '';
 
-include "app/common/functions_folder/functions.php";
+secure(extract($_POST));
 
-$_SESSION["register_errors"] = [];
-
-$errors = [];
-
-$data = [];
-
-if (!isset($_POST["nom"]) || empty($_POST["nom"])) {
-    $errors["nom"] = "Ce champs est vide";
+if (empty($nom) || empty($prenom) || empty($pseudo) || empty($mail) || empty($country) || empty($tel) || empty($pass)) {
+    $errors = "Tous les champs sont requis.";
 }
 
-if (!isset($_POST["prenom"]) || empty($_POST["prenom"])) {
-    $errors["prenom"] = "Ce champs est vide";
+if (!empty($pass) && strlen($pass) >= 8 && empty($repass)) {
+    $errors = "Le champs Confirmez mot de passe est requis.";
 }
 
-if (!isset($_POST["pseudo"]) || empty($_POST["pseudo"])) {
-    $errors["pseudo"] = "Ce champs est vide";
+if (!empty($mail) && !filter_var($mail, FILTER_VALIDATE_EMAIL)) {
+    $errors = "Entrez une addresse email valide s'il vous plaît.";
 }
 
-if (isset($_POST["country"]) && $_POST["country"] == "Pays") {
-    $errors["country"] = "Veuillez renseigner ce champs";
+if (!empty($pass) && strlen($pass) < 8) {
+    $errors = "Le champs Mot de passe doit contenir minimum 8 caractères. Les espaces ne sont pas pris en compte.";
 }
 
-if (!isset($_POST["tel"]) || empty($_POST["tel"])) {
-    $errors["tel"] = "Veuillez renseigner ce champs";
+if ((!empty($repass) && strlen($pass) >= 8 && $repass != $pass)) {
+    $errors = "Le champs Confirmez mot de passe doit recevoir le même mot de passe que celui du champs Mot de passe.";
 }
 
-if (!isset($_POST["mail"]) || empty($_POST["mail"])) {
-    $errors["mail"] = "Le champs d'adresse email est vide.";
+if (filter_var($mail, FILTER_VALIDATE_EMAIL)) {
+    if (checkExistFieldEntry('mail', $mail)) {
+        $errors = "L'adresse email " . $mail . " est déjà associé à un compte.";
+    }
+    
+    if (checkExistFieldEntry('user_name', $pseudo) && !checkExistFieldEntry('mail', $mail)) {
+        $errors = "Le nom d'utilisateur " . $pseudo . " a déjà été pris.";
+    }
+    
+    if (checkExistFieldEntry('phone_number', $tel) && !checkExistFieldEntry('user_name', $pseudo) && !checkExistFieldEntry('mail', $mail)) {
+        $errors = "Le numéro " . $tel . " appartient à un de nos utilisateur.";
+    }
 }
-
-if (isset($_POST["mail"]) && !empty($_POST["mail"]) && !filter_var($_POST["mail"], FILTER_VALIDATE_EMAIL)) {
-    $errors["mail"] = "Entrez une addresse email valide s'il vous plaît";
-}
-
-if (!isset($_POST["pass"]) || empty($_POST["pass"]) && !checkExistFieldEntry('mail',$_POST["mail"])) {
-    $errors["pass"] = "Le champs du mot de passe est vide.";
-}
-
-if (isset($_POST["pass"]) && !empty($_POST["pass"]) && strlen(secure($_POST["pass"])) < 8) {
-    $errors["pass"] = "Le champs doit contenir minimum 8 caractères. Les espaces ne sont pas pris en compte.";
-}
-
-if (isset($_POST["pass"]) && !empty($_POST["pass"]) && strlen(secure($_POST["pass"])) >= 8 && empty($_POST["repass"])) {
-    $errors["repass"] = "Entrez votre mot de passe à nouveau.";
-}
-
-if ((isset($_POST["repass"]) && !empty($_POST["repass"]) && strlen(secure($_POST["pass"])) >= 8 && $_POST["repass"] != $_POST["pass"])) {
-    $errors["repass"] = "Mot de passe erroné. Entrez le mot de passe du précédent champs";
-}
-
-if (
-    isset($_POST["pass"]) && !empty($_POST["pass"]) && strlen(secure($_POST["pass"])) >= 8
-    && isset($_POST["repass"]) && !empty($_POST["repass"])
-    && $_POST["repass"] == $_POST["pass"]
-    && !isset($_POST["terms"]) && empty($_POST["terms"])
-) {
-    $errors["terms"] = "Veuillez cocher cette case s'il vous plaît.";
-}
-
-if (checkExistFieldEntry('mail',$_POST["mail"])) {
-    $errors["mail"] = "[ " . $_POST["mail"] . " ] est déjà associé à un compte. Veuillez le changer.";
-}
-
-if (checkExistFieldEntry('user_name',$_POST["pseudo"])) {
-    $errors["pseudo"] = "Le nom d'utilisateur [ " . $_POST["pseudo"] . " ] a déjà été pris. Veuillez le changer.";
-}
-
-if (isset($_POST["nom"]) && !empty($_POST["nom"])) {
-    $data["nom"] = secure($_POST["nom"]);
-}
-
-if (isset($_POST["prenom"]) && !empty($_POST["prenom"])) {
-    $data["prenom"] = secure($_POST["prenom"]);
-}
-
-if (isset($_POST["tel"]) && !empty($_POST["tel"])) {
-    $data["tel"] = $_POST["tel"];
-}
-
-if (isset($_POST["pseudo"]) && !empty($_POST["pseudo"])) {
-    $data["pseudo"] = secure($_POST["pseudo"]);
-}
-
-if (isset($_POST["mail"]) && !empty($_POST["mail"]) && (!filter_var($_POST["mail"], FILTER_VALIDATE_EMAIL) || filter_var($_POST["mail"], FILTER_VALIDATE_EMAIL))) {
-    $data["mail"] = secure($_POST["mail"]);
-}
-
-if (isset($_POST["country"]) && !empty($_POST["country"])) {
-    $data["country"] = $_POST["country"]; //die (var_dump($data["country"]));
-}
-
-$data["profile"] = "ADMINISTRATOR";
-
-setcookie(
-    "user_register_data",
-    json_encode($data),
-    [
-        'expires' => time() + 365 * 24 * 3600,
-        'path' => '/',
-        'secure' => true,
-        'httponly' => true,
-    ]
-);
 
 if (empty($errors)) {
 
-    $database =  databaseLogin();
+    $profile = "ADMIN";
 
-    if (is_object($database)) {
+    if (registration($nom, $prenom, $tel, $pseudo, $mail, $country, $pass, $profile)) {
 
-        // Ecriture de la requête
-        $request_insertion = 'INSERT INTO user(name, first_names, phone_number, user_name, mail, country, password, profile, token) VALUES (:nom, :prenom, :tel, :pseudo, :mail, :country, :pass, :profile, :token)';
+        $mail_assoc_to_deleted_account = checkMailAssocToDeletedAccount($mail);
 
-        // Préparation
-        $request_insertion_prepare = $database->prepare($request_insertion);
+        if (!empty($mail_assoc_to_deleted_account)) {
 
-        // Exécution ! 
-        $result = $request_insertion_prepare->execute([
-            'nom' => $data["nom"],
-            'prenom' => $data["prenom"],
-            'tel' => $data["tel"],
-            'pseudo' => $data["pseudo"],
-            'mail' => $data["mail"],
-            'country' => ltrim(preg_replace('/[^\p{L}\p{N}\s]/u', " ", $_POST["country"])),
-            'pass' => sha1($_POST["pass"]),
-            'profile' => $data["profile"],
-            'token' => sha1($data["mail"]),
-        ]);
+            foreach ($mail_assoc_to_deleted_account as $key => $value) {
 
-        if ($result) {
+                backDeletedAccount($mail_assoc_to_deleted_account[$key]['id'], $mail);
 
-            setcookie(
-                "user_register_data",
-                "",
-                [
-                    'expires' => time() + 365 * 24 * 3600,
-                    'path' => '/',
-                    'secure' => true,
-                    'httponly' => true,
-                ]
-            );
-            
-            $_SESSION['success'] = 'Inscription effectuée avec succès.';
-
-            header("location:".PROJECT."admin/login");
-        } else {
-
-            $_SESSION['error'] = 'Oupss!!! Une erreur s\'est produite lors de l\'enregistrement de l\'utilisateur. Veuillez réessayer ou contacter l\'administrateur du site.';
-
-            header("location:".PROJECT."admin/register");
+            }
         }
+    
+        $subject = 'NOUVEAU COMPTE ADMINISTRATEUR EN ATTENTE DE VALIDATION';
+
+        ob_start(); 
+
+        include 'app/admin/register/mailtemp.php'; 
+
+        $mailcontent = ob_get_contents(); 
+
+        ob_end_clean(); 
+
+        if (mailSendin(MAIL_ADDRESS, 'Africa Express Cargo', $subject, $mailcontent)) {
+
+            $response = array('success' => true, 'message' => 'Super !!! Vous êtes inscrit. Vous recevrez un mail après examen et validation de votre compte. Si vous ne recevez pas de mail dans 1h, contactez nous à cette adresse : contact.support@africa-express-cargo.com');
+
+        } else {
+            
+            $user_id = getUserId($mail)['id'];
+
+            if (backDeletedAccount($user_id, $mail) && updateTokenTable($user_id)) {
+
+                $response = array('success' => false, 'message' => 'Cause probable : Appareil Hors Connexion. Vérifiez votre connexion internet et réessayer. Si cela persiste, contactez-nous.');
+
+            }
+
+        }
+
     } else {
 
-        $_SESSION['error'] = $database;
+        $response = array('success' => false, 'message' => 'Oupss!!! Une erreur a été détecté lors du processus. Veuillez réessayer ou nous contacter si cela persiste.');
 
-        header("location:".PROJECT."admin/register");
     }
+
 } else {
 
-    $_SESSION["register_errors"] = $errors;
+    $response = array('success' => false, 'message' => $errors);
 
-    header("location:".PROJECT."admin/register");
 }
+
+header('Content-Type: application/json');
+echo json_encode($response);

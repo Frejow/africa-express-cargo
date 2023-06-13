@@ -287,7 +287,7 @@ $_SESSION['admin_current_url'] = "{$_SERVER['REQUEST_SCHEME']}://{$_SERVER['HTTP
                         <div class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
                             <a href='<?= redirect($_SESSION['theme'], PROJECT.'admin/dash/profile') ?>' class="dropdown-item">Mon Compte</a>
                             <a href='<?= redirect($_SESSION['theme'], PROJECT.'admin/dash/profile-settings') ?>' class="dropdown-item">Paramètres du compte</a>
-                            <a href="./sign-in.html" class="dropdown-item">Déconnexion</a>
+                            <a href="<?= redirect($_SESSION['theme'], PROJECT.'admin/logout') ?>" class="dropdown-item">Déconnexion</a>
                         </div>
                     </div>
                 </div>
@@ -644,7 +644,7 @@ $_SESSION['admin_current_url'] = "{$_SERVER['REQUEST_SCHEME']}://{$_SERVER['HTTP
                         <div class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
                             <a href='<?= redirect($_SESSION['theme'], PROJECT.'admin/dash/profile') ?>' class="dropdown-item">Mon Compte</a>
                             <a href='<?= redirect($_SESSION['theme'], PROJECT.'admin/dash/profile-settings') ?>' class="dropdown-item">Paramètres du compte</a>
-                            <a href="#" class="dropdown-item">Déconnexion</a>
+                            <a href="<?= redirect($_SESSION['theme'], PROJECT.'admin/logout') ?>" class="dropdown-item">Déconnexion</a>
                         </div>
                     </div>
                 </div>

@@ -1,6 +1,6 @@
 <?php
 
-$url = $_SERVER['REQUEST_SCHEME'].'://'.$_SERVER['HTTP_HOST'].PROJECT.'customer/reset-password/index/{user_id}/{token}';
+$url = $_SERVER['REQUEST_SCHEME'].'://'.$_SERVER['HTTP_HOST'].PROJECT.'agents/reset-password/index/{user_id}/{token}';
 
 $url = str_replace("{user_id}", $user_id, $url);
 
@@ -154,7 +154,7 @@ $url = str_replace("{token}", $token, $url);
                     <tr>
                         <td bgcolor="#ffffff" align="left"
                             style="padding: 20px 30px 40px 30px; color: #666666; font-family: 'Lato', Helvetica, Arial, sans-serif; font-size: 18px; font-weight: 400; line-height: 25px;">
-                            <p style="margin: 0;">Nous avons remarqué que vous avez récemment demandé une réinitialisation de mot de passe pour votre compte. Pour vous assurer que vous pouvez accéder à votre compte en toute sécurité, nous vous invitons à cliquer sur le bouton ci-dessous pour réinitialiser votre mot de passe.</p>
+                            <p style="margin: 0;">Nous avons remarqué que vous avez récemment demandé une réinitialisation de mot de passe pour votre compte. Nous vous invitons à cliquer sur le bouton ci-dessous pour réinitialiser votre mot de passe.</p>
                         </td>
                     </tr>
                     <tr>

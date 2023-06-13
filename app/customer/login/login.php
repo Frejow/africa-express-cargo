@@ -1,31 +1,17 @@
 <?php
 
-$_SESSION["login_errors"] = [];
+$errors = '';
 
-$errors = [];
+extract($_POST);
 
-$data = [];
-
-if (!isset($_POST["m_ps"]) || empty($_POST["m_ps"])) {
-    $errors["m_ps"] = "Ce champs est requis.";
+if (empty($m_ps) || empty($pass)) {
+    $errors = 'Les deux champs sont requis.';
 }
 
-if (isset($_POST["m_ps"]) && !empty($_POST["m_ps"])) {
-    $data["m_ps"] = (secure($_POST["m_ps"]));
-}
+if (!empty($m_ps) && !empty($pass)) {
 
-if (!isset($_POST["pass"]) || empty($_POST["pass"])) {
-    $errors["pass"] = "Le champs du mot de passe est requis.";
-}
-
-if (isset($_POST["pass"]) && !empty($_POST["pass"])) {
-    $data["pass"] = secure($_POST["pass"]);
-}
-
-if (empty($errors)) {
-
-    $checkby_mail_password = retrieveUserbyEmailAndPassword($_POST["m_ps"], $_POST["pass"], 'CUSTOMER', 1, 1, 0);
-    $checkby_username_password = retrieveUserbyPseudoAndPassword($_POST["m_ps"], $_POST["pass"], 'CUSTOMER', 1, 1, 0);
+    $checkby_mail_password = retrieveUserbyEmailAndPassword($m_ps, $pass, 'CUSTOMER', 1, 1, 0);
+    $checkby_username_password = retrieveUserbyPseudoAndPassword($m_ps, $pass, 'CUSTOMER', 1, 1, 0);
 
     if (!empty($checkby_mail_password) || !empty($checkby_username_password)) {
 
@@ -39,95 +25,31 @@ if (empty($errors)) {
             
         }
 
-        if (isset($_POST["remember_me"]) && !empty($_POST["remember_me"])){
-        
-            setcookie(
-                "cud",
-                json_encode($data),
-                [
-                    'expires' => time() + 365 * 24 * 3600,
-                    'path' => '/',
-                    'secure' => true,
-                    'httponly' => true,
-                ]
-            );
-        
-        } else {
-            setcookie('cud', '', time() - 3600, '/');
-        }
+    } elseif (empty($checkby_mail_password) || empty($checkby_username_password)) {
 
-        if (isset($_COOKIE['thm'])) {
-
-            $_SESSION['success_msg'] = 'Authentification réussie';
-
-            header("location:".PROJECT."customer/dash/packages-listings".$_COOKIE['thm']);
-
-            setcookie('thm', '', time() - 3600, '/');
-
-        } elseif (isset($_COOKIE['crl'])) {
-
-            $_SESSION['success_msg'] = 'Authentification réussie';
-
-            header("location:".$_COOKIE['crl']);
-
-            setcookie('crl', '', time() - 3600, '/');
-
-        } else {
-            
-            $_SESSION['success_msg'] = 'Authentification réussie';
-
-            header("location:".PROJECT."customer/dash/packages-listings?theme=light");
-
-        }
-        
-        setcookie('ud', '', time() - 3600, '/');
+        $errors = 'Identifiant incorrect, mot de passe incorrect, compte inactif ou inexistant.';
 
     }
-    elseif (empty($checkby_mail_password) || empty($checkby_username_password)) {
-
-        setcookie(
-            "error_msg",
-            "Adresse email ou mot de passe incorrect. Réessayer",
-            [
-                'expires' => time() + 365 * 24 * 3600,
-                'path' => '/',
-                'secure' => true,
-                'httponly' => true,
-            ]
-        );
-
-        setcookie(
-            "ud",
-            json_encode($data),
-            [
-                'expires' => time() + 365 * 24 * 3600,
-                'path' => '/',
-                'secure' => true,
-                'httponly' => true,
-            ]
-        );
-
-        header("location:".PROJECT."customer/login");
-        
-    }
-    
 }
 
-else {
+if (!empty($errors)) {
 
-    $_SESSION["login_errors"] = $errors;
+  $response = array('success' => false, 'message' => $errors);
 
-    setcookie(
-        "ud",
-        json_encode($data),
-        [
-            'expires' => time() + 365 * 24 * 3600,
-            'path' => '/',
-            'secure' => true,
-            'httponly' => true,
-        ]
-    );
+} else {
     
-    header("location:".PROJECT."customer/login");
+    $theme = '?theme=light';
+
+    if (!empty($_COOKIE['thm'])) { $theme = $_COOKIE['thm']; }
+
+    $redirectUrl = PROJECT.'customer/dash/packages-listings'.$theme;
+
+    if (!empty($_COOKIE['crl'])) { $redirectUrl = $_COOKIE['crl']; }
+
+  $response = array('success' => true, 'message' => 'Authentification réussie', 'redirectUrl' => $redirectUrl);
 
 }
+
+header('Content-Type: application/json');
+echo json_encode($response);
+

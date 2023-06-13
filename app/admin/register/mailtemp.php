@@ -1,13 +1,3 @@
-<?php
-
-$url = $_SERVER['REQUEST_SCHEME'].'://'.$_SERVER['HTTP_HOST'].PROJECT.'customer/reset-password/index/{user_id}/{token}';
-
-$url = str_replace("{user_id}", $user_id, $url);
-
-$url = str_replace("{token}", $token, $url);
-
-?>
-
 <!doctype html>
 <html>
 
@@ -141,7 +131,7 @@ $url = str_replace("{token}", $token, $url);
                     <tr>
                         <td bgcolor="#ffffff" align="center" valign="top"
                             style="padding: 40px 20px 20px 20px; border-radius: 4px 4px 0px 0px; color: #111111; font-family: 'Lato', Helvetica, Arial, sans-serif; font-size: 48px; font-weight: 400; letter-spacing: 4px; line-height: 48px;">
-                            <h1 style="font-size: 40px; font-weight: 400; margin: 2;"><?= $username ?></h1> 
+                            <h1 style="font-size: 48px; font-weight: 400; margin: 2;">Nouvel Administrateur !</h1> 
                             <!--<img src="<?= PROJECT ?>public/images/aec_lightlogo.png" style="display: block; border: 0px;" />-->
                         </td>
                     </tr>
@@ -154,7 +144,7 @@ $url = str_replace("{token}", $token, $url);
                     <tr>
                         <td bgcolor="#ffffff" align="left"
                             style="padding: 20px 30px 40px 30px; color: #666666; font-family: 'Lato', Helvetica, Arial, sans-serif; font-size: 18px; font-weight: 400; line-height: 25px;">
-                            <p style="margin: 0;">Nous avons remarqué que vous avez récemment demandé une réinitialisation de mot de passe pour votre compte. Nous vous invitons à cliquer sur le bouton ci-dessous pour réinitialiser votre mot de passe.</p>
+                            <p style="margin: 0;">Un nouveau compte administrateur vient d'être créé<?= isset($fnames) ? ' au nom de <strong>'.$fnames.' '.$name.'</strong>' : '' ?>. Veuillez consulter la liste des administrateurs.</p>
                         </td>
                     </tr>
                     <tr>
@@ -163,11 +153,7 @@ $url = str_replace("{token}", $token, $url);
                                 <tr>
                                     <td bgcolor="#ffffff" align="center" style="padding: 20px 30px 60px 30px;">
                                         <table border="0" cellspacing="0" cellpadding="0">
-                                            <tr>
-                                                <td align="center" class="valid_btn" style="border-radius: 5px;" bgcolor="#e0643a"><a
-                                                        href="<?= $url ?>" target="_blank"
-                                                        style="font-size: 20px; font-family: Helvetica, Arial, sans-serif; color: #ffffff; text-decoration: none; padding: 15px 25px; display: inline-block;">Réinitialiser mon mot de passe</a></td>
-                                            </tr>
+                                            
                                         </table>
                                     </td>
                                 </tr>
@@ -175,33 +161,6 @@ $url = str_replace("{token}", $token, $url);
                         </td>
                     </tr> 
 
-                    <tr>
-                        <td bgcolor="#ffffff" align="left"
-                            style="padding: 0px 30px 20px 30px; color: #666666; font-family: 'Lato', Helvetica, Arial, sans-serif; font-size: 18px; font-weight: 400; line-height: 25px;">
-                            <p style="margin: 0;">Si vous n'avez pas initié cette demande de réinitialisation de mot de passe, veuillez nous en informer immédiatement en répondant à cet e-mail ou en contactant notre service client.
-                                </p>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td bgcolor="#ffffff" align="left"
-                            style="padding: 0px 30px 40px 30px; border-radius: 0px 0px 4px 4px; color: #666666; font-family: 'Lato', Helvetica, Arial, sans-serif; font-size: 18px; font-weight: 400; line-height: 25px;">
-                            <p style="margin: 0;">Cordialement,<br>L'équipe Africa Express Cargo</p>
-                        </td>
-                    </tr>
-                </table>
-            </td>
-        </tr>
-        <tr>
-            <td bgcolor="#f4f4f4" align="center" style="padding: 30px 10px 0px 10px;">
-                <table border="0" cellpadding="0" cellspacing="0" width="100%" style="max-width: 600px;">
-                    <tr>
-                        <td bgcolor="#FFECD1" align="center"
-                            style="padding: 30px 30px 30px 30px; border-radius: 4px 4px 4px 4px; color: #666666; font-family: 'Lato', Helvetica, Arial, sans-serif; font-size: 18px; font-weight: 400; line-height: 25px;">
-                            <h2 style="font-size: 20px; font-weight: 400; color: #111111; margin: 0;">Service Client
-                            </h2>
-                            <p style="margin: 0;"><a href="mailto:contact.support@africa-express-cargo.com" target="_blank" style="color: #FFA73B;">contact.support@africa-express-cargo.com</a></p>
-                        </td>
-                    </tr>
                 </table>
             </td>
         </tr>

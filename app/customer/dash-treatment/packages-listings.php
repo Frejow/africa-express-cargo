@@ -4,11 +4,18 @@
 
 if (!empty($_POST['previous'])) {
 
+    if ($_POST['previous'] < 0) {
+        $_POST['previous'] = 1;
+    } 
+
     $_SESSION['previous_page'] = $_POST['previous'];
 
     header("location:". redirect($_SESSION['theme'], PROJECT.'customer/dash/packages-listings'));
+
 } else {
+
     header("location:". redirect($_SESSION['theme'], PROJECT.'customer/dash/packages-listings'));
+
 }
 
 if (!empty($_POST['next'])) {
@@ -21,7 +28,9 @@ if (!empty($_POST['next'])) {
 
     }
 } else {
+
     header("location:". redirect($_SESSION['theme'], PROJECT.'customer/dash/packages-listings'));
+
 }
 
 //Pagination
@@ -48,7 +57,9 @@ if (!empty($_POST['statusSelect'])) {
     }
     
 } else {
+
     header("location:". redirect($_SESSION['theme'], PROJECT.'customer/dash/packages-listings'));
+
 }
 
 //Filter
@@ -109,31 +120,41 @@ if (!empty($_POST['select'])) {
 //Package deletion
 
 if (!empty($_POST['package_deletion'])) {
+
+    if (explode('&', $_POST['package_deletion'])[0] == 'En attente...' || explode('&', $_POST['package_deletion'])[0] == 'Livrer et Confirmer') {
+
+        if (!empty(explode('&', $_POST['package_deletion'])[2])) {
+
+            if (deletedPackageOrPackagesGroup(explode('&', $_POST['package_deletion'])[1], 'package')) {
     
-    if (!empty(explode('&', $_POST['package_deletion'])[1])) {
-
-        if (deletedPackageOrPackagesGroup(explode('&', $_POST['package_deletion'])[0], 'package')) {
-
-            if (unlinkSpecificPackagesGroupOfPackage(explode('&', $_POST['package_deletion'])[1], explode('&', $_POST['package_deletion'])[0])) {
-
-                $_SESSION['success_msg'] = 'Votre colis N°'. explode('&', $_POST['package_deletion'])[0] .' a été supprimé avec succès';
+                if (unlinkSpecificPackagesGroupOfPackage(explode('&', $_POST['package_deletion'])[2], explode('&', $_POST['package_deletion'])[1])) {
     
+                    $_SESSION['success_msg'] = 'Votre colis N°'. explode('&', $_POST['package_deletion'])[1] .' a été supprimé avec succès';
+        
+                    header("location:". redirect($_SESSION['theme'], PROJECT.'customer/dash/packages-listings'));
+    
+                }
+        
+            }
+    
+        } else {
+    
+            if (deletedPackageOrPackagesGroup(explode('&', $_POST['package_deletion'])[1], 'package')) {
+    
+                $_SESSION['success_msg'] = 'Votre colis N°'. explode('&', $_POST['package_deletion'])[1] .' a été supprimé avec succès';
+        
                 header("location:". redirect($_SESSION['theme'], PROJECT.'customer/dash/packages-listings'));
-
+        
             }
     
         }
 
     } else {
 
-        if (deletedPackageOrPackagesGroup($_POST['package_deletion'], 'package')) {
+        $_SESSION['error_msg'] = 'Le colis N°'. explode('&', $_POST['package_deletion'])[1] .' ne peut être supprimé.';
 
-            $_SESSION['success_msg'] = 'Votre colis N°'. $_POST['package_deletion'] .' a été supprimé avec succès';
+        header("location:". redirect($_SESSION['theme'], PROJECT.'customer/dash/packages-listings'));
     
-            header("location:". redirect($_SESSION['theme'], PROJECT.'customer/dash/packages-listings'));
-    
-        }
-
     }
     
 } else {
@@ -161,7 +182,7 @@ if (!empty($_POST['confirm'])) {
 } else {
 
     header("location:". redirect($_SESSION['theme'], PROJECT.'customer/dash/packages-listings'));
-    
+
 }
 
 //Confirmation

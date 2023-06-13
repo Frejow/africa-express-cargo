@@ -173,3 +173,9 @@ $redirectUrl = $_SESSION['current_url'];
                 header('Content-Type: application/json');
                 echo json_encode($response);
                 exit;
+
+
+                <div class="form-check ml-5">
+                            <input class="form-check-input" type="checkbox" name="terms" id="myBox" onchange="activeButton()" />
+                            <label class="" for="flexCheckChecked">J'accepte les termes<span class="text-danger">*</span></label>
+                        </div>

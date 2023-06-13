@@ -8,19 +8,19 @@ if (empty($nom) || empty($prenom) || empty($pseudo) || empty($mail) || empty($co
     $errors = "Tous les champs sont requis.";
 }
 
-if (isset($pass) && !empty($pass) && strlen($pass) >= 8 && empty($repass)) {
+if (!empty($pass) && strlen($pass) >= 8 && empty($repass)) {
     $errors = "Le champs Confirmez mot de passe est requis.";
 }
 
-if (isset($mail) && !empty($mail) && !filter_var($mail, FILTER_VALIDATE_EMAIL)) {
+if (!empty($mail) && !filter_var($mail, FILTER_VALIDATE_EMAIL)) {
     $errors = "Entrez une addresse email valide s'il vous plaît.";
 }
 
-if (isset($pass) && !empty($pass) && strlen($pass) < 8) {
+if (!empty($pass) && strlen($pass) < 8) {
     $errors = "Le champs Mot de passe doit contenir minimum 8 caractères. Les espaces ne sont pas pris en compte.";
 }
 
-if ((isset($repass) && !empty($repass) && strlen($pass) >= 8 && $repass != $pass)) {
+if ((!empty($repass) && strlen($pass) >= 8 && $repass != $pass)) {
     $errors = "Le champs Confirmez mot de passe doit recevoir le même mot de passe que celui du champs Mot de passe.";
 }
 
@@ -34,21 +34,23 @@ if (filter_var($mail, FILTER_VALIDATE_EMAIL)) {
     }
     
     if (checkExistFieldEntry('phone_number', $tel) && !checkExistFieldEntry('user_name', $pseudo) && !checkExistFieldEntry('mail', $mail)) {
-        $errors = "Ce numéro " . $tel . " appartient à un de nos utilisateur.";
+        $errors = "Le numéro " . $tel . " appartient à un de nos utilisateur.";
     }
 }
 
 if (empty($errors)) {
 
+    $profile = "AGENT";
+
     if (registration($nom, $prenom, $tel, $pseudo, $mail, $country, $pass, $profile)) {
 
         $mail_assoc_to_deleted_account = checkMailAssocToDeletedAccount($mail);
 
-        if (isset($mail_assoc_to_deleted_account) && !empty($mail_assoc_to_deleted_account)) {
+        if (!empty($mail_assoc_to_deleted_account)) {
 
             foreach ($mail_assoc_to_deleted_account as $key => $value) {
 
-                backDeletedAccount($mail_assoc_to_deleted_account[$key]['id'], $mail);
+                backDeletedAccount($value['id'], $mail);
 
             }
         }
