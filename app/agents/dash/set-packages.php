@@ -1,6 +1,6 @@
 <?php include 'app/common/agents/1stpart.php' ?>
 
-<form action="<?= redirect($_SESSION['theme'], PROJECT.'agents/dash-treatment/set-noaddressee-packages') ?>" method="post" class="mt-3">
+<form action="<?= redirect($_SESSION['theme'], PROJECT.'agents/dash-treatment/set-packages') ?>" method="post" class="mt-3">
     <div class="page-body">
         <div class="container-xl">
             <div class="row row-deck row-cards">
@@ -8,7 +8,7 @@
                     <div class="card">
                         <div class="card-header d-flex">
                             <div>
-                                <a href="<?= redirect($_SESSION['theme'], PROJECT.'agents/dash/noaddressee-packages-listings') ?>" class="btn btn-link link-secondary" style="border:none; width:fit-content;">
+                                <a href="<?= redirect($_SESSION['theme'], PROJECT.'agents/dash/packages-listings') ?>" class="btn btn-link link-secondary" style="border:none; width:fit-content;">
                                 <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
                                     <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
                                     <path d="M9 11l-4 4l4 4m-4 -4h11a4 4 0 0 0 0 -8h-1"></path>
@@ -17,9 +17,24 @@
                             </div>
                         </div>
                         <div class="card-body">
-                            <div class="mb-3 d-none">
-                                <label class="form-label">Nom du colis</label>
-                                <input type="text" class="form-control" name="example-text-input" placeholder="Entrez le nom de votre colis">
+                            <div class="mb-3 ">
+                                <label class="form-label">Client ( Laissez ce champs tel quel s'il s'agit d'un colis sans destinataire ) </label>
+                                <div class="">
+                                    <select class="form-select select2bs4"  required name="customerSelect" data-placeholder="Laissez ce champs vide s'il s'agit d'un colis sans destinataire" style="width: 100%;">
+                                    <option value="38">Sans destinataire</option>
+                                    <?php
+                                    $customersListing = customersListing();
+                                    if (!empty($customersListing)) {
+                                        foreach ($customersListing as $key => $value) {
+                                    ?>
+                                        <option value="<?= $value['id'] ?>"><?= $value['name'] .' '. $value['first_names'] ?></option>
+
+                                    <?php
+                                        }
+                                    }
+                                    ?>
+                                    </select>
+                                </div>
                             </div>
                             <label class="form-label">Type de produits</label>
                             <div class="form-selectgroup-boxes row mb-3">
@@ -149,7 +164,7 @@
                             </div>
                         </div>
                         <div class="card-footer d-flex">
-                            <a href="<?= redirect($_SESSION['theme'], PROJECT.'agents/dash/noaddressee-packages-listings') ?>" class="btn btn-link link-secondary" style="border:none;">
+                            <a href="<?= redirect($_SESSION['theme'], PROJECT.'agents/dash/packages-listings') ?>" class="btn btn-link link-secondary" style="border:none;">
                                 Annuler
                             </a>
                             <button type="submit" class="btn text-white ms-auto btn-warning">

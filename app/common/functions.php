@@ -1,6 +1,7 @@
 <?php
 
 /** Initialization instance of phpmailer classes */
+
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
 
@@ -13,7 +14,7 @@ use PHPMailer\PHPMailer\Exception;
  */
 function redirect(string $theme, string $link): string
 {
-    return $link.'?'.$theme;
+    return $link . '?' . $theme;
 }
 
 /**
@@ -28,7 +29,6 @@ function getResource($params, string $default_resource, $session_type, string $r
     if (is_array($session_type) && !empty($session_type)) {
 
         $resource = $params;
-
     } else {
 
         $resource = $default_resource;
@@ -38,7 +38,6 @@ function getResource($params, string $default_resource, $session_type, string $r
         header("location:" . PROJECT . $redirectUrl);
 
         exit;
-
     }
     return $resource;
 }
@@ -68,7 +67,7 @@ function secure($data): string
  * @param string $profile The user type of Profile (CUSTOMER, AGENT or ADMIN)
  * 
  * @return bool The result.
-*/
+ */
 function registration(string $name, string $first_names, string $phone_number, string $user_name, string $mail, string $country, string $password, string $profile): bool
 {
 
@@ -154,7 +153,7 @@ function mailSendin(string $destination, string $recipient, string $subject, str
  * @param string $mail The mail address submitted by user at registration.
  * 
  * @return bool The result.
-*/
+ */
 function backDeletedAccount(int $id, string $mail): bool
 {
     date_default_timezone_set("Africa/Lagos");
@@ -170,7 +169,7 @@ function backDeletedAccount(int $id, string $mail): bool
     $request_execution = $request_prepare->execute(
         [
             'id'  => $id,
-            'mail' => $mail.'_was_deleted',
+            'mail' => $mail . '_was_deleted',
             'user_name' => 'this_user_name_was_deleted',
             'phone_number' => 'this_user_phone_number_was_deleted',
             'is_active' => 0,
@@ -264,7 +263,7 @@ function checkExistFieldEntry(string $fieldtype, string $fieldentry): bool
 
     $database = databaseLogin();
 
-    $request = "SELECT * FROM user WHERE " .$fieldtype."=:fieldtype and is_deleted = :is_deleted";
+    $request = "SELECT * FROM user WHERE " . $fieldtype . "=:fieldtype and is_deleted = :is_deleted";
 
     $request_prepare = $database->prepare($request);
 
@@ -315,7 +314,6 @@ function checkMailAssocToDeletedAccount(string $mail): array
         if (!empty($data) && is_array($data)) {
 
             $mail_assoc_to_deleted_account = $data;
-
         }
     }
 
@@ -364,7 +362,7 @@ function updateAccountStatus(int $user_id): bool
  * @param string $mail The user mail address.
  * 
  * @return array $user_id The user id.
-*/
+ */
 function getUserId(string $mail): array
 {
     $user_id = [];
@@ -397,7 +395,7 @@ function getUserId(string $mail): array
  * @param int $user_id The user id.
  * 
  * @return array $mail_pseudo The mail and the username.
-*/
+ */
 function getUserMailAndUsername(int $user_id): array
 {
     $mail_pseudo = [];
@@ -430,7 +428,7 @@ function getUserMailAndUsername(int $user_id): array
  * @param string $mail The mail address.
  * 
  * @return array $user_name The username.
-*/
+ */
 function getUsername(string $mail): array
 {
     $user_name = [];
@@ -749,7 +747,7 @@ function retrieveUserbyPseudoAndPassword(string $pseudo, string $password, strin
         'is_active' => $is_active,
         'is_deleted' => $is_deleted
     ]);
-    
+
     if ($request_execution) {
 
         $data = $request_prepare->fetch(PDO::FETCH_ASSOC);
@@ -757,7 +755,6 @@ function retrieveUserbyPseudoAndPassword(string $pseudo, string $password, strin
         if (!empty($data) && is_array($data)) {
 
             $values = json_encode($data);
-
         }
     }
 
@@ -775,7 +772,7 @@ function retrieveUserbyPseudoAndPassword(string $pseudo, string $password, strin
  * @param string $phone_number The user Phone Number.
  * 
  * @return bool The result.
-*/
+ */
 function updatePersonalInf(int $id, string $name, string $first_names, string $user_name, string $country, string $mail, string $phone_number): bool
 {
     date_default_timezone_set("Africa/Lagos");
@@ -952,7 +949,7 @@ function deactivatedAccount(int $id): bool
  * @param int $id The user id.
  * 
  * @return bool The result.
-*/
+ */
 function deletedAccount(int $id): bool
 {
     date_default_timezone_set("Africa/Lagos");
@@ -1026,7 +1023,6 @@ function deleteDir(string $dir): void
     if (!is_dir($dir)) {
 
         return;
-
     }
 
     $contain = scandir($dir);
@@ -1040,11 +1036,9 @@ function deleteDir(string $dir): void
             if (is_dir($path)) {
 
                 deleteDir($path);
-
             } else {
 
                 unlink($path);
-
             }
         }
     }
@@ -1245,84 +1239,290 @@ function getPackageImages(int $package_id): array
  * @param int $packages_nb_per_page Packages number to show per page.
  * @param string $status Package status
  * @param string $search The value of search field. 
- * @param int $user_id The user id.
+ * @param mixed $packages_type The user id.
+ * @param mixed $user_id The user id.
  * 
  * @return array $list All packages list based on the provide values of the function parameters.
  */
-function listings(string $table, int $page, int $packages_nb_per_page, string $status, string $search, int $user_id): array
+function listings(string $table, int $page, int $packages_nb_per_page, string $status, string $search, $packages_type = null, $user_id = null): array
 {
 
     $list = [];
 
     $database = databaseLogin();
 
-    if ($status === 'Tout Afficher' && $search === 'UNDEFINED') {
+    if (!is_null($user_id)) {
 
-        $request = "SELECT * FROM " . $table . " WHERE user_id = :user_id and is_deleted = :is_deleted ORDER BY id DESC LIMIT " . $packages_nb_per_page . " OFFSET " . ($page - 1) * $packages_nb_per_page;
+        if ($status === 'Tout Afficher' && $search === 'UNDEFINED') {
 
-        $request_prepare = $database->prepare($request);
+            $request = "SELECT * FROM " . $table . " WHERE user_id = :user_id and is_deleted = :is_deleted ORDER BY id DESC LIMIT " . $packages_nb_per_page . " OFFSET " . ($page - 1) * $packages_nb_per_page;
 
-        $request_execution = $request_prepare->execute([
-            'user_id' => $user_id,
-            'is_deleted' => 0,
-        ]);
-    } elseif ($status !== 'Tout Afficher' && $search === 'UNDEFINED') {
+            $request_prepare = $database->prepare($request);
 
-        $request = "SELECT * FROM " . $table . " WHERE user_id = :user_id and status = :status and is_deleted = :is_deleted ORDER BY id DESC LIMIT " . $packages_nb_per_page . " OFFSET " . ($page - 1) * $packages_nb_per_page;
+            $request_execution = $request_prepare->execute([
+                'user_id' => $user_id,
+                'is_deleted' => 0,
+            ]);
+        } elseif ($status !== 'Tout Afficher' && $search === 'UNDEFINED') {
 
-        $request_prepare = $database->prepare($request);
+            $request = "SELECT * FROM " . $table . " WHERE user_id = :user_id and status = :status and is_deleted = :is_deleted ORDER BY id DESC LIMIT " . $packages_nb_per_page . " OFFSET " . ($page - 1) * $packages_nb_per_page;
 
-        $request_execution = $request_prepare->execute([
-            'user_id' => $user_id,
-            'status' => $status,
-            'is_deleted' => 0,
-        ]);
-    } elseif ($status === 'Tout Afficher' && $search !== 'UNDEFINED') {
+            $request_prepare = $database->prepare($request);
 
-        $request = "SELECT * FROM " . $table . " WHERE user_id = :user_id and is_deleted = :is_deleted AND ";
+            $request_execution = $request_prepare->execute([
+                'user_id' => $user_id,
+                'status' => $status,
+                'is_deleted' => 0,
+            ]);
+        } elseif ($status === 'Tout Afficher' && $search !== 'UNDEFINED') {
 
-        $search_terms_array = str_split($search);
+            $request = "SELECT * FROM " . $table . " WHERE user_id = :user_id and is_deleted = :is_deleted AND ";
 
-        $search_terms_count = count($search_terms_array);
+            $search_terms_array = str_split($search);
 
-        for ($i = 0; $i < $search_terms_count; $i++) {
-            $request .= "tracking_number LIKE '%" . $search_terms_array[$i] . "%'";
-            if ($i != $search_terms_count - 1) {
-                $request .= " AND ";
+            $search_terms_count = count($search_terms_array);
+
+            for ($i = 0; $i < $search_terms_count; $i++) {
+                $request .= "tracking_number LIKE '%" . $search_terms_array[$i] . "%'";
+                if ($i != $search_terms_count - 1) {
+                    $request .= " AND ";
+                }
             }
-        }
-        $request .= " ORDER BY id DESC LIMIT " . $packages_nb_per_page . " OFFSET " . ($page - 1) * $packages_nb_per_page;
+            $request .= " ORDER BY id DESC LIMIT " . $packages_nb_per_page . " OFFSET " . ($page - 1) * $packages_nb_per_page;
 
-        $request_prepare = $database->prepare($request);
+            $request_prepare = $database->prepare($request);
 
-        $request_execution = $request_prepare->execute([
-            'user_id' => $user_id,
-            'is_deleted' => 0,
-        ]);
-    } elseif ($status !== 'Tout Afficher' && $search !== 'UNDEFINED') {
+            $request_execution = $request_prepare->execute([
+                'user_id' => $user_id,
+                'is_deleted' => 0,
+            ]);
+        } elseif ($status !== 'Tout Afficher' && $search !== 'UNDEFINED') {
 
-        $request = "SELECT * FROM " . $table . " WHERE user_id = :user_id and is_deleted = :is_deleted AND ";
+            $request = "SELECT * FROM " . $table . " WHERE user_id = :user_id and is_deleted = :is_deleted AND ";
 
-        $search_terms_array = str_split($search);
+            $search_terms_array = str_split($search);
 
-        $search_terms_count = count($search_terms_array);
+            $search_terms_count = count($search_terms_array);
 
-        for ($i = 0; $i < $search_terms_count; $i++) {
-            $request .= "tracking_number LIKE '%" . $search_terms_array[$i] . "%'";
-            if ($i != $search_terms_count - 1) {
-                $request .= " AND ";
+            for ($i = 0; $i < $search_terms_count; $i++) {
+                $request .= "tracking_number LIKE '%" . $search_terms_array[$i] . "%'";
+                if ($i != $search_terms_count - 1) {
+                    $request .= " AND ";
+                }
             }
+            $request .= " AND status = :status ORDER BY id DESC LIMIT " . $packages_nb_per_page . " OFFSET " . ($page - 1) * $packages_nb_per_page;
+
+            $request_prepare = $database->prepare($request);
+
+            $request_execution = $request_prepare->execute([
+                'user_id' => $user_id,
+                'status' => $status,
+                'is_deleted' => 0,
+            ]);
         }
-        $request .= " AND status = :status ORDER BY id DESC LIMIT " . $packages_nb_per_page . " OFFSET " . ($page - 1) * $packages_nb_per_page;
+    } 
+    
+    elseif (is_null($user_id) && $packages_type == 'Tous les colis') {
 
-        $request_prepare = $database->prepare($request);
+        if ($status === 'Tout Afficher' && $search === 'UNDEFINED') {
 
-        $request_execution = $request_prepare->execute([
-            'user_id' => $user_id,
-            'status' => $status,
-            'is_deleted' => 0,
-        ]);
+            $request = "SELECT * FROM " . $table . " WHERE is_deleted = :is_deleted ORDER BY id DESC LIMIT " . $packages_nb_per_page . " OFFSET " . ($page - 1) * $packages_nb_per_page;
+
+            $request_prepare = $database->prepare($request);
+
+            $request_execution = $request_prepare->execute([
+                'is_deleted' => 0,
+            ]);
+        } elseif ($status !== 'Tout Afficher' && $search === 'UNDEFINED') {
+
+            $request = "SELECT * FROM " . $table . " WHERE status = :status AND is_deleted = :is_deleted ORDER BY id DESC LIMIT " . $packages_nb_per_page . " OFFSET " . ($page - 1) * $packages_nb_per_page;
+
+            $request_prepare = $database->prepare($request);
+
+            $request_execution = $request_prepare->execute([
+                'status' => $status,
+                'is_deleted' => 0,
+            ]);
+        } elseif ($status === 'Tout Afficher' && $search !== 'UNDEFINED') {
+
+            $request = "SELECT * FROM " . $table . " WHERE is_deleted = :is_deleted AND ";
+
+            $search_terms_array = str_split($search);
+
+            $search_terms_count = count($search_terms_array);
+
+            for ($i = 0; $i < $search_terms_count; $i++) {
+                $request .= "tracking_number LIKE '%" . $search_terms_array[$i] . "%'";
+                if ($i != $search_terms_count - 1) {
+                    $request .= " AND ";
+                }
+            }
+            $request .= " ORDER BY id DESC LIMIT " . $packages_nb_per_page . " OFFSET " . ($page - 1) * $packages_nb_per_page;
+
+            $request_prepare = $database->prepare($request);
+
+            $request_execution = $request_prepare->execute([
+                'is_deleted' => 0,
+            ]);
+        } elseif ($status !== 'Tout Afficher' && $search !== 'UNDEFINED') {
+
+            $request = "SELECT * FROM " . $table . " WHERE is_deleted = :is_deleted AND ";
+
+            $search_terms_array = str_split($search);
+
+            $search_terms_count = count($search_terms_array);
+
+            for ($i = 0; $i < $search_terms_count; $i++) {
+                $request .= "tracking_number LIKE '%" . $search_terms_array[$i] . "%'";
+                if ($i != $search_terms_count - 1) {
+                    $request .= " AND ";
+                }
+            }
+            $request .= " AND status = :status ORDER BY id DESC LIMIT " . $packages_nb_per_page . " OFFSET " . ($page - 1) * $packages_nb_per_page;
+
+            $request_prepare = $database->prepare($request);
+
+            $request_execution = $request_prepare->execute([
+                'status' => $status,
+                'is_deleted' => 0,
+            ]);
+        }
+    } 
+    
+    elseif (is_null($user_id) && $packages_type == 'Colis avec destinataire') {
+
+        if ($status === 'Tout Afficher' && $search === 'UNDEFINED') {
+
+            $request = "SELECT * FROM " . $table . " WHERE user_id <> 38 AND is_deleted = :is_deleted ORDER BY id DESC LIMIT " . $packages_nb_per_page . " OFFSET " . ($page - 1) * $packages_nb_per_page;
+
+            $request_prepare = $database->prepare($request);
+
+            $request_execution = $request_prepare->execute([
+                'is_deleted' => 0,
+            ]);
+        } elseif ($status !== 'Tout Afficher' && $search === 'UNDEFINED') {
+
+            $request = "SELECT * FROM " . $table . " WHERE user_id <> 38 AND status = :status AND is_deleted = :is_deleted ORDER BY id DESC LIMIT " . $packages_nb_per_page . " OFFSET " . ($page - 1) * $packages_nb_per_page;
+
+            $request_prepare = $database->prepare($request);
+
+            $request_execution = $request_prepare->execute([
+                'status' => $status,
+                'is_deleted' => 0,
+            ]);
+        } elseif ($status === 'Tout Afficher' && $search !== 'UNDEFINED') {
+
+            $request = "SELECT * FROM " . $table . " WHERE user_id <> 38 AND is_deleted = :is_deleted AND ";
+
+            $search_terms_array = str_split($search);
+
+            $search_terms_count = count($search_terms_array);
+
+            for ($i = 0; $i < $search_terms_count; $i++) {
+                $request .= "tracking_number LIKE '%" . $search_terms_array[$i] . "%'";
+                if ($i != $search_terms_count - 1) {
+                    $request .= " AND ";
+                }
+            }
+            $request .= " ORDER BY id DESC LIMIT " . $packages_nb_per_page . " OFFSET " . ($page - 1) * $packages_nb_per_page;
+
+            $request_prepare = $database->prepare($request);
+
+            $request_execution = $request_prepare->execute([
+                'is_deleted' => 0,
+            ]);
+        } elseif ($status !== 'Tout Afficher' && $search !== 'UNDEFINED') {
+
+            $request = "SELECT * FROM " . $table . " WHERE user_id <> 38 AND is_deleted = :is_deleted AND ";
+
+            $search_terms_array = str_split($search);
+
+            $search_terms_count = count($search_terms_array);
+
+            for ($i = 0; $i < $search_terms_count; $i++) {
+                $request .= "tracking_number LIKE '%" . $search_terms_array[$i] . "%'";
+                if ($i != $search_terms_count - 1) {
+                    $request .= " AND ";
+                }
+            }
+            $request .= " AND status = :status ORDER BY id DESC LIMIT " . $packages_nb_per_page . " OFFSET " . ($page - 1) * $packages_nb_per_page;
+
+            $request_prepare = $database->prepare($request);
+
+            $request_execution = $request_prepare->execute([
+                'status' => $status,
+                'is_deleted' => 0,
+            ]);
+        }
     }
+
+    elseif (is_null($user_id) && $packages_type == 'Colis sans destinataire') {
+
+        if ($status === 'Tout Afficher' && $search === 'UNDEFINED') {
+
+            $request = "SELECT * FROM " . $table . " WHERE user_id = 38 AND is_deleted = :is_deleted ORDER BY id DESC LIMIT " . $packages_nb_per_page . " OFFSET " . ($page - 1) * $packages_nb_per_page;
+
+            $request_prepare = $database->prepare($request);
+
+            $request_execution = $request_prepare->execute([
+                'is_deleted' => 0,
+            ]);
+        } elseif ($status !== 'Tout Afficher' && $search === 'UNDEFINED') {
+
+            $request = "SELECT * FROM " . $table . " WHERE user_id = 38 AND status = :status AND is_deleted = :is_deleted ORDER BY id DESC LIMIT " . $packages_nb_per_page . " OFFSET " . ($page - 1) * $packages_nb_per_page;
+
+            $request_prepare = $database->prepare($request);
+
+            $request_execution = $request_prepare->execute([
+                'status' => $status,
+                'is_deleted' => 0,
+            ]);
+        } elseif ($status === 'Tout Afficher' && $search !== 'UNDEFINED') {
+
+            $request = "SELECT * FROM " . $table . " WHERE user_id = 38 AND is_deleted = :is_deleted AND ";
+
+            $search_terms_array = str_split($search);
+
+            $search_terms_count = count($search_terms_array);
+
+            for ($i = 0; $i < $search_terms_count; $i++) {
+                $request .= "tracking_number LIKE '%" . $search_terms_array[$i] . "%'";
+                if ($i != $search_terms_count - 1) {
+                    $request .= " AND ";
+                }
+            }
+            $request .= " ORDER BY id DESC LIMIT " . $packages_nb_per_page . " OFFSET " . ($page - 1) * $packages_nb_per_page;
+
+            $request_prepare = $database->prepare($request);
+
+            $request_execution = $request_prepare->execute([
+                'is_deleted' => 0,
+            ]);
+        } elseif ($status !== 'Tout Afficher' && $search !== 'UNDEFINED') {
+
+            $request = "SELECT * FROM " . $table . " WHERE user_id = 38 AND is_deleted = :is_deleted AND ";
+
+            $search_terms_array = str_split($search);
+
+            $search_terms_count = count($search_terms_array);
+
+            for ($i = 0; $i < $search_terms_count; $i++) {
+                $request .= "tracking_number LIKE '%" . $search_terms_array[$i] . "%'";
+                if ($i != $search_terms_count - 1) {
+                    $request .= " AND ";
+                }
+            }
+            $request .= " AND status = :status ORDER BY id DESC LIMIT " . $packages_nb_per_page . " OFFSET " . ($page - 1) * $packages_nb_per_page;
+
+            $request_prepare = $database->prepare($request);
+
+            $request_execution = $request_prepare->execute([
+                'status' => $status,
+                'is_deleted' => 0,
+            ]);
+        }
+    }
+
 
     if ($request_execution) {
 
@@ -1340,27 +1540,70 @@ function listings(string $table, int $page, int $packages_nb_per_page, string $s
 /** Number of rows in a package or packages group table
  * 
  * @param string $table The name of table.
- * @param int $user_id.
+ * @param mixed $packages_type.
+ * @param mixed $user_id.
  * 
  * @return array $rows The number of rows.
  */
-function countRowsInTable(string $table, int $user_id): array
+function countRowsInTable(string $table, $packages_type = null, $user_id = null): array
 {
 
     $rows = [];
 
     $database = databaseLogin();
 
-    $request = "SELECT COUNT(*) FROM " . $table . " WHERE is_deleted = :is_deleted and user_id = :user_id";
+    if (!is_null($user_id)) {
 
-    $request_prepare = $database->prepare($request);
+        $request = "SELECT COUNT(*) FROM " . $table . " WHERE is_deleted = :is_deleted and user_id = :user_id";
 
-    $request_execution = $request_prepare->execute(
-        [
-            "is_deleted" => 0,
-            "user_id" => $user_id
-        ]
-    );
+        $request_prepare = $database->prepare($request);
+
+        $request_execution = $request_prepare->execute(
+            [
+                "is_deleted" => 0,
+                "user_id" => $user_id
+            ]
+        );
+    } 
+    
+    elseif (is_null($user_id) && $packages_type == 'Tous les colis') {
+
+        $request = "SELECT COUNT(*) FROM " . $table . " WHERE is_deleted = :is_deleted";
+
+        $request_prepare = $database->prepare($request);
+
+        $request_execution = $request_prepare->execute(
+            [
+                "is_deleted" => 0,
+            ]
+        );
+    }
+
+    elseif (is_null($user_id) && $packages_type == 'Colis avec destinataire') {
+
+        $request = "SELECT COUNT(*) FROM " . $table . " WHERE user_id <> 38 AND is_deleted = :is_deleted";
+
+        $request_prepare = $database->prepare($request);
+
+        $request_execution = $request_prepare->execute(
+            [
+                "is_deleted" => 0,
+            ]
+        );
+    }
+
+    elseif (is_null($user_id) && $packages_type == 'Colis sans destinataire') {
+
+        $request = "SELECT COUNT(*) FROM " . $table . " WHERE user_id = 38 AND is_deleted = :is_deleted";
+
+        $request_prepare = $database->prepare($request);
+
+        $request_execution = $request_prepare->execute(
+            [
+                "is_deleted" => 0,
+            ]
+        );
+    }
 
     if ($request_execution) {
 
@@ -1413,7 +1656,7 @@ function deletedPackageOrPackagesGroup(string $tracking_number, string $table): 
  * @param int $user_id The user id.
  * 
  * @return array $packages_listing All packages concerned.
-*/
+ */
 function packagesListingInSelectField(int $user_id): array
 {
 
@@ -1696,4 +1939,70 @@ function updatePackageStatus(string $tracking_number, string $status): bool
     }
 
     return $updatePackageStatus;
+}
+
+/** Check if there is atleast one active package with delivered status
+ * 
+ * @return array The result.
+ */
+function checkDeliveredStatus(): array
+{
+
+    $packageDelivered = [];
+
+    $database = databaseLogin();
+
+    $request = "SELECT * FROM package WHERE status = :status and is_deleted = :is_deleted";
+
+    $request_prepare = $database->prepare($request);
+
+    $request_execution = $request_prepare->execute([
+        'status' => 'Livrer',
+        'is_deleted' => 0
+    ]);
+
+    if ($request_execution) {
+
+        $data = $request_prepare->fetchAll(PDO::FETCH_ASSOC);
+
+        if (!empty($data) && is_array($data)) {
+            $packageDelivered = $data;
+        }
+    }
+
+    return $packageDelivered;
+}
+
+/** Listing of all customers 
+ * 
+ * @return array $customersListing All packages concerned.
+ */
+function customersListing(): array
+{
+
+    $customersListing = [];
+
+    $database = databaseLogin();
+
+    $request = "SELECT * FROM user WHERE profile = :profile and is_deleted = :is_deleted and is_active = :is_active ORDER BY id DESC";
+
+    $request_prepare = $database->prepare($request);
+
+    $request_execution = $request_prepare->execute([
+        'profile' => 'CUSTOMER',
+        'is_deleted' => 0,
+        'is_active' => 1
+    ]);
+
+    if ($request_execution) {
+
+        $data = $request_prepare->fetchAll(PDO::FETCH_ASSOC);
+
+        if (!empty($data) && is_array($data)) {
+
+            $customersListing = $data;
+        }
+    }
+
+    return $customersListing;
 }

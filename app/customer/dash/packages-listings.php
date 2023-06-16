@@ -60,13 +60,13 @@ if (isset($_SESSION['research']) && !empty($_SESSION['research'])) {
 }
 
 //Affectation du retour de la fonction listings avec les cinq paramètres suscités à la variable $packages_lisitngs
-$packages_listings = listings($table, $_SESSION['page'], $_SESSION['packages_nb_per_page'], $_SESSION['status'], strtoupper($_SESSION['search']), $data['id']);
+$packages_listings = listings($table, $_SESSION['page'], $_SESSION['packages_nb_per_page'], $_SESSION['status'], strtoupper($_SESSION['search']), null, $data['id']);
 
 /**
  * Affectation du retour de la fonction countRowsInTable avec pour paramètre la table concernée par le listings à la 
  * variable $rows. Cette fonction retourne le nombre de lignes dans la table avec le champs is_deleted = 0
  */
-$rows = countRowsInTable($table, $data['id']);
+$rows = countRowsInTable($table, null, $data['id']);
 
 ?>
 
@@ -207,7 +207,21 @@ $rows = countRowsInTable($table, $data['id']);
                                         <th>-> Groupe Colis ?</th>
                                         <th></th>
                                         <th></th>
-                                        <th></th>
+                                        <?php
+                                        if (!empty(checkDeliveredStatus()) && sizeof(checkDeliveredStatus()) > 1) {
+                                        ?>
+                                            <th>
+                                                <a class="btn-link link-success" href="#" data-bs-toggle="modal" data-bs-target="#confirmAllModal">
+                                                    Confirmer pour tout
+                                                </a>
+                                            </th>
+                                        <?php
+                                        } else {
+                                        ?>
+                                            <th></th>
+                                        <?php
+                                        }
+                                        ?>
                                     </tr>
                                 </thead>
                                 <tbody class="text-center">
@@ -500,6 +514,40 @@ $rows = countRowsInTable($table, $data['id']);
                                                                             Annuler
                                                                         </a></div>
                                                                     <div class="col"><button type="submit" name="confirm" value="<?= $package["tracking_number"] ?>" class="btn btn-success w-100" data-bs-dismiss="modal">
+                                                                            Oui
+                                                                        </button></div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <!--
+                                                Modal de confirmation de réception de tous les colis livrés
+                                            -->
+                                            <div class="modal modal-blur fade" id="confirmAllModal" tabindex="-1" role="dialog" data-bs-backdrop='static' aria-hidden="true">
+                                                <div class="modal-dialog modal-sm modal-dialog-centered modal-dialog-scrollable" role="document">
+                                                    <div class="modal-content">
+                                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                        <div class="modal-status bg-success"></div>
+                                                        <div class="modal-body text-center py-4">
+                                                            <!-- Download SVG icon from http://tabler-icons.io/i/circle-check -->
+                                                            <svg xmlns="http://www.w3.org/2000/svg" class="icon mb-2 text-green icon-lg" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                                                <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                                                                <path d="M12 12m-9 0a9 9 0 1 0 18 0a9 9 0 1 0 -18 0" />
+                                                                <path d="M9 12l2 2l4 -4" />
+                                                            </svg>
+
+                                                            <h3>Vous confirmez avoir reçu tous les colis suivants :</h3>
+
+                                                        </div>
+                                                        <div class="modal-footer">
+                                                            <div class="w-100">
+                                                                <div class="row">
+                                                                    <div class="col"><a href="#" class="btn w-100" data-bs-dismiss="modal">
+                                                                            Annuler
+                                                                        </a></div>
+                                                                    <div class="col"><button type="submit" name="confirmAll" value="" class="btn btn-success w-100" data-bs-dismiss="modal">
                                                                             Oui
                                                                         </button></div>
                                                                 </div>

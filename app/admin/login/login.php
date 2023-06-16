@@ -42,7 +42,7 @@ if (!empty($errors)) {
 
     if (!empty($_COOKIE['thm'])) { $theme = $_COOKIE['thm']; }
 
-    $redirectUrl = PROJECT.'admin/dash/noaddressee-packages-listings'.$theme;
+    $redirectUrl = PROJECT.'admin/dash/packages-listings'.$theme;
 
     if (!empty($_COOKIE['crl'])) { $redirectUrl = $_COOKIE['crl']; }
 

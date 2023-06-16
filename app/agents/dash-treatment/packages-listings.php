@@ -7,7 +7,7 @@ if (isset($_POST['previous'])) {
 
     $_SESSION['previous_page'] = $_POST['previous'];
 
-    header("location:". redirect($_SESSION['theme'], PROJECT.'agents/dash/noaddressee-packages-listings'));
+    header("location:". redirect($_SESSION['theme'], PROJECT.'agents/dash/packages-listings'));
 }
 
 if (isset($_POST['next'])) {
@@ -16,7 +16,7 @@ if (isset($_POST['next'])) {
 
     if (isset($_SESSION['next_page'])) {
 
-        header("location:". redirect($_SESSION['theme'], PROJECT.'agents/dash/noaddressee-packages-listings'));
+        header("location:". redirect($_SESSION['theme'], PROJECT.'agents/dash/packages-listings'));
 
     }
 } 
@@ -25,7 +25,7 @@ if (isset($_POST['next'])) {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-//Filter
+//Filter Status
 
 if (isset($_POST['statusSelect']) && !empty($_POST['statusSelect'])) {
 
@@ -34,7 +34,7 @@ if (isset($_POST['statusSelect']) && !empty($_POST['statusSelect'])) {
 
     if ($_SESSION['status'] == $_POST['statusSelect']) {
 
-        header("location:". redirect($_SESSION['theme'], PROJECT.'agents/dash/noaddressee-packages-listings'));
+        header("location:". redirect($_SESSION['theme'], PROJECT.'agents/dash/packages-listings'));
 
     } else {
 
@@ -44,14 +44,39 @@ if (isset($_POST['statusSelect']) && !empty($_POST['statusSelect'])) {
 
         if (isset($_SESSION['selected_status'])) {
 
-            header("location:". redirect($_SESSION['theme'], PROJECT.'agents/dash/noaddressee-packages-listings'));
+            header("location:". redirect($_SESSION['theme'], PROJECT.'agents/dash/packages-listings'));
 
         }
     }
     
 } 
 
-//Filter
+//Filter Status
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+//Filter Package
+
+if (!empty($_POST['packagesType'])) {
+
+    if ($_SESSION['package'] == $_POST['packagesType']) {
+
+        header("location:". redirect($_SESSION['theme'], PROJECT.'agents/dash/packages-listings'));
+
+    } else {
+
+        $_SESSION['packages_type'] = $_POST['packagesType'];
+
+        if (isset($_SESSION['packages_type'])) {
+
+            header("location:". redirect($_SESSION['theme'], PROJECT.'agents/dash/packages-listings'));
+
+        }
+    }
+    
+} 
+
+//Filter Package
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -63,13 +88,13 @@ if (isset($_POST['search']) && !empty($_POST['search'])) {
 
     if (isset($_SESSION['research'])) {
 
-        header("location:". redirect($_SESSION['theme'], PROJECT.'agents/dash/noaddressee-packages-listings'));
+        header("location:". redirect($_SESSION['theme'], PROJECT.'agents/dash/packages-listings'));
 
     }
 //die ('dedans');
 } else {
 
-    header("location:". redirect($_SESSION['theme'], PROJECT.'agents/dash/noaddressee-packages-listings'));
+    header("location:". redirect($_SESSION['theme'], PROJECT.'agents/dash/packages-listings'));
 
 }
 
@@ -84,7 +109,7 @@ if (isset($_POST['select'])) {
     
     if ($_SESSION['packages_nb_per_page'] == $_POST['select']) {
 
-        header("location:". redirect($_SESSION['theme'], PROJECT.'agents/dash/noaddressee-packages-listings'));
+        header("location:". redirect($_SESSION['theme'], PROJECT.'agents/dash/packages-listings'));
 
     } else {
 
@@ -92,7 +117,7 @@ if (isset($_POST['select'])) {
 
         $_SESSION['select_packages_nb_per_page'] = $_POST['select'];
 
-        header("location:". redirect($_SESSION['theme'], PROJECT.'agents/dash/noaddressee-packages-listings'));
+        header("location:". redirect($_SESSION['theme'], PROJECT.'agents/dash/packages-listings'));
         
     }
     
@@ -116,7 +141,7 @@ if (isset($_POST['package_deletion']) && !empty($_POST['package_deletion'])) {
 
                 $_SESSION['success_msg'] = 'Votre colis N°'. explode('&', $_POST['package_deletion'])[0] .' a été supprimé avec succès';
     
-                header("location:". redirect($_SESSION['theme'], PROJECT.'agents/dash/noaddressee-packages-listings'));
+                header("location:". redirect($_SESSION['theme'], PROJECT.'agents/dash/packages-listings'));
 
             }
     
@@ -128,7 +153,7 @@ if (isset($_POST['package_deletion']) && !empty($_POST['package_deletion'])) {
 
             $_SESSION['success_msg'] = 'Votre colis N°'. $_POST['package_deletion'] .' a été supprimé avec succès';
     
-            header("location:". redirect($_SESSION['theme'], PROJECT.'agents/dash/noaddressee-packages-listings'));
+            header("location:". redirect($_SESSION['theme'], PROJECT.'agents/dash/packages-listings'));
     
         }
 

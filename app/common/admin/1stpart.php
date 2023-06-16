@@ -42,13 +42,13 @@ $_SESSION['admin_current_url'] = "{$_SERVER['REQUEST_SCHEME']}://{$_SERVER['HTTP
             case "edit-shipping-packages-group":
                 echo "<title>Modifier Groupe de colis</title>";
                 break;
-            case "noaddressee-packages-listings":
+            case "packages-listings":
                 echo "<title>Colis sans destinataire</title>";
                 break;
-            case "set-noaddressee-packages":
+            case "set-packages":
                 echo "<title>Ajouter Colis sans destinataire</title>";
                 break;
-            case "edit-noaddressee-packages":
+            case "edit-packages":
                 echo "<title>Modifier Colis sans destinataire</title>";
                 break;
             case "profile":
@@ -309,12 +309,12 @@ $_SESSION['admin_current_url'] = "{$_SERVER['REQUEST_SCHEME']}://{$_SERVER['HTTP
                         </li>
                         <li class="nav-item 
                             <?php
-                            if ($params[2] == 'noaddressee-packages-listings' || $params[2] == 'set-noaddressee-packages' || $params[2] == 'edit-noaddressee-packages'){
+                            if ($params[2] == 'packages-listings' || $params[2] == 'set-packages' || $params[2] == 'edit-packages'){
                                 echo 'active';
                             }
                             ?>
                             ">
-                            <a class="nav-link" href="<?= redirect($_SESSION['theme'], PROJECT.'admin/dash/noaddressee-packages-listings') ?>">
+                            <a class="nav-link" href="<?= redirect($_SESSION['theme'], PROJECT.'admin/dash/packages-listings') ?>">
                                 <span class="nav-link-icon d-md-none d-lg-inline-block"><!-- Download SVG icon from http://tabler-icons.io/i/checkbox -->
                                     <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
                                         <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>

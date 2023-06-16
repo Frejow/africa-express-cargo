@@ -12,45 +12,6 @@ $_SESSION['customer_current_url'] = "{$_SERVER['REQUEST_SCHEME']}://{$_SERVER['H
     <?php
     if (isset($params[2]) && !empty($params[2])) {
         switch ($params[2]) {
-            case "customers-packages-listings":
-                echo "<title>Colis clients</title>";
-                break;
-            case "update-customers-packages":
-                echo "<title>Mettre à jour Colis clients</title>";
-                break;
-            case "customers-packages-group-listings":
-                echo "<title>Groupe de colis clients</title>";
-                break;
-            case "update-customers-packages-group":
-                echo "<title>Mettre à jour Groupe de colis clients</title>";
-                break;
-            case "agents-packages-group-listings":
-                echo "<title>Groupe de colis agents</title>";
-                break;
-            case "update-agents-packages-group":
-                echo "<title>Mettre à jour Groupe de colis agents</title>";
-                break;
-            case "shipping-packages-group-listings":
-                echo "<title>Groupe de colis</title>";
-                break;
-            case "add-packages-inshipping-packagesgroup":
-                echo "<title>Ajouter colis au groupe de colis</title>";
-                break;
-            case "set-shipping-packages-group":
-                echo "<title>Ajouter Groupe de colis</title>";
-                break;
-            case "edit-shipping-packages-group":
-                echo "<title>Modifier Groupe de colis</title>";
-                break;
-            case "noaddressee-packages-listings":
-                echo "<title>Colis sans destinataire</title>";
-                break;
-            case "set-noaddressee-packages":
-                echo "<title>Ajouter Colis sans destinataire</title>";
-                break;
-            case "edit-noaddressee-packages":
-                echo "<title>Modifier Colis sans destinataire</title>";
-                break;
             case "profile":
                 echo "<title>Mon Compte</title>";
                 break;
@@ -63,14 +24,11 @@ $_SESSION['customer_current_url'] = "{$_SERVER['REQUEST_SCHEME']}://{$_SERVER['H
             case "notifications":
                 echo "<title>Notifications</title>";
                 break;
-            case "customers-listings":
-                echo "<title>Liste des clients</title>";
-                break;
-            case "agents-listings":
-                echo "<title>Liste des agents</title>";
-                break;
             case "packages-listings":
                 echo "<title>Mes colis</title>";
+                break;
+            case "noaddressee-packages-listings":
+                echo "<title>Colis sans destinataire</title>";
                 break;
             case "set-packages":
                 echo "<title>Ajouter colis</title>";
@@ -367,11 +325,11 @@ $_SESSION['customer_current_url'] = "{$_SERVER['REQUEST_SCHEME']}://{$_SERVER['H
                             </div>
                         </a>
                         <div class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
-                            <a href='<?= redirect($_SESSION['theme'], PROJECT.'customer/dash/profile') ?>' class="dropdown-item">Mon Compte</a>
-                            <a href='<?= redirect($_SESSION['theme'], PROJECT.'customer/dash/feedback') ?>' class="dropdown-item">Feedback</a>
+                            <a href='<?= redirect($_SESSION['theme'], PROJECT . 'customer/dash/profile') ?>' class="dropdown-item">Mon Compte</a>
+                            <a href='<?= redirect($_SESSION['theme'], PROJECT . 'customer/dash/feedback') ?>' class="dropdown-item">Feedback</a>
                             <div class="dropdown-divider"></div>
-                            <a href='<?= redirect($_SESSION['theme'], PROJECT.'customer/dash/profile-settings') ?>' class="dropdown-item">Paramètres du compte</a>
-                            <a href='<?= redirect($_SESSION['theme'], PROJECT.'customer/logout') ?>' class="dropdown-item">Déconnexion</a>
+                            <a href='<?= redirect($_SESSION['theme'], PROJECT . 'customer/dash/profile-settings') ?>' class="dropdown-item">Paramètres du compte</a>
+                            <a href='<?= redirect($_SESSION['theme'], PROJECT . 'customer/logout') ?>' class="dropdown-item">Déconnexion</a>
                         </div>
                     </div>
                 </div>
@@ -383,7 +341,7 @@ $_SESSION['customer_current_url'] = "{$_SERVER['REQUEST_SCHEME']}://{$_SERVER['H
                     <div class="container-xl">
                         <ul class="navbar-nav">
                             <li class="nav-item d-lg-none <?= $params[2] == 'notifications' ? 'active' : '' ?>">
-                                <a class="nav-link" href="<?= redirect($_SESSION['theme'], PROJECT.'customer/dash/notifications') ?>">
+                                <a class="nav-link" href="<?= redirect($_SESSION['theme'], PROJECT . 'customer/dash/notifications') ?>">
                                     <span class="nav-link-icon d-md-none d-lg-inline-block"><!-- Download SVG icon from http://tabler-icons.io/i/checkbox -->
                                         <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
                                             <path stroke="none" d="M0 0h24v24H0z" fill="none" />
@@ -402,7 +360,7 @@ $_SESSION['customer_current_url'] = "{$_SERVER['REQUEST_SCHEME']}://{$_SERVER['H
                                 echo 'active';
                             }
                             ?>">
-                                <a class="nav-link" href="<?= redirect($_SESSION['theme'], PROJECT.'customer/dash/packages-listings') ?>">
+                                <a class="nav-link" href="<?= redirect($_SESSION['theme'], PROJECT . 'customer/dash/packages-listings') ?>">
                                     <span class="nav-link-icon d-md-none d-lg-inline-block"><!-- Download SVG icon from http://tabler-icons.io/i/checkbox -->
                                         <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
                                             <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
@@ -425,7 +383,7 @@ $_SESSION['customer_current_url'] = "{$_SERVER['REQUEST_SCHEME']}://{$_SERVER['H
                             }
                             ?>
                             ">
-                                <a class="nav-link" href="<?= redirect($_SESSION['theme'], PROJECT.'customer/dash/packages-group-listings') ?>">
+                                <a class="nav-link" href="<?= redirect($_SESSION['theme'], PROJECT . 'customer/dash/packages-group-listings') ?>">
                                     <span class="nav-link-icon d-md-none d-lg-inline-block"><!-- Download SVG icon from http://tabler-icons.io/i/home -->
                                         <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
                                             <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
@@ -446,7 +404,7 @@ $_SESSION['customer_current_url'] = "{$_SERVER['REQUEST_SCHEME']}://{$_SERVER['H
                                 </a>
                             </li>
                             <li class="nav-item <?= $params[2] == 'noaddressee-packages-listings' ? 'active' : '' ?>">
-                                <a class="nav-link" href="<?= redirect($_SESSION['theme'], PROJECT.'customer/dash/noaddressee-packages-listings') ?>">
+                                <a class="nav-link" href="<?= redirect($_SESSION['theme'], PROJECT . 'customer/dash/noaddressee-packages-listings') ?>">
                                     <span class="nav-link-icon d-md-none d-lg-inline-block"><!-- Download SVG icon from http://tabler-icons.io/i/checkbox -->
                                         <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
                                             <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>

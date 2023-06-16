@@ -1,3 +1,8 @@
+date_default_timezone_set('Europe/Paris');
+
+$date = "2014-02-01 14:25:47"; echo date('Y-m-d H:i:s', strtotime($date . " +10 min")); die;
+////////////////////////////////
+
 $_SESSION["login_errors"] = [];
 
 $errors = [];
@@ -49,7 +54,7 @@ if (empty($errors)) {
 
             $_SESSION['success_msg'] = 'Authentification réussie';
 
-            header("location:".PROJECT."agents/dash/noaddressee-packages-listings".$_COOKIE['thm']);
+            header("location:".PROJECT."agents/dash/packages-listings".$_COOKIE['thm']);
 
             setcookie('thm', '', time() - 3600, '/');
 
@@ -65,7 +70,7 @@ if (empty($errors)) {
             
             $_SESSION['success_msg'] = 'Authentification réussie';
 
-            header("location:".PROJECT."agents/dash/noaddressee-packages-listings?theme=light");
+            header("location:".PROJECT."agents/dash/packages-listings?theme=light");
 
         }
         

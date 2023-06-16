@@ -8,7 +8,7 @@
                     <div class="card">
                         <div class="card-header d-flex">
                             <div>
-                                <a href="<?= redirect($_SESSION['theme'], PROJECT.'agents/dash/noaddressee-packages-listings') ?>" class="btn btn-link link-secondary" style="border:none; width:fit-content;">
+                                <a href="<?= redirect($_SESSION['theme'], PROJECT.'agents/dash/packages-listings') ?>" class="btn btn-link link-secondary" style="border:none; width:fit-content;">
                                 <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
                                     <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
                                     <path d="M9 11l-4 4l4 4m-4 -4h11a4 4 0 0 0 0 -8h-1"></path>
@@ -149,7 +149,7 @@
                             </div>
                         </div>
                         <div class="card-footer d-flex">
-                            <a href="<?= redirect($_SESSION['theme'], PROJECT.'agents/dash/noaddressee-packages-listings') ?>" class="btn btn-link link-secondary" style="border:none;">
+                            <a href="<?= redirect($_SESSION['theme'], PROJECT.'agents/dash/packages-listings') ?>" class="btn btn-link link-secondary" style="border:none;">
                                 Annuler
                             </a>
                             <button type="submit" class="btn text-white ms-auto btn-warning">

@@ -37,9 +37,9 @@ if (isset($_SESSION['research']) && !empty($_SESSION['research'])) {
     $_SESSION['search'] = $_SESSION['research'];
 }
 
-$packages_group_listings = listings($table, $_SESSION['page'], $_SESSION['packages_nb_per_page'], $_SESSION['status'], strtoupper($_SESSION['search']), $data['id']);
+$packages_group_listings = listings($table, $_SESSION['page'], $_SESSION['packages_nb_per_page'], $_SESSION['status'], strtoupper($_SESSION['search']), null, $data['id']);
 
-$rows = countRowsInTable($table, $data['id']);
+$rows = countRowsInTable($table, null, $data['id']);
 
 ?>
 

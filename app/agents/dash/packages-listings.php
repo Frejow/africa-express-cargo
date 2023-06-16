@@ -13,35 +13,38 @@ include 'app/common/agents/1stpart.php';
 //Initialisation des valeurs par défaut des différents paramètres de la fonction de listings
 
 //Premier paramètre, le nom de la table en base de données à lister. Table "package" pour le cas présent
-$table = "package"; 
+$table = "package";
 
 //Second paramètre, le numéro de la page. 1 par défaut
 if (!isset($_SESSION['previous_page']) && !isset($_SESSION['next_page'])) {
-    $_SESSION['page'] = 1; 
+    $_SESSION['page'] = 1;
 }
 
 //Troisième paramètre, nombre de colis à afficher par page. 10 par défaut
-$_SESSION['packages_nb_per_page'] = 10; 
+$_SESSION['packages_nb_per_page'] = 10;
 
 //Quatrième paramètre, le type de statut suivant lequel filtrer la liste. "Tout Afficher" par défaut
-$_SESSION['status'] = 'Tout Afficher'; 
+$_SESSION['status'] = 'Tout Afficher';
 
 // Cinquième paramètre, le numéro de suivi à rechercher. "UNDEFINED" par défaut dans le cas où aucune recherche n'est lancée
-$_SESSION['search'] = 'UNDEFINED'; 
+$_SESSION['search'] = 'UNDEFINED';
+
+// Sixième paramètre
+$_SESSION['package'] = 'Tous les colis';
 
 //Nouvelle valeur du second paramètre, le numéro de page selon le cas (page précédente)
 if (isset($_SESSION['previous_page']) && !empty($_SESSION['previous_page'])) {
-    $_SESSION['page'] = $_SESSION['previous_page']; 
+    $_SESSION['page'] = $_SESSION['previous_page'];
 }
 
 //Nouvelle valeur du second paramètre, le numéro de page selon le cas (page suivante)
 if (isset($_SESSION['next_page']) && !empty($_SESSION['next_page'])) {
-    $_SESSION['page'] = $_SESSION['next_page']; 
+    $_SESSION['page'] = $_SESSION['next_page'];
 }
 
 //Nouvelle valeur du second paramètre, le numéro de page selon le cas (page actuel)
 if (isset($_SESSION['actual_page']) && !empty($_SESSION['actual_page'])) {
-    $_SESSION['page'] = $_SESSION['actual_page']; 
+    $_SESSION['page'] = $_SESSION['actual_page'];
 }
 
 /**
@@ -49,7 +52,7 @@ if (isset($_SESSION['actual_page']) && !empty($_SESSION['actual_page'])) {
  * par l'utilisateur poiur afficher le nombre de colis par page
  */
 if (isset($_SESSION['select_packages_nb_per_page']) && !empty($_SESSION['select_packages_nb_per_page'])) {
-    $_SESSION['packages_nb_per_page'] = $_SESSION['select_packages_nb_per_page']; 
+    $_SESSION['packages_nb_per_page'] = $_SESSION['select_packages_nb_per_page'];
 }
 
 /**
@@ -57,22 +60,28 @@ if (isset($_SESSION['select_packages_nb_per_page']) && !empty($_SESSION['select_
  * statut autre que celui par défaut
  */
 if (isset($_SESSION['selected_status']) && !empty($_SESSION['selected_status'])) {
-    $_SESSION['status'] = $_SESSION['selected_status']; 
+    $_SESSION['status'] = $_SESSION['selected_status'];
 }
 
 //Nouvelle valeur du cinquième paramètre, le numéro de suivi à rechercher dans la table "package"
 if (isset($_SESSION['research']) && !empty($_SESSION['research'])) {
-    $_SESSION['search'] = $_SESSION['research']; 
+    $_SESSION['search'] = $_SESSION['research'];
 }
 
+//Nouvelle valeur du sixième paramètre
+if (isset($_SESSION['packages_type']) && !empty($_SESSION['packages_type'])) {
+    $_SESSION['package'] = $_SESSION['packages_type'];
+}
+//die(var_dump($_SESSION['package']));
+
 //Affectation du retour de la fonction listings avec les cinq paramètres suscités à la variable $packages_lisitngs
-$packages_listings = listings($table, $_SESSION['page'], $_SESSION['packages_nb_per_page'], $_SESSION['status'], strtoupper($_SESSION['search']), 0);
+$packages_listings = listings($table, $_SESSION['page'], $_SESSION['packages_nb_per_page'], $_SESSION['status'], strtoupper($_SESSION['search']), $_SESSION['package'], null);
 
 /**
  * Affectation du retour de la fonction countRowsInTable avec pour paramètre la table concernée par le listings à la 
  * variable $rows. Cette fonction retourne le nombre de lignes dans la table avec le champs is_deleted = 0
  */
-$rows = countRowsInTable($table, 0);
+$rows = countRowsInTable($table, $_SESSION['package'], null);
 
 ?>
 
@@ -81,7 +90,7 @@ $rows = countRowsInTable($table, 0);
     paramètres de la fonction listings sont soumises et récupérées via la méthode POST. Ici, aucune valeur ne transite par
     l'url.
 -->
-<form id="myForm" action="<?= redirect($_SESSION['theme'], PROJECT.'agents/dash-treatment/noaddressee-packages-listings') ?>" method="post">
+<form id="myForm" action="<?= redirect($_SESSION['theme'], PROJECT . 'agents/dash-treatment/packages-listings') ?>" method="post">
     <!-- Bouton de création de colis -->
     <div class="page-header d-print-none">
         <div class="container-xl d-flex" style="justify-content: center;">
@@ -89,23 +98,23 @@ $rows = countRowsInTable($table, 0);
                 <!-- Page title actions -->
                 <div class="col-12 col-lg-auto ms-auto d-print-none">
                     <div class="btn-list justify-content-center">
-                        <a href="<?= redirect($_SESSION['theme'], PROJECT.'agents/dash/set-noaddressee-packages') ?>" class="btn d-none text-white d-sm-inline-block btn-warning">
+                        <a href="<?= redirect($_SESSION['theme'], PROJECT . 'agents/dash/set-packages') ?>" class="btn d-none text-white d-sm-inline-block btn-warning">
                             <!-- Download SVG icon from http://tabler-icons.io/i/plus -->
                             <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
                                 <path stroke="none" d="M0 0h24v24H0z" fill="none" />
                                 <path d="M12 5l0 14" />
                                 <path d="M5 12l14 0" />
                             </svg>
-                            Nouveau colis
+                            Ajouter colis
                         </a>
-                        <a href="<?= redirect($_SESSION['theme'], PROJECT.'agents/dash/set-noaddressee-packages') ?>" class="btn d-sm-none text-white btn-warning">
+                        <a href="<?= redirect($_SESSION['theme'], PROJECT . 'agents/dash/set-packages') ?>" class="btn d-sm-none text-white btn-warning">
                             <!-- Download SVG icon from http://tabler-icons.io/i/plus -->
                             <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
                                 <path stroke="none" d="M0 0h24v24H0z" fill="none" />
                                 <path d="M12 5l0 14" />
                                 <path d="M5 12l14 0" />
                             </svg>
-                            Nouveau Colis
+                            Ajouter Colis
                         </a>
                     </div>
                 </div>
@@ -116,9 +125,28 @@ $rows = countRowsInTable($table, 0);
     <div class="page-body">
         <div class="container-xl text-center">
             <div class="row row-deck row-cards">
+                <div class="col-lg col-xs ms-auto text-muted">
+                    <div class="ms-2 d-inline-block">
+                        <select class="form-select" name="packagesType" id="mySelect3">
+                            <option <?php if (isset($_SESSION['packages_type']) && $_SESSION['packages_type'] == 'Tous les colis') {
+                                        echo 'selected';
+                                    } ?> data-value="Tous les colis">Tous les colis</option>
+                            <option <?php if (isset($_SESSION['packages_type']) && $_SESSION['packages_type'] == 'Colis avec destinataire') {
+                                        echo 'selected';
+                                    } ?> data-value="Colis avec destinataire">Colis avec destinataire</option>
+                            <option <?php if (isset($_SESSION['packages_type']) && $_SESSION['packages_type'] == 'Colis sans destinataire') {
+                                        echo 'selected';
+                                    } ?> data-value="Colis sans destinataire">Colis sans destinataire</option>
+                        </select>
+                    </div>
+                </div>
                 <div class="col-12">
                     <div class="card">
+
                         <div class="card-body border-bottom py-3">
+
+
+
                             <div class="row">
                                 <!-- 
                                     Bloc select de sélection des différentes valeurs proposées pour le nombre de colis à 
@@ -170,10 +198,9 @@ $rows = countRowsInTable($table, 0);
                                     formulaire pour envoyer la valeur correspondante au fichier de traiment du formulaire.
                                 -->
                                 <div class="col-lg-4 col-xs ms-auto text-muted">
-                                    Filtrer :
+                                    Statuts :
                                     <div class="ms-2 d-inline-block">
                                         <select class="form-select" name="statusSelect" id="mySelect2">
-                                            <option disabled selected value="">Tout Afficher</option>
                                             <option <?php if (isset($_SESSION['selected_status']) && $_SESSION['selected_status'] == 'Tout Afficher') {
                                                         echo 'selected';
                                                     } ?> data-value="Tout Afficher">Tout Afficher</option>
@@ -192,6 +219,9 @@ $rows = countRowsInTable($table, 0);
                                             <option <?php if (isset($_SESSION['selected_status']) && $_SESSION['selected_status'] == 'Livrer') {
                                                         echo 'selected';
                                                     } ?> data-value="Livrer">Livrer</option>
+                                            <option <?php if (isset($_SESSION['selected_status']) && $_SESSION['selected_status'] == 'Livrer et Confirmer') {
+                                                        echo 'selected';
+                                                    } ?> data-value="Livrer et Confirmer">Livrer et Confirmer</option>
                                         </select>
                                     </div>
                                 </div>
@@ -208,6 +238,7 @@ $rows = countRowsInTable($table, 0);
                                         <th class="">N° de suivi</th>
                                         <th>Type de produits</th>
                                         <th>Statut</th>
+                                        <th>Groupe Colis</th>
                                         <th></th>
                                         <th></th>
                                     </tr>
@@ -239,10 +270,10 @@ $rows = countRowsInTable($table, 0);
                                              * au groupe en question. Le contrôle suivant permet donc d'accéder au groupe de tout colis contenu dans ce dernier pour permettre l'affichage
                                              * en clair à l'utilisateur.
                                              */
-                                            if (!empty($packages_listings[$key]["customer_package_group_id"])) {
+                                            if (!empty($package["customer_package_group_id"])) {
 
                                                 //Récupération du numéro de suivi du groupe de colis
-                                                $packages_group_tracking_number = getPackagesGroupTrackingNumber($packages_listings[$key]["customer_package_group_id"])['tracking_number'];
+                                                $packages_group_tracking_number = getPackagesGroupTrackingNumber($package["customer_package_group_id"])['tracking_number'];
 
                                                 /**
                                                  * Récupération de tous les colis contenu dans le groupe. 
@@ -250,8 +281,7 @@ $rows = countRowsInTable($table, 0);
                                                  * appartient le colis présentement concerné. Cette liste sera affichée dans un modal avec le numéro de suivi du colis
                                                  * présentement concerné surligné en orange pour permettre son identification rapide par l'utilisateur.
                                                  */
-                                                $packages_ingrouplistings = getAllPackagesLinkedToSpecificPackagesGroup($packages_listings[$key]["customer_package_group_id"]);
-
+                                                $packages_ingrouplistings = getAllPackagesLinkedToSpecificPackagesGroup($package["customer_package_group_id"]);
                                             }
                                     ?>
                                             <tr>
@@ -282,45 +312,141 @@ $rows = countRowsInTable($table, 0);
 
                                                     ?><input class="form-check-input m-0 align-middle row-check" type="checkbox" value="BN95F621" name="checkbox" aria-label="Select invoice"></td>
                                                 <td>
-                                                    <?= $packages_listings[$key]["tracking_number"] ?>
+                                                    <?= $package["tracking_number"] ?>
                                                 </td>
                                                 <td class="">
                                                     <span></span>
 
-                                                    <?= !empty($packages_listings[$key]["product_type"]) ? $packages_listings[$key]["product_type"] : '-' ?>
+                                                    <?= !empty($package["product_type"]) ? $package["product_type"] : '-' ?>
                                                 </td>
                                                 <td>
-                                                    <span class="badge 
-                                                    <?php if ($packages_listings[$key]["status"] == 'En attente...') {
-                                                        echo 'bg-secondary';
-                                                    } elseif ($packages_listings[$key]["status"] == 'En transit') {
-                                                        echo 'bg-primary';
-                                                    } elseif ($packages_listings[$key]["status"] == 'Entrepôt Chine') {
-                                                        echo 'bg-danger';
-                                                    } elseif ($packages_listings[$key]["status"] == 'Entrepôt Bénin') {
-                                                        echo 'bg-warning';
-                                                    } elseif ($packages_listings[$key]["status"] == 'Livrer') {
+                                                    <span class="badge
+                                                    <?php if ($package["status"] == 'En attente...') {
+                                                        echo 'bg-danger-lt';
+                                                    } elseif ($package["status"] == 'En transit') {
+                                                        echo 'bg-primary-lt';
+                                                    } elseif ($package["status"] == 'Entrepôt Chine') {
+                                                        echo 'bg-secondary-lt';
+                                                    } elseif ($package["status"] == 'Entrepôt Bénin') {
+                                                        echo 'bg-warning-lt';
+                                                    } elseif ($package["status"] == 'Livrer') {
+                                                        echo 'bg-teal-lt';
+                                                    } elseif ($package["status"] == 'Livrer et Confirmer') {
                                                         echo 'bg-success';
                                                     }
                                                     ?>
-                                                    me-1"></span>
+                                                    me-1"><?= $package["status"] ?></span>
+                                                </td>
+                                                <td>
+                                                    <?= !empty($package["customer_package_group_id"]) ? 'Oui -> <a href = "#" data-bs-toggle="modal" data-bs-target="#' . $packages_group_tracking_number . $key . '">' . $packages_group_tracking_number . ' [ Voir ]</a>' : 'Non' ?>
 
-                                                    <?= $packages_listings[$key]["status"] ?>
-                                                </td>         
+                                                    <!--
+                                                        Modal d'affichage des colis contenus dans un groupe de colis.
+                                                    -->
+                                                    <div class="modal modal-blur fade" data-bs-backdrop='static' id="<?= !empty($package["customer_package_group_id"]) ? $packages_group_tracking_number . $key : '' ?>" tabindex="-1" role="dialog" aria-hidden="true">
+                                                        <div class="modal-dialog modal-dialog-centered modal-lg modal-dialog-scrollable" role="document">
+                                                            <div class="modal-content">
+                                                                <div class="modal-header">
+                                                                    <h3 class="modal-title">Groupe N° <?= !empty($package["customer_package_group_id"]) ? $packages_group_tracking_number : '' ?></h3>
+                                                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                                </div>
+                                                                <div class="modal-body">
+                                                                    <div class="datagrid">
+                                                                        <div class="datagrid-item">
+                                                                            <div class="datagrid-title">Nombre de Colis</div>
+                                                                            <div class="datagrid-content"><?= !empty($package["customer_package_group_id"]) ? sizeof($packages_ingrouplistings) : '' ?></div>
+                                                                        </div>
+                                                                    </div><br>
+                                                                    <div class="row row-deck row-cards text-center">
+                                                                        <div class="col-12">
+                                                                            <div class="card">
+                                                                                <div class="card-body border-bottom py-3">
+                                                                                    <div class="d-flex justify-content-center">
+                                                                                        <div class="">
+                                                                                            <h3 class="d-inline-block">
+                                                                                                Colis du Groupe
+                                                                                            </h3>
+                                                                                        </div>
+                                                                                    </div>
+                                                                                </div>
+                                                                                <div class="table-responsive">
+                                                                                    <table class="table card-table table-vcenter text-nowrap datatable">
+                                                                                        <thead>
+                                                                                            <tr>
+                                                                                                <th class="">N° de suivi</th>
+                                                                                                <th>Type de produits</th>
+                                                                                            </tr>
+                                                                                        </thead>
+                                                                                        <tbody>
+                                                                                            <?php
+                                                                                            if (isset($packages_ingrouplistings) && !empty($packages_ingrouplistings)) {
+
+                                                                                                foreach ($packages_ingrouplistings as $_key => $packages_ingroup) {
+                                                                                            ?>
+                                                                                                    <tr>
+                                                                                                        <td>
+                                                                                                            <?= $packages_ingroup["tracking_number"] == $package["tracking_number"] ? '<span class="badge bg-orange">' . $packages_ingrouplistings[$_key]["tracking_number"] . '</span>' : $packages_ingrouplistings[$_key]["tracking_number"] ?>
+                                                                                                        </td>
+                                                                                                        <td>
+                                                                                                            <?= !empty($packages_ingroup["product_type"]) ? $packages_ingroup["product_type"] : '-' ?>
+                                                                                                        </td>
+                                                                                                        <!--
+                                                                                                        <td class="text-end">
+                                                                                                            <span class="">
+                                                                                                                <a class="btn-link" href="" data-bs-toggle="modal" data-bs-dismiss="false" data-bs-target="<?= "#modal-packages-ingroup-detail" . $key ?>">
+                                                                                                                    Détails
+                                                                                                                </a>
+                                                                                                            </span>
+                                                                                                        </td>
+                                                                                                        -->
+                                                                                                    </tr>
+                                                                                            <?php
+
+                                                                                                }
+                                                                                            }
+                                                                                            ?>
+                                                                                        </tbody>
+                                                                                    </table>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+                                                </td>
                                                 <td class="text-end">
                                                     <span class="">
                                                         <a class="btn-link" href="" data-bs-toggle="modal" data-bs-target="<?= '#modal-packages-detail' . $key ?>">
                                                             Détails
                                                         </a>
                                                     </span>
-                                                </td> 
-                                                <td class="text-end">
-                                                    <span class="">
-                                                        <a class="btn-link link-warning" href='<?= redirect($_SESSION['theme'], PROJECT.'agents/dash/edit-packages') ?>'>
-                                                            Modifier
-                                                        </a>
-                                                    </span>
                                                 </td>
+                                                <?php
+                                                if ($package["user_id"] == 38) {
+                                                ?>
+                                                    <td class="text-end">
+                                                        <span class="">
+                                                            <a class="btn-link link-warning" href='<?= redirect($_SESSION['theme'], PROJECT . 'agents/dash/edit-packages') ?>'>
+                                                                Modifier
+                                                            </a>
+                                                        </span>
+                                                    </td>
+                                                <?php
+                                                } else {
+                                                ?>
+                                                    <td class="text-end">
+                                                        <span class="">
+                                                            <a class="btn-link link-warning" href="<?= redirect($_SESSION['theme'], PROJECT . 'agents/dash/update-packages') ?>">
+                                                                Mettre à jour
+                                                            </a>
+                                                        </span>
+                                                    </td>
+                                                <?php
+                                                }
+                                                ?>
                                             </tr>
                                         <?php
                                         }
@@ -340,127 +466,121 @@ $rows = countRowsInTable($table, 0);
 
                             <?php
 
-                                $s = null; //Cette variable stocke la valeur du numéro de la première ligne sur une page
+                            $s = null; //Cette variable stocke la valeur du numéro de la première ligne sur une page
 
-                                if (!isset($_SESSION['previous_page']) && !isset($_SESSION['next_page']) && !isset($_SESSION['actual_page'])) {
+                            if (!isset($_SESSION['previous_page']) && !isset($_SESSION['next_page']) && !isset($_SESSION['actual_page'])) {
 
-                                    $s = $_SESSION['page'];
+                                $s = $_SESSION['page'];
 
-                                    if (!isset($packages_listings) || empty($packages_listings)) {
-                                        $s = 'de ' . $n . ' ligne';
-                                    }
-
-                                ?>
-
-                                    <p class="m-0 text-muted">
-                                        Affichage 
-                                        <?php if (isset($packages_listings) && !empty($packages_listings)) { 
-                                        ?> 
-                                            de la ligne 
-                                        <?php 
-                                        } 
-                                        ?> 
-                                            <span><?= $s ?></span> 
-                                        <?php if (isset($packages_listings) && !empty($packages_listings)) { 
-                                        ?> 
-                                            à la ligne <span><?= $en ?></span> 
-                                        <?php 
-                                        } 
-                                        ?>  sur <span><?= $rows['COUNT(*)'] ?></span> ligne(s) au total
-                                    </p>
-
-                                <?php
-                                } 
-
-                                elseif ((isset($_SESSION['previous_page']) || isset($_SESSION['next_page']) || isset($_SESSION['actual_page'])) && $_SESSION['page'] == 2) {
-
-                                    $s = $_SESSION['packages_nb_per_page'] + 1;
-
-                                    if (!isset($packages_listings) || empty($packages_listings)) {
-                                        $s = 'de ' . $n . ' ligne';
-                                    }
-
-                                ?>
-
-                                    <p class="m-0 text-muted">
-                                        Affichage 
-                                        <?php if (isset($packages_listings) && !empty($packages_listings)) { 
-                                        ?> 
-                                            de la ligne 
-                                        <?php 
-                                        } 
-                                        ?> 
-                                            <span><?= $s ?></span> 
-                                        <?php if (isset($packages_listings) && !empty($packages_listings)) { 
-                                        ?> 
-                                            à la ligne <span><?= $en ?></span> 
-                                        <?php 
-                                        } 
-                                        ?>  sur <span><?= $rows['COUNT(*)'] ?></span> ligne(s) au total
-                                    </p>
-
-                                <?php
-                                } 
-                                
-                                elseif ((isset($_SESSION['previous_page']) || isset($_SESSION['next_page']) || isset($_SESSION['actual_page'])) && $_SESSION['page'] > 2) {
-
-                                    $s = ($_SESSION['packages_nb_per_page'] * ($_SESSION['page'] - 1)) + 1;
-
-                                    if (!isset($packages_listings) || empty($packages_listings)) {
-                                        $s = 'de ' . $n . ' ligne';
-                                    }
-
-                                ?>
-
-                                    <p class="m-0 text-muted">
-                                        Affichage 
-                                        <?php if (isset($packages_listings) && !empty($packages_listings)) { 
-                                        ?> 
-                                            de la ligne 
-                                        <?php 
-                                        } 
-                                        ?> 
-                                            <span><?= $s ?></span> 
-                                        <?php if (isset($packages_listings) && !empty($packages_listings)) { 
-                                        ?> 
-                                            à la ligne <span><?= $en ?></span> 
-                                        <?php 
-                                        } 
-                                        ?>  sur <span><?= $rows['COUNT(*)'] ?></span> ligne(s) au total
-                                    </p>
-
-                                <?php
-                                } 
-                                
-                                else {
-
-                                    $s = ($_SESSION['packages_nb_per_page'] * ($_SESSION['page'] - 1)) + 1;
-
-                                    if (!isset($packages_listings) || empty($packages_listings)) {
-                                        $s = 'de ' . $n . ' ligne';
-                                    }
-
-                                ?>
-
-                                    <p class="m-0 text-muted">
-                                        Affichage 
-                                        <?php if (isset($packages_listings) && !empty($packages_listings)) { 
-                                        ?> 
-                                            de la ligne 
-                                        <?php 
-                                        } 
-                                        ?> 
-                                            <span><?= $s ?></span> 
-                                        <?php if (isset($packages_listings) && !empty($packages_listings)) { 
-                                        ?> 
-                                            à la ligne <span><?= $en ?></span> 
-                                        <?php 
-                                        } 
-                                        ?>  sur <span><?= $rows['COUNT(*)'] ?></span> ligne(s) au total
-                                    </p>
-
-                                <?php
+                                if (!isset($packages_listings) || empty($packages_listings)) {
+                                    $s = 'de ' . $n . ' ligne';
                                 }
+
+                            ?>
+
+                                <p class="m-0 text-muted">
+                                    Affichage
+                                    <?php if (isset($packages_listings) && !empty($packages_listings)) {
+                                    ?>
+                                        de la ligne
+                                    <?php
+                                    }
+                                    ?>
+                                    <span><?= $s ?></span>
+                                    <?php if (isset($packages_listings) && !empty($packages_listings)) {
+                                    ?>
+                                        à la ligne <span><?= $en ?></span>
+                                    <?php
+                                    }
+                                    ?> sur <span><?= $rows['COUNT(*)'] ?></span> ligne(s) au total
+                                </p>
+
+                            <?php
+                            } elseif ((isset($_SESSION['previous_page']) || isset($_SESSION['next_page']) || isset($_SESSION['actual_page'])) && $_SESSION['page'] == 2) {
+
+                                $s = $_SESSION['packages_nb_per_page'] + 1;
+
+                                if (!isset($packages_listings) || empty($packages_listings)) {
+                                    $s = 'de ' . $n . ' ligne';
+                                }
+
+                            ?>
+
+                                <p class="m-0 text-muted">
+                                    Affichage
+                                    <?php if (isset($packages_listings) && !empty($packages_listings)) {
+                                    ?>
+                                        de la ligne
+                                    <?php
+                                    }
+                                    ?>
+                                    <span><?= $s ?></span>
+                                    <?php if (isset($packages_listings) && !empty($packages_listings)) {
+                                    ?>
+                                        à la ligne <span><?= $en ?></span>
+                                    <?php
+                                    }
+                                    ?> sur <span><?= $rows['COUNT(*)'] ?></span> ligne(s) au total
+                                </p>
+
+                            <?php
+                            } elseif ((isset($_SESSION['previous_page']) || isset($_SESSION['next_page']) || isset($_SESSION['actual_page'])) && $_SESSION['page'] > 2) {
+
+                                $s = ($_SESSION['packages_nb_per_page'] * ($_SESSION['page'] - 1)) + 1;
+
+                                if (!isset($packages_listings) || empty($packages_listings)) {
+                                    $s = 'de ' . $n . ' ligne';
+                                }
+
+                            ?>
+
+                                <p class="m-0 text-muted">
+                                    Affichage
+                                    <?php if (isset($packages_listings) && !empty($packages_listings)) {
+                                    ?>
+                                        de la ligne
+                                    <?php
+                                    }
+                                    ?>
+                                    <span><?= $s ?></span>
+                                    <?php if (isset($packages_listings) && !empty($packages_listings)) {
+                                    ?>
+                                        à la ligne <span><?= $en ?></span>
+                                    <?php
+                                    }
+                                    ?> sur <span><?= $rows['COUNT(*)'] ?></span> ligne(s) au total
+                                </p>
+
+                            <?php
+                            } else {
+
+                                $s = ($_SESSION['packages_nb_per_page'] * ($_SESSION['page'] - 1)) + 1;
+
+                                if (!isset($packages_listings) || empty($packages_listings)) {
+                                    $s = 'de ' . $n . ' ligne';
+                                }
+
+                            ?>
+
+                                <p class="m-0 text-muted">
+                                    Affichage
+                                    <?php if (isset($packages_listings) && !empty($packages_listings)) {
+                                    ?>
+                                        de la ligne
+                                    <?php
+                                    }
+                                    ?>
+                                    <span><?= $s ?></span>
+                                    <?php if (isset($packages_listings) && !empty($packages_listings)) {
+                                    ?>
+                                        à la ligne <span><?= $en ?></span>
+                                    <?php
+                                    }
+                                    ?> sur <span><?= $rows['COUNT(*)'] ?></span> ligne(s) au total
+                                </p>
+
+                            <?php
+                            }
 
                             ?>
 
@@ -518,56 +638,56 @@ if (isset($packages_listings) && !empty($packages_listings)) {
                             <div class="datagrid-item">
                                 <div class="datagrid-title">Description</div>
                                 <div class="datagrid-content">
-                                    <?= $packages_listings[$key]["description"] ?>
+                                    <?= $package["description"] ?>
                                 </div>
                             </div>
                             <div class="datagrid-item">
                                 <div class="datagrid-title">Type d'Envoi</div>
                                 <div class="datagrid-content">
-                                    <?= !empty($packages_listings[$key]["shipping_type"]) ? $packages_listings[$key]["shipping_type"] : '-' ?>
+                                    <?= !empty($package["shipping_type"]) ? $package["shipping_type"] : '-' ?>
                                 </div>
                             </div>
                             <div class="datagrid-item">
                                 <div class="datagrid-title">Poids Net (KG)</div>
                                 <div class="datagrid-content">
-                                    <?= !empty($packages_listings[$key]["net_weight"]) ? $packages_listings[$key]["net_weight"] : '-' ?>
+                                    <?= !empty($package["net_weight"]) ? $package["net_weight"] : '-' ?>
                                 </div>
                             </div>
                             <div class="datagrid-item">
                                 <div class="datagrid-title">Poids Volumétrique (CBM)</div>
                                 <div class="datagrid-content">
-                                    <?= !empty($packages_listings[$key]["metric_weight"]) ? $packages_listings[$key]["metric_weight"] : '-' ?>
+                                    <?= !empty($package["metric_weight"]) ? $package["metric_weight"] : '-' ?>
                                 </div>
                             </div>
                             <div class="datagrid-item">
                                 <div class="datagrid-title">Valeur (FCFA)</div>
                                 <div class="datagrid-content">
-                                    <?= !empty($packages_listings[$key]["worth"]) ? $packages_listings[$key]["worth"] : '-' ?>
+                                    <?= !empty($package["worth"]) ? $package["worth"] : '-' ?>
                                 </div>
                             </div>
                             <div class="datagrid-item">
                                 <div class="datagrid-title">Nombre</div>
                                 <div class="datagrid-content">
-                                    <?= !empty($packages_listings[$key]["package_units_number"]) ? $packages_listings[$key]["package_units_number"] : '-' ?>
+                                    <?= !empty($package["package_units_number"]) ? $package["package_units_number"] : '-' ?>
                                 </div>
                             </div>
                             <div class="datagrid-item">
                                 <div class="datagrid-title">Coût Unitaire D'Expédition (CUE)</div>
                                 <div class="datagrid-content">
-                                    <?= !empty($packages_listings[$key]["shipping_unit_cost"]) ? $packages_listings[$key]["shipping_unit_cost"] . ' / pcs' : '-' ?>
+                                    <?= !empty($package["shipping_unit_cost"]) ? $package["shipping_unit_cost"] . ' / pcs' : '-' ?>
                                 </div>
                             </div>
                             <div class="datagrid-item">
                                 <div class="datagrid-title">Coût Expédition (CUE*Nombre)</div>
                                 <div class="datagrid-content">
-                                    <?= !empty($packages_listings[$key]["shipping_cost"]) ? $packages_listings[$key]["shipping_cost"] : '-' ?>
+                                    <?= !empty($package["shipping_cost"]) ? $package["shipping_cost"] : '-' ?>
                                 </div>
                             </div>
                         </div><br>
                         <div class="row row-cols g-3">
                             <?php
-                            if (checkPackageIdInPackagesImagesTab($packages_listings[$key]["id"])) {
-                                $select_images = getPackageImages($packages_listings[$key]["id"]);
+                            if (checkPackageIdInPackagesImagesTab($package["id"])) {
+                                $select_images = getPackageImages($package["id"]);
                                 if (!empty($select_images)) {
                                     foreach ($select_images as $_key => $value) {
                             ?>

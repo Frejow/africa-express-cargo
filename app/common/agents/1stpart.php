@@ -12,26 +12,20 @@ $_SESSION['agent_current_url'] = "{$_SERVER['REQUEST_SCHEME']}://{$_SERVER['HTTP
     <?php
     if (isset($params[2]) && !empty($params[2])) {
         switch ($params[2]) {
-            case "customers-packages-listings":
-                echo "<title>Colis clients</title>";
+            case "packages-listings":
+                echo "<title>Colis</title>";
                 break;
-            case "update-customers-packages":
-                echo "<title>Mettre à jour Colis clients</title>";
+            case "update-packages":
+                echo "<title>Mettre à jour colis</title>";
                 break;
             case "customers-packages-group-listings":
-                echo "<title>Groupe de colis clients</title>";
+                echo "<title>Groupe de colis Clients</title>";
                 break;
             case "update-customers-packages-group":
                 echo "<title>Mettre à jour Groupe de colis clients</title>";
                 break;
-            case "agents-packages-group-listings":
-                echo "<title>Groupe de colis agents</title>";
-                break;
-            case "update-agents-packages-group":
-                echo "<title>Mettre à jour Groupe de colis agents</title>";
-                break;
             case "shipping-packages-group-listings":
-                echo "<title>Groupe de colis</title>";
+                echo "<title>Groupe de colis Expédition</title>";
                 break;
             case "add-packages-inshipping-packagesgroup":
                 echo "<title>Ajouter colis au groupe de colis</title>";
@@ -42,14 +36,11 @@ $_SESSION['agent_current_url'] = "{$_SERVER['REQUEST_SCHEME']}://{$_SERVER['HTTP
             case "edit-shipping-packages-group":
                 echo "<title>Modifier Groupe de colis</title>";
                 break;
-            case "noaddressee-packages-listings":
-                echo "<title>Colis sans destinataire</title>";
+            case "set-packages":
+                echo "<title>Ajouter colis</title>";
                 break;
-            case "set-noaddressee-packages":
-                echo "<title>Ajouter Colis sans destinataire</title>";
-                break;
-            case "edit-noaddressee-packages":
-                echo "<title>Modifier Colis sans destinataire</title>";
+            case "edit-packages":
+                echo "<title>Modifier colis</title>";
                 break;
             case "profile":
                 echo "<title>Mon Compte</title>";
@@ -65,18 +56,6 @@ $_SESSION['agent_current_url'] = "{$_SERVER['REQUEST_SCHEME']}://{$_SERVER['HTTP
                 break;
             case "customers-listings":
                 echo "<title>Liste des clients</title>";
-                break;
-            case "agents-listings":
-                echo "<title>Liste des agents</title>";
-                break;
-            case "packages-listings":
-                echo "<title>Mes colis</title>";
-                break;
-            case "set-packages":
-                echo "<title>Ajouter colis</title>";
-                break;
-            case "edit-packages":
-                echo "<title>Modifier colis</title>";
                 break;
             case "packages-group-listings":
                 echo "<title>Groupe de colis</title>";
@@ -157,14 +136,14 @@ $_SESSION['agent_current_url'] = "{$_SERVER['REQUEST_SCHEME']}://{$_SERVER['HTTP
                 </h1>
                 <div class="navbar-nav flex-row d-lg-none">
                     <div class="d-flex d-lg-flex">
-                        <a href="<?= $_SERVER['REDIRECT_URL']."?theme=dark"?>" class="nav-link px-0 hide-theme-dark" title="Mode sombre" data-bs-toggle="tooltip" data-bs-placement="bottom">
+                        <a href="<?= $_SERVER['REDIRECT_URL'] . "?theme=dark" ?>" class="nav-link px-0 hide-theme-dark" title="Mode sombre" data-bs-toggle="tooltip" data-bs-placement="bottom">
                             <!-- Download SVG icon from http://tabler-icons.io/i/moon -->
                             <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
                                 <path stroke="none" d="M0 0h24v24H0z" fill="none" />
                                 <path d="M12 3c.132 0 .263 0 .393 0a7.5 7.5 0 0 0 7.92 12.446a9 9 0 1 1 -8.313 -12.454z" />
                             </svg>
                         </a>
-                        <a href="<?= $_SERVER['REDIRECT_URL']."?theme=light"?>" class="nav-link px-0 hide-theme-light" title="Mode éclairé" data-bs-toggle="tooltip" data-bs-placement="bottom">
+                        <a href="<?= $_SERVER['REDIRECT_URL'] . "?theme=light" ?>" class="nav-link px-0 hide-theme-light" title="Mode éclairé" data-bs-toggle="tooltip" data-bs-placement="bottom">
                             <!-- Download SVG icon from http://tabler-icons.io/i/sun -->
                             <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
                                 <path stroke="none" d="M0 0h24v24H0z" fill="none" />
@@ -282,16 +261,16 @@ $_SESSION['agent_current_url'] = "{$_SERVER['REQUEST_SCHEME']}://{$_SERVER['HTTP
                             </div>
                         </a>
                         <div class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
-                            <a href='<?= redirect($_SESSION['theme'], PROJECT.'agents/dash/profile') ?>' class="dropdown-item">Mon Compte</a>
-                            <a href='<?= redirect($_SESSION['theme'], PROJECT.'agents/dash/profile-settings') ?>' class="dropdown-item">Paramètres du compte</a>
-                            <a href='<?= redirect($_SESSION['theme'], PROJECT.'agents/logout') ?>' class="dropdown-item">Déconnexion</a>
+                            <a href='<?= redirect($_SESSION['theme'], PROJECT . 'agents/dash/profile') ?>' class="dropdown-item">Mon Compte</a>
+                            <a href='<?= redirect($_SESSION['theme'], PROJECT . 'agents/dash/profile-settings') ?>' class="dropdown-item">Paramètres du compte</a>
+                            <a href='<?= redirect($_SESSION['theme'], PROJECT . 'agents/logout') ?>' class="dropdown-item">Déconnexion</a>
                         </div>
                     </div>
                 </div>
                 <div class="collapse navbar-collapse" id="sidebar-menu">
                     <ul class="navbar-nav pt-lg-3">
                         <li class="nav-item d-lg-none <?= $params[2] == 'notifications' ? 'active' : '' ?>">
-                            <a class="nav-link" href="<?= redirect($_SESSION['theme'], PROJECT.'agents/dash/notifications') ?>">
+                            <a class="nav-link" href="<?= redirect($_SESSION['theme'], PROJECT . 'agents/dash/notifications') ?>">
                                 <span class="nav-link-icon d-md-none d-lg-inline-block"><!-- Download SVG icon from http://tabler-icons.io/i/checkbox -->
                                     <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
                                         <path stroke="none" d="M0 0h24v24H0z" fill="none" />
@@ -306,12 +285,12 @@ $_SESSION['agent_current_url'] = "{$_SERVER['REQUEST_SCHEME']}://{$_SERVER['HTTP
                         </li>
                         <li class="nav-item 
                             <?php
-                            if ($params[2] == 'noaddressee-packages-listings' || $params[2] == 'set-noaddressee-packages' || $params[2] == 'edit-noaddressee-packages'){
+                            if ($params[2] == 'packages-listings' || $params[2] == 'set-packages' || $params[2] == 'edit-packages') {
                                 echo 'active';
                             }
                             ?>
                             ">
-                            <a class="nav-link" href="<?= redirect($_SESSION['theme'], PROJECT.'agents/dash/noaddressee-packages-listings') ?>">
+                            <a class="nav-link" href="<?= redirect($_SESSION['theme'], PROJECT . 'agents/dash/packages-listings') ?>">
                                 <span class="nav-link-icon d-md-none d-lg-inline-block"><!-- Download SVG icon from http://tabler-icons.io/i/checkbox -->
                                     <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
                                         <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
@@ -324,18 +303,18 @@ $_SESSION['agent_current_url'] = "{$_SERVER['REQUEST_SCHEME']}://{$_SERVER['HTTP
                                     </svg>
                                 </span>
                                 <span class="nav-link-title">
-                                    Colis sans destinataire
+                                    Colis
                                 </span>
                             </a>
                         </li>
                         <li class="nav-item 
                             <?php
-                            if ($params[2] == 'shipping-packages-group-listings' || $params[2] == 'set-shipping-packages-group' || $params[2] == 'edit-shipping-packages-group' || $params[2] == 'add-packages-inshipping-packagesgroup'){
+                            if ($params[2] == 'shipping-packages-group-listings' || $params[2] == 'set-shipping-packages-group' || $params[2] == 'edit-shipping-packages-group' || $params[2] == 'add-packages-inshipping-packagesgroup') {
                                 echo 'active';
                             }
                             ?>
                             ">
-                            <a class="nav-link" href="<?= redirect($_SESSION['theme'], PROJECT.'agents/dash/shipping-packages-group-listings') ?>">
+                            <a class="nav-link" href="<?= redirect($_SESSION['theme'], PROJECT . 'agents/dash/shipping-packages-group-listings') ?>">
                                 <span class="nav-link-icon d-md-none d-lg-inline-block"><!-- Download SVG icon from http://tabler-icons.io/i/home -->
                                     <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
                                         <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
@@ -351,7 +330,56 @@ $_SESSION['agent_current_url'] = "{$_SERVER['REQUEST_SCHEME']}://{$_SERVER['HTTP
                                     </svg>
                                 </span>
                                 <span class="nav-link-title">
-                                    Groupe de colis
+                                    Groupe de colis Expédition
+                                </span>
+                            </a>
+                        </li>
+                        <li class="nav-item 
+                            <?php
+                            if ($params[2] == 'customers-packages-group-listings' || $params[2] == 'update-customers-packages-group') {
+                                echo 'active';
+                            }
+                            ?>
+                            ">
+                            <a class="nav-link" href="<?= redirect($_SESSION['theme'], PROJECT . 'agents/dash/customers-packages-group-listings') ?>">
+                                <span class="nav-link-icon d-md-none d-lg-inline-block"><!-- Download SVG icon from http://tabler-icons.io/i/home -->
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                        <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                                        <path d="M7 16.5l-5 -3l5 -3l5 3v5.5l-5 3z"></path>
+                                        <path d="M2 13.5v5.5l5 3"></path>
+                                        <path d="M7 16.545l5 -3.03"></path>
+                                        <path d="M17 16.5l-5 -3l5 -3l5 3v5.5l-5 3z"></path>
+                                        <path d="M12 19l5 3"></path>
+                                        <path d="M17 16.5l5 -3"></path>
+                                        <path d="M12 13.5v-5.5l-5 -3l5 -3l5 3v5.5"></path>
+                                        <path d="M7 5.03v5.455"></path>
+                                        <path d="M12 8l5 -3"></path>
+                                    </svg>
+                                </span>
+                                <span class="nav-link-title">
+                                    Groupe de colis Clients
+                                </span>
+                            </a>
+                        </li>
+                        <li class="nav-item 
+                            <?php
+                            if ($params[2] == 'customers-listings') {
+                                echo 'active';
+                            }
+                            ?>
+                            ">
+                            <a class="nav-link" href="<?= redirect($_SESSION['theme'], PROJECT . 'agents/dash/customers-listings') ?>">
+                                <span class="nav-link-icon d-md-none d-lg-inline-block"><!-- Download SVG icon from http://tabler-icons.io/i/checkbox -->
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                        <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                                        <path d="M9 7m-4 0a4 4 0 1 0 8 0a4 4 0 1 0 -8 0"></path>
+                                        <path d="M3 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2"></path>
+                                        <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+                                        <path d="M21 21v-2a4 4 0 0 0 -3 -3.85"></path>
+                                    </svg>
+                                </span>
+                                <span class="nav-link-title">
+                                    Clients
                                 </span>
                             </a>
                         </li>
@@ -374,8 +402,7 @@ $_SESSION['agent_current_url'] = "{$_SERVER['REQUEST_SCHEME']}://{$_SERVER['HTTP
                                 <div class="dropdown-menu-columns">
                                     <div class="dropdown-menu-column">
                                         <div class="dropend">
-                                            <a class="dropdown-item <?= $params[2] == 'customers-listings' ? 'active' : '' ?>" 
-                                            href="<?= redirect($_SESSION['theme'], PROJECT.'agents/dash/customers-listings') ?>">
+                                            <a class="dropdown-item <?= $params[2] == 'customers-listings' ? 'active' : '' ?>" href="<?= redirect($_SESSION['theme'], PROJECT . 'agents/dash/customers-listings') ?>">
                                                 <span class="nav-link-icon d-md-none d-lg-inline-block"><!-- Download SVG icon from http://tabler-icons.io/i/checkbox -->
                                                     <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
                                                         <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
@@ -393,11 +420,10 @@ $_SESSION['agent_current_url'] = "{$_SERVER['REQUEST_SCHEME']}://{$_SERVER['HTTP
                                         <div class="dropend">
                                             <a class="dropdown-item 
                                             <?php
-                                            if ($params[2] == 'customers-packages-listings' || $params[2] == 'update-customers-packages'){
+                                            if ($params[2] == 'customers-packages-listings' || $params[2] == 'update-customers-packages') {
                                                 echo 'active';
                                             }
-                                            ?>" 
-                                            href="<?= redirect($_SESSION['theme'], PROJECT.'agents/dash/customers-packages-listings') ?>">
+                                            ?>" href="<?= redirect($_SESSION['theme'], PROJECT . 'agents/dash/customers-packages-listings') ?>">
                                                 <span class="nav-link-icon d-md-none d-lg-inline-block"><!-- Download SVG icon from http://tabler-icons.io/i/checkbox -->
                                                     <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
                                                         <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
@@ -414,11 +440,10 @@ $_SESSION['agent_current_url'] = "{$_SERVER['REQUEST_SCHEME']}://{$_SERVER['HTTP
                                         <div class="dropend">
                                             <a class="dropdown-item 
                                             <?php
-                                            if ($params[2] == 'customers-packages-group-listings' || $params[2] == 'update-customers-packages-group'){
+                                            if ($params[2] == 'customers-packages-group-listings' || $params[2] == 'update-customers-packages-group') {
                                                 echo 'active';
                                             }
-                                            ?>" 
-                                            href="<?= redirect($_SESSION['theme'], PROJECT.'agents/dash/customers-packages-group-listings') ?>">
+                                            ?>" href="<?= redirect($_SESSION['theme'], PROJECT . 'agents/dash/customers-packages-group-listings') ?>">
                                                 <span class="nav-link-icon d-md-none d-lg-inline-block"><!-- Download SVG icon from http://tabler-icons.io/i/home -->
                                                     <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
                                                         <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
@@ -451,14 +476,14 @@ $_SESSION['agent_current_url'] = "{$_SERVER['REQUEST_SCHEME']}://{$_SERVER['HTTP
                 </button>
                 <div class="navbar-nav flex-row order-md-last">
                     <div class="d-none d-md-flex">
-                        <a href="<?= $_SERVER['REDIRECT_URL']."?theme=dark"?>" class="nav-link px-0 hide-theme-dark" title="Mode sombre" data-bs-toggle="tooltip" data-bs-placement="bottom">
+                        <a href="<?= $_SERVER['REDIRECT_URL'] . "?theme=dark" ?>" class="nav-link px-0 hide-theme-dark" title="Mode sombre" data-bs-toggle="tooltip" data-bs-placement="bottom">
                             <!-- Download SVG icon from http://tabler-icons.io/i/moon -->
                             <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
                                 <path stroke="none" d="M0 0h24v24H0z" fill="none" />
                                 <path d="M12 3c.132 0 .263 0 .393 0a7.5 7.5 0 0 0 7.92 12.446a9 9 0 1 1 -8.313 -12.454z" />
                             </svg>
                         </a>
-                        <a href="<?= $_SERVER['REDIRECT_URL']."?theme=light"?>" class="nav-link px-0 hide-theme-light" title="Mode éclairé" data-bs-toggle="tooltip" data-bs-placement="bottom">
+                        <a href="<?= $_SERVER['REDIRECT_URL'] . "?theme=light" ?>" class="nav-link px-0 hide-theme-light" title="Mode éclairé" data-bs-toggle="tooltip" data-bs-placement="bottom">
                             <!-- Download SVG icon from http://tabler-icons.io/i/sun -->
                             <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
                                 <path stroke="none" d="M0 0h24v24H0z" fill="none" />
@@ -576,9 +601,9 @@ $_SESSION['agent_current_url'] = "{$_SERVER['REQUEST_SCHEME']}://{$_SERVER['HTTP
                             </div>
                         </a>
                         <div class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
-                            <a href='<?= redirect($_SESSION['theme'], PROJECT.'agents/dash/profile') ?>' class="dropdown-item">Mon Compte</a>
-                            <a href='<?= redirect($_SESSION['theme'], PROJECT.'agents/dash/profile-settings') ?>' class="dropdown-item">Paramètres du compte</a>
-                            <a href='<?= redirect($_SESSION['theme'], PROJECT.'agents/logout') ?>' class="dropdown-item">Déconnexion</a>
+                            <a href='<?= redirect($_SESSION['theme'], PROJECT . 'agents/dash/profile') ?>' class="dropdown-item">Mon Compte</a>
+                            <a href='<?= redirect($_SESSION['theme'], PROJECT . 'agents/dash/profile-settings') ?>' class="dropdown-item">Paramètres du compte</a>
+                            <a href='<?= redirect($_SESSION['theme'], PROJECT . 'agents/logout') ?>' class="dropdown-item">Déconnexion</a>
                         </div>
                     </div>
                 </div>

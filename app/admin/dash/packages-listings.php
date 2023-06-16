@@ -7,7 +7,7 @@
                     <!-- Page title actions -->
                     <div class="col-12 col-lg-auto ms-auto d-print-none">
                         <div class="btn-list justify-content-center">
-                            <a href="<?= redirect($_SESSION['theme'], PROJECT.'admin/dash/set-noaddressee-packages') ?>" class="btn d-none text-white d-sm-inline-block btn-warning">
+                            <a href="<?= redirect($_SESSION['theme'], PROJECT.'admin/dash/set-packages') ?>" class="btn d-none text-white d-sm-inline-block btn-warning">
                                 <!-- Download SVG icon from http://tabler-icons.io/i/plus -->
                                 <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
                                     <path stroke="none" d="M0 0h24v24H0z" fill="none" />
@@ -16,7 +16,7 @@
                                 </svg>
                                 Nouveau colis
                             </a>
-                            <a href="<?= redirect($_SESSION['theme'], PROJECT.'admin/dash/set-noaddressee-packages') ?>" class="btn d-sm-none text-white btn-warning">
+                            <a href="<?= redirect($_SESSION['theme'], PROJECT.'admin/dash/set-packages') ?>" class="btn d-sm-none text-white btn-warning">
                                 <!-- Download SVG icon from http://tabler-icons.io/i/plus -->
                                 <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
                                     <path stroke="none" d="M0 0h24v24H0z" fill="none" />
@@ -87,7 +87,7 @@
                                             </td>
                                             <td class="text-end">
                                                 <span class="">
-                                                    <a class="btn-link link-warning" href="<?= redirect($_SESSION['theme'], PROJECT.'admin/dash/edit-noaddressee-packages') ?>">
+                                                    <a class="btn-link link-warning" href="<?= redirect($_SESSION['theme'], PROJECT.'admin/dash/edit-packages') ?>">
                                                         Modifier
                                                     </a>
                                                 </span>
