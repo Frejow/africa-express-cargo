@@ -116,7 +116,9 @@ if (isset($_POST['pass_w']) && !empty($_POST['pass_w']) && checkSubmittedPasswor
 
             if (updateAvatar($data['id'], $newdata['avatar'])) {
 
-                if (getUserPersonalInf($data['id'])) {
+                if (!empty(getUserPersonalInf($data['id']))) {
+
+                    $_SESSION['connected_agent'] = getUserPersonalInf($data['id']);
     
                     $_SESSION['success_msg'] = 'Mise à jour effectuée avec succès';
     

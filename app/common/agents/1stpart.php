@@ -60,7 +60,7 @@ $_SESSION['agent_current_url'] = "{$_SERVER['REQUEST_SCHEME']}://{$_SERVER['HTTP
             case "packages-group-listings":
                 echo "<title>Groupe de colis</title>";
                 break;
-            case "add-packages-ingroup":
+            case "add-packages-inpackagesgroup":
                 echo "<title>Ajouter colis au groupe de colis</title>";
                 break;
             case "set-packages-group":
@@ -68,6 +68,18 @@ $_SESSION['agent_current_url'] = "{$_SERVER['REQUEST_SCHEME']}://{$_SERVER['HTTP
                 break;
             case "edit-packages-group":
                 echo "<title>Modifier groupe de colis</title>";
+                break;
+            case "products-type":
+                echo "<title>Type de produits</title>";
+                break;
+            case "shipping-type":
+                echo "<title>Type d'envoi</title>";
+                break;
+            case "set-products-type":
+                echo "<title>Ajouter nouveau type de produit</title>";
+                break;
+            case "update-products-type":
+                echo "<title>Mise à jour</title>";
                 break;
             default:
                 echo "<title>Erreur 404</title>";
@@ -105,16 +117,85 @@ $_SESSION['agent_current_url'] = "{$_SERVER['REQUEST_SCHEME']}://{$_SERVER['HTTP
             display: none;
         }
 
-        .modal {
-            pointer-events: none;
+        .loader-container {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
         }
 
-        .modal-dialog {
-            pointer-events: initial;
+        .logo {
+            width: 100px;
+            margin-bottom: 20px;
         }
 
-        .modal-backdrop {
-            z-index: 1040 !important;
+        .loader {
+            width: 40px;
+            height: 40px;
+            border: 6px solid #2b348d;
+            border-top-color: #f58337;
+            border-radius: 50%;
+            animation: spin 1s ease-in-out infinite;
+        }
+
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        #preview {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            align-items: center;
+        }
+
+        #preview img {
+            margin: 2px;
+            max-width: 250px;
+            max-height: 250px;
+            width: auto;
+            height: auto;
+        }
+
+        #importButton {
+            width: 500px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        @media (max-width: 575px) {
+            #importButton {
+                width: 150px;
+                white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
+            }
+
+            .img_container {
+                display: flex;
+                flex-wrap: wrap;
+            }
+        }
+
+        #importButton:hover {
+            overflow: auto;
+        }
+
+        .img_container {
+            display: flex;
+            flex-wrap: wrap;
+        }
+
+        .img_container img {
+            width: 100%;
+            height: auto;
+            margin: 5px;
+            max-width: 250px;
+            max-height: 250px;
         }
     </style>
 </head>
@@ -309,12 +390,12 @@ $_SESSION['agent_current_url'] = "{$_SERVER['REQUEST_SCHEME']}://{$_SERVER['HTTP
                         </li>
                         <li class="nav-item 
                             <?php
-                            if ($params[2] == 'shipping-packages-group-listings' || $params[2] == 'set-shipping-packages-group' || $params[2] == 'edit-shipping-packages-group' || $params[2] == 'add-packages-inshipping-packagesgroup') {
+                            if ($params[2] == 'packages-group-listings' || $params[2] == 'set-packages-group' || $params[2] == 'edit-packages-group' || $params[2] == 'add-packages-inpackagesgroup') {
                                 echo 'active';
                             }
                             ?>
                             ">
-                            <a class="nav-link" href="<?= redirect($_SESSION['theme'], PROJECT . 'agents/dash/shipping-packages-group-listings') ?>">
+                            <a class="nav-link" href="<?= redirect($_SESSION['theme'], PROJECT . 'agents/dash/packages-group-listings') ?>">
                                 <span class="nav-link-icon d-md-none d-lg-inline-block"><!-- Download SVG icon from http://tabler-icons.io/i/home -->
                                     <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
                                         <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
@@ -330,34 +411,7 @@ $_SESSION['agent_current_url'] = "{$_SERVER['REQUEST_SCHEME']}://{$_SERVER['HTTP
                                     </svg>
                                 </span>
                                 <span class="nav-link-title">
-                                    Groupe de colis Expédition
-                                </span>
-                            </a>
-                        </li>
-                        <li class="nav-item 
-                            <?php
-                            if ($params[2] == 'customers-packages-group-listings' || $params[2] == 'update-customers-packages-group') {
-                                echo 'active';
-                            }
-                            ?>
-                            ">
-                            <a class="nav-link" href="<?= redirect($_SESSION['theme'], PROJECT . 'agents/dash/customers-packages-group-listings') ?>">
-                                <span class="nav-link-icon d-md-none d-lg-inline-block"><!-- Download SVG icon from http://tabler-icons.io/i/home -->
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-                                        <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
-                                        <path d="M7 16.5l-5 -3l5 -3l5 3v5.5l-5 3z"></path>
-                                        <path d="M2 13.5v5.5l5 3"></path>
-                                        <path d="M7 16.545l5 -3.03"></path>
-                                        <path d="M17 16.5l-5 -3l5 -3l5 3v5.5l-5 3z"></path>
-                                        <path d="M12 19l5 3"></path>
-                                        <path d="M17 16.5l5 -3"></path>
-                                        <path d="M12 13.5v-5.5l-5 -3l5 -3l5 3v5.5"></path>
-                                        <path d="M7 5.03v5.455"></path>
-                                        <path d="M12 8l5 -3"></path>
-                                    </svg>
-                                </span>
-                                <span class="nav-link-title">
-                                    Groupe de colis Clients
+                                    Groupe de colis
                                 </span>
                             </a>
                         </li>
@@ -383,87 +437,47 @@ $_SESSION['agent_current_url'] = "{$_SERVER['REQUEST_SCHEME']}://{$_SERVER['HTTP
                                 </span>
                             </a>
                         </li>
-                        <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" data-bs-auto-close="outside" role="button" aria-expanded="false" href="#">
-                                <span class="nav-link-icon d-md-none d-lg-inline-block"><!-- Download SVG icon from http://tabler-icons.io/i/checkbox -->
+                        <li class="nav-item 
+                            <?php
+                            if ($params[2] == 'products-type' || $params[2] == 'set-products-type' || $params[2] == 'edit-products-type') {
+                                echo 'active';
+                            }
+                            ?>
+                            ">
+                            <a class="nav-link" href="<?= redirect($_SESSION['theme'], PROJECT . 'agents/dash/products-type') ?>">
+                                <span class="nav-link-icon d-md-none d-lg-inline-block">
                                     <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
                                         <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
-                                        <path d="M9 7m-4 0a4 4 0 1 0 8 0a4 4 0 1 0 -8 0"></path>
-                                        <path d="M3 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2"></path>
-                                        <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
-                                        <path d="M21 21v-2a4 4 0 0 0 -3 -3.85"></path>
+                                        <path d="M14 4h6v6h-6z"></path>
+                                        <path d="M4 14h6v6h-6z"></path>
+                                        <path d="M17 17m-3 0a3 3 0 1 0 6 0a3 3 0 1 0 -6 0"></path>
+                                        <path d="M7 7m-3 0a3 3 0 1 0 6 0a3 3 0 1 0 -6 0"></path>
                                     </svg>
                                 </span>
                                 <span class="nav-link-title">
-                                    Clients
+                                    Type de produits
                                 </span>
                             </a>
-                            <div class="dropdown-menu">
-                                <div class="dropdown-menu-columns">
-                                    <div class="dropdown-menu-column">
-                                        <div class="dropend">
-                                            <a class="dropdown-item <?= $params[2] == 'customers-listings' ? 'active' : '' ?>" href="<?= redirect($_SESSION['theme'], PROJECT . 'agents/dash/customers-listings') ?>">
-                                                <span class="nav-link-icon d-md-none d-lg-inline-block"><!-- Download SVG icon from http://tabler-icons.io/i/checkbox -->
-                                                    <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-                                                        <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
-                                                        <path d="M13 5h8"></path>
-                                                        <path d="M13 9h5"></path>
-                                                        <path d="M13 15h8"></path>
-                                                        <path d="M13 19h5"></path>
-                                                        <path d="M3 4m0 1a1 1 0 0 1 1 -1h4a1 1 0 0 1 1 1v4a1 1 0 0 1 -1 1h-4a1 1 0 0 1 -1 -1z"></path>
-                                                        <path d="M3 14m0 1a1 1 0 0 1 1 -1h4a1 1 0 0 1 1 1v4a1 1 0 0 1 -1 1h-4a1 1 0 0 1 -1 -1z"></path>
-                                                    </svg>
-                                                </span>
-                                                Liste Clients
-                                            </a>
-                                        </div>
-                                        <div class="dropend">
-                                            <a class="dropdown-item 
-                                            <?php
-                                            if ($params[2] == 'customers-packages-listings' || $params[2] == 'update-customers-packages') {
-                                                echo 'active';
-                                            }
-                                            ?>" href="<?= redirect($_SESSION['theme'], PROJECT . 'agents/dash/customers-packages-listings') ?>">
-                                                <span class="nav-link-icon d-md-none d-lg-inline-block"><!-- Download SVG icon from http://tabler-icons.io/i/checkbox -->
-                                                    <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-                                                        <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
-                                                        <path d="M12 3l8 4.5l0 9l-8 4.5l-8 -4.5l0 -9l8 -4.5"></path>
-                                                        <path d="M12 12l8 -4.5"></path>
-                                                        <path d="M12 12l0 9"></path>
-                                                        <path d="M12 12l-8 -4.5"></path>
-                                                        <path d="M16 5.25l-8 4.5"></path>
-                                                    </svg>
-                                                </span>
-                                                Liste Colis
-                                            </a>
-                                        </div>
-                                        <div class="dropend">
-                                            <a class="dropdown-item 
-                                            <?php
-                                            if ($params[2] == 'customers-packages-group-listings' || $params[2] == 'update-customers-packages-group') {
-                                                echo 'active';
-                                            }
-                                            ?>" href="<?= redirect($_SESSION['theme'], PROJECT . 'agents/dash/customers-packages-group-listings') ?>">
-                                                <span class="nav-link-icon d-md-none d-lg-inline-block"><!-- Download SVG icon from http://tabler-icons.io/i/home -->
-                                                    <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-                                                        <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
-                                                        <path d="M7 16.5l-5 -3l5 -3l5 3v5.5l-5 3z"></path>
-                                                        <path d="M2 13.5v5.5l5 3"></path>
-                                                        <path d="M7 16.545l5 -3.03"></path>
-                                                        <path d="M17 16.5l-5 -3l5 -3l5 3v5.5l-5 3z"></path>
-                                                        <path d="M12 19l5 3"></path>
-                                                        <path d="M17 16.5l5 -3"></path>
-                                                        <path d="M12 13.5v-5.5l-5 -3l5 -3l5 3v5.5"></path>
-                                                        <path d="M7 5.03v5.455"></path>
-                                                        <path d="M12 8l5 -3"></path>
-                                                    </svg>
-                                                </span>
-                                                Groupe de Colis
-                                            </a>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
+                        </li>
+                        <li class="nav-item 
+                            <?php
+                            if ($params[2] == 'shipping-type') {
+                                echo 'active';
+                            }
+                            ?>
+                            ">
+                            <a class="nav-link" href="<?= redirect($_SESSION['theme'], PROJECT . 'agents/dash/shipping-type') ?>">
+                                <span class="nav-link-icon d-md-none d-lg-inline-block">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                        <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                                        <path d="M10 14l11 -11"></path>
+                                        <path d="M21 3l-6.5 18a0.55 .55 0 0 1 -1 0l-3.5 -7l-7 -3.5a0.55 .55 0 0 1 0 -1l18 -6.5"></path>
+                                    </svg>
+                                </span>
+                                <span class="nav-link-title">
+                                    Type d'envoi
+                                </span>
+                            </a>
                         </li>
                     </ul>
                 </div>

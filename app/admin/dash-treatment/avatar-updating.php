@@ -12,17 +12,17 @@ if (isset($_POST["avatar_deletion"])) {
 
         if (!empty(getUserPersonalInf($data['id']))) {
 
-            $_SESSION['connected_agent'] = getUserPersonalInf($data['id']);
+            $_SESSION['connected_admin'] = getUserPersonalInf($data['id']);
 
             $_SESSION['success_msg'] = 'Mise à jour effectuée avec succès';
 
-            header("location:". redirect($_SESSION['theme'], PROJECT.'agents/dash/profile-settings'));
+            header("location:". redirect($_SESSION['theme'], PROJECT.'admin/dash/profile-settings'));
 
         } else {
     
             $_SESSION['error_msg'] = 'Une erreur est survenue. Réessayer, si cela persiste, veuillez nous contacter !';
 
-            header("location:". redirect($_SESSION['theme'], PROJECT.'agents/dash/profile-settings'));
+            header("location:". redirect($_SESSION['theme'], PROJECT.'admin/dash/profile-settings'));
 
         }
 
@@ -30,7 +30,7 @@ if (isset($_POST["avatar_deletion"])) {
     
         $_SESSION['error_msg'] = 'Une erreur est survenue. Réessayer, si cela persiste, veuillez nous contacter !';
 
-        header("location:". redirect($_SESSION['theme'], PROJECT.'agents/dash/profile-settings'));
+        header("location:". redirect($_SESSION['theme'], PROJECT.'admin/dash/profile-settings'));
 
     }
 
@@ -96,7 +96,7 @@ if (isset($_POST['pass_w']) && !empty($_POST['pass_w']) && checkSubmittedPasswor
 
             $_SESSION['error_msg'] = 'Une erreur est survenue avec ce fichier. Il se peut que votre fichier pèse plus que le poids maximal autorisé. Réessayer avec un autre fichier image. Si cela persiste, contactez nous !';
         
-            header("location:". redirect($_SESSION['theme'], PROJECT.'agents/dash/profile-settings'));
+            header("location:". redirect($_SESSION['theme'], PROJECT.'admin/dash/profile-settings'));
 
         }
         
@@ -116,17 +116,19 @@ if (isset($_POST['pass_w']) && !empty($_POST['pass_w']) && checkSubmittedPasswor
 
             if (updateAvatar($data['id'], $newdata['avatar'])) {
 
-                if (getUserPersonalInf($data['id'])) {
+                if (!empty(getUserPersonalInf($data['id']))) {
+
+                    $_SESSION['connected_admin'] = getUserPersonalInf($data['id']);
     
                     $_SESSION['success_msg'] = 'Mise à jour effectuée avec succès';
     
-                    header("location:". redirect($_SESSION['theme'], PROJECT.'agents/dash/profile-settings'));
+                    header("location:". redirect($_SESSION['theme'], PROJECT.'admin/dash/profile-settings'));
     
                 } else {
         
                     $_SESSION['error_msg'] = 'Une erreur est survenue. Réessayer, si cela persiste, contactez nous !';
         
-                    header("location:". redirect($_SESSION['theme'], PROJECT.'agents/dash/profile-settings'));
+                    header("location:". redirect($_SESSION['theme'], PROJECT.'admin/dash/profile-settings'));
         
                 }
      
@@ -134,7 +136,7 @@ if (isset($_POST['pass_w']) && !empty($_POST['pass_w']) && checkSubmittedPasswor
         
                 $_SESSION['error_msg'] = 'Une erreur est survenue. Réessayer, si cela persiste, veuillez nous contacter !';
     
-                header("location:". redirect($_SESSION['theme'], PROJECT.'agents/dash/profile-settings'));
+                header("location:". redirect($_SESSION['theme'], PROJECT.'admin/dash/profile-settings'));
     
             }
 
@@ -142,7 +144,7 @@ if (isset($_POST['pass_w']) && !empty($_POST['pass_w']) && checkSubmittedPasswor
 
             $_SESSION['error_msg'] = 'Une erreur est survenue. Cause probable : Importation de fichier lourd et dépassant la limite autorisée (Poids Max : 2Mo). Réessayer en respectant la limite autorisée. Contactez nous si cela persiste.';
 
-            header("location:". redirect($_SESSION['theme'], PROJECT.'agents/dash/profile-settings'));
+            header("location:". redirect($_SESSION['theme'], PROJECT.'admin/dash/profile-settings'));
 
             exit;
 
@@ -166,7 +168,7 @@ if (isset($_POST['pass_w']) && !empty($_POST['pass_w']) && checkSubmittedPasswor
 
     $_SESSION['error_msg'] = 'Une erreur est survenue. Cause probable : Importation de fichier lourd et dépassant la limite autorisée (Poids Max : 2Mo). Réessayer en respectant la limite autorisée. Contactez nous si cela persiste.';
 
-    header("location:". redirect($_SESSION['theme'], PROJECT.'agents/dash/profile-settings'));
+    header("location:". redirect($_SESSION['theme'], PROJECT.'admin/dash/profile-settings'));
 
     exit;
 
@@ -178,6 +180,6 @@ if (!empty($error)) {
 
     $_SESSION['avatar_error'] = $error;
 
-    header("location:". redirect($_SESSION['theme'], PROJECT.'agents/dash/profile-settings'));
+    header("location:". redirect($_SESSION['theme'], PROJECT.'admin/dash/profile-settings'));
 
 }

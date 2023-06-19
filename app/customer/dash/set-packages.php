@@ -15,7 +15,7 @@ if (isset($_SESSION["data"]) && !empty($_SESSION["data"])) {
 
 ?>
 
-<form action="<?= redirect($_SESSION['theme'], PROJECT.'customer/dash-treatment/set-packages') ?>" method="post" enctype="multipart/form-data" class="mt-3">
+<form action="<?= redirect($_SESSION['theme'], PROJECT . 'customer/dash-treatment/set-packages') ?>" method="post" enctype="multipart/form-data" class="mt-3">
     <div class="page-body">
         <div class="container-xl">
             <div class="row row-deck row-cards">
@@ -23,7 +23,7 @@ if (isset($_SESSION["data"]) && !empty($_SESSION["data"])) {
                     <div class="card">
                         <div class="card-header d-flex">
                             <div>
-                                <a href="<?= redirect($_SESSION['theme'], PROJECT.'customer/dash/packages-listings') ?>" class="btn btn-link link-secondary" style="border:none; width:fit-content;">
+                                <a href="<?= redirect($_SESSION['theme'], PROJECT . 'customer/dash/packages-listings') ?>" class="btn btn-link link-secondary" style="border:none; width:fit-content;">
                                     <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
                                         <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
                                         <path d="M9 11l-4 4l4 4m-4 -4h11a4 4 0 0 0 0 -8h-1"></path>
@@ -38,7 +38,7 @@ if (isset($_SESSION["data"]) && !empty($_SESSION["data"])) {
                             <div class="row">
                                 <div class="col-lg-4">
                                     <div class="mb-3">
-                                        <label class="form-label">Numéro de suivi [ Requis ]</label>
+                                        <label class="form-label">Numéro de suivi <span class="text-danger">[ Requis ]</span></label>
                                         <div class="input-group input-group-flat">
                                             <input type="text" required class="form-control" name="pack_trackN" value="<?php echo (isset($updata["pack_trackN"]) && !empty($updata["pack_trackN"])) ? $updata["pack_trackN"] : "" ?>" placeholder="0X0YZ1" autocomplete="off">
                                         </div>
@@ -62,17 +62,15 @@ if (isset($_SESSION["data"]) && !empty($_SESSION["data"])) {
                                     </div>
                                 </div>
                             </div>
-                            <div class="row">
+                            <div class="row mb-3">
                                 <div class="col-lg-12">
                                     <div>
-                                        <label class="form-label">Description du colis [ Requis ]</label>
+                                        <label class="form-label">Description du colis <span class="text-danger">[ Requis ]</span></label>
                                         <textarea class="form-control" required name="pack_descp" rows="3"><?php echo (isset($updata["pack_descp"]) && !empty($updata["pack_descp"])) ? $updata["pack_descp"] : "" ?></textarea>
                                     </div>
                                 </div>
-                            </div>                        
-                        </div>
-                        <div class="card-body">
-                        <label class="form-label">Type de produits</label>
+                            </div>
+                            <label class="form-label">Type de produits</label>
                             <div class="form-selectgroup-boxes row mb-3">
                                 <div class="col-lg-4">
                                     <label class="form-selectgroup-item">
@@ -131,6 +129,8 @@ if (isset($_SESSION["data"]) && !empty($_SESSION["data"])) {
                                     </div>
                                 </div>
                             </div>
+                        </div>
+                        <div class="card-body">
                             <div class="row">
                                 <div class="card-body text-center">
                                     <h3 class="card-title"></h3>
@@ -146,16 +146,15 @@ if (isset($_SESSION["data"]) && !empty($_SESSION["data"])) {
                                         </svg>
                                     </label>
                                     <input type="file" name="filesToUpload[]" id="filesToUpload" style="display:none" multiple onchange="updatebuttonLabel()">
-                                    <input type="button" class="mb-2 btn <?= isset($updata["images"]) ? 'btn-danger' : 'link-warning' ?>" 
-                                    value="<?php 
-                                    if (isset($updata["images"]) && !empty($updata["images"])) {
-                                        foreach ($updata["images"] as $key => $value) {
-                                            echo $updata["images"][$key].' ';
-                                        }
-                                    } else {
-                                        echo  "AJOUTER DES IMAGES [ MAXIMUM 03 ]";
-                                    } 
-                                    ?>" id="importButton" onclick="document.getElementById('filesToUpload').click();" />
+                                    <input type="button" class="mb-2 btn <?= isset($updata["images"]) ? 'btn-danger' : 'link-warning' ?>" value="<?php
+                                                                                                                                                    if (isset($updata["images"]) && !empty($updata["images"])) {
+                                                                                                                                                        foreach ($updata["images"] as $key => $value) {
+                                                                                                                                                            echo $updata["images"][$key] . ' ';
+                                                                                                                                                        }
+                                                                                                                                                    } else {
+                                                                                                                                                        echo  "AJOUTER DES IMAGES [ MAXIMUM 03 ]";
+                                                                                                                                                    }
+                                                                                                                                                    ?>" id="importButton" onclick="document.getElementById('filesToUpload').click();" />
 
                                     <?php
                                     if (isset($error["images"]) && !empty($error["images"])) {
@@ -170,7 +169,7 @@ if (isset($_SESSION["data"]) && !empty($_SESSION["data"])) {
                             </div>
                         </div>
                         <div class="card-footer d-flex">
-                            <a href="<?= redirect($_SESSION['theme'], PROJECT.'customer/dash/packages-listings') ?>" class="btn btn-link link-secondary" style="border:none;">
+                            <a href="<?= redirect($_SESSION['theme'], PROJECT . 'customer/dash/packages-listings') ?>" class="btn btn-link link-secondary" style="border:none;">
                                 Annuler
                             </a>
                             <button type="submit" class="btn text-white ms-auto btn-warning">

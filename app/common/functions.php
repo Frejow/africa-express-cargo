@@ -1236,7 +1236,7 @@ function getPackageImages(int $package_id): array
  * 
  * @param string $table The name of table.
  * @param int $page The page number.
- * @param int $packages_nb_per_page Packages number to show per page.
+ * @param int $rows_per_page Packages number to show per page.
  * @param string $status Package status
  * @param string $search The value of search field. 
  * @param mixed $packages_type The user id.
@@ -1244,7 +1244,7 @@ function getPackageImages(int $package_id): array
  * 
  * @return array $list All packages list based on the provide values of the function parameters.
  */
-function listings(string $table, int $page, int $packages_nb_per_page, string $status, string $search, $packages_type = null, $user_id = null): array
+function listings(string $table, int $page, int $rows_per_page, string $status, string $search, $type = null, $user_id = null): array
 {
 
     $list = [];
@@ -1255,7 +1255,7 @@ function listings(string $table, int $page, int $packages_nb_per_page, string $s
 
         if ($status === 'Tout Afficher' && $search === 'UNDEFINED') {
 
-            $request = "SELECT * FROM " . $table . " WHERE user_id = :user_id and is_deleted = :is_deleted ORDER BY id DESC LIMIT " . $packages_nb_per_page . " OFFSET " . ($page - 1) * $packages_nb_per_page;
+            $request = "SELECT * FROM " . $table . " WHERE user_id = :user_id and is_deleted = :is_deleted ORDER BY id DESC LIMIT " . $rows_per_page . " OFFSET " . ($page - 1) * $rows_per_page;
 
             $request_prepare = $database->prepare($request);
 
@@ -1265,7 +1265,7 @@ function listings(string $table, int $page, int $packages_nb_per_page, string $s
             ]);
         } elseif ($status !== 'Tout Afficher' && $search === 'UNDEFINED') {
 
-            $request = "SELECT * FROM " . $table . " WHERE user_id = :user_id and status = :status and is_deleted = :is_deleted ORDER BY id DESC LIMIT " . $packages_nb_per_page . " OFFSET " . ($page - 1) * $packages_nb_per_page;
+            $request = "SELECT * FROM " . $table . " WHERE user_id = :user_id and status = :status and is_deleted = :is_deleted ORDER BY id DESC LIMIT " . $rows_per_page . " OFFSET " . ($page - 1) * $rows_per_page;
 
             $request_prepare = $database->prepare($request);
 
@@ -1288,7 +1288,7 @@ function listings(string $table, int $page, int $packages_nb_per_page, string $s
                     $request .= " AND ";
                 }
             }
-            $request .= " ORDER BY id DESC LIMIT " . $packages_nb_per_page . " OFFSET " . ($page - 1) * $packages_nb_per_page;
+            $request .= " ORDER BY id DESC LIMIT " . $rows_per_page . " OFFSET " . ($page - 1) * $rows_per_page;
 
             $request_prepare = $database->prepare($request);
 
@@ -1310,7 +1310,7 @@ function listings(string $table, int $page, int $packages_nb_per_page, string $s
                     $request .= " AND ";
                 }
             }
-            $request .= " AND status = :status ORDER BY id DESC LIMIT " . $packages_nb_per_page . " OFFSET " . ($page - 1) * $packages_nb_per_page;
+            $request .= " AND status = :status ORDER BY id DESC LIMIT " . $rows_per_page . " OFFSET " . ($page - 1) * $rows_per_page;
 
             $request_prepare = $database->prepare($request);
 
@@ -1320,13 +1320,11 @@ function listings(string $table, int $page, int $packages_nb_per_page, string $s
                 'is_deleted' => 0,
             ]);
         }
-    } 
-    
-    elseif (is_null($user_id) && $packages_type == 'Tous les colis') {
+    } elseif (is_null($user_id) && ($type == 'Tous les colis' || $type == 'Tous les groupes de colis')) {
 
         if ($status === 'Tout Afficher' && $search === 'UNDEFINED') {
 
-            $request = "SELECT * FROM " . $table . " WHERE is_deleted = :is_deleted ORDER BY id DESC LIMIT " . $packages_nb_per_page . " OFFSET " . ($page - 1) * $packages_nb_per_page;
+            $request = "SELECT * FROM " . $table . " WHERE is_deleted = :is_deleted ORDER BY id DESC LIMIT " . $rows_per_page . " OFFSET " . ($page - 1) * $rows_per_page;
 
             $request_prepare = $database->prepare($request);
 
@@ -1335,7 +1333,7 @@ function listings(string $table, int $page, int $packages_nb_per_page, string $s
             ]);
         } elseif ($status !== 'Tout Afficher' && $search === 'UNDEFINED') {
 
-            $request = "SELECT * FROM " . $table . " WHERE status = :status AND is_deleted = :is_deleted ORDER BY id DESC LIMIT " . $packages_nb_per_page . " OFFSET " . ($page - 1) * $packages_nb_per_page;
+            $request = "SELECT * FROM " . $table . " WHERE status = :status AND is_deleted = :is_deleted ORDER BY id DESC LIMIT " . $rows_per_page . " OFFSET " . ($page - 1) * $rows_per_page;
 
             $request_prepare = $database->prepare($request);
 
@@ -1357,7 +1355,7 @@ function listings(string $table, int $page, int $packages_nb_per_page, string $s
                     $request .= " AND ";
                 }
             }
-            $request .= " ORDER BY id DESC LIMIT " . $packages_nb_per_page . " OFFSET " . ($page - 1) * $packages_nb_per_page;
+            $request .= " ORDER BY id DESC LIMIT " . $rows_per_page . " OFFSET " . ($page - 1) * $rows_per_page;
 
             $request_prepare = $database->prepare($request);
 
@@ -1378,7 +1376,7 @@ function listings(string $table, int $page, int $packages_nb_per_page, string $s
                     $request .= " AND ";
                 }
             }
-            $request .= " AND status = :status ORDER BY id DESC LIMIT " . $packages_nb_per_page . " OFFSET " . ($page - 1) * $packages_nb_per_page;
+            $request .= " AND status = :status ORDER BY id DESC LIMIT " . $rows_per_page . " OFFSET " . ($page - 1) * $rows_per_page;
 
             $request_prepare = $database->prepare($request);
 
@@ -1387,13 +1385,11 @@ function listings(string $table, int $page, int $packages_nb_per_page, string $s
                 'is_deleted' => 0,
             ]);
         }
-    } 
-    
-    elseif (is_null($user_id) && $packages_type == 'Colis avec destinataire') {
+    } elseif (is_null($user_id) && ($type == 'Colis avec destinataire' || $type == 'Groupes de colis clients')) {
 
         if ($status === 'Tout Afficher' && $search === 'UNDEFINED') {
 
-            $request = "SELECT * FROM " . $table . " WHERE user_id <> 38 AND is_deleted = :is_deleted ORDER BY id DESC LIMIT " . $packages_nb_per_page . " OFFSET " . ($page - 1) * $packages_nb_per_page;
+            $request = "SELECT * FROM " . $table . " WHERE user_id <> 38 AND is_deleted = :is_deleted ORDER BY id DESC LIMIT " . $rows_per_page . " OFFSET " . ($page - 1) * $rows_per_page;
 
             $request_prepare = $database->prepare($request);
 
@@ -1402,7 +1398,7 @@ function listings(string $table, int $page, int $packages_nb_per_page, string $s
             ]);
         } elseif ($status !== 'Tout Afficher' && $search === 'UNDEFINED') {
 
-            $request = "SELECT * FROM " . $table . " WHERE user_id <> 38 AND status = :status AND is_deleted = :is_deleted ORDER BY id DESC LIMIT " . $packages_nb_per_page . " OFFSET " . ($page - 1) * $packages_nb_per_page;
+            $request = "SELECT * FROM " . $table . " WHERE user_id <> 38 AND status = :status AND is_deleted = :is_deleted ORDER BY id DESC LIMIT " . $rows_per_page . " OFFSET " . ($page - 1) * $rows_per_page;
 
             $request_prepare = $database->prepare($request);
 
@@ -1424,7 +1420,7 @@ function listings(string $table, int $page, int $packages_nb_per_page, string $s
                     $request .= " AND ";
                 }
             }
-            $request .= " ORDER BY id DESC LIMIT " . $packages_nb_per_page . " OFFSET " . ($page - 1) * $packages_nb_per_page;
+            $request .= " ORDER BY id DESC LIMIT " . $rows_per_page . " OFFSET " . ($page - 1) * $rows_per_page;
 
             $request_prepare = $database->prepare($request);
 
@@ -1445,7 +1441,7 @@ function listings(string $table, int $page, int $packages_nb_per_page, string $s
                     $request .= " AND ";
                 }
             }
-            $request .= " AND status = :status ORDER BY id DESC LIMIT " . $packages_nb_per_page . " OFFSET " . ($page - 1) * $packages_nb_per_page;
+            $request .= " AND status = :status ORDER BY id DESC LIMIT " . $rows_per_page . " OFFSET " . ($page - 1) * $rows_per_page;
 
             $request_prepare = $database->prepare($request);
 
@@ -1454,13 +1450,11 @@ function listings(string $table, int $page, int $packages_nb_per_page, string $s
                 'is_deleted' => 0,
             ]);
         }
-    }
-
-    elseif (is_null($user_id) && $packages_type == 'Colis sans destinataire') {
+    } elseif (is_null($user_id) && ($type == 'Colis sans destinataire' || $type == 'Groupes de colis expédition')) {
 
         if ($status === 'Tout Afficher' && $search === 'UNDEFINED') {
 
-            $request = "SELECT * FROM " . $table . " WHERE user_id = 38 AND is_deleted = :is_deleted ORDER BY id DESC LIMIT " . $packages_nb_per_page . " OFFSET " . ($page - 1) * $packages_nb_per_page;
+            $request = "SELECT * FROM " . $table . " WHERE user_id = 38 AND is_deleted = :is_deleted ORDER BY id DESC LIMIT " . $rows_per_page . " OFFSET " . ($page - 1) * $rows_per_page;
 
             $request_prepare = $database->prepare($request);
 
@@ -1469,7 +1463,7 @@ function listings(string $table, int $page, int $packages_nb_per_page, string $s
             ]);
         } elseif ($status !== 'Tout Afficher' && $search === 'UNDEFINED') {
 
-            $request = "SELECT * FROM " . $table . " WHERE user_id = 38 AND status = :status AND is_deleted = :is_deleted ORDER BY id DESC LIMIT " . $packages_nb_per_page . " OFFSET " . ($page - 1) * $packages_nb_per_page;
+            $request = "SELECT * FROM " . $table . " WHERE user_id = 38 AND status = :status AND is_deleted = :is_deleted ORDER BY id DESC LIMIT " . $rows_per_page . " OFFSET " . ($page - 1) * $rows_per_page;
 
             $request_prepare = $database->prepare($request);
 
@@ -1491,7 +1485,7 @@ function listings(string $table, int $page, int $packages_nb_per_page, string $s
                     $request .= " AND ";
                 }
             }
-            $request .= " ORDER BY id DESC LIMIT " . $packages_nb_per_page . " OFFSET " . ($page - 1) * $packages_nb_per_page;
+            $request .= " ORDER BY id DESC LIMIT " . $rows_per_page . " OFFSET " . ($page - 1) * $rows_per_page;
 
             $request_prepare = $database->prepare($request);
 
@@ -1512,7 +1506,7 @@ function listings(string $table, int $page, int $packages_nb_per_page, string $s
                     $request .= " AND ";
                 }
             }
-            $request .= " AND status = :status ORDER BY id DESC LIMIT " . $packages_nb_per_page . " OFFSET " . ($page - 1) * $packages_nb_per_page;
+            $request .= " AND status = :status ORDER BY id DESC LIMIT " . $rows_per_page . " OFFSET " . ($page - 1) * $rows_per_page;
 
             $request_prepare = $database->prepare($request);
 
@@ -1564,9 +1558,7 @@ function countRowsInTable(string $table, $packages_type = null, $user_id = null)
                 "user_id" => $user_id
             ]
         );
-    } 
-    
-    elseif (is_null($user_id) && $packages_type == 'Tous les colis') {
+    } elseif (is_null($user_id) && $packages_type == 'Tous les colis') {
 
         $request = "SELECT COUNT(*) FROM " . $table . " WHERE is_deleted = :is_deleted";
 
@@ -1577,9 +1569,7 @@ function countRowsInTable(string $table, $packages_type = null, $user_id = null)
                 "is_deleted" => 0,
             ]
         );
-    }
-
-    elseif (is_null($user_id) && $packages_type == 'Colis avec destinataire') {
+    } elseif (is_null($user_id) && $packages_type == 'Colis avec destinataire') {
 
         $request = "SELECT COUNT(*) FROM " . $table . " WHERE user_id <> 38 AND is_deleted = :is_deleted";
 
@@ -1590,9 +1580,7 @@ function countRowsInTable(string $table, $packages_type = null, $user_id = null)
                 "is_deleted" => 0,
             ]
         );
-    }
-
-    elseif (is_null($user_id) && $packages_type == 'Colis sans destinataire') {
+    } elseif (is_null($user_id) && $packages_type == 'Colis sans destinataire') {
 
         $request = "SELECT COUNT(*) FROM " . $table . " WHERE user_id = 38 AND is_deleted = :is_deleted";
 
@@ -1984,7 +1972,7 @@ function customersListing(): array
 
     $database = databaseLogin();
 
-    $request = "SELECT * FROM user WHERE profile = :profile and is_deleted = :is_deleted and is_active = :is_active ORDER BY id DESC";
+    $request = "SELECT * FROM user WHERE profile = :profile and is_deleted = :is_deleted and is_active = :is_active ORDER BY name ASC";
 
     $request_prepare = $database->prepare($request);
 
@@ -2005,4 +1993,81 @@ function customersListing(): array
     }
 
     return $customersListing;
+}
+
+/** Add product type
+ * 
+ * @param string $name.
+ * @param int $billing_per_kg.
+ * @param int $billing_per_cbm.
+ * @param int $billing_per_pcs.
+ * @param int $billing_per_kg_with_insurance.
+ * @param int $billing_per_cbm_with_insurance.
+ * @param int $billing_per_pcs_with_insurance.
+ * 
+ * @return bool The result.
+ */
+function addProduct(string $name, int $billing_per_kg, int $billing_per_cbm, int $billing_per_pcs, int $billing_per_kg_with_insurance, int $billing_per_cbm_with_insurance, int $billing_per_pcs_with_insurance): bool
+{
+
+    $addProduct = false;
+
+    $database = databaseLogin();
+
+    $request = "INSERT INTO product_type (name, billing_per_kg, billing_per_cbm, billing_per_pcs, billing_per_kg_with_insurance, billing_per_cbm_with_insurance, billing_per_pcs_with_insurance) 
+    VALUES (:name, :billing_per_kg, :billing_per_cbm, :billing_per_pcs, :billing_per_kg_with_insurance, :billing_per_cbm_with_insurance, :billing_per_pcs_with_insurance)";
+
+    $request_prepare = $database->prepare($request);
+
+    $request_execution = $request_prepare->execute(
+        [
+            'name' => $name,
+            'billing_per_kg' => $billing_per_kg,
+            'billing_per_cbm' => $billing_per_cbm,
+            'billing_per_pcs' => $billing_per_pcs,
+            'billing_per_kg_with_insurance' => $billing_per_kg_with_insurance,
+            'billing_per_cbm_with_insurance' => $billing_per_cbm_with_insurance,
+            'billing_per_pcs_with_insurance' => $billing_per_pcs_with_insurance,
+        ]
+    );
+
+    if ($request_execution) {
+        $addProduct = true;
+    }
+
+    return $addProduct;
+}
+
+/** Check product type
+ * 
+ * @param string $productTypt The tracking number.
+ * 
+ * @return bool The result.
+ */
+function checkProductType(string $productType): bool
+{
+
+    $checkProductType = false;
+
+    $database = databaseLogin();
+
+    $request = "SELECT * FROM product_type WHERE name = :name and is_deleted = :is_deleted";
+
+    $request_prepare = $database->prepare($request);
+
+    $request_execution = $request_prepare->execute([
+        'name' => $productType,
+        'is_deleted' => 0
+    ]);
+
+    if ($request_execution) {
+
+        $data = $request_prepare->fetchAll(PDO::FETCH_ASSOC);
+
+        if (!empty($data) && is_array($data)) {
+            $checkProductType = true;
+        }
+    }
+
+    return $checkProductType;
 }

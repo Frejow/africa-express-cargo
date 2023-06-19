@@ -390,6 +390,43 @@
     });
 </script>
 
+<!--Display block for package addition-->
+
+<script>
+    function updateBlockVisibility() {
+        var selection = document.getElementById("selection");
+        var block1 = document.getElementById("block1");
+        var block2 = document.getElementById("block2");
+
+        if (selection.value === "38") {
+            block1.style.display = "block";
+            block2.style.display = "none";
+        } else {
+            block1.style.display = "none";
+            block2.style.display = "block";
+        }
+
+        updateBlockVisibility();
+    }
+</script>
+
+<!--Display block for insurance billing-->
+
+<script>
+    function insuranceBlockVisibility() {
+        var radio = document.getElementById("radio");
+        var insuranceBlock = document.getElementById("insuranceBlock");
+
+        if (radio.checked) {
+            insuranceBlock.style.display = "block";
+        } else {
+            insuranceBlock.style.display = "none";
+        }
+
+        insuranceBlockVisibility();
+    }
+</script>
+
 <script src="<?= PROJECT ?>public/datatables/jquery.dataTables.js"></script>
 <script src="<?= PROJECT ?>public/datatables-bs4/js/dataTables.bootstrap4.js"></script>
 <script src="<?= PROJECT ?>public/datatables-buttons/js/dataTables.buttons.js"></script>

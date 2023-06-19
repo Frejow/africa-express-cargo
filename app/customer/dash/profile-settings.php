@@ -1,4 +1,6 @@
-<?php include 'app/common/customer/1stpart.php';  ?>
+<?php include 'app/common/customer/1stpart.php';  
+
+//die(var_dump($_SESSION['connected_customer'])); ?>
 
 <div class="page-header d-print-none">
     <div class="container-xl">

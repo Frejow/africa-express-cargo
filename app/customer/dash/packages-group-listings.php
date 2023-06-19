@@ -7,7 +7,7 @@ if (!isset($_SESSION['previous_page']) && !isset($_SESSION['next_page'])) {
     $_SESSION['page'] = 1;
 }
 
-$_SESSION['packages_nb_per_page'] = 10;
+$_SESSION['rows_per_page'] = 10;
 
 $_SESSION['status'] = 'Tout Afficher';
 
@@ -25,8 +25,8 @@ if (isset($_SESSION['actual_page']) && !empty($_SESSION['actual_page'])) {
     $_SESSION['page'] = $_SESSION['actual_page'];
 }
 
-if (isset($_SESSION['select_packages_nb_per_page']) && !empty($_SESSION['select_packages_nb_per_page'])) {
-    $_SESSION['packages_nb_per_page'] = $_SESSION['select_packages_nb_per_page'];
+if (isset($_SESSION['selected_rows_per_page']) && !empty($_SESSION['selected_rows_per_page'])) {
+    $_SESSION['rows_per_page'] = $_SESSION['selected_rows_per_page'];
 }
 
 if (isset($_SESSION['selected_status']) && !empty($_SESSION['selected_status'])) {
@@ -37,7 +37,7 @@ if (isset($_SESSION['research']) && !empty($_SESSION['research'])) {
     $_SESSION['search'] = $_SESSION['research'];
 }
 
-$packages_group_listings = listings($table, $_SESSION['page'], $_SESSION['packages_nb_per_page'], $_SESSION['status'], strtoupper($_SESSION['search']), null, $data['id']);
+$packages_group_listings = listings($table, $_SESSION['page'], $_SESSION['rows_per_page'], $_SESSION['status'], strtoupper($_SESSION['search']), null, $data['id']);
 
 $rows = countRowsInTable($table, null, $data['id']);
 
@@ -85,13 +85,13 @@ $rows = countRowsInTable($table, null, $data['id']);
                                     <div class="mx-2 d-inline-block">
                                         <select class="form-select" name="select" id="mySelect">
                                             <option value="10">10</option>
-                                            <option <?php if (isset($_SESSION['select_packages_nb_per_page']) && $_SESSION['select_packages_nb_per_page'] == 15) {
+                                            <option <?php if (isset($_SESSION['selected_rows_per_page']) && $_SESSION['selected_rows_per_page'] == 15) {
                                                         echo 'selected';
                                                     } ?> value="15">15</option>
-                                            <option <?php if (isset($_SESSION['select_packages_nb_per_page']) && $_SESSION['select_packages_nb_per_page'] == 20) {
+                                            <option <?php if (isset($_SESSION['selected_rows_per_page']) && $_SESSION['selected_rows_per_page'] == 20) {
                                                         echo 'selected';
                                                     } ?> value="20">20</option>
-                                            <option <?php if (isset($_SESSION['select_packages_nb_per_page']) && $_SESSION['select_packages_nb_per_page'] == 30) {
+                                            <option <?php if (isset($_SESSION['selected_rows_per_page']) && $_SESSION['selected_rows_per_page'] == 30) {
                                                         echo 'selected';
                                                     } ?> value="30">30</option>
                                         </select>
@@ -194,17 +194,17 @@ $rows = countRowsInTable($table, null, $data['id']);
                                                             echo $en;
                                                         } elseif ($_SESSION['page'] == 2) {
 
-                                                            $en = $_SESSION['packages_nb_per_page'] + $key + 1;
+                                                            $en = $_SESSION['rows_per_page'] + $key + 1;
 
                                                             echo $en;
                                                         } elseif ($_SESSION['page'] > 2 && $m > 2) {
 
-                                                            $en = ($_SESSION['packages_nb_per_page'] * ($m - 1)) + $key + 1;
+                                                            $en = ($_SESSION['rows_per_page'] * ($m - 1)) + $key + 1;
 
                                                             echo $en;
                                                         } else {
 
-                                                            $en = ($_SESSION['packages_nb_per_page'] * ($m - 1)) + $key + 1;
+                                                            $en = ($_SESSION['rows_per_page'] * ($m - 1)) + $key + 1;
 
                                                             echo $en;
                                                         }
@@ -335,7 +335,7 @@ $rows = countRowsInTable($table, null, $data['id']);
 
                             } elseif ((isset($_SESSION['previous_page']) || isset($_SESSION['next_page']) || isset($_SESSION['actual_page'])) && $_SESSION['page'] == 2) {
 
-                                $s = $_SESSION['packages_nb_per_page'] + 1;
+                                $s = $_SESSION['rows_per_page'] + 1;
 
                                 if (!isset($packages_group_listings) || empty($packages_group_listings)) {
                                     $s = 'de ' . $n . ' ligne';
@@ -348,7 +348,7 @@ $rows = countRowsInTable($table, null, $data['id']);
 
                             } elseif ((isset($_SESSION['previous_page']) || isset($_SESSION['next_page']) || isset($_SESSION['actual_page'])) && $_SESSION['page'] > 2) {
 
-                                $s = ($_SESSION['packages_nb_per_page'] * ($_SESSION['page'] - 1)) + 1;
+                                $s = ($_SESSION['rows_per_page'] * ($_SESSION['page'] - 1)) + 1;
 
                                 if (!isset($packages_group_listings) || empty($packages_group_listings)) {
                                     $s = 'de ' . $n . ' ligne';
@@ -361,7 +361,7 @@ $rows = countRowsInTable($table, null, $data['id']);
 
                             } else {
 
-                                $s = ($_SESSION['packages_nb_per_page'] * ($_SESSION['page'] - 1)) + 1;
+                                $s = ($_SESSION['rows_per_page'] * ($_SESSION['page'] - 1)) + 1;
 
                                 if (!isset($packages_group_listings) || empty($packages_group_listings)) {
                                     $s = 'de ' . $n . ' ligne';

@@ -13,7 +13,7 @@ include 'app/common/agents/1stpart.php';
 //Initialisation des valeurs par défaut des différents paramètres de la fonction de listings
 
 //Premier paramètre, le nom de la table en base de données à lister. Table "package" pour le cas présent
-$table = "package";
+$table = "customer_package_group";
 
 //Second paramètre, le numéro de la page. 1 par défaut
 if (!isset($_SESSION['previous_page']) && !isset($_SESSION['next_page'])) {
@@ -30,7 +30,7 @@ $_SESSION['status'] = 'Tout Afficher';
 $_SESSION['search'] = 'UNDEFINED';
 
 // Sixième paramètre
-$_SESSION['type'] = 'Tous les colis';
+$_SESSION['type'] = 'Tous les groupe de colis';
 
 //Nouvelle valeur du second paramètre, le numéro de page selon le cas (page précédente)
 if (isset($_SESSION['previous_page']) && !empty($_SESSION['previous_page'])) {
@@ -90,7 +90,7 @@ $rows = countRowsInTable($table, $_SESSION['package'], null);
     paramètres de la fonction listings sont soumises et récupérées via la méthode POST. Ici, aucune valeur ne transite par
     l'url.
 -->
-<form id="myForm" action="<?= redirect($_SESSION['theme'], PROJECT . 'agents/dash-treatment/packages-listings') ?>" method="post">
+<form id="myForm" action="<?= redirect($_SESSION['theme'], PROJECT . 'agents/dash-treatment/packages-group-listings') ?>" method="post">
     <!-- Bouton de création de colis -->
     <div class="page-header d-print-none">
         <div class="container-xl d-flex" style="justify-content: center;">
@@ -98,23 +98,23 @@ $rows = countRowsInTable($table, $_SESSION['package'], null);
                 <!-- Page title actions -->
                 <div class="col-12 col-lg-auto ms-auto d-print-none">
                     <div class="btn-list justify-content-center">
-                        <a href="<?= redirect($_SESSION['theme'], PROJECT . 'agents/dash/set-packages') ?>" class="btn d-none text-white d-sm-inline-block btn-warning">
+                        <a href="<?= redirect($_SESSION['theme'], PROJECT . 'agents/dash/set-packages-group') ?>" class="btn d-none text-white d-sm-inline-block btn-warning">
                             <!-- Download SVG icon from http://tabler-icons.io/i/plus -->
                             <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
                                 <path stroke="none" d="M0 0h24v24H0z" fill="none" />
                                 <path d="M12 5l0 14" />
                                 <path d="M5 12l14 0" />
                             </svg>
-                            Ajouter colis
+                            Groupe de colis
                         </a>
-                        <a href="<?= redirect($_SESSION['theme'], PROJECT . 'agents/dash/set-packages') ?>" class="btn d-sm-none text-white btn-warning">
+                        <a href="<?= redirect($_SESSION['theme'], PROJECT . 'agents/dash/set-packages-group') ?>" class="btn d-sm-none text-white btn-warning">
                             <!-- Download SVG icon from http://tabler-icons.io/i/plus -->
                             <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
                                 <path stroke="none" d="M0 0h24v24H0z" fill="none" />
                                 <path d="M12 5l0 14" />
                                 <path d="M5 12l14 0" />
                             </svg>
-                            Ajouter Colis
+                            Groupe de colis
                         </a>
                     </div>
                 </div>
@@ -128,15 +128,15 @@ $rows = countRowsInTable($table, $_SESSION['package'], null);
                 <div class="col-lg col-xs ms-auto text-muted">
                     <div class="ms-2 d-inline-block">
                         <select class="form-select" name="packagesType" id="mySelect3">
-                            <option <?php if (isset($_SESSION['packages_type']) && $_SESSION['packages_type'] == 'Tous les colis') {
+                            <option <?php if (isset($_SESSION['packages_type']) && $_SESSION['packages_type'] == 'Tous les groupes de colis') {
                                         echo 'selected';
-                                    } ?> data-value="Tous les colis">Tous les colis</option>
-                            <option <?php if (isset($_SESSION['packages_type']) && $_SESSION['packages_type'] == 'Colis avec destinataire') {
+                                    } ?> data-value="Tous les groupes de colis">Tous les groupes de colis</option>
+                            <option <?php if (isset($_SESSION['packages_type']) && $_SESSION['packages_type'] == 'Groupes de colis clients') {
                                         echo 'selected';
-                                    } ?> data-value="Colis avec destinataire">Colis avec destinataire</option>
-                            <option <?php if (isset($_SESSION['packages_type']) && $_SESSION['packages_type'] == 'Colis sans destinataire') {
+                                    } ?> data-value="Groupes de colis clients">Groupes de colis clients</option>
+                            <option <?php if (isset($_SESSION['packages_type']) && $_SESSION['packages_type'] == 'Groupes de colis expédition') {
                                         echo 'selected';
-                                    } ?> data-value="Colis sans destinataire">Colis sans destinataire</option>
+                                    } ?> data-value="Groupes de colis expédition">Groupes de colis expédition</option>
                         </select>
                     </div>
                 </div>
@@ -238,7 +238,6 @@ $rows = countRowsInTable($table, $_SESSION['package'], null);
                                         <th class="">N° de suivi</th>
                                         <th>Type de produits</th>
                                         <th>Statut</th>
-                                        <th>Groupe Colis</th>
                                         <th></th>
                                         <th></th>
                                     </tr>
@@ -262,27 +261,6 @@ $rows = countRowsInTable($table, $_SESSION['package'], null);
                                         }
 
                                         foreach ($packages_listings as $key => $package) {
-
-                                            /**
-                                             * Chaque colis a la possibilité d'appartenir à un groupe de colis. Lorsque c'est le cas, l'identifiant du groupe auquel appartient 
-                                             * le colis est associé au colis. Pour un affichage plus détaillé, il a été mis en place la possibilité pour l'utilisateur de voir 
-                                             * un aperçu du groupe auquel appartient son colis et de bien visualiser le numéro de suivi de son colis dans la liste des colis appartenant
-                                             * au groupe en question. Le contrôle suivant permet donc d'accéder au groupe de tout colis contenu dans ce dernier pour permettre l'affichage
-                                             * en clair à l'utilisateur.
-                                             */
-                                            if (!empty($package["customer_package_group_id"])) {
-
-                                                //Récupération du numéro de suivi du groupe de colis
-                                                $packages_group_tracking_number = getPackagesGroupTrackingNumber($package["customer_package_group_id"])['tracking_number'];
-
-                                                /**
-                                                 * Récupération de tous les colis contenu dans le groupe. 
-                                                 * La variable $packages_ingrouplistings sera appelée plus bas pour afficher la liste de tous les colis du groupe auquel 
-                                                 * appartient le colis présentement concerné. Cette liste sera affichée dans un modal avec le numéro de suivi du colis
-                                                 * présentement concerné surligné en orange pour permettre son identification rapide par l'utilisateur.
-                                                 */
-                                                $packages_ingrouplistings = getAllPackagesLinkedToSpecificPackagesGroup($package["customer_package_group_id"]);
-                                            }
                                     ?>
                                             <tr>
                                                 <td>
@@ -310,7 +288,8 @@ $rows = countRowsInTable($table, $_SESSION['package'], null);
                                                         echo $en;
                                                     }
 
-                                                    ?><input class="form-check-input m-0 align-middle row-check" type="checkbox" value="BN95F621" name="checkbox" aria-label="Select invoice"></td>
+                                                    ?>
+                                                </td>
                                                 <td>
                                                     <?= $package["tracking_number"] ?>
                                                 </td>
@@ -337,86 +316,6 @@ $rows = countRowsInTable($table, $_SESSION['package'], null);
                                                     ?>
                                                     me-1"><?= $package["status"] ?></span>
                                                 </td>
-                                                <td>
-                                                    <?= !empty($package["customer_package_group_id"]) ? 'Oui -> <a href = "#" data-bs-toggle="modal" data-bs-target="#' . $packages_group_tracking_number . $key . '">' . $packages_group_tracking_number . ' [ Voir ]</a>' : 'Non' ?>
-
-                                                    <!--
-                                                        Modal d'affichage des colis contenus dans un groupe de colis.
-                                                    -->
-                                                    <div class="modal modal-blur fade" data-bs-backdrop='static' id="<?= !empty($package["customer_package_group_id"]) ? $packages_group_tracking_number . $key : '' ?>" tabindex="-1" role="dialog" aria-hidden="true">
-                                                        <div class="modal-dialog modal-dialog-centered modal-lg modal-dialog-scrollable" role="document">
-                                                            <div class="modal-content">
-                                                                <div class="modal-header">
-                                                                    <h3 class="modal-title">Groupe N° <?= !empty($package["customer_package_group_id"]) ? $packages_group_tracking_number : '' ?></h3>
-                                                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                                                </div>
-                                                                <div class="modal-body">
-                                                                    <div class="datagrid">
-                                                                        <div class="datagrid-item">
-                                                                            <div class="datagrid-title">Nombre de Colis</div>
-                                                                            <div class="datagrid-content"><?= !empty($package["customer_package_group_id"]) ? sizeof($packages_ingrouplistings) : '' ?></div>
-                                                                        </div>
-                                                                    </div><br>
-                                                                    <div class="row row-deck row-cards text-center">
-                                                                        <div class="col-12">
-                                                                            <div class="card">
-                                                                                <div class="card-body border-bottom py-3">
-                                                                                    <div class="d-flex justify-content-center">
-                                                                                        <div class="">
-                                                                                            <h3 class="d-inline-block">
-                                                                                                Colis du Groupe
-                                                                                            </h3>
-                                                                                        </div>
-                                                                                    </div>
-                                                                                </div>
-                                                                                <div class="table-responsive">
-                                                                                    <table class="table card-table table-vcenter text-nowrap datatable">
-                                                                                        <thead>
-                                                                                            <tr>
-                                                                                                <th class="">N° de suivi</th>
-                                                                                                <th>Type de produits</th>
-                                                                                            </tr>
-                                                                                        </thead>
-                                                                                        <tbody>
-                                                                                            <?php
-                                                                                            if (isset($packages_ingrouplistings) && !empty($packages_ingrouplistings)) {
-
-                                                                                                foreach ($packages_ingrouplistings as $_key => $packages_ingroup) {
-                                                                                            ?>
-                                                                                                    <tr>
-                                                                                                        <td>
-                                                                                                            <?= $packages_ingroup["tracking_number"] == $package["tracking_number"] ? '<span class="badge bg-orange">' . $packages_ingrouplistings[$_key]["tracking_number"] . '</span>' : $packages_ingrouplistings[$_key]["tracking_number"] ?>
-                                                                                                        </td>
-                                                                                                        <td>
-                                                                                                            <?= !empty($packages_ingroup["product_type"]) ? $packages_ingroup["product_type"] : '-' ?>
-                                                                                                        </td>
-                                                                                                        <!--
-                                                                                                        <td class="text-end">
-                                                                                                            <span class="">
-                                                                                                                <a class="btn-link" href="" data-bs-toggle="modal" data-bs-dismiss="false" data-bs-target="<?= "#modal-packages-ingroup-detail" . $key ?>">
-                                                                                                                    Détails
-                                                                                                                </a>
-                                                                                                            </span>
-                                                                                                        </td>
-                                                                                                        -->
-                                                                                                    </tr>
-                                                                                            <?php
-
-                                                                                                }
-                                                                                            }
-                                                                                            ?>
-                                                                                        </tbody>
-                                                                                    </table>
-                                                                                </div>
-                                                                            </div>
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-
-                                                </td>
                                                 <td class="text-end">
                                                     <span class="">
                                                         <a class="btn-link" href="" data-bs-toggle="modal" data-bs-target="<?= '#modal-packages-detail' . $key ?>">
@@ -429,7 +328,7 @@ $rows = countRowsInTable($table, $_SESSION['package'], null);
                                                 ?>
                                                     <td class="text-end">
                                                         <span class="">
-                                                            <a class="btn-link link-warning" href='<?= redirect($_SESSION['theme'], PROJECT . 'agents/dash/edit-packages') ?>'>
+                                                            <a class="btn-link link-warning" href='<?= redirect($_SESSION['theme'], PROJECT . 'agents/dash/edit-packages-group') ?>'>
                                                                 Modifier
                                                             </a>
                                                         </span>
@@ -439,7 +338,7 @@ $rows = countRowsInTable($table, $_SESSION['package'], null);
                                                 ?>
                                                     <td class="text-end">
                                                         <span class="">
-                                                            <a class="btn-link link-warning" href="<?= redirect($_SESSION['theme'], PROJECT . 'agents/dash/update-packages') ?>">
+                                                            <a class="btn-link link-warning" href="<?= redirect($_SESSION['theme'], PROJECT . 'agents/dash/update-packages-group') ?>">
                                                                 Mettre à jour
                                                             </a>
                                                         </span>

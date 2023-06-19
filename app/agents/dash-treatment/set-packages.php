@@ -152,7 +152,7 @@ if (isset($_FILES["filesToUpload"]) && !empty($_FILES["filesToUpload"])) {
 
                             $_SESSION['error_msg'] = 'Erreur niveau extension de fichier(s). Extensions autorisées [ PNG/JPG/JPEG/GIF ]';
 
-                            header("location:". redirect($_SESSION['theme'], PROJECT.'customer/dash/set-packages'));
+                            header("location:". redirect($_SESSION['theme'], PROJECT.'agents/dash/set-packages'));
 
                             exit;
 
@@ -168,7 +168,7 @@ if (isset($_FILES["filesToUpload"]) && !empty($_FILES["filesToUpload"])) {
 
                             $_SESSION['error_msg'] = 'Erreur niveau extension de fichier(s). Extensions autorisées [ PNG/JPG/JPEG/GIF ]';
 
-                            header("location:". redirect($_SESSION['theme'], PROJECT.'customer/dash/set-packages'));
+                            header("location:". redirect($_SESSION['theme'], PROJECT.'agents/dash/set-packages'));
 
                             exit;
 
@@ -198,7 +198,7 @@ if (isset($_FILES["filesToUpload"]) && !empty($_FILES["filesToUpload"])) {
 
                         $_SESSION['error_msg'] = 'Erreur niveau poids de fichier(s). Poids maximum autorisé : 2mo';
 
-                        header("location:". redirect($_SESSION['theme'], PROJECT.'customer/dash/set-packages'));
+                        header("location:". redirect($_SESSION['theme'], PROJECT.'agents/dash/set-packages'));
 
                         exit;
 
@@ -214,7 +214,7 @@ if (isset($_FILES["filesToUpload"]) && !empty($_FILES["filesToUpload"])) {
 
                         $_SESSION['error_msg'] = 'Erreur niveau poids de fichier(s). Poids maximum autorisé : 2mo';
 
-                        header("location:". redirect($_SESSION['theme'], PROJECT.'customer/dash/set-packages'));
+                        header("location:". redirect($_SESSION['theme'], PROJECT.'agents/dash/set-packages'));
 
                         exit;
 
@@ -232,7 +232,7 @@ if (isset($_FILES["filesToUpload"]) && !empty($_FILES["filesToUpload"])) {
 
         $_SESSION['error_msg'] = 'Vous essayez une importation de plus de 03 fichiers.';
 
-        header("location:". redirect($_SESSION['theme'], PROJECT.'customer/dash/set-packages'));
+        header("location:". redirect($_SESSION['theme'], PROJECT.'agents/dash/set-packages'));
 
         exit;
 
@@ -262,7 +262,7 @@ if (empty($error)) {
 
                         $_SESSION['data'] = json_encode($updata);
 
-                        header("location:". redirect($_SESSION['theme'], PROJECT.'customer/dash/set-packages'));
+                        header("location:". redirect($_SESSION['theme'], PROJECT.'agents/dash/set-packages'));
 
                         exit;
 
@@ -277,7 +277,7 @@ if (empty($error)) {
 
                     $_SESSION['success_msg'] = 'Votre colis a été ajouté avec succès';
 
-                    header("location:". redirect($_SESSION['theme'], PROJECT.'customer/dash/packages-listings'));
+                    header("location:". redirect($_SESSION['theme'], PROJECT.'agents/dash/packages-listings'));
 
                 } else {
 
@@ -285,7 +285,7 @@ if (empty($error)) {
 
                     $_SESSION['data'] = json_encode($updata);
 
-                    header("location:". redirect($_SESSION['theme'], PROJECT.'customer/dash/set-packages'));
+                    header("location:". redirect($_SESSION['theme'], PROJECT.'agents/dash/set-packages'));
 
                     exit;
 
@@ -295,7 +295,7 @@ if (empty($error)) {
 
                 $_SESSION['success_msg'] = 'Votre colis a été ajouté avec succès';
 
-                header("location:". redirect($_SESSION['theme'], PROJECT.'customer/dash/packages-listings'));
+                header("location:". redirect($_SESSION['theme'], PROJECT.'agents/dash/packages-listings'));
 
             }
 
@@ -305,7 +305,7 @@ if (empty($error)) {
 
             $_SESSION['data'] = json_encode($updata);
 
-            header("location:". redirect($_SESSION['theme'], PROJECT.'customer/dash/set-packages'));
+            header("location:". redirect($_SESSION['theme'], PROJECT.'agents/dash/set-packages'));
 
             exit;
 
@@ -315,7 +315,7 @@ if (empty($error)) {
 
         $_SESSION['error_msg'] = 'Une erreur est survenue. Cause probable : Importation de fichier(s) lourds et dépassant la limite autorisée (Poids Max/Fichier : 2Mo). Réessayer en respectant la limite autorisée. Contactez nous si cela persiste.';
 
-        header("location:". redirect($_SESSION['theme'], PROJECT.'customer/dash/set-packages'));
+        header("location:". redirect($_SESSION['theme'], PROJECT.'agents/dash/set-packages'));
 
         exit;
     }
@@ -326,7 +326,7 @@ if (empty($error)) {
 
     $_SESSION['set_pack_errors'] = $error;
 
-    header("location:". redirect($_SESSION['theme'], PROJECT.'customer/dash/set-packages'));
+    header("location:". redirect($_SESSION['theme'], PROJECT.'agents/dash/set-packages'));
 
 }
 

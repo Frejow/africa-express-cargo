@@ -59,7 +59,7 @@ if (isset($_POST['statusSelect']) && !empty($_POST['statusSelect'])) {
 
 if (!empty($_POST['packagesType'])) {
 
-    if ($_SESSION['package'] == $_POST['packagesType']) {
+    if ($_SESSION['type'] == $_POST['packagesType']) {
 
         header("location:". redirect($_SESSION['theme'], PROJECT.'agents/dash/packages-listings'));
 
@@ -107,7 +107,7 @@ if (isset($_POST['search']) && !empty($_POST['search'])) {
 if (isset($_POST['select'])) {
 
     
-    if ($_SESSION['packages_nb_per_page'] == $_POST['select']) {
+    if ($_SESSION['rows_per_page'] == $_POST['select']) {
 
         header("location:". redirect($_SESSION['theme'], PROJECT.'agents/dash/packages-listings'));
 
@@ -115,7 +115,7 @@ if (isset($_POST['select'])) {
 
         $_SESSION['actual_page'] = $_SESSION['page'];
 
-        $_SESSION['select_packages_nb_per_page'] = $_POST['select'];
+        $_SESSION['selected_rows_per_page'] = $_POST['select'];
 
         header("location:". redirect($_SESSION['theme'], PROJECT.'agents/dash/packages-listings'));
         
@@ -127,40 +127,18 @@ if (isset($_POST['select'])) {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-//Package deletion
+//Package edition
 
-if (isset($_POST['package_deletion']) && !empty($_POST['package_deletion'])) {
 
-    //die (var_dump($_POST['package_deletion']));
-    
-    if (isset(explode('&', $_POST['package_deletion'])[1])) {
 
-        if (deletedPackageOrPackagesGroup(explode('&', $_POST['package_deletion'])[0], 'package')) {
+//Package edition
 
-            if (unlinkSpecificPackagesGroupOfPackage(explode('&', $_POST['package_deletion'])[1], explode('&', $_POST['package_deletion'])[0])) {
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-                $_SESSION['success_msg'] = 'Votre colis N°'. explode('&', $_POST['package_deletion'])[0] .' a été supprimé avec succès';
-    
-                header("location:". redirect($_SESSION['theme'], PROJECT.'agents/dash/packages-listings'));
+//Package updating
 
-            }
-    
-        }
 
-    } else {
 
-        if (deletedPackageOrPackagesGroup($_POST['package_deletion'], 'package')) {
-
-            $_SESSION['success_msg'] = 'Votre colis N°'. $_POST['package_deletion'] .' a été supprimé avec succès';
-    
-            header("location:". redirect($_SESSION['theme'], PROJECT.'agents/dash/packages-listings'));
-    
-        }
-
-    }
-    
-} 
-
-//Package deletion
+//Package updating
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

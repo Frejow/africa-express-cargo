@@ -82,7 +82,7 @@ if (isset($_POST['search']) && !empty($_POST['search'])) {
 if (isset($_POST['select'])) {
 
     
-    if ($_SESSION['packages_nb_per_page'] == $_POST['select']) {
+    if ($_SESSION['rows_per_page'] == $_POST['select']) {
 
         header("location:". redirect($_SESSION['theme'], PROJECT.'agents/dash/packages-listings'));
 
@@ -90,7 +90,7 @@ if (isset($_POST['select'])) {
 
         $_SESSION['actual_page'] = $_SESSION['page'];
 
-        $_SESSION['select_packages_nb_per_page'] = $_POST['select'];
+        $_SESSION['selected_rows_per_page'] = $_POST['select'];
 
         header("location:". redirect($_SESSION['theme'], PROJECT.'agents/dash/packages-listings'));
         
