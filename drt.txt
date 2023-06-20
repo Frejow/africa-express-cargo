@@ -1,3 +1,11 @@
+<div class="d-flex py-1 align-items-center">
+                                        <span class="avatar me-2" style="background-image: url(<?= PROJECT ?>public/images/jow-p.jpg)"></span>
+                                        <div class="flex-fill">
+                                            <div class="font-weight-medium">Jow Doe</div>
+                                            <div class="text-muted"><a href="#" class="text-reset">jow.doe@outlook.com</a></div>
+                                        </div>
+                                    </div>
+
 date_default_timezone_set('Europe/Paris');
 
 $date = "2014-02-01 14:25:47"; echo date('Y-m-d H:i:s', strtotime($date . " +10 min")); die;

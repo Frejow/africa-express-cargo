@@ -90,7 +90,7 @@
                                                 <path d="M12 4l0 12"></path>
                                             </svg>
                                         </label>
-                                        <input type="button" class="btn link-secondary" style="text-decoration: none;" value="<?php echo (isset($updata["avatar"]) && !empty($updata["avatar"])) ? $updata["avatar"] : 'Importer une autre image' ?>" id="importbutton" onclick="document.getElementById('fileToUpload').click();" />
+                                        <input type="button" class="btn link-secondary" style="text-decoration: none; width: auto;" value="<?php echo (isset($updata["avatar"]) && !empty($updata["avatar"])) ? $updata["avatar"] : 'Importer une autre image' ?>" id="importbutton" onclick="document.getElementById('fileToUpload').click();" />
                                     </div>
                                 <?php
                                 }

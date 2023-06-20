@@ -1,7 +1,4 @@
 <?php
-if (connected()) {
-    $_SESSION['current_url'] = "{$_SERVER['REQUEST_SCHEME']}://{$_SERVER['HTTP_HOST']}{$_SERVER['REQUEST_URI']}";
-}
 
 include 'app/common/agents/1stpart.php'; ?>
 

@@ -10,13 +10,13 @@ if (!isset($_SESSION['previous_page']) && !isset($_SESSION['next_page'])) {
     $_SESSION['page'] = 1;
 }
 
-//Troisième paramètre, nombre de clients à afficher par page. 10 par défaut
+//Troisième paramètre, nombre d'agents à afficher par page. 10 par défaut
 $_SESSION['rows_per_page'] = 10;
 
 //Quatrième paramètre, la valeur suivant laquelle trier la liste. "Par défaut" par défaut
 $_SESSION['order'] = 'Par défaut';
 
-// Cinquième paramètre, le nom du client à rechercher. "UNDEFINED" par défaut dans le cas où aucune recherche n'est lancée
+// Cinquième paramètre, le nom de l'agent à rechercher. "UNDEFINED" par défaut dans le cas où aucune recherche n'est lancée
 $_SESSION['search'] = 'UNDEFINED';
 
 // Sixième paramètre
@@ -38,7 +38,7 @@ if (isset($_SESSION['actual_page']) && !empty($_SESSION['actual_page'])) {
 }
 
 /**
- * Nouvelle valeur du troisième paramètre, nombre de clients par page, lorsqu'un autre nombre autre que 10 est sélectionné 
+ * Nouvelle valeur du troisième paramètre, nombre d'agents par page, lorsqu'un autre nombre autre que 10 est sélectionné 
  * par l'utilisateur poiur afficher le nombre de type de produits par page
  */
 if (isset($_SESSION['selected_rows_per_page']) && !empty($_SESSION['selected_rows_per_page'])) {
@@ -58,43 +58,43 @@ if (isset($_SESSION['research']) && !empty($_SESSION['research'])) {
     $_SESSION['search'] = $_SESSION['research'];
 }
 
-//die(var_dump($_SESSION['customers_listings']));
+//die(var_dump($_SESSION['agents_listings']));
 
 //Affectation du retour de la fonction othListings avec les six paramètres suscités à la variable $packages_lisitngs
-$customers_listings = othListings($table, $_SESSION['page'], $_SESSION['rows_per_page'], strtoupper($_SESSION['search']), $_SESSION['research_by'], $_SESSION['order'], 'CUSTOMER');
+$agents_listings = othListings($table, $_SESSION['page'], $_SESSION['rows_per_page'], strtoupper($_SESSION['search']), $_SESSION['research_by'], $_SESSION['order'], 'AGENT', $data['id']);
 
 /**
  * Affectation du retour de la fonction countRowsInTable avec pour paramètre la table concernée par le listings à la 
  * variable $rows. Cette fonction retourne le nombre de lignes dans la table avec le champs is_deleted = 0
  */
-$rows = countRowsInTable($table, null, null, 'CUSTOMER');
+$rows = countRowsInTable($table, null, null, 'AGENT', $data['id']);
 
 ?>
 
-<form id="myForm" action="<?= redirect($_SESSION['theme'], PROJECT . 'agents/dash-treatment/customers-listings') ?>" method="post">
+<form id="myForm" action="<?= redirect($_SESSION['theme'], PROJECT . 'agents/dash-treatment/agents-listings') ?>" method="post">
     <div class="page-header d-print-none">
         <div class="container-xl d-flex" style="justify-content: center;">
             <div class="row g-2 align-items-center " style="flex-wrap: wrap;">
                 <!-- Page title actions -->
                 <div class="col-12 col-lg-auto ms-auto d-print-none">
                     <div class="btn-list justify-content-center">
-                        <a href="<?= redirect($_SESSION['theme'], PROJECT . 'agents/dash/new-customer') ?>" class="btn d-none text-white d-sm-inline-block btn-warning">
+                        <a href="<?= redirect($_SESSION['theme'], PROJECT . 'agents/dash/new-agent') ?>" class="btn d-none text-white d-sm-inline-block btn-warning">
                             <!-- Download SVG icon from http://tabler-icons.io/i/plus -->
                             <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
                                 <path stroke="none" d="M0 0h24v24H0z" fill="none" />
                                 <path d="M12 5l0 14" />
                                 <path d="M5 12l14 0" />
                             </svg>
-                            Nouveau client
+                            Nouvel agent
                         </a>
-                        <a href="<?= redirect($_SESSION['theme'], PROJECT . 'agents/dash/new-customer') ?>" class="btn d-sm-none text-white btn-warning">
+                        <a href="<?= redirect($_SESSION['theme'], PROJECT . 'agents/dash/new-agent') ?>" class="btn d-sm-none text-white btn-warning">
                             <!-- Download SVG icon from http://tabler-icons.io/i/plus -->
                             <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
                                 <path stroke="none" d="M0 0h24v24H0z" fill="none" />
                                 <path d="M12 5l0 14" />
                                 <path d="M5 12l14 0" />
                             </svg>
-                            Client
+                            Agent
                         </a>
                     </div>
                 </div>
@@ -136,7 +136,7 @@ $rows = countRowsInTable($table, null, null, 'CUSTOMER');
                                     </div>
 
                                     <div class="ms-2 d-inline-block">
-                                        <input type="text" name="search" class="form-control" value="<?= isset($_SESSION['research']) ? $_SESSION['research'] : '' ?>" placeholder="Nom du client">
+                                        <input type="text" name="search" class="form-control" value="<?= isset($_SESSION['research']) ? $_SESSION['research'] : '' ?>" placeholder="Nom de l'agent">
                                     </div>
                                     <button type="submit" class="btn-link link-primary">
                                         <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
@@ -173,16 +173,65 @@ $rows = countRowsInTable($table, null, null, 'CUSTOMER');
                                 <thead class="text-center">
                                     <tr>
                                         <th class="w-1">#</th>
-                                        <th>Clients</th>
+                                        <th>Agents</th>
                                         <th>Nom d'utilisateur</th>
                                         <th>Numéro de téléphone</th>
                                         <th>Pays</th>
                                         <th></th>
                                     </tr>
                                 </thead>
+                                <tbody class="bg-orange-lt">
+                                    <tr>
+                                        <td>
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="icon text-warning icon-xs" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                                <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                                                <path d="M15 4.5l-4 4l-4 1.5l-1.5 1.5l7 7l1.5 -1.5l1.5 -4l4 -4" fill="currentColor"></path>
+                                                <path d="M9 15l-4.5 4.5"></path>
+                                                <path d="M14.5 4l5.5 5.5"></path>
+                                            </svg>
+                                        </td>
+                                        <td>
+                                            <div class=" py-1 align-items-center">
+                                                <a href="" class="modal-fade" data-bs-toggle="modal" data-bs-target="#previous-image">
+                                                    <span class="avatar me-2" style="background-image: url(<?= $data['avatar'] != 'null' ? $data['avatar'] : PROJECT . 'public/images/default-user-profile.jpg' ?>)"></span>
+                                                </a>
+                                                <div class="flex-fill">
+                                                    <div class="font-weight-medium"><?= !empty($data['name']) ? $data['name'] . ' ' . $data['first_names'] : '' ?> <span>( Moi )</span></div>
+                                                    <div class="text-muted"><a href="mailto:<?= !empty($data['mail']) ? $data['mail'] : ''  ?>" class="text-reset"><?= !empty($data['mail']) ? $data['mail'] : '' ?></a></div>
+                                                </div>
+                                            </div>
+                                            <?php
+                                            if ($data['avatar'] != 'null') {
+                                            ?>
+                                                <div class="modal fade" id="previous-image">
+                                                    <div class="modal-dialog modal-dialog-centered modal-fullscreen-sm-down">
+                                                        <div class="modal-content">
+                                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                            <img class="" src="<?= $data['avatar'] == 'null' ? PROJECT . 'public/images/default-user-profile.jpg' : $data['avatar'] ?>" alt="User profile picture">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            <?php
+                                            }
+                                            ?>
+                                        </td>
+                                        <td>
+                                            <?= !empty($data['user_name']) ? $data['user_name'] : '' ?>
+                                        </td>
+                                        <td>
+                                            <?= !empty($data['phone_number']) ? $data['phone_number'] : '' ?>
+                                        </td>
+                                        <td>
+                                            <?= !empty($data['country']) ? $data['country'] : '' ?>
+                                        </td>
+                                        <td>
+
+                                        </td>
+                                    </tr>
+                                </tbody>
                                 <tbody class="text-center">
                                     <?php
-                                    if (isset($customers_listings) && !empty($customers_listings)) {
+                                    if (isset($agents_listings) && !empty($agents_listings)) {
 
                                         $n = 0; //Cette variable stocke le nombre de lignes affiché lorsque la table "product_type" ne contient logiquement pas de type de produit. Donc $n restera 0
                                         $m = 0; //Cette variable stocke le numéro de page en cours d'affichage.
@@ -198,7 +247,7 @@ $rows = countRowsInTable($table, null, null, 'CUSTOMER');
                                             $m = $_SESSION['actual_page'];
                                         }
 
-                                        foreach ($customers_listings as $key => $customer) {
+                                        foreach ($agents_listings as $key => $agent) {
                                     ?>
                                             <tr>
                                                 <td>
@@ -230,22 +279,22 @@ $rows = countRowsInTable($table, null, null, 'CUSTOMER');
                                                 </td>
                                                 <td>
                                                     <div class=" py-1 align-items-center">
-                                                        <a href="" class="modal-fade" data-bs-toggle="modal" data-bs-target="#previous-image<?= $key ?>">
-                                                            <span class="avatar me-2" style="background-image: url(<?= $customer['avatar'] != 'null' ? $customer['avatar'] : PROJECT . 'public/images/default-user-profile.jpg' ?>)"></span>
+                                                        <a href="" class="modal-fade" data-bs-toggle="modal" data-bs-target="#previous-image<?=$key?>">
+                                                            <span class="avatar me-2" style="background-image: url(<?= $agent['avatar'] != 'null' ? $agent['avatar'] : PROJECT . 'public/images/default-user-profile.jpg' ?>)"></span>
                                                         </a>
                                                         <div class="flex-fill">
-                                                            <div class="font-weight-medium"><?= !empty($customer['name']) ? $customer['name'] . ' ' . $customer['first_names'] : '' ?></div>
-                                                            <div class="text-muted"><a href="mailto:<?= !empty($customer['mail']) ? $customer['mail'] : ''  ?>" class="text-reset"><?= !empty($customer['mail']) ? $customer['mail'] : '' ?></a></div>
+                                                            <div class="font-weight-medium"><?= !empty($agent['name']) ? $agent['name'] . ' ' . $agent['first_names'] : '' ?></div>
+                                                            <div class="text-muted"><a href="mailto:<?= !empty($agent['mail']) ? $agent['mail'] : ''  ?>" class="text-reset"><?= !empty($agent['mail']) ? $agent['mail'] : '' ?></a></div>
                                                         </div>
                                                     </div>
                                                     <?php
-                                                    if ($customer['avatar'] != 'null') {
+                                                    if ($agent['avatar'] != 'null') {
                                                     ?>
-                                                        <div class="modal fade" id="previous-image<?= $key ?>">
+                                                        <div class="modal fade" id="previous-image<?=$key?>">
                                                             <div class="modal-dialog modal-dialog-centered modal-fullscreen-sm-down">
                                                                 <div class="modal-content">
                                                                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                                                    <img class="" src="<?= $customer['avatar'] == 'null' ? PROJECT . 'public/images/default-user-profile.jpg' : $customer['avatar'] ?>" alt="User profile picture">
+                                                                    <img class="" src="<?= $agent['avatar'] == 'null' ? PROJECT . 'public/images/default-user-profile.jpg' : $agent['avatar'] ?>" alt="User profile picture">
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -254,26 +303,16 @@ $rows = countRowsInTable($table, null, null, 'CUSTOMER');
                                                     ?>
                                                 </td>
                                                 <td>
-                                                    <?= !empty($customer['user_name']) ? $customer['user_name'] : '' ?>
+                                                    <?= !empty($agent['user_name']) ? $agent['user_name'] : '' ?>
                                                 </td>
                                                 <td>
-                                                    <?= !empty($customer['phone_number']) ? $customer['phone_number'] : '' ?>
+                                                    <?= !empty($agent['phone_number']) ? $agent['phone_number'] : '' ?>
                                                 </td>
                                                 <td>
-                                                    <?= !empty($customer['country']) ? $customer['country'] : '' ?>
+                                                    <?= !empty($agent['country']) ? $agent['country'] : '' ?>
                                                 </td>
                                                 <?php
-                                                if ($customer["is_active"] == 1) {
-                                                ?>
-                                                    <td class="text-end">
-                                                        <span class="">
-                                                            <button class="btn-link link-danger" type="submit" name="deactivation">
-                                                                Désactiver
-                                                            </button>
-                                                        </span>
-                                                    </td>
-                                                <?php
-                                                } else {
+                                                if ($agent["is_active"] == 0) {
                                                 ?>
                                                     <td class="text-end">
                                                         <span class="">
@@ -282,6 +321,10 @@ $rows = countRowsInTable($table, null, null, 'CUSTOMER');
                                                             </button>
                                                         </span>
                                                     </td>
+                                                <?php
+                                                } else {
+                                                ?>
+                                                    <td></td>
                                                 <?php
                                                 }
                                                 ?>
@@ -310,7 +353,7 @@ $rows = countRowsInTable($table, null, null, 'CUSTOMER');
 
                                 $s = $_SESSION['page'];
 
-                                if (!isset($customers_listings) || empty($customers_listings)) {
+                                if (!isset($agents_listings) || empty($agents_listings)) {
                                     $s = 'de ' . $n . ' ligne';
                                 }
 
@@ -318,14 +361,14 @@ $rows = countRowsInTable($table, null, null, 'CUSTOMER');
 
                                 <p class="m-0 text-muted">
                                     Affichage
-                                    <?php if (isset($customers_listings) && !empty($customers_listings)) {
+                                    <?php if (isset($agents_listings) && !empty($agents_listings)) {
                                     ?>
                                         de la ligne
                                     <?php
                                     }
                                     ?>
                                     <span><?= $s ?></span>
-                                    <?php if (isset($customers_listings) && !empty($customers_listings)) {
+                                    <?php if (isset($agents_listings) && !empty($agents_listings)) {
                                     ?>
                                         à la ligne <span><?= $en ?></span>
                                     <?php
@@ -338,7 +381,7 @@ $rows = countRowsInTable($table, null, null, 'CUSTOMER');
 
                                 $s = $_SESSION['rows_per_page'] + 1;
 
-                                if (!isset($customers_listings) || empty($customers_listings)) {
+                                if (!isset($agents_listings) || empty($agents_listings)) {
                                     $s = 'de ' . $n . ' ligne';
                                 }
 
@@ -346,14 +389,14 @@ $rows = countRowsInTable($table, null, null, 'CUSTOMER');
 
                                 <p class="m-0 text-muted">
                                     Affichage
-                                    <?php if (isset($customers_listings) && !empty($customers_listings)) {
+                                    <?php if (isset($agents_listings) && !empty($agents_listings)) {
                                     ?>
                                         de la ligne
                                     <?php
                                     }
                                     ?>
                                     <span><?= $s ?></span>
-                                    <?php if (isset($customers_listings) && !empty($customers_listings)) {
+                                    <?php if (isset($agents_listings) && !empty($agents_listings)) {
                                     ?>
                                         à la ligne <span><?= $en ?></span>
                                     <?php
@@ -366,7 +409,7 @@ $rows = countRowsInTable($table, null, null, 'CUSTOMER');
 
                                 $s = ($_SESSION['rows_per_page'] * ($_SESSION['page'] - 1)) + 1;
 
-                                if (!isset($customers_listings) || empty($customers_listings)) {
+                                if (!isset($agents_listings) || empty($agents_listings)) {
                                     $s = 'de ' . $n . ' ligne';
                                 }
 
@@ -374,14 +417,14 @@ $rows = countRowsInTable($table, null, null, 'CUSTOMER');
 
                                 <p class="m-0 text-muted">
                                     Affichage
-                                    <?php if (isset($customers_listings) && !empty($customers_listings)) {
+                                    <?php if (isset($agents_listings) && !empty($agents_listings)) {
                                     ?>
                                         de la ligne
                                     <?php
                                     }
                                     ?>
                                     <span><?= $s ?></span>
-                                    <?php if (isset($customers_listings) && !empty($customers_listings)) {
+                                    <?php if (isset($agents_listings) && !empty($agents_listings)) {
                                     ?>
                                         à la ligne <span><?= $en ?></span>
                                     <?php
@@ -394,7 +437,7 @@ $rows = countRowsInTable($table, null, null, 'CUSTOMER');
 
                                 $s = ($_SESSION['rows_per_page'] * ($_SESSION['page'] - 1)) + 1;
 
-                                if (!isset($customers_listings) || empty($customers_listings)) {
+                                if (!isset($agents_listings) || empty($agents_listings)) {
                                     $s = 'de ' . $n . ' ligne';
                                 }
 
@@ -402,14 +445,14 @@ $rows = countRowsInTable($table, null, null, 'CUSTOMER');
 
                                 <p class="m-0 text-muted">
                                     Affichage
-                                    <?php if (isset($customers_listings) && !empty($customers_listings)) {
+                                    <?php if (isset($agents_listings) && !empty($agents_listings)) {
                                     ?>
                                         de la ligne
                                     <?php
                                     }
                                     ?>
                                     <span><?= $s ?></span>
-                                    <?php if (isset($customers_listings) && !empty($customers_listings)) {
+                                    <?php if (isset($agents_listings) && !empty($agents_listings)) {
                                     ?>
                                         à la ligne <span><?= $en ?></span>
                                     <?php
@@ -434,7 +477,7 @@ $rows = countRowsInTable($table, null, null, 'CUSTOMER');
                                     </button>
                                 </li>
                                 <li class="page-item page-link active"><?= $_SESSION['page'] ?></li>
-                                <li class="page-item <?php if (!isset($customers_listings) || empty($customers_listings)) {
+                                <li class="page-item <?php if (!isset($agents_listings) || empty($agents_listings)) {
                                                             echo 'disabled';
                                                         } ?>">
                                     <button type="submit" name="next" value="<?= $_SESSION['page'] + 1 ?>" class="page-link">

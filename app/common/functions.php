@@ -86,7 +86,7 @@ function registration(string $name, string $first_names, string $phone_number, s
             'tel' => $phone_number,
             'pseudo' => $user_name,
             'mail' => $mail,
-            'country' => ltrim(preg_replace('/[^\p{L}\p{N}\s]/u', "", $country)),
+            'country' => trim(ltrim(preg_replace('/[^\p{L}\p{N}\s]/u', "", $country))),
             'pass' => sha1($password),
             'profile' => $profile,
         ]
@@ -1539,7 +1539,7 @@ function listings(string $table, int $page, int $rows_per_page, string $status, 
  * 
  * @return array $rows The number of rows.
  */
-function countRowsInTable(string $table, $packages_type = null, $user_id = null): array
+function countRowsInTable(string $table, $packages_type = null, $user_id = null, $profile = null, $cnctdprofile_id = null): array
 {
 
     $rows = [];
@@ -1588,6 +1588,41 @@ function countRowsInTable(string $table, $packages_type = null, $user_id = null)
 
         $request_execution = $request_prepare->execute(
             [
+                "is_deleted" => 0,
+            ]
+        );
+    } elseif (is_null($user_id) && is_null($packages_type) && is_null($profile)) {
+
+        $request = "SELECT COUNT(*) FROM " . $table . " WHERE is_deleted = :is_deleted";
+
+        $request_prepare = $database->prepare($request);
+
+        $request_execution = $request_prepare->execute(
+            [
+                "is_deleted" => 0,
+            ]
+        );
+    } elseif (is_null($user_id) && is_null($packages_type) && !is_null($profile) && is_null($cnctdprofile_id)) {
+
+        $request = "SELECT COUNT(*) FROM " . $table . " WHERE profile = :profile AND is_deleted = :is_deleted";
+
+        $request_prepare = $database->prepare($request);
+
+        $request_execution = $request_prepare->execute(
+            [
+                "profile" => $profile,
+                "is_deleted" => 0,
+            ]
+        );
+    } elseif (is_null($user_id) && is_null($packages_type) && !is_null($profile) && !is_null($cnctdprofile_id)) {
+
+        $request = "SELECT COUNT(*) FROM " . $table . " WHERE id <> ".$cnctdprofile_id." AND profile = :profile AND is_deleted = :is_deleted";
+
+        $request_prepare = $database->prepare($request);
+
+        $request_execution = $request_prepare->execute(
+            [
+                "profile" => $profile,
                 "is_deleted" => 0,
             ]
         );
@@ -1963,7 +1998,7 @@ function checkDeliveredStatus(): array
 
 /** Listing of all customers 
  * 
- * @return array $customersListing All packages concerned.
+ * @return array $customersListing.
  */
 function customersListing(): array
 {
@@ -2070,4 +2105,333 @@ function checkProductType(string $productType): bool
     }
 
     return $checkProductType;
+}
+
+/** Listing
+ * 
+ * @param string $table The name of table.
+ * @param int $page The page number.
+ * @param int $rows_per_page Number to show per page.
+ * @param string $search The value of search field. 
+ * @param string $researchBy.
+ * @param mixed $orderBy.
+ * 
+ * @return array $list The list.
+ */
+function othListings(string $table, int $page, int $rows_per_page, string $search, string $researchBy, string $orderBy, $profile = null, $cnctdprofile_id = null): array
+{
+
+    $list = [];
+
+    $database = databaseLogin();
+    
+    if (is_null($profile)) {
+
+        if ($orderBy === 'Par défaut' && $search === 'UNDEFINED') {
+
+            $request = "SELECT * FROM " . $table . " WHERE is_deleted = :is_deleted ORDER BY id DESC LIMIT " . $rows_per_page . " OFFSET " . ($page - 1) * $rows_per_page;
+    
+            $request_prepare = $database->prepare($request);
+    
+            $request_execution = $request_prepare->execute([
+                'is_deleted' => 0,
+            ]);
+        } elseif ($orderBy === 'Par défaut' && $search !== 'UNDEFINED') {
+    
+            $request = "SELECT * FROM " . $table . " WHERE is_deleted = :is_deleted AND ";
+    
+            $search_terms_array = str_split($search);
+    
+            $search_terms_count = count($search_terms_array);
+    
+            for ($i = 0; $i < $search_terms_count; $i++) {
+                $request .= $researchBy . " LIKE '%" . $search_terms_array[$i] . "%'";
+                if ($i != $search_terms_count - 1) {
+                    $request .= " AND ";
+                }
+            }
+            $request .= " ORDER BY id DESC LIMIT " . $rows_per_page . " OFFSET " . ($page - 1) * $rows_per_page;
+    
+            $request_prepare = $database->prepare($request);
+    
+            $request_execution = $request_prepare->execute([
+                'is_deleted' => 0,
+            ]);
+        } elseif ($orderBy === 'A - Z' && $search === 'UNDEFINED') {
+    
+            $request = "SELECT * FROM " . $table . " WHERE is_deleted = :is_deleted ORDER BY name ASC LIMIT " . $rows_per_page . " OFFSET " . ($page - 1) * $rows_per_page;
+    
+            $request_prepare = $database->prepare($request);
+    
+            $request_execution = $request_prepare->execute([
+                'is_deleted' => 0,
+            ]);
+        } elseif ($orderBy === 'Z - A' && $search === 'UNDEFINED') {
+    
+            $request = "SELECT * FROM " . $table . " WHERE is_deleted = :is_deleted ORDER BY name DESC LIMIT " . $rows_per_page . " OFFSET " . ($page - 1) * $rows_per_page;
+    
+            $request_prepare = $database->prepare($request);
+    
+            $request_execution = $request_prepare->execute([
+                'is_deleted' => 0,
+            ]);
+        } elseif ($orderBy === 'A - Z' && $search !== 'UNDEFINED') {
+    
+            $request = "SELECT * FROM " . $table . " WHERE is_deleted = :is_deleted AND ";
+    
+            $search_terms_array = str_split($search);
+    
+            $search_terms_count = count($search_terms_array);
+    
+            for ($i = 0; $i < $search_terms_count; $i++) {
+                $request .= $researchBy . " LIKE '%" . $search_terms_array[$i] . "%'";
+                if ($i != $search_terms_count - 1) {
+                    $request .= " AND ";
+                }
+            }
+            $request .= " AND status = :status ORDER BY name ASC LIMIT " . $rows_per_page . " OFFSET " . ($page - 1) * $rows_per_page;
+    
+            $request_prepare = $database->prepare($request);
+    
+            $request_execution = $request_prepare->execute([
+                'is_deleted' => 0,
+            ]);
+        } elseif ($orderBy === 'Z - A' && $search !== 'UNDEFINED') {
+    
+            $request = "SELECT * FROM " . $table . " WHERE is_deleted = :is_deleted AND ";
+    
+            $search_terms_array = str_split($search);
+    
+            $search_terms_count = count($search_terms_array);
+    
+            for ($i = 0; $i < $search_terms_count; $i++) {
+                $request .= $researchBy . " LIKE '%" . $search_terms_array[$i] . "%'";
+                if ($i != $search_terms_count - 1) {
+                    $request .= " AND ";
+                }
+            }
+            $request .= " AND status = :status ORDER BY name DESC LIMIT " . $rows_per_page . " OFFSET " . ($page - 1) * $rows_per_page;
+    
+            $request_prepare = $database->prepare($request);
+    
+            $request_execution = $request_prepare->execute([
+                'is_deleted' => 0,
+            ]);
+        }
+    } 
+    
+    elseif (!is_null($profile) && is_null($cnctdprofile_id)) {
+
+        if ($orderBy === 'Par défaut' && $search === 'UNDEFINED') {
+
+            $request = "SELECT * FROM " . $table . " WHERE is_deleted = :is_deleted and profile = :profile ORDER BY id DESC LIMIT " . $rows_per_page . " OFFSET " . ($page - 1) * $rows_per_page;
+    
+            $request_prepare = $database->prepare($request);
+    
+            $request_execution = $request_prepare->execute([
+                'profile' => $profile,
+                'is_deleted' => 0,
+            ]);
+        } elseif ($orderBy === 'A - Z' && $search === 'UNDEFINED') {
+    
+            $request = "SELECT * FROM " . $table . " WHERE is_deleted = :is_deleted and profile = :profile ORDER BY name ASC LIMIT " . $rows_per_page . " OFFSET " . ($page - 1) * $rows_per_page;
+    
+            $request_prepare = $database->prepare($request);
+    
+            $request_execution = $request_prepare->execute([
+                'profile' => $profile,
+                'is_deleted' => 0,
+            ]);
+        } elseif ($orderBy === 'Z - A' && $search === 'UNDEFINED') {
+    
+            $request = "SELECT * FROM " . $table . " WHERE is_deleted = :is_deleted and profile = :profile ORDER BY name DESC LIMIT " . $rows_per_page . " OFFSET " . ($page - 1) * $rows_per_page;
+    
+            $request_prepare = $database->prepare($request);
+    
+            $request_execution = $request_prepare->execute([
+                'profile' => $profile,
+                'is_deleted' => 0,
+            ]);
+        } elseif ($orderBy === 'Par défaut' && $search !== 'UNDEFINED') {
+    
+            $request = "SELECT * FROM " . $table . " WHERE is_deleted = :is_deleted and profile = :profile AND ";
+    
+            $search_terms_array = str_split($search);
+    
+            $search_terms_count = count($search_terms_array);
+    
+            for ($i = 0; $i < $search_terms_count; $i++) {
+                $request .= $researchBy . " LIKE '%" . $search_terms_array[$i] . "%'";
+                if ($i != $search_terms_count - 1) {
+                    $request .= " AND ";
+                }
+            }
+            $request .= " ORDER BY id DESC LIMIT " . $rows_per_page . " OFFSET " . ($page - 1) * $rows_per_page;
+    
+            $request_prepare = $database->prepare($request);
+    
+            $request_execution = $request_prepare->execute([
+                'profile' => $profile,
+                'is_deleted' => 0,
+            ]);
+        } elseif ($orderBy === 'A - Z' && $search !== 'UNDEFINED') {
+    
+            $request = "SELECT * FROM " . $table . " WHERE is_deleted = :is_deleted and profile = :profile AND ";
+    
+            $search_terms_array = str_split($search);
+    
+            $search_terms_count = count($search_terms_array);
+    
+            for ($i = 0; $i < $search_terms_count; $i++) {
+                $request .= $researchBy . " LIKE '%" . $search_terms_array[$i] . "%'";
+                if ($i != $search_terms_count - 1) {
+                    $request .= " AND ";
+                }
+            }
+            $request .= " AND status = :status ORDER BY name ASC LIMIT " . $rows_per_page . " OFFSET " . ($page - 1) * $rows_per_page;
+    
+            $request_prepare = $database->prepare($request);
+    
+            $request_execution = $request_prepare->execute([
+                'profile' => $profile,
+                'is_deleted' => 0,
+            ]);
+        } elseif ($orderBy === 'Z - A' && $search !== 'UNDEFINED') {
+    
+            $request = "SELECT * FROM " . $table . " WHERE is_deleted = :is_deleted and profile = :profile AND ";
+    
+            $search_terms_array = str_split($search);
+    
+            $search_terms_count = count($search_terms_array);
+    
+            for ($i = 0; $i < $search_terms_count; $i++) {
+                $request .= $researchBy . " LIKE '%" . $search_terms_array[$i] . "%'";
+                if ($i != $search_terms_count - 1) {
+                    $request .= " AND ";
+                }
+            }
+            $request .= " AND status = :status ORDER BY name DESC LIMIT " . $rows_per_page . " OFFSET " . ($page - 1) * $rows_per_page;
+    
+            $request_prepare = $database->prepare($request);
+    
+            $request_execution = $request_prepare->execute([
+                'profile' => $profile,
+                'is_deleted' => 0,
+            ]);
+        }
+    }
+
+    elseif (!is_null($profile) && !is_null($cnctdprofile_id)) {
+
+        if ($orderBy === 'Par défaut' && $search === 'UNDEFINED') {
+
+            $request = "SELECT * FROM " . $table . " WHERE id <> ".$cnctdprofile_id." and is_deleted = :is_deleted and profile = :profile ORDER BY id DESC LIMIT " . $rows_per_page . " OFFSET " . ($page - 1) * $rows_per_page;
+    
+            $request_prepare = $database->prepare($request);
+    
+            $request_execution = $request_prepare->execute([
+                'profile' => $profile,
+                'is_deleted' => 0,
+            ]);
+        } elseif ($orderBy === 'A - Z' && $search === 'UNDEFINED') {
+    
+            $request = "SELECT * FROM " . $table . " WHERE id <> ".$cnctdprofile_id." and is_deleted = :is_deleted and profile = :profile ORDER BY name ASC LIMIT " . $rows_per_page . " OFFSET " . ($page - 1) * $rows_per_page;
+    
+            $request_prepare = $database->prepare($request);
+    
+            $request_execution = $request_prepare->execute([
+                'profile' => $profile,
+                'is_deleted' => 0,
+            ]);
+        } elseif ($orderBy === 'Z - A' && $search === 'UNDEFINED') {
+    
+            $request = "SELECT * FROM " . $table . " WHERE id <> ".$cnctdprofile_id." and is_deleted = :is_deleted and profile = :profile ORDER BY name DESC LIMIT " . $rows_per_page . " OFFSET " . ($page - 1) * $rows_per_page;
+    
+            $request_prepare = $database->prepare($request);
+    
+            $request_execution = $request_prepare->execute([
+                'profile' => $profile,
+                'is_deleted' => 0,
+            ]);
+        } elseif ($orderBy === 'Par défaut' && $search !== 'UNDEFINED') {
+    
+            $request = "SELECT * FROM " . $table . " WHERE id <> ".$cnctdprofile_id." and is_deleted = :is_deleted and profile = :profile AND ";
+    
+            $search_terms_array = str_split($search);
+    
+            $search_terms_count = count($search_terms_array);
+    
+            for ($i = 0; $i < $search_terms_count; $i++) {
+                $request .= $researchBy . " LIKE '%" . $search_terms_array[$i] . "%'";
+                if ($i != $search_terms_count - 1) {
+                    $request .= " AND ";
+                }
+            }
+            $request .= " ORDER BY id DESC LIMIT " . $rows_per_page . " OFFSET " . ($page - 1) * $rows_per_page;
+    
+            $request_prepare = $database->prepare($request);
+    
+            $request_execution = $request_prepare->execute([
+                'profile' => $profile,
+                'is_deleted' => 0,
+            ]);
+        } elseif ($orderBy === 'A - Z' && $search !== 'UNDEFINED') {
+    
+            $request = "SELECT * FROM " . $table . " WHERE id <> ".$cnctdprofile_id." and is_deleted = :is_deleted and profile = :profile AND ";
+    
+            $search_terms_array = str_split($search);
+    
+            $search_terms_count = count($search_terms_array);
+    
+            for ($i = 0; $i < $search_terms_count; $i++) {
+                $request .= $researchBy . " LIKE '%" . $search_terms_array[$i] . "%'";
+                if ($i != $search_terms_count - 1) {
+                    $request .= " AND ";
+                }
+            }
+            $request .= " AND status = :status ORDER BY name ASC LIMIT " . $rows_per_page . " OFFSET " . ($page - 1) * $rows_per_page;
+    
+            $request_prepare = $database->prepare($request);
+    
+            $request_execution = $request_prepare->execute([
+                'profile' => $profile,
+                'is_deleted' => 0,
+            ]);
+        } elseif ($orderBy === 'Z - A' && $search !== 'UNDEFINED') {
+    
+            $request = "SELECT * FROM " . $table . " WHERE id <> ".$cnctdprofile_id." and is_deleted = :is_deleted and profile = :profile AND ";
+    
+            $search_terms_array = str_split($search);
+    
+            $search_terms_count = count($search_terms_array);
+    
+            for ($i = 0; $i < $search_terms_count; $i++) {
+                $request .= $researchBy . " LIKE '%" . $search_terms_array[$i] . "%'";
+                if ($i != $search_terms_count - 1) {
+                    $request .= " AND ";
+                }
+            }
+            $request .= " AND status = :status ORDER BY name DESC LIMIT " . $rows_per_page . " OFFSET " . ($page - 1) * $rows_per_page;
+    
+            $request_prepare = $database->prepare($request);
+    
+            $request_execution = $request_prepare->execute([
+                'profile' => $profile,
+                'is_deleted' => 0,
+            ]);
+        }
+    }
+
+
+    if ($request_execution) {
+
+        $data = $request_prepare->fetchAll(PDO::FETCH_ASSOC);
+
+        if (!empty($data) && is_array($data)) {
+
+            $list = $data;
+        }
+    }
+
+    return $list;
 }

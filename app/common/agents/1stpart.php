@@ -81,6 +81,9 @@ $_SESSION['agent_current_url'] = "{$_SERVER['REQUEST_SCHEME']}://{$_SERVER['HTTP
             case "update-products-type":
                 echo "<title>Mise à jour</title>";
                 break;
+            case "agents-listings":
+                echo "<title>Liste des agents</title>";
+                break;
             default:
                 echo "<title>Erreur 404</title>";
                 break;
@@ -335,10 +338,10 @@ $_SESSION['agent_current_url'] = "{$_SERVER['REQUEST_SCHEME']}://{$_SERVER['HTTP
                     </div>
                     <div class="nav-item dropdown">
                         <a href="#" class="nav-link d-flex lh-1 text-reset p-0" data-bs-toggle="dropdown" aria-label="Open user menu">
-                            <span class="avatar avatar-sm" style="background-image: url(<?= PROJECT ?>public/images/jow-p.jpg)"></span>
+                            <span class="avatar avatar-sm" style="background-image: url(<?= $data['avatar'] == 'null' ? PROJECT . 'public/images/default-user-profile.jpg' : $data['avatar'] ?>)"></span>
                             <div class="d-none d-xl-block ps-2">
-                                <div>Jow Doe</div>
-                                <div class="mt-1 small text-muted">Dev</div>
+                                <div><?= $data['name'] . ' ' . $data['first_names'] ?></div>
+                                <div class="mt-1 small text-muted"><?= '@' . $data['user_name'] ?></div>
                             </div>
                         </a>
                         <div class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
@@ -417,28 +420,6 @@ $_SESSION['agent_current_url'] = "{$_SERVER['REQUEST_SCHEME']}://{$_SERVER['HTTP
                         </li>
                         <li class="nav-item 
                             <?php
-                            if ($params[2] == 'customers-listings') {
-                                echo 'active';
-                            }
-                            ?>
-                            ">
-                            <a class="nav-link" href="<?= redirect($_SESSION['theme'], PROJECT . 'agents/dash/customers-listings') ?>">
-                                <span class="nav-link-icon d-md-none d-lg-inline-block"><!-- Download SVG icon from http://tabler-icons.io/i/checkbox -->
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-                                        <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
-                                        <path d="M9 7m-4 0a4 4 0 1 0 8 0a4 4 0 1 0 -8 0"></path>
-                                        <path d="M3 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2"></path>
-                                        <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
-                                        <path d="M21 21v-2a4 4 0 0 0 -3 -3.85"></path>
-                                    </svg>
-                                </span>
-                                <span class="nav-link-title">
-                                    Clients
-                                </span>
-                            </a>
-                        </li>
-                        <li class="nav-item 
-                            <?php
                             if ($params[2] == 'products-type' || $params[2] == 'set-products-type' || $params[2] == 'edit-products-type') {
                                 echo 'active';
                             }
@@ -476,6 +457,49 @@ $_SESSION['agent_current_url'] = "{$_SERVER['REQUEST_SCHEME']}://{$_SERVER['HTTP
                                 </span>
                                 <span class="nav-link-title">
                                     Type d'envoi
+                                </span>
+                            </a>
+                        </li>
+                        <li class="nav-item 
+                            <?php
+                            if ($params[2] == 'customers-listings') {
+                                echo 'active';
+                            }
+                            ?>
+                            ">
+                            <a class="nav-link" href="<?= redirect($_SESSION['theme'], PROJECT . 'agents/dash/customers-listings') ?>">
+                                <span class="nav-link-icon d-md-none d-lg-inline-block"><!-- Download SVG icon from http://tabler-icons.io/i/checkbox -->
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                        <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                                        <path d="M9 7m-4 0a4 4 0 1 0 8 0a4 4 0 1 0 -8 0"></path>
+                                        <path d="M3 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2"></path>
+                                        <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+                                        <path d="M21 21v-2a4 4 0 0 0 -3 -3.85"></path>
+                                    </svg>
+                                </span>
+                                <span class="nav-link-title">
+                                    Clients
+                                </span>
+                            </a>
+                        </li>
+                        <li class="nav-item 
+                            <?php
+                            if ($params[2] == 'agents-listings') {
+                                echo 'active';
+                            }
+                            ?>
+                            ">
+                            <a class="nav-link" href="<?= redirect($_SESSION['theme'], PROJECT . 'agents/dash/agents-listings') ?>">
+                                <span class="nav-link-icon d-md-none d-lg-inline-block"><!-- Download SVG icon from http://tabler-icons.io/i/checkbox -->
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                        <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                                        <path d="M3 21v-13l9 -4l9 4v13"></path>
+                                        <path d="M13 13h4v8h-10v-6h6"></path>
+                                        <path d="M13 21v-9a1 1 0 0 0 -1 -1h-2a1 1 0 0 0 -1 1v3"></path>
+                                    </svg>
+                                </span>
+                                <span class="nav-link-title">
+                                    Agents
                                 </span>
                             </a>
                         </li>
@@ -608,10 +632,10 @@ $_SESSION['agent_current_url'] = "{$_SERVER['REQUEST_SCHEME']}://{$_SERVER['HTTP
                     </div>
                     <div class="nav-item dropdown">
                         <a href="#" class="nav-link d-flex lh-1 text-reset p-0" data-bs-toggle="dropdown" aria-label="Open user menu">
-                            <span class="avatar avatar-sm" style="background-image: url(<?= PROJECT ?>public/images/jow-p.jpg)"></span>
+                            <span class="avatar avatar-sm" style="background-image: url(<?= $data['avatar'] == 'null' ? PROJECT . 'public/images/default-user-profile.jpg' : $data['avatar'] ?>)"></span>
                             <div class="d-none d-xl-block ps-2">
-                                <div>Jow Doe</div>
-                                <div class="mt-1 small text-muted">Dev</div>
+                                <div><?= $data['name'] . ' ' . $data['first_names'] ?></div>
+                                <div class="mt-1 small text-muted"><?= '@' . $data['user_name'] ?></div>
                             </div>
                         </a>
                         <div class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">

@@ -1,10 +1,5 @@
 <?php
 
-//Récupération de l'url de la page
-if (connected()) {
-    $_SESSION['current_url'] = "http://{$_SERVER['HTTP_HOST']}{$_SERVER['REQUEST_URI']}";
-}
-
 //Inclure l'en-tête 
 include 'app/common/agents/1stpart.php';
 
@@ -232,7 +227,7 @@ $rows = countRowsInTable($table, $_SESSION['package'], null);
                         -->
                         <div class="table-responsive">
                             <table class="table card-table table-vcenter text-nowrap">
-                                <thead>
+                                <thead class="text-center">
                                     <tr>
                                         <th class="w-1">#<input class="form-check-input m-0 align-middle row-check" type="checkbox" id="check-all" aria-label="Select all invoices"></th>
                                         <th class="">N° de suivi</th>
@@ -242,7 +237,7 @@ $rows = countRowsInTable($table, $_SESSION['package'], null);
                                         <th></th>
                                     </tr>
                                 </thead>
-                                <tbody>
+                                <tbody class="text-center">
                                     <?php
                                     if (isset($packages_listings) && !empty($packages_listings)) {
 

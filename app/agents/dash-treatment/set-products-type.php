@@ -5,11 +5,11 @@ $error = [];
 $updata = [];
 $_SESSION['set_prodtype_errors'] = [];
 
-extract($_POST);
+secure(extract($_POST));
 
 if (!empty($products)) {
 
-    $updata['products'] = secure($products);
+    $updata['products'] = $products;
 
     if (!empty(explode('-', $products)[1])) {
 
@@ -20,9 +20,9 @@ if (!empty($products)) {
 
         foreach ($products_array as $key => $product) {
 
-            if (!checkProductType(secure(ucfirst($product)))) {
+            if (!checkProductType(ucfirst(trim($product)))) {
 
-                $data['products'][] = ucfirst($product);
+                $data['products'][] = ucfirst(trim($product));
 
             } else {
 
@@ -50,9 +50,9 @@ if (!empty($products)) {
 
     } else {
 
-        if (!checkProductType(secure(ucfirst($products)))) {
+        if (!checkProductType(ucfirst(trim($products)))) {
 
-            $newdata['products'] = secure(ucfirst($products));
+            $newdata['products'] = ucfirst(trim($products));
         } else {
     
             $error['products'] = $products . ' existe déjà.';
@@ -70,7 +70,7 @@ if (!empty($products)) {
 
 if (!empty($insurance)) {
 
-    $updata['insurance'] = secure($insurance);
+    $updata['insurance'] = $insurance;
 
 } else {
 
@@ -81,7 +81,7 @@ if (!empty($insurance)) {
 
 if (!empty($bill)) {
 
-    $updata['bill'] = secure($bill);
+    $updata['bill'] = $bill;
 
 } else {
 
@@ -94,7 +94,7 @@ if ($insurance == 'non') {
 
     if (!empty($unit)) {
 
-        $updata['unit'] = secure($unit);
+        $updata['unit'] = $unit;
 
         if ($unit == 'KG') {
             $newdata['billing_per_kg'] = $bill;
@@ -113,7 +113,7 @@ if ($insurance == 'non') {
         }
     } else {
 
-        $updata['unit'] = secure($unit);
+        $updata['unit'] = $unit;
 
         $error['unit'] = 'Ce champs est requis.';
 
@@ -129,7 +129,7 @@ if ($insurance == 'oui') {
 
     if (!empty($bill_insuranceIn)) {
 
-        $updata['bill_insuranceIn'] = secure($bill_insuranceIn);
+        $updata['bill_insuranceIn'] = $bill_insuranceIn;
 
     } else {
 
@@ -140,7 +140,7 @@ if ($insurance == 'oui') {
 
     if (!empty($unit)) {
 
-        $updata['unit'] = secure($unit);
+        $updata['unit'] = $unit;
 
         if ($unit == 'KG') {
             $newdata['billing_per_kg'] = $bill;

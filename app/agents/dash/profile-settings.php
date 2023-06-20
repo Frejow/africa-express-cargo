@@ -1,9 +1,5 @@
 <?php
 
-if (connected()) {
-    $_SESSION['current_url'] = "{$_SERVER['REQUEST_SCHEME']}://{$_SERVER['HTTP_HOST']}{$_SERVER['REQUEST_URI']}";
-}
-
 include 'app/common/agents/1stpart.php';  
 //die(var_dump($data));
 ?>
@@ -79,7 +75,7 @@ include 'app/common/agents/1stpart.php';
                         }
                         ?>
 
-                        <form action="<?= redirect($_SESSION['theme'], PROJECT . 'customer/dash-treatment/avatar-updating') ?>" class="text-center" method="post" enctype="multipart/form-data">
+                        <form action="<?= redirect($_SESSION['theme'], PROJECT . 'agents/dash-treatment/avatar-updating') ?>" class="text-center" method="post" enctype="multipart/form-data">
 
                             <div class="col mt-3">
                                 <input type="file" name="fileToUpload" id="fileToUpload" style="display: none;" onchange="updateButtonLabel()">
@@ -96,7 +92,7 @@ include 'app/common/agents/1stpart.php';
                                                 <path d="M12 4l0 12"></path>
                                             </svg>
                                         </label>
-                                        <input type="button" class="btn link-secondary" style="text-decoration: none;" value="<?php echo (isset($updata["avatar"]) && !empty($updata["avatar"])) ? $updata["avatar"] : 'Importer une autre image' ?>" id="importbutton" onclick="document.getElementById('fileToUpload').click();" />
+                                        <input type="button" class="btn link-secondary" style="text-decoration: none; width: auto;" value="<?php echo (isset($updata["avatar"]) && !empty($updata["avatar"])) ? $updata["avatar"] : 'Importer une autre image' ?>" id="importbutton" onclick="document.getElementById('fileToUpload').click();" />
                                     </div>
                                 <?php
                                 }
@@ -298,7 +294,7 @@ include 'app/common/agents/1stpart.php';
                             </div>
                         </div>
 
-                        <form class="col-lg-11" action="<?= redirect($_SESSION['theme'], PROJECT . 'customer/dash-treatment/personal-informations-updating') ?>" method="post" id="form_appear" style="display: flex; flex-direction: column; display: none;">
+                        <form class="col-lg-11" action="<?= redirect($_SESSION['theme'], PROJECT . 'agents/dash-treatment/personal-informations-updating') ?>" method="post" id="form_appear" style="display: flex; flex-direction: column; display: none;">
                             <h3 class="mt-4 text-center">Mise à jour - Informations Personnelles</h3>
                             <div class="row g-3">
                                 <div class="col-md">
@@ -423,7 +419,7 @@ include 'app/common/agents/1stpart.php';
 
                         </form>
 
-                        <form action="<?= redirect($_SESSION['theme'], PROJECT . 'customer/dash-treatment/password-updating') ?>" method="post" style="display: flex;flex-direction: column;align-items:center;">
+                        <form action="<?= redirect($_SESSION['theme'], PROJECT . 'agents/dash-treatment/password-updating') ?>" method="post" style="display: flex;flex-direction: column;align-items:center;">
 
                             <?php
 
@@ -511,7 +507,7 @@ include 'app/common/agents/1stpart.php';
 
                         <div class="row">
 
-                            <form action="<?= redirect($_SESSION['theme'], PROJECT . 'customer/dash-treatment/account-deactivation') ?>" method="post">
+                            <form action="<?= redirect($_SESSION['theme'], PROJECT . 'agents/dash-treatment/account-deactivation') ?>" method="post">
 
                                 <?php
 
@@ -573,7 +569,7 @@ include 'app/common/agents/1stpart.php';
 
                             </form>
 
-                            <form action="<?= redirect($_SESSION['theme'], PROJECT . 'customer/dash-treatment/account-deletion') ?>" method="post">
+                            <form action="<?= redirect($_SESSION['theme'], PROJECT . 'agents/dash-treatment/account-deletion') ?>" method="post">
 
                                 <?php
 
