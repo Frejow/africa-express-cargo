@@ -655,13 +655,13 @@ if (isset($packages_listings) && !empty($packages_listings)) {
                                 </div>
                             </div>
                             <div class="datagrid-item">
-                                <div class="datagrid-title">Valeur (FCFA)</div>
+                                <div class="datagrid-title">Coût unitaire du Colis (FCFA)</div>
                                 <div class="datagrid-content">
                                     <?= !empty($package["worth"]) ? $package["worth"] : '-' ?>
                                 </div>
                             </div>
                             <div class="datagrid-item">
-                                <div class="datagrid-title">Nombre</div>
+                                <div class="datagrid-title">Nombre de Pièces (PCS)</div>
                                 <div class="datagrid-content">
                                     <?= !empty($package["package_units_number"]) ? $package["package_units_number"] : '-' ?>
                                 </div>
@@ -669,11 +669,11 @@ if (isset($packages_listings) && !empty($packages_listings)) {
                             <div class="datagrid-item">
                                 <div class="datagrid-title">Coût Unitaire D'Expédition (CUE)</div>
                                 <div class="datagrid-content">
-                                    <?= !empty($package["shipping_unit_cost"]) ? $package["shipping_unit_cost"] . ' / pcs' : '-' ?>
+                                    <?= !empty($package["shipping_unit_cost"]) ? $package["shipping_unit_cost"] : '-' ?>
                                 </div>
                             </div>
                             <div class="datagrid-item">
-                                <div class="datagrid-title">Coût Expédition (CUE*Nombre)</div>
+                                <div class="datagrid-title">Coût Expédition [ CUE*(PCS/KG/CBM) ]</div>
                                 <div class="datagrid-content">
                                     <?= !empty($package["shipping_cost"]) ? $package["shipping_cost"] : '-' ?>
                                 </div>

@@ -16,7 +16,7 @@ $_SESSION['rows_per_page'] = 10;
 //Quatrième paramètre, la valeur suivant laquelle trier la liste. "Par défaut" par défaut
 $_SESSION['order'] = 'Par défaut';
 
-// Cinquième paramètre, le numéro de suivi à rechercher. "UNDEFINED" par défaut dans le cas où aucune recherche n'est lancée
+// Cinquième paramètre, le type de produit à rechercher. "UNDEFINED" par défaut dans le cas où aucune recherche n'est lancée
 $_SESSION['search'] = 'UNDEFINED';
 
 // Sixième paramètre
@@ -60,7 +60,7 @@ if (isset($_SESSION['research']) && !empty($_SESSION['research'])) {
 
 //die(var_dump($_SESSION['products_listings']));
 
-//Affectation du retour de la fonction othListings avec les six paramètres suscités à la variable $packages_lisitngs
+//Affectation du retour de la fonction othListings avec les six paramètres suscités à la variable $products_listings
 $products_listings = othListings($table, $_SESSION['page'], $_SESSION['rows_per_page'], ucfirst($_SESSION['search']), $_SESSION['research_by'], $_SESSION['order']);
 
 /**
@@ -173,7 +173,7 @@ $rows = countRowsInTable($table);
                                 <thead class="text-center">
                                     <tr>
                                         <th class="w-1">#</th>
-                                        <th>Type de produits</th>
+                                        <th>Types de produits</th>
                                         <th>Tarif (fcfa) / kg</th>
                                         <th>Tarif (fcfa) / cbm</th>
                                         <th>Tarif (fcfa) / pcs</th>
@@ -250,7 +250,7 @@ $rows = countRowsInTable($table);
                                                 <td class="text-end">
                                                     <span class="">
                                                         <a class="btn-link" href="" data-bs-toggle="modal" data-bs-target="<?= '#modal-packages-detail' . $key ?>">
-                                                            Modifier
+                                                            Mettre à jour
                                                         </a>
                                                     </span>
                                                 </td>

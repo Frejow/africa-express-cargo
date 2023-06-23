@@ -427,6 +427,51 @@
     }
 </script>
 
+<!--Display block for -->
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        var selectElement = document.getElementById('products');
+        var insurBlock = document.getElementById('insurance');
+
+        selectElement.addEventListener('change', function() {
+            var selectedOption = selectElement.options[selectElement.selectedIndex];
+            var targetBlockId = selectedOption.getAttribute('data-target');
+
+            if (targetBlockId === 'insurance') {
+                insurBlock.style.display = 'block';
+            } else {
+                insurBlock.style.display = 'none';
+            }
+        });
+    });
+</script>
+
+<!-- Checkboxes -->
+
+<script>
+    window.addEventListener("DOMContentLoaded", function() {
+        var checkAll = document.getElementById("check-all");
+        var checkboxes = document.querySelectorAll(".ischecked");
+
+        checkAll.addEventListener("change", function() {
+            var isChecked = checkAll.checked;
+
+            checkboxes.forEach(function(checkbox) {
+                checkbox.checked = isChecked;
+            });
+        });
+
+        checkboxes.forEach(function(checkbox) {
+            checkbox.addEventListener("change", function() {
+                if (checkbox.checked && checkAll.checked) {
+                    checkAll.checked = false;
+                }
+            });
+        });
+    });
+</script>
+
 <script src="<?= PROJECT ?>public/datatables/jquery.dataTables.js"></script>
 <script src="<?= PROJECT ?>public/datatables-bs4/js/dataTables.bootstrap4.js"></script>
 <script src="<?= PROJECT ?>public/datatables-buttons/js/dataTables.buttons.js"></script>

@@ -20,7 +20,7 @@ if (!empty($products)) {
 
         foreach ($products_array as $key => $product) {
 
-            if (!checkProductType(ucfirst(trim($product)))) {
+            if (!checkingThirdParam('product_type', 'name', ucfirst(trim($product)))) {
 
                 $data['products'][] = ucfirst(trim($product));
 
@@ -50,7 +50,7 @@ if (!empty($products)) {
 
     } else {
 
-        if (!checkProductType(ucfirst(trim($products)))) {
+        if (!checkingThirdParam('product_type', 'name', ucfirst(trim($products)))) {
 
             $newdata['products'] = ucfirst(trim($products));
         } else {
@@ -74,9 +74,9 @@ if (!empty($insurance)) {
 
 } else {
 
-    $error['insurance'] = 'Ce champs est requis.';
+    $error['insurance'] = 'Ce type de produit dispose d\'un tarif assurance incluse ?';
 
-    $_SESSION['error_msg'] = 'Erreur. Champs requis soumis vide.';
+    $_SESSION['error_msg'] = 'Erreur. Veuillez sélectionner une réponse entre Oui ou Non au niveau du champs Assurance.';
 }
 
 if (!empty($bill)) {
@@ -123,6 +123,8 @@ if ($insurance == 'non') {
     $newdata['billing_per_kg_with_insurance'] = 0;
     $newdata['billing_per_cbm_with_insurance'] = 0;
     $newdata['billing_per_pcs_with_insurance'] = 0;
+
+    $newdata['have_insurance'] = 0;
 }
 
 if ($insurance == 'oui') {
@@ -170,6 +172,7 @@ if ($insurance == 'oui') {
         $_SESSION['error_msg'] = 'Erreur. Champs requis soumis vide.';
     }
 
+    $newdata['have_insurance'] = 1;
 }
 
 
@@ -177,7 +180,7 @@ if (empty($error)) {
 
     if (!is_array($newdata['products'])) {
 
-        if (addProduct($newdata['products'], $newdata['billing_per_kg'], $newdata['billing_per_cbm'], $newdata['billing_per_pcs'], $newdata['billing_per_kg_with_insurance'], $newdata['billing_per_cbm_with_insurance'], $newdata['billing_per_pcs_with_insurance'])) {
+        if (addProduct($newdata['products'], $newdata['billing_per_kg'], $newdata['billing_per_cbm'], $newdata['billing_per_pcs'], $newdata['billing_per_kg_with_insurance'], $newdata['billing_per_cbm_with_insurance'], $newdata['billing_per_pcs_with_insurance'], $newdata['have_insurance'])) {
         
             $_SESSION['success_msg'] = 'Nouveau type de produit ajouté avec succès';
     
@@ -192,7 +195,7 @@ if (empty($error)) {
 
         foreach($newdata['products'] as $key => $products) {
 
-            if (addProduct($products, $newdata['billing_per_kg'], $newdata['billing_per_cbm'], $newdata['billing_per_pcs'], $newdata['billing_per_kg_with_insurance'], $newdata['billing_per_cbm_with_insurance'], $newdata['billing_per_pcs_with_insurance'])) {
+            if (addProduct($products, $newdata['billing_per_kg'], $newdata['billing_per_cbm'], $newdata['billing_per_pcs'], $newdata['billing_per_kg_with_insurance'], $newdata['billing_per_cbm_with_insurance'], $newdata['billing_per_pcs_with_insurance'], $newdata['have_insurance'])) {
         
                 $_SESSION['success_msg'] = 'Nouveaux types de produits ajoutés avec succès';
         

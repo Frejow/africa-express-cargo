@@ -34,9 +34,9 @@ if (isset($_SESSION["data"]) && !empty($_SESSION["data"])) {
                             </button>
                         </div>
                         <div class="card-body">
-                            <div class="row">
+                            <div class="row mb-3">
                                 <div class="col-lg">
-                                    <div class="mb-3">
+                                    <div class="">
                                         <label for="products" class="form-label">Type de produit <span class="text-danger">[ Requis ]</span></label>
                                         <div class="input-group input-group-flat">
                                             <input type="text" id="products" class="form-control ps-1" name="products" value="<?php echo (isset($updata["products"]) && !empty($updata["products"])) ? $updata["products"] : "" ?>" placeholder="Noms (Ordinateur ou Ordinateur-Téléphones portables si les deux types ont un même tarif.)" autocomplete="off">
@@ -86,9 +86,9 @@ if (isset($_SESSION["data"]) && !empty($_SESSION["data"])) {
                                 }
                                 ?>
                             </div>
-                            <div class="row">
+                            <div class="row mb-3">
                                 <div class="col-lg-6">
-                                    <div class="mb-3">
+                                    <div class="">
                                         <label for="bill" class="form-label">Tarif normal ( EN FCFA ) <span class="text-danger">[ Requis ]</span></label>
                                         <div class="input-group input-group-flat">
                                             <input type="text" id="bill" class="form-control ps-1" name="bill" value="<?= !empty($updata["bill"]) ? $updata["bill"] : "" ?>" placeholder="Montant" autocomplete="off">
@@ -101,7 +101,7 @@ if (isset($_SESSION["data"]) && !empty($_SESSION["data"])) {
                                     ?>
                                 </div>
                                 <div class="col-lg-6">
-                                    <div class="mb-3">
+                                    <div class="">
                                         <label for="unit" class="form-label">Par <span class="text-danger">[ Requis ]</span></label>
                                         <div class="mb-3">
                                             <select class="form-select" name="unit" id="unit">
@@ -118,9 +118,9 @@ if (isset($_SESSION["data"]) && !empty($_SESSION["data"])) {
                                     ?>
                                 </div>
                             </div>
-                            <div class="row" id="insuranceBlock" style="<?php echo (!empty($updata["insurance"]) && $updata["insurance"] == "oui") ? "display: block;" : "display: none;" ?>">
+                            <div class="row mb-3" id="insuranceBlock" style="<?php echo (!empty($updata["insurance"]) && $updata["insurance"] == "oui") ? "display: block;" : "display: none;" ?>">
                                 <div class="offset-lg-3 col-lg-6">
-                                    <div class="mb-3">
+                                    <div class="">
                                         <label for="bill_insuranceIn" class="form-label">Tarif avec assurance ( EN FCFA ) <span class="text-danger">[ Requis ]</span></label>
                                         <div class="input-group input-group-flat">
                                             <input type="text" id="bill_insuranceIn" class="form-control ps-1" name="bill_insuranceIn" value="<?= !empty($updata["bill_insuranceIn"]) ? $updata["bill_insuranceIn"] : "" ?>" placeholder="Montant" autocomplete="off">

@@ -28,7 +28,7 @@ if (isset($_SESSION["add_pack_ingroup_errors"]) && !empty($_SESSION["add_pack_in
                                 <div class="">
                                     <select class="form-select select2bs4" multiple="multiple" required name="packSelect[]" data-placeholder="Selectionnez colis" style="width: 100%;">
                                     <?php
-                                    $packages_listing = packagesListingInSelectField($data['id']);
+                                    $packages_listing = selectFieldListing('package', $data['id']);
                                     if (isset($packages_listing) && !empty($packages_listing)) {
                                         foreach ($packages_listing as $key => $value) {
                                     ?>

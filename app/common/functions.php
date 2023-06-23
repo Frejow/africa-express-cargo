@@ -979,25 +979,27 @@ function deletedAccount(int $id): bool
     return $update_is_deleted_field;
 }
 
-/** Check tracking number
+/** Checking
  * 
- * @param string $trackN The tracking number.
+ * @param string $table The name of table.
+ * @param string $where.
+ * @param string $thirdParam.
  * 
  * @return bool The result.
  */
-function checkTrackingNumber(string $trackN): bool
+function checkingThirdParam(string $table, string $where, string $thirdParam): bool
 {
 
-    $trackN_found = false;
+    $checkingThirdParam = false;
 
     $database = databaseLogin();
 
-    $request = "SELECT * FROM package WHERE tracking_number = :tracking_number and is_deleted = :is_deleted";
+    $request = "SELECT * FROM " . $table . " WHERE " . $where . " = :" . $where . " and is_deleted = :is_deleted";
 
     $request_prepare = $database->prepare($request);
 
     $request_execution = $request_prepare->execute([
-        'tracking_number' => $trackN,
+        $where => $thirdParam,
         'is_deleted' => 0
     ]);
 
@@ -1006,25 +1008,19 @@ function checkTrackingNumber(string $trackN): bool
         $data = $request_prepare->fetchAll(PDO::FETCH_ASSOC);
 
         if (!empty($data) && is_array($data)) {
-            $trackN_found = true;
+            $checkingThirdParam = true;
         }
     }
 
-    return $trackN_found;
+    return $checkingThirdParam;
 }
 
 /** Folder deletion
  * 
  * @param string $dir The folder path.
  */
-function deleteDir(string $dir): void
+function deleteDir(string $dir)
 {
-
-    if (!is_dir($dir)) {
-
-        return;
-    }
-
     $contain = scandir($dir);
 
     foreach ($contain as $value) {
@@ -1042,7 +1038,6 @@ function deleteDir(string $dir): void
             }
         }
     }
-
     rmdir($dir);
 }
 
@@ -1616,7 +1611,7 @@ function countRowsInTable(string $table, $packages_type = null, $user_id = null,
         );
     } elseif (is_null($user_id) && is_null($packages_type) && !is_null($profile) && !is_null($cnctdprofile_id)) {
 
-        $request = "SELECT COUNT(*) FROM " . $table . " WHERE id <> ".$cnctdprofile_id." AND profile = :profile AND is_deleted = :is_deleted";
+        $request = "SELECT COUNT(*) FROM " . $table . " WHERE id <> " . $cnctdprofile_id . " AND profile = :profile AND is_deleted = :is_deleted";
 
         $request_prepare = $database->prepare($request);
 
@@ -1672,41 +1667,6 @@ function deletedPackageOrPackagesGroup(string $tracking_number, string $table): 
     }
 
     return $update_is_deleted_field;
-}
-
-/** Listing of all unlinked packages to a packages group 
- * 
- * @param int $user_id The user id.
- * 
- * @return array $packages_listing All packages concerned.
- */
-function packagesListingInSelectField(int $user_id): array
-{
-
-    $packages_listing = [];
-
-    $database = databaseLogin();
-
-    $request = "SELECT * FROM package WHERE user_id = :user_id and is_deleted = :is_deleted and customer_package_group_id IS NULL ORDER BY id DESC";
-
-    $request_prepare = $database->prepare($request);
-
-    $request_execution = $request_prepare->execute([
-        'user_id' => $user_id,
-        'is_deleted' => 0,
-    ]);
-
-    if ($request_execution) {
-
-        $data = $request_prepare->fetchAll(PDO::FETCH_ASSOC);
-
-        if (!empty($data) && is_array($data)) {
-
-            $packages_listing = $data;
-        }
-    }
-
-    return $packages_listing;
 }
 
 /** Insert packages group in 'customer_package_group' table and get the packages group id
@@ -1996,40 +1956,6 @@ function checkDeliveredStatus(): array
     return $packageDelivered;
 }
 
-/** Listing of all customers 
- * 
- * @return array $customersListing.
- */
-function customersListing(): array
-{
-
-    $customersListing = [];
-
-    $database = databaseLogin();
-
-    $request = "SELECT * FROM user WHERE profile = :profile and is_deleted = :is_deleted and is_active = :is_active ORDER BY name ASC";
-
-    $request_prepare = $database->prepare($request);
-
-    $request_execution = $request_prepare->execute([
-        'profile' => 'CUSTOMER',
-        'is_deleted' => 0,
-        'is_active' => 1
-    ]);
-
-    if ($request_execution) {
-
-        $data = $request_prepare->fetchAll(PDO::FETCH_ASSOC);
-
-        if (!empty($data) && is_array($data)) {
-
-            $customersListing = $data;
-        }
-    }
-
-    return $customersListing;
-}
-
 /** Add product type
  * 
  * @param string $name.
@@ -2042,15 +1968,15 @@ function customersListing(): array
  * 
  * @return bool The result.
  */
-function addProduct(string $name, int $billing_per_kg, int $billing_per_cbm, int $billing_per_pcs, int $billing_per_kg_with_insurance, int $billing_per_cbm_with_insurance, int $billing_per_pcs_with_insurance): bool
+function addProduct(string $name, int $billing_per_kg, int $billing_per_cbm, int $billing_per_pcs, int $billing_per_kg_with_insurance, int $billing_per_cbm_with_insurance, int $billing_per_pcs_with_insurance, int $have_insurance): bool
 {
 
     $addProduct = false;
 
     $database = databaseLogin();
 
-    $request = "INSERT INTO product_type (name, billing_per_kg, billing_per_cbm, billing_per_pcs, billing_per_kg_with_insurance, billing_per_cbm_with_insurance, billing_per_pcs_with_insurance) 
-    VALUES (:name, :billing_per_kg, :billing_per_cbm, :billing_per_pcs, :billing_per_kg_with_insurance, :billing_per_cbm_with_insurance, :billing_per_pcs_with_insurance)";
+    $request = "INSERT INTO product_type (name, billing_per_kg, billing_per_cbm, billing_per_pcs, billing_per_kg_with_insurance, billing_per_cbm_with_insurance, billing_per_pcs_with_insurance, have_insurance) 
+    VALUES (:name, :billing_per_kg, :billing_per_cbm, :billing_per_pcs, :billing_per_kg_with_insurance, :billing_per_cbm_with_insurance, :billing_per_pcs_with_insurance, :have_insurance)";
 
     $request_prepare = $database->prepare($request);
 
@@ -2063,6 +1989,7 @@ function addProduct(string $name, int $billing_per_kg, int $billing_per_cbm, int
             'billing_per_kg_with_insurance' => $billing_per_kg_with_insurance,
             'billing_per_cbm_with_insurance' => $billing_per_cbm_with_insurance,
             'billing_per_pcs_with_insurance' => $billing_per_pcs_with_insurance,
+            'have_insurance' => $have_insurance,
         ]
     );
 
@@ -2073,40 +2000,6 @@ function addProduct(string $name, int $billing_per_kg, int $billing_per_cbm, int
     return $addProduct;
 }
 
-/** Check product type
- * 
- * @param string $productTypt The tracking number.
- * 
- * @return bool The result.
- */
-function checkProductType(string $productType): bool
-{
-
-    $checkProductType = false;
-
-    $database = databaseLogin();
-
-    $request = "SELECT * FROM product_type WHERE name = :name and is_deleted = :is_deleted";
-
-    $request_prepare = $database->prepare($request);
-
-    $request_execution = $request_prepare->execute([
-        'name' => $productType,
-        'is_deleted' => 0
-    ]);
-
-    if ($request_execution) {
-
-        $data = $request_prepare->fetchAll(PDO::FETCH_ASSOC);
-
-        if (!empty($data) && is_array($data)) {
-            $checkProductType = true;
-        }
-    }
-
-    return $checkProductType;
-}
-
 /** Listing
  * 
  * @param string $table The name of table.
@@ -2114,36 +2007,38 @@ function checkProductType(string $productType): bool
  * @param int $rows_per_page Number to show per page.
  * @param string $search The value of search field. 
  * @param string $researchBy.
- * @param mixed $orderBy.
+ * @param string $orderBy.
+ * @param string $profile.
+ * @param int $cnctdprofile_id.
  * 
  * @return array $list The list.
  */
-function othListings(string $table, int $page, int $rows_per_page, string $search, string $researchBy, string $orderBy, $profile = null, $cnctdprofile_id = null): array
+function othListings(string $table, int $page, int $rows_per_page, string $search, string $researchBy, string $orderBy, string $profile = null, int $cnctdprofile_id = null): array
 {
 
     $list = [];
 
     $database = databaseLogin();
-    
+
     if (is_null($profile)) {
 
         if ($orderBy === 'Par défaut' && $search === 'UNDEFINED') {
 
             $request = "SELECT * FROM " . $table . " WHERE is_deleted = :is_deleted ORDER BY id DESC LIMIT " . $rows_per_page . " OFFSET " . ($page - 1) * $rows_per_page;
-    
+
             $request_prepare = $database->prepare($request);
-    
+
             $request_execution = $request_prepare->execute([
                 'is_deleted' => 0,
             ]);
         } elseif ($orderBy === 'Par défaut' && $search !== 'UNDEFINED') {
-    
+
             $request = "SELECT * FROM " . $table . " WHERE is_deleted = :is_deleted AND ";
-    
+
             $search_terms_array = str_split($search);
-    
+
             $search_terms_count = count($search_terms_array);
-    
+
             for ($i = 0; $i < $search_terms_count; $i++) {
                 $request .= $researchBy . " LIKE '%" . $search_terms_array[$i] . "%'";
                 if ($i != $search_terms_count - 1) {
@@ -2151,115 +2046,113 @@ function othListings(string $table, int $page, int $rows_per_page, string $searc
                 }
             }
             $request .= " ORDER BY id DESC LIMIT " . $rows_per_page . " OFFSET " . ($page - 1) * $rows_per_page;
-    
+
             $request_prepare = $database->prepare($request);
-    
+
             $request_execution = $request_prepare->execute([
                 'is_deleted' => 0,
             ]);
         } elseif ($orderBy === 'A - Z' && $search === 'UNDEFINED') {
-    
+
             $request = "SELECT * FROM " . $table . " WHERE is_deleted = :is_deleted ORDER BY name ASC LIMIT " . $rows_per_page . " OFFSET " . ($page - 1) * $rows_per_page;
-    
+
             $request_prepare = $database->prepare($request);
-    
+
             $request_execution = $request_prepare->execute([
                 'is_deleted' => 0,
             ]);
         } elseif ($orderBy === 'Z - A' && $search === 'UNDEFINED') {
-    
+
             $request = "SELECT * FROM " . $table . " WHERE is_deleted = :is_deleted ORDER BY name DESC LIMIT " . $rows_per_page . " OFFSET " . ($page - 1) * $rows_per_page;
-    
+
             $request_prepare = $database->prepare($request);
-    
+
             $request_execution = $request_prepare->execute([
                 'is_deleted' => 0,
             ]);
         } elseif ($orderBy === 'A - Z' && $search !== 'UNDEFINED') {
-    
+
             $request = "SELECT * FROM " . $table . " WHERE is_deleted = :is_deleted AND ";
-    
+
             $search_terms_array = str_split($search);
-    
+
             $search_terms_count = count($search_terms_array);
-    
+
             for ($i = 0; $i < $search_terms_count; $i++) {
                 $request .= $researchBy . " LIKE '%" . $search_terms_array[$i] . "%'";
                 if ($i != $search_terms_count - 1) {
                     $request .= " AND ";
                 }
             }
-            $request .= " AND status = :status ORDER BY name ASC LIMIT " . $rows_per_page . " OFFSET " . ($page - 1) * $rows_per_page;
-    
+            $request .= " ORDER BY name ASC LIMIT " . $rows_per_page . " OFFSET " . ($page - 1) * $rows_per_page;
+
             $request_prepare = $database->prepare($request);
-    
+
             $request_execution = $request_prepare->execute([
                 'is_deleted' => 0,
             ]);
         } elseif ($orderBy === 'Z - A' && $search !== 'UNDEFINED') {
-    
+
             $request = "SELECT * FROM " . $table . " WHERE is_deleted = :is_deleted AND ";
-    
+
             $search_terms_array = str_split($search);
-    
+
             $search_terms_count = count($search_terms_array);
-    
+
             for ($i = 0; $i < $search_terms_count; $i++) {
                 $request .= $researchBy . " LIKE '%" . $search_terms_array[$i] . "%'";
                 if ($i != $search_terms_count - 1) {
                     $request .= " AND ";
                 }
             }
-            $request .= " AND status = :status ORDER BY name DESC LIMIT " . $rows_per_page . " OFFSET " . ($page - 1) * $rows_per_page;
-    
+            $request .= " ORDER BY name DESC LIMIT " . $rows_per_page . " OFFSET " . ($page - 1) * $rows_per_page;
+
             $request_prepare = $database->prepare($request);
-    
+
             $request_execution = $request_prepare->execute([
                 'is_deleted' => 0,
             ]);
         }
-    } 
-    
-    elseif (!is_null($profile) && is_null($cnctdprofile_id)) {
+    } elseif (!is_null($profile) && is_null($cnctdprofile_id)) {
 
         if ($orderBy === 'Par défaut' && $search === 'UNDEFINED') {
 
             $request = "SELECT * FROM " . $table . " WHERE is_deleted = :is_deleted and profile = :profile ORDER BY id DESC LIMIT " . $rows_per_page . " OFFSET " . ($page - 1) * $rows_per_page;
-    
+
             $request_prepare = $database->prepare($request);
-    
+
             $request_execution = $request_prepare->execute([
                 'profile' => $profile,
                 'is_deleted' => 0,
             ]);
         } elseif ($orderBy === 'A - Z' && $search === 'UNDEFINED') {
-    
+
             $request = "SELECT * FROM " . $table . " WHERE is_deleted = :is_deleted and profile = :profile ORDER BY name ASC LIMIT " . $rows_per_page . " OFFSET " . ($page - 1) * $rows_per_page;
-    
+
             $request_prepare = $database->prepare($request);
-    
+
             $request_execution = $request_prepare->execute([
                 'profile' => $profile,
                 'is_deleted' => 0,
             ]);
         } elseif ($orderBy === 'Z - A' && $search === 'UNDEFINED') {
-    
+
             $request = "SELECT * FROM " . $table . " WHERE is_deleted = :is_deleted and profile = :profile ORDER BY name DESC LIMIT " . $rows_per_page . " OFFSET " . ($page - 1) * $rows_per_page;
-    
+
             $request_prepare = $database->prepare($request);
-    
+
             $request_execution = $request_prepare->execute([
                 'profile' => $profile,
                 'is_deleted' => 0,
             ]);
         } elseif ($orderBy === 'Par défaut' && $search !== 'UNDEFINED') {
-    
+
             $request = "SELECT * FROM " . $table . " WHERE is_deleted = :is_deleted and profile = :profile AND ";
-    
+
             $search_terms_array = str_split($search);
-    
+
             $search_terms_count = count($search_terms_array);
-    
+
             for ($i = 0; $i < $search_terms_count; $i++) {
                 $request .= $researchBy . " LIKE '%" . $search_terms_array[$i] . "%'";
                 if ($i != $search_terms_count - 1) {
@@ -2267,100 +2160,98 @@ function othListings(string $table, int $page, int $rows_per_page, string $searc
                 }
             }
             $request .= " ORDER BY id DESC LIMIT " . $rows_per_page . " OFFSET " . ($page - 1) * $rows_per_page;
-    
+
             $request_prepare = $database->prepare($request);
-    
+
             $request_execution = $request_prepare->execute([
                 'profile' => $profile,
                 'is_deleted' => 0,
             ]);
         } elseif ($orderBy === 'A - Z' && $search !== 'UNDEFINED') {
-    
+
             $request = "SELECT * FROM " . $table . " WHERE is_deleted = :is_deleted and profile = :profile AND ";
-    
+
             $search_terms_array = str_split($search);
-    
+
             $search_terms_count = count($search_terms_array);
-    
+
             for ($i = 0; $i < $search_terms_count; $i++) {
                 $request .= $researchBy . " LIKE '%" . $search_terms_array[$i] . "%'";
                 if ($i != $search_terms_count - 1) {
                     $request .= " AND ";
                 }
             }
-            $request .= " AND status = :status ORDER BY name ASC LIMIT " . $rows_per_page . " OFFSET " . ($page - 1) * $rows_per_page;
-    
+            $request .= " ORDER BY name ASC LIMIT " . $rows_per_page . " OFFSET " . ($page - 1) * $rows_per_page;
+
             $request_prepare = $database->prepare($request);
-    
+
             $request_execution = $request_prepare->execute([
                 'profile' => $profile,
                 'is_deleted' => 0,
             ]);
         } elseif ($orderBy === 'Z - A' && $search !== 'UNDEFINED') {
-    
+
             $request = "SELECT * FROM " . $table . " WHERE is_deleted = :is_deleted and profile = :profile AND ";
-    
+
             $search_terms_array = str_split($search);
-    
+
             $search_terms_count = count($search_terms_array);
-    
+
             for ($i = 0; $i < $search_terms_count; $i++) {
                 $request .= $researchBy . " LIKE '%" . $search_terms_array[$i] . "%'";
                 if ($i != $search_terms_count - 1) {
                     $request .= " AND ";
                 }
             }
-            $request .= " AND status = :status ORDER BY name DESC LIMIT " . $rows_per_page . " OFFSET " . ($page - 1) * $rows_per_page;
-    
+            $request .= " ORDER BY name DESC LIMIT " . $rows_per_page . " OFFSET " . ($page - 1) * $rows_per_page;
+
             $request_prepare = $database->prepare($request);
-    
+
             $request_execution = $request_prepare->execute([
                 'profile' => $profile,
                 'is_deleted' => 0,
             ]);
         }
-    }
-
-    elseif (!is_null($profile) && !is_null($cnctdprofile_id)) {
+    } elseif (!is_null($profile) && !is_null($cnctdprofile_id)) {
 
         if ($orderBy === 'Par défaut' && $search === 'UNDEFINED') {
 
-            $request = "SELECT * FROM " . $table . " WHERE id <> ".$cnctdprofile_id." and is_deleted = :is_deleted and profile = :profile ORDER BY id DESC LIMIT " . $rows_per_page . " OFFSET " . ($page - 1) * $rows_per_page;
-    
+            $request = "SELECT * FROM " . $table . " WHERE id <> " . $cnctdprofile_id . " and is_deleted = :is_deleted and profile = :profile ORDER BY id DESC LIMIT " . $rows_per_page . " OFFSET " . ($page - 1) * $rows_per_page;
+
             $request_prepare = $database->prepare($request);
-    
+
             $request_execution = $request_prepare->execute([
                 'profile' => $profile,
                 'is_deleted' => 0,
             ]);
         } elseif ($orderBy === 'A - Z' && $search === 'UNDEFINED') {
-    
-            $request = "SELECT * FROM " . $table . " WHERE id <> ".$cnctdprofile_id." and is_deleted = :is_deleted and profile = :profile ORDER BY name ASC LIMIT " . $rows_per_page . " OFFSET " . ($page - 1) * $rows_per_page;
-    
+
+            $request = "SELECT * FROM " . $table . " WHERE id <> " . $cnctdprofile_id . " and is_deleted = :is_deleted and profile = :profile ORDER BY name ASC LIMIT " . $rows_per_page . " OFFSET " . ($page - 1) * $rows_per_page;
+
             $request_prepare = $database->prepare($request);
-    
+
             $request_execution = $request_prepare->execute([
                 'profile' => $profile,
                 'is_deleted' => 0,
             ]);
         } elseif ($orderBy === 'Z - A' && $search === 'UNDEFINED') {
-    
-            $request = "SELECT * FROM " . $table . " WHERE id <> ".$cnctdprofile_id." and is_deleted = :is_deleted and profile = :profile ORDER BY name DESC LIMIT " . $rows_per_page . " OFFSET " . ($page - 1) * $rows_per_page;
-    
+
+            $request = "SELECT * FROM " . $table . " WHERE id <> " . $cnctdprofile_id . " and is_deleted = :is_deleted and profile = :profile ORDER BY name DESC LIMIT " . $rows_per_page . " OFFSET " . ($page - 1) * $rows_per_page;
+
             $request_prepare = $database->prepare($request);
-    
+
             $request_execution = $request_prepare->execute([
                 'profile' => $profile,
                 'is_deleted' => 0,
             ]);
         } elseif ($orderBy === 'Par défaut' && $search !== 'UNDEFINED') {
-    
-            $request = "SELECT * FROM " . $table . " WHERE id <> ".$cnctdprofile_id." and is_deleted = :is_deleted and profile = :profile AND ";
-    
+
+            $request = "SELECT * FROM " . $table . " WHERE id <> " . $cnctdprofile_id . " and is_deleted = :is_deleted and profile = :profile AND ";
+
             $search_terms_array = str_split($search);
-    
+
             $search_terms_count = count($search_terms_array);
-    
+
             for ($i = 0; $i < $search_terms_count; $i++) {
                 $request .= $researchBy . " LIKE '%" . $search_terms_array[$i] . "%'";
                 if ($i != $search_terms_count - 1) {
@@ -2368,53 +2259,53 @@ function othListings(string $table, int $page, int $rows_per_page, string $searc
                 }
             }
             $request .= " ORDER BY id DESC LIMIT " . $rows_per_page . " OFFSET " . ($page - 1) * $rows_per_page;
-    
+
             $request_prepare = $database->prepare($request);
-    
+
             $request_execution = $request_prepare->execute([
                 'profile' => $profile,
                 'is_deleted' => 0,
             ]);
         } elseif ($orderBy === 'A - Z' && $search !== 'UNDEFINED') {
-    
-            $request = "SELECT * FROM " . $table . " WHERE id <> ".$cnctdprofile_id." and is_deleted = :is_deleted and profile = :profile AND ";
-    
+
+            $request = "SELECT * FROM " . $table . " WHERE id <> " . $cnctdprofile_id . " and is_deleted = :is_deleted and profile = :profile AND ";
+
             $search_terms_array = str_split($search);
-    
+
             $search_terms_count = count($search_terms_array);
-    
+
             for ($i = 0; $i < $search_terms_count; $i++) {
                 $request .= $researchBy . " LIKE '%" . $search_terms_array[$i] . "%'";
                 if ($i != $search_terms_count - 1) {
                     $request .= " AND ";
                 }
             }
-            $request .= " AND status = :status ORDER BY name ASC LIMIT " . $rows_per_page . " OFFSET " . ($page - 1) * $rows_per_page;
-    
+            $request .= " ORDER BY name ASC LIMIT " . $rows_per_page . " OFFSET " . ($page - 1) * $rows_per_page;
+
             $request_prepare = $database->prepare($request);
-    
+
             $request_execution = $request_prepare->execute([
                 'profile' => $profile,
                 'is_deleted' => 0,
             ]);
         } elseif ($orderBy === 'Z - A' && $search !== 'UNDEFINED') {
-    
-            $request = "SELECT * FROM " . $table . " WHERE id <> ".$cnctdprofile_id." and is_deleted = :is_deleted and profile = :profile AND ";
-    
+
+            $request = "SELECT * FROM " . $table . " WHERE id <> " . $cnctdprofile_id . " and is_deleted = :is_deleted and profile = :profile AND ";
+
             $search_terms_array = str_split($search);
-    
+
             $search_terms_count = count($search_terms_array);
-    
+
             for ($i = 0; $i < $search_terms_count; $i++) {
                 $request .= $researchBy . " LIKE '%" . $search_terms_array[$i] . "%'";
                 if ($i != $search_terms_count - 1) {
                     $request .= " AND ";
                 }
             }
-            $request .= " AND status = :status ORDER BY name DESC LIMIT " . $rows_per_page . " OFFSET " . ($page - 1) * $rows_per_page;
-    
+            $request .= " ORDER BY name DESC LIMIT " . $rows_per_page . " OFFSET " . ($page - 1) * $rows_per_page;
+
             $request_prepare = $database->prepare($request);
-    
+
             $request_execution = $request_prepare->execute([
                 'profile' => $profile,
                 'is_deleted' => 0,
@@ -2434,4 +2325,193 @@ function othListings(string $table, int $page, int $rows_per_page, string $searc
     }
 
     return $list;
+}
+
+/** Listing in select field 
+ * 
+ * @param string $table Name of table
+ * @param int $user_id The user id.
+ * 
+ * @return array $selectFieldListing.
+ */
+function selectFieldListing(string $table, string $profile = null, int $user_id = null): array
+{
+    $selectFieldListing = [];
+
+    $database = databaseLogin();
+
+    if (is_null($profile) && !is_null($user_id)) {
+
+        $request = "SELECT * FROM " . $table . " WHERE user_id = :user_id and is_deleted = :is_deleted and customer_package_group_id IS NULL ORDER BY id DESC";
+
+        $request_prepare = $database->prepare($request);
+
+        $request_execution = $request_prepare->execute([
+            'user_id' => $user_id,
+            'is_deleted' => 0,
+        ]);
+    } elseif (!is_null($profile) && is_null($user_id)) {
+
+        $request = "SELECT * FROM " . $table . " WHERE profile = :profile and is_deleted = :is_deleted and is_active = :is_active ORDER BY name ASC";
+
+        $request_prepare = $database->prepare($request);
+
+        $request_execution = $request_prepare->execute([
+            'profile' => $profile,
+            'is_deleted' => 0,
+            'is_active' => 1
+        ]);
+    } elseif (is_null($profile) && is_null($user_id)) {
+
+        $request = "SELECT * FROM " . $table . " WHERE is_deleted = :is_deleted and is_active = :is_active ORDER BY name ASC";
+
+        $request_prepare = $database->prepare($request);
+
+        $request_execution = $request_prepare->execute([
+            'is_deleted' => 0,
+            'is_active' => 1
+        ]);
+    }
+
+    if ($request_execution) {
+
+        $data = $request_prepare->fetchAll(PDO::FETCH_ASSOC);
+
+        if (!empty($data) && is_array($data)) {
+
+            $selectFieldListing = $data;
+        }
+    }
+
+    return $selectFieldListing;
+}
+
+/** Get product
+ * 
+ * @param int $product_id.
+ * 
+ * @return array $getProduct.
+ */
+function getProduct(int $product_id): array
+{
+    $getProduct = [];
+
+    $database = databaseLogin();
+
+    $request = "SELECT * FROM product_type WHERE id = :id and is_active = :is_active and is_deleted = :is_deleted";
+
+    $request_prepare = $database->prepare($request);
+
+    $request_execution = $request_prepare->execute([
+        'id' => $product_id,
+        'is_active' => 1,
+        'is_deleted' => 0
+    ]);
+
+    if ($request_execution) {
+
+        $data = $request_prepare->fetch(PDO::FETCH_ASSOC);
+
+        if (!empty($data) && is_array($data)) {
+
+            $getProduct = $data;
+        }
+    }
+    return $getProduct;
+}
+
+/** Add shipping type
+ * 
+ * @param string $name.
+ * @param string $delivery_time.
+ * 
+ * @return bool The result.
+ */
+function addShipping(string $name, string $delivery_time): bool
+{
+
+    $addShipping = false;
+
+    $database = databaseLogin();
+
+    $request = "INSERT INTO shipping_type (name, delivery_time) VALUES (:name, :delivery_time)";
+
+    $request_prepare = $database->prepare($request);
+
+    $request_execution = $request_prepare->execute(
+        [
+            'name' => $name,
+            'delivery_time' => $delivery_time,
+        ]
+    );
+
+    if ($request_execution) {
+        $addShipping = true;
+    }
+
+    return $addShipping;
+}
+
+/** Add package
+ * 
+ * @param string $tracking_number The package tracking number.
+ * @param int $package_units_number The number of packages.
+ * @param int $worth The package worth in terms of amount.
+ * @param string $description Package description.
+ * @param int $net_weight Package net weight.
+ * @param int $volumetric_weight Package volumetric weight.
+ * @param string $product_type Product type according to package nature.
+ * @param int $user_id The user id.
+ * 
+ * @return bool The result.
+ */
+function addPackge(
+    string $tracking_number,
+    int    $package_units_number,
+    int    $worth,
+    string $description,
+    string $net_weight,
+    string $volumetric_weight,
+    int    $shipping_unit_cost,
+    string $shipping_cost,
+    string $product_type,
+    string $shipping_type,
+    int    $user_id,
+    int    $product_type_id,
+    int    $shipping_type_id
+): bool {
+
+    $insertion = false;
+
+    $database = databaseLogin();
+
+    $request = "INSERT INTO package (tracking_number, package_units_number, worth, description, net_weight, volumetric_weight, shipping_unit_cost, shipping_cost, product_type, shipping_type, user_id, product_type_id, shipping_type_id) 
+    VALUES (:tracking_number, :package_units_number, :worth, :description, :net_weight, :volumetric_weight, :shipping_unit_cost, :shipping_cost, :product_type, :shipping_type, :user_id, :product_type_id, :shipping_type_id)";
+
+    $request_prepare = $database->prepare($request);
+
+    $request_execution = $request_prepare->execute(
+        [
+            'tracking_number' => $tracking_number,
+            'package_units_number' => $package_units_number,
+            'worth' => $worth,
+            'description' => $description,
+            'net_weight' => $net_weight,
+            'volumetric_weight' => $volumetric_weight,
+            'shipping_unit_cost' => $shipping_unit_cost,
+            'shipping_cost' => $shipping_cost,
+            'product_type' => $product_type,
+            'shipping_type' => $shipping_type,
+            'user_id' => $user_id,
+            'product_type_id' => $product_type_id,
+            'shipping_type_id' => $shipping_type_id
+        ]
+    );
+
+    if ($request_execution) {
+
+        $insertion = true;
+    }
+
+    return $insertion;
 }

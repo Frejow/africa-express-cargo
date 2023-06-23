@@ -9,7 +9,7 @@ $_SESSION['success_msg'] = [];
 
 if (isset($_POST['pack_trackN']) && !empty($_POST['pack_trackN'])) {
 
-    if (!checkTrackingNumber(secure(strtoupper($_POST['pack_trackN'])))) {
+    if (!checkingThirdParam('package','tracking_number', secure(strtoupper($_POST['pack_trackN'])))) {
 
         $newdata['pack_trackN'] = secure(strtoupper($_POST['pack_trackN']));
 

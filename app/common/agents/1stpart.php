@@ -78,6 +78,9 @@ $_SESSION['agent_current_url'] = "{$_SERVER['REQUEST_SCHEME']}://{$_SERVER['HTTP
             case "set-products-type":
                 echo "<title>Ajouter nouveau type de produit</title>";
                 break;
+            case "set-shipping-type":
+                echo "<title>Ajouter nouveau type d'envoi</title>";
+                break;
             case "update-products-type":
                 echo "<title>Mise à jour</title>";
                 break;
@@ -442,7 +445,7 @@ $_SESSION['agent_current_url'] = "{$_SERVER['REQUEST_SCHEME']}://{$_SERVER['HTTP
                         </li>
                         <li class="nav-item 
                             <?php
-                            if ($params[2] == 'shipping-type') {
+                            if ($params[2] == 'shipping-type' || $params[2] == 'set-shipping-type') {
                                 echo 'active';
                             }
                             ?>
