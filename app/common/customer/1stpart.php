@@ -48,6 +48,15 @@ $_SESSION['customer_current_url'] = "{$_SERVER['REQUEST_SCHEME']}://{$_SERVER['H
             case "edit-packages-group":
                 echo "<title>Modifier groupe de colis</title>";
                 break;
+            case "products-type":
+                echo "<title>Type de produits</title>";
+                break;
+            case "shipping-type":
+                echo "<title>Type d'envoi</title>";
+                break;
+            case "invoices":
+                echo "<title>Mes Factures</title>";
+                break;
             default:
                 echo "<title>Erreur 404</title>";
                 break;
@@ -421,8 +430,8 @@ $_SESSION['customer_current_url'] = "{$_SERVER['REQUEST_SCHEME']}://{$_SERVER['H
                                     </span>
                                 </a>
                             </li>
-                            <li class="nav-item dropdown">
-                                <a class="nav-link dropdown-toggle" href="#navbar-base" data-bs-toggle="dropdown" data-bs-auto-close="outside" role="button" aria-expanded="false">
+                            <li class="nav-item <?= $params[2] == 'products-type' ? 'active' : '' ?>">
+                                <a class="nav-link" href="<?= redirect($_SESSION['theme'], PROJECT . 'customer/dash/products-type') ?>">
                                     <span class="nav-link-icon d-md-none d-lg-inline-block">
                                         <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
                                             <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
@@ -433,45 +442,36 @@ $_SESSION['customer_current_url'] = "{$_SERVER['REQUEST_SCHEME']}://{$_SERVER['H
                                         </svg>
                                     </span>
                                     <span class="nav-link-title">
-                                        Type de Produits et Tarifs
+                                        Types de produits
                                     </span>
                                 </a>
-                                <div class="dropdown-menu">
-                                    <div class="dropdown-menu-columns">
-                                        <div class="dropdown-menu-column">
-                                            <div class="dropend">
-                                                <a class="dropdown-item dropdown-toggle" href="#sidebar-cards" data-bs-toggle="dropdown" data-bs-auto-close="outside" role="button" aria-expanded="false">
-                                                    Normaux
-                                                </a>
-                                                <div class="dropdown-menu">
-                                                    <span href="" class="dropdown-item">
-                                                        Tarif Aérien : 8500 Fcfa/Kg
-                                                    </span>
-                                                </div>
-                                            </div>
-                                            <div class="dropend">
-                                                <a class="dropdown-item dropdown-toggle" href="#sidebar-cards" data-bs-toggle="dropdown" data-bs-auto-close="outside" role="button" aria-expanded="false">
-                                                    Spéciaux
-                                                </a>
-                                                <div class="dropdown-menu">
-                                                    <span href="" class="dropdown-item">
-                                                        Tarif Aérien : 9000 Fcfa/Kg
-                                                    </span>
-                                                </div>
-                                            </div>
-                                            <div class="dropend">
-                                                <a class="dropdown-item dropdown-toggle" href="#sidebar-cards" data-bs-toggle="dropdown" data-bs-auto-close="outside" role="button" aria-expanded="false">
-                                                    A batterie
-                                                </a>
-                                                <div class="dropdown-menu">
-                                                    <span href="" class="dropdown-item">
-                                                        Tarif Aérien : 9500 Fcfa/Kg
-                                                    </span>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
+                            </li>
+                            <li class="nav-item <?= $params[2] == 'shipping-type' ? 'active' : '' ?>">
+                                <a class="nav-link" href="<?= redirect($_SESSION['theme'], PROJECT . 'customer/dash/shipping-type') ?>">
+                                    <span class="nav-link-icon d-md-none d-lg-inline-block">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                            <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                                            <path d="M10 14l11 -11"></path>
+                                            <path d="M21 3l-6.5 18a0.55 .55 0 0 1 -1 0l-3.5 -7l-7 -3.5a0.55 .55 0 0 1 0 -1l18 -6.5"></path>
+                                        </svg>
+                                    </span>
+                                    <span class="nav-link-title">
+                                        Types d'envoi
+                                    </span>
+                                </a>
+                            </li>
+                            <li class="nav-item <?= $params[2] == 'invoices' ? 'active' : '' ?>">
+                                <a class="nav-link" href="<?= redirect($_SESSION['theme'], PROJECT . 'customer/dash/invoices') ?>">
+                                    <span class="nav-link-icon d-md-none d-lg-inline-block"><!-- Download SVG icon from http://tabler-icons.io/i/checkbox -->
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                            <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                                            <path d="M5 21v-16a2 2 0 0 1 2 -2h10a2 2 0 0 1 2 2v16l-3 -2l-2 2l-2 -2l-2 2l-2 -2l-3 2m4 -14h6m-6 4h6m-2 4h2"></path>
+                                        </svg>
+                                    </span>
+                                    <span class="nav-link-title">
+                                        Mes Factures
+                                    </span>
+                                </a>
                             </li>
                         </ul>
                     </div>

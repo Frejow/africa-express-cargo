@@ -76,7 +76,7 @@ $packages_listings = listings($table, $_SESSION['page'], $_SESSION['rows_per_pag
  * Affectation du retour de la fonction countRowsInTable avec pour paramètre la table concernée par le listings à la 
  * variable $rows. Cette fonction retourne le nombre de lignes dans la table avec le champs is_deleted = 0
  */
-$rows = countRowsInTable($table, $_SESSION['package'], null);
+$rows = countRowsInTable($table, $_SESSION['type'], null);
 
 ?>
 

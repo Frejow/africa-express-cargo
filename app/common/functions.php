@@ -1553,7 +1553,7 @@ function countRowsInTable(string $table, $packages_type = null, $user_id = null,
                 "user_id" => $user_id
             ]
         );
-    } elseif (is_null($user_id) && $packages_type == 'Tous les colis') {
+    } elseif (is_null($user_id) && ($packages_type == 'Tous les colis' || $packages_type == 'Tous les groupes de colis')) {
 
         $request = "SELECT COUNT(*) FROM " . $table . " WHERE is_deleted = :is_deleted";
 
@@ -1564,7 +1564,7 @@ function countRowsInTable(string $table, $packages_type = null, $user_id = null,
                 "is_deleted" => 0,
             ]
         );
-    } elseif (is_null($user_id) && $packages_type == 'Colis avec destinataire') {
+    } elseif (is_null($user_id) && ($packages_type == 'Colis avec destinataire' || $packages_type == 'Groupes de colis clients')) {
 
         $request = "SELECT COUNT(*) FROM " . $table . " WHERE user_id <> 38 AND is_deleted = :is_deleted";
 
@@ -1575,7 +1575,7 @@ function countRowsInTable(string $table, $packages_type = null, $user_id = null,
                 "is_deleted" => 0,
             ]
         );
-    } elseif (is_null($user_id) && $packages_type == 'Colis sans destinataire') {
+    } elseif (is_null($user_id) && ($packages_type == 'Colis sans destinataire' || $packages_type == 'Groupes de colis expédition')) {
 
         $request = "SELECT COUNT(*) FROM " . $table . " WHERE user_id = 38 AND is_deleted = :is_deleted";
 

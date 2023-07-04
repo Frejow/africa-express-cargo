@@ -38,7 +38,7 @@ if (isset($_SESSION["data"]) && !empty($_SESSION["data"])) {
                         </div>
                         <div class="card-body">
                             <div class="mb-3 ">
-                                <label for="selection" class="form-label">Client [ Laissez ce champs tel quel s'il s'agit d'un colis sans destinataire ] </label>
+                                <label for="selection" class="form-label"> <?= !empty($updata["customerSelect"]) ? "Client" : "Client [ Laissez ce champs tel quel s'il s'agit d'un colis sans destinataire ]" ?> </label>
                                 <div class="">
                                     <select class="form-select select2bs4" id="selection" onchange="updateBlockVisibility()" name="customerSelect" data-placeholder="Laissez ce champs vide s'il s'agit d'un colis sans destinataire" style="width: 100%;">
                                         <option value="38">Sans destinataire</option>

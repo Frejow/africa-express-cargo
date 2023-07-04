@@ -395,7 +395,7 @@ if (!empty($_FILES["filesToUpload"])) {
 
                             $newfolder = $rootpath . '/' . $newdata['customerUsername'] . '/packages/' . $newdata['pack_trackN'];
 
-                            if (!file_exists($newfolder)) {
+                            if (!is_dir($newfolder)) {
 
                                 mkdir($newfolder, 0700, true);
                             }
@@ -407,6 +407,7 @@ if (!empty($_FILES["filesToUpload"])) {
                             if (!empty($error['images'])) {
                                 deleteDir($newfolder);
                             }
+                            
                         } else {
 
                             $rootpath = $_SERVER['DOCUMENT_ROOT'] . '/africa-express-cargo/public/images/uploads';
