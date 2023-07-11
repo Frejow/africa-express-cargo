@@ -145,7 +145,7 @@ if (isset($_SESSION["data"]) && !empty($_SESSION["data"])) {
                                             <path d="M12 4l0 12"></path>
                                         </svg>
                                     </label>
-                                    <input type="file" name="filesToUpload[]" id="filesToUpload" style="display:none" multiple onchange="updatebuttonLabel()">
+                                    <input type="file" accept=".png,.jpg,.jpeg,.gif" name="filesToUpload[]" id="filesToUpload" style="display:none" multiple onchange="updatebuttonLabel()">
                                     <input type="button" class="mb-2 btn <?= isset($updata["images"]) ? 'btn-danger' : 'link-warning' ?>" value="<?php
                                                                                                                                                     if (isset($updata["images"]) && !empty($updata["images"])) {
                                                                                                                                                         foreach ($updata["images"] as $key => $value) {
@@ -154,7 +154,7 @@ if (isset($_SESSION["data"]) && !empty($_SESSION["data"])) {
                                                                                                                                                     } else {
                                                                                                                                                         echo  "AJOUTER DES IMAGES [ MAXIMUM 03 ]";
                                                                                                                                                     }
-                                                                                                                                                    ?>" id="importButton" onclick="document.getElementById('filesToUpload').click();" />
+                                                                                                                                                    ?>" id="importButton" style="width: auto;" onclick="document.getElementById('filesToUpload').click();" />
 
                                     <?php
                                     if (isset($error["images"]) && !empty($error["images"])) {

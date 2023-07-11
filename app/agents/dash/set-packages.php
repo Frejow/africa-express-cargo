@@ -41,7 +41,7 @@ if (isset($_SESSION["data"]) && !empty($_SESSION["data"])) {
                                 <label for="selection" class="form-label"> <?= !empty($updata["customerSelect"]) ? "Client" : "Client [ Laissez ce champs tel quel s'il s'agit d'un colis sans destinataire ]" ?> </label>
                                 <div class="">
                                     <select class="form-select select2bs4" id="selection" onchange="updateBlockVisibility()" name="customerSelect" data-placeholder="Laissez ce champs vide s'il s'agit d'un colis sans destinataire" style="width: 100%;">
-                                        <option value="38">Sans destinataire</option>
+                                        <option value="<?= ANONYMOUS_USER ?>">Sans destinataire</option>
                                         <?php
                                         $customersListing = selectFieldListing('user', 'CUSTOMER');
                                         if (!empty($customersListing)) {
@@ -243,7 +243,7 @@ if (isset($_SESSION["data"]) && !empty($_SESSION["data"])) {
                                     ?>
                                 </div>
                             </div>
-                            <div style="<?php echo (!empty($updata["customerSelect"]) && $updata["customerSelect"] == '38') ? "display: block;" : "display: none;" ?>" id="block1">
+                            <div style="<?php echo (!empty($updata["customerSelect"]) && $updata["customerSelect"] == ANONYMOUS_USER) ? "display: block;" : "display: none;" ?>" id="block1">
                                 <div class="row mb-3">
                                     <div class="col">
                                         <div class="">
@@ -288,7 +288,7 @@ if (isset($_SESSION["data"]) && !empty($_SESSION["data"])) {
                                     </div>
                                 </div>
                             </div>
-                            <div style="<?php echo (!empty($updata["customerSelect"]) && $updata["customerSelect"] != '38') ? "display: block;" : "display: none;" ?>" id="block2">
+                            <div style="<?php echo (!empty($updata["customerSelect"]) && $updata["customerSelect"] != ANONYMOUS_USER) ? "display: block;" : "display: none;" ?>" id="block2">
                                 <div class="row mb-3">
                                     <div class="col-lg-4">
                                         <div class="">
@@ -352,7 +352,7 @@ if (isset($_SESSION["data"]) && !empty($_SESSION["data"])) {
                                                 <path d="M12 4l0 12"></path>
                                             </svg>
                                         </label>
-                                        <input type="file" name="filesToUpload[]" id="filesToUpload" style="display:none" multiple onchange="updatebuttonLabel()">
+                                        <input type="file" accept=".png,.jpg,.jpeg,.gif" name="filesToUpload[]" id="filesToUpload" style="display:none" multiple onchange="updatebuttonLabel()">
                                         <input type="button" style="width: auto;" class="mb-2 btn <?= isset($updata["images"]) ? 'btn-danger' : 'link-warning' ?>" 
                                         value="<?php if (isset($updata["images"]) && !empty($updata["images"])) { foreach ($updata["images"] as $key => $value) { echo $updata["images"][$key] . ' '; }
                                         } else { echo  "AJOUTER DES IMAGES [ MAXIMUM 03 ]"; } ?>" id="importButton" onclick="document.getElementById('filesToUpload').click();" />

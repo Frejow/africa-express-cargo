@@ -398,7 +398,7 @@
         var block1 = document.getElementById("block1");
         var block2 = document.getElementById("block2");
 
-        if (selection.value === "38") {
+        if (selection.value === '<?= ANONYMOUS_USER ?>') {
             block1.style.display = "block";
             block2.style.display = "none";
         } else {

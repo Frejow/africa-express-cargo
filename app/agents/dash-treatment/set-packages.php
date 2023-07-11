@@ -10,7 +10,7 @@ extract($_POST); //die(var_dump($_FILES["filesToUpload"]));
 
 if (!empty($customerSelect)) {
 
-    if ($customerSelect != 38) {
+    if ($customerSelect != ANONYMOUS_USER) {
         if (!empty(explode('&', $customerSelect)[1])) {
             $newdata['customerId'] = secure(explode('&', $customerSelect)[0]);
             $newdata['customerUsername'] = secure(explode('&', $customerSelect)[1]);
@@ -363,7 +363,7 @@ if (!empty($unit_bill) && !empty($newdata['pack_netWeight']) && $newdata['pack_n
     $newdata['shipping_cost'] = 0;
 }
 
-//if ($customerSelect != 38) {
+//if ($customerSelect != ANONYMOUS_USER) {
 
 //} 
 

@@ -12,6 +12,7 @@ define('DATABASE_USERNAME', $_ENV['DATABASE_USERNAME']);
 define('DATABASE_PASSWORD', $_ENV['DATABASE_PASSWORD']);
 define('MAIL_ADDRESS', $_ENV['MAIL_ADDRESS']);
 define('MAIL_PASSWORD', $_ENV['MAIL_PASSWORD']);
+define('ANONYMOUS_USER', $_ENV['ANONYMOUS_USER']);
 
 $default_profile = "customer";
 $default_profile_folder = "app/customer/index.php";

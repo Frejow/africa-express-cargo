@@ -1384,7 +1384,7 @@ function listings(string $table, int $page, int $rows_per_page, string $status, 
 
         if ($status === 'Tout Afficher' && $search === 'UNDEFINED') {
 
-            $request = "SELECT * FROM " . $table . " WHERE user_id <> 38 AND is_deleted = :is_deleted ORDER BY id DESC LIMIT " . $rows_per_page . " OFFSET " . ($page - 1) * $rows_per_page;
+            $request = "SELECT * FROM " . $table . " WHERE user_id <> ". ANONYMOUS_USER ." AND is_deleted = :is_deleted ORDER BY id DESC LIMIT " . $rows_per_page . " OFFSET " . ($page - 1) * $rows_per_page;
 
             $request_prepare = $database->prepare($request);
 
@@ -1393,7 +1393,7 @@ function listings(string $table, int $page, int $rows_per_page, string $status, 
             ]);
         } elseif ($status !== 'Tout Afficher' && $search === 'UNDEFINED') {
 
-            $request = "SELECT * FROM " . $table . " WHERE user_id <> 38 AND status = :status AND is_deleted = :is_deleted ORDER BY id DESC LIMIT " . $rows_per_page . " OFFSET " . ($page - 1) * $rows_per_page;
+            $request = "SELECT * FROM " . $table . " WHERE user_id <> ". ANONYMOUS_USER ." AND status = :status AND is_deleted = :is_deleted ORDER BY id DESC LIMIT " . $rows_per_page . " OFFSET " . ($page - 1) * $rows_per_page;
 
             $request_prepare = $database->prepare($request);
 
@@ -1403,7 +1403,7 @@ function listings(string $table, int $page, int $rows_per_page, string $status, 
             ]);
         } elseif ($status === 'Tout Afficher' && $search !== 'UNDEFINED') {
 
-            $request = "SELECT * FROM " . $table . " WHERE user_id <> 38 AND is_deleted = :is_deleted AND ";
+            $request = "SELECT * FROM " . $table . " WHERE user_id <> ". ANONYMOUS_USER ." AND is_deleted = :is_deleted AND ";
 
             $search_terms_array = str_split($search);
 
@@ -1424,7 +1424,7 @@ function listings(string $table, int $page, int $rows_per_page, string $status, 
             ]);
         } elseif ($status !== 'Tout Afficher' && $search !== 'UNDEFINED') {
 
-            $request = "SELECT * FROM " . $table . " WHERE user_id <> 38 AND is_deleted = :is_deleted AND ";
+            $request = "SELECT * FROM " . $table . " WHERE user_id <> ". ANONYMOUS_USER ." AND is_deleted = :is_deleted AND ";
 
             $search_terms_array = str_split($search);
 
@@ -1449,7 +1449,7 @@ function listings(string $table, int $page, int $rows_per_page, string $status, 
 
         if ($status === 'Tout Afficher' && $search === 'UNDEFINED') {
 
-            $request = "SELECT * FROM " . $table . " WHERE user_id = 38 AND is_deleted = :is_deleted ORDER BY id DESC LIMIT " . $rows_per_page . " OFFSET " . ($page - 1) * $rows_per_page;
+            $request = "SELECT * FROM " . $table . " WHERE user_id = ". ANONYMOUS_USER ." AND is_deleted = :is_deleted ORDER BY id DESC LIMIT " . $rows_per_page . " OFFSET " . ($page - 1) * $rows_per_page;
 
             $request_prepare = $database->prepare($request);
 
@@ -1458,7 +1458,7 @@ function listings(string $table, int $page, int $rows_per_page, string $status, 
             ]);
         } elseif ($status !== 'Tout Afficher' && $search === 'UNDEFINED') {
 
-            $request = "SELECT * FROM " . $table . " WHERE user_id = 38 AND status = :status AND is_deleted = :is_deleted ORDER BY id DESC LIMIT " . $rows_per_page . " OFFSET " . ($page - 1) * $rows_per_page;
+            $request = "SELECT * FROM " . $table . " WHERE user_id = ". ANONYMOUS_USER ." AND status = :status AND is_deleted = :is_deleted ORDER BY id DESC LIMIT " . $rows_per_page . " OFFSET " . ($page - 1) * $rows_per_page;
 
             $request_prepare = $database->prepare($request);
 
@@ -1468,7 +1468,7 @@ function listings(string $table, int $page, int $rows_per_page, string $status, 
             ]);
         } elseif ($status === 'Tout Afficher' && $search !== 'UNDEFINED') {
 
-            $request = "SELECT * FROM " . $table . " WHERE user_id = 38 AND is_deleted = :is_deleted AND ";
+            $request = "SELECT * FROM " . $table . " WHERE user_id = ". ANONYMOUS_USER ." AND is_deleted = :is_deleted AND ";
 
             $search_terms_array = str_split($search);
 
@@ -1489,7 +1489,7 @@ function listings(string $table, int $page, int $rows_per_page, string $status, 
             ]);
         } elseif ($status !== 'Tout Afficher' && $search !== 'UNDEFINED') {
 
-            $request = "SELECT * FROM " . $table . " WHERE user_id = 38 AND is_deleted = :is_deleted AND ";
+            $request = "SELECT * FROM " . $table . " WHERE user_id = ". ANONYMOUS_USER ." AND is_deleted = :is_deleted AND ";
 
             $search_terms_array = str_split($search);
 
@@ -1566,7 +1566,7 @@ function countRowsInTable(string $table, $packages_type = null, $user_id = null,
         );
     } elseif (is_null($user_id) && ($packages_type == 'Colis avec destinataire' || $packages_type == 'Groupes de colis clients')) {
 
-        $request = "SELECT COUNT(*) FROM " . $table . " WHERE user_id <> 38 AND is_deleted = :is_deleted";
+        $request = "SELECT COUNT(*) FROM " . $table . " WHERE user_id <> ". ANONYMOUS_USER ." AND is_deleted = :is_deleted";
 
         $request_prepare = $database->prepare($request);
 
@@ -1577,7 +1577,7 @@ function countRowsInTable(string $table, $packages_type = null, $user_id = null,
         );
     } elseif (is_null($user_id) && ($packages_type == 'Colis sans destinataire' || $packages_type == 'Groupes de colis expédition')) {
 
-        $request = "SELECT COUNT(*) FROM " . $table . " WHERE user_id = 38 AND is_deleted = :is_deleted";
+        $request = "SELECT COUNT(*) FROM " . $table . " WHERE user_id = ". ANONYMOUS_USER ." AND is_deleted = :is_deleted";
 
         $request_prepare = $database->prepare($request);
 

@@ -78,7 +78,7 @@ include 'app/common/agents/1stpart.php';
                         <form action="<?= redirect($_SESSION['theme'], PROJECT . 'agents/dash-treatment/avatar-updating') ?>" class="text-center" method="post" enctype="multipart/form-data">
 
                             <div class="col mt-3">
-                                <input type="file" name="fileToUpload" id="fileToUpload" style="display: none;" onchange="updateButtonLabel()">
+                                <input type="file" accept=".png,.jpg,.jpeg,.gif" name="fileToUpload" id="fileToUpload" style="display: none;" onchange="updateButtonLabel()">
 
                                 <?php
                                 if ($data['avatar'] != 'null') {
