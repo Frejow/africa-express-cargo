@@ -36,9 +36,9 @@ if (isset($_POST["avatar_deletion"])) {
 
 }
 
-if (isset($_POST['pass_w']) && !empty($_POST['pass_w']) && checkSubmittedPassword($data['id'], $_POST['pass_w'])) {
+if (!empty($_POST['pass_w']) && checkSubmittedPassword($data['id'], $_POST['pass_w'])) {
 
-    if (isset($_FILES["fileToUpload"]) && !empty($_FILES['fileToUpload'])) {
+    if (!empty($_FILES['fileToUpload'])) {
 
         if ($_FILES["fileToUpload"]["error"] == 0) {
 

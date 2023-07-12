@@ -1,6 +1,6 @@
 <?php
 
-include 'app/common/agents/1stpart.php';  
+include 'app/common/agents/1stpart.php';
 //die(var_dump($data));
 ?>
 
@@ -50,10 +50,17 @@ include 'app/common/agents/1stpart.php';
 
                         ?>
                         <div class="row align-items-center">
-                            <a href="" class="modal-fade" data-bs-toggle="modal" data-bs-target="#previous-image">
-                                <div class="col-auto"><span class="avatar avatar-xl" style='background-image: url("<?= $data['avatar'] == 'null' ? PROJECT . 'public/images/default-user-profile.jpg' : $data['avatar'] ?>");'></span>
-                                </div>
-                            </a>
+
+                            <div id="pBlock1" class="mb-2" style="display: none;">
+                                <span id="preview" class="col-auto avatar avatar-xl"></span>
+                            </div>
+
+                            <div id="pBlock2" class="col-auto mb-2">
+                                <a href="" class="modal-fade" data-bs-toggle="modal" data-bs-target="#previous-image">
+                                    <span class="avatar avatar-xl" style='background-image: url("<?= $data['avatar'] == 'null' ? PROJECT . 'public/images/default-user-profile.jpg' : $data['avatar'] ?>");'></span>
+                                </a>
+                            </div>
+
                             <?php
                             if ($data['avatar'] != 'null') {
                             ?>
@@ -74,81 +81,41 @@ include 'app/common/agents/1stpart.php';
                             echo "<p style = 'color:red; font-size:12px;'>" . $error["pass_w"] . "</p>";
                         }
                         ?>
+                        <?php
+                        if (isset($error["avatar"]) && !empty($error["avatar"])) {
+                            echo "<p style = 'color:red; font-size:12px;'>" . $error["avatar"] . "</p>";
+                        }
+                        ?>
 
                         <form action="<?= redirect($_SESSION['theme'], PROJECT . 'agents/dash-treatment/avatar-updating') ?>" class="text-center" method="post" enctype="multipart/form-data">
 
-                            <div class="col mt-3">
-                                <input type="file" accept=".png,.jpg,.jpeg,.gif" name="fileToUpload" id="fileToUpload" style="display: none;" onchange="updateButtonLabel()">
+                            <div class="row">
+
+                                <div id="fileBlock" class="col-md mt-2">
+
+                                    <input type="file" accept=".png,.jpg,.jpeg,.gif" name="fileToUpload" id="fileToUpload" style="display: none;" onchange="updateButtonLabel()">
+
+                                    <input type="button" class="btn link-secondary" style="text-decoration: none; width: auto;" value="Importer image" id="importbutton" onclick="document.getElementById('fileToUpload').click();" />
+
+                                </div>
+
+                                <div id="submissionBlock" class="col-md mt-2 mb-1" style="display: none;">
+                                    <a href="#" class="btn link-warning" data-bs-toggle="modal" data-bs-target="#modal-warning1" style="text-decoration: none;">Appliquer</a>
+                                </div>
 
                                 <?php
                                 if ($data['avatar'] != 'null') {
                                 ?>
-                                    <div class="col-md text-center">
-                                        <label for="importbutton">
-                                            <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-                                                <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
-                                                <path d="M4 17v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2 -2v-2"></path>
-                                                <path d="M7 9l5 -5l5 5"></path>
-                                                <path d="M12 4l0 12"></path>
-                                            </svg>
-                                        </label>
-                                        <input type="button" class="btn link-secondary" style="text-decoration: none; width: auto;" value="<?php echo (isset($updata["avatar"]) && !empty($updata["avatar"])) ? $updata["avatar"] : 'Importer une autre image' ?>" id="importbutton" onclick="document.getElementById('fileToUpload').click();" />
-                                    </div>
-                                <?php
-                                }
-                                ?>
-
-                                <?php
-                                if ($data['avatar'] == 'null') {
-                                ?>
-                                    <div class="col-md text-center">
-                                        <label for="importbutton">
-                                            <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-                                                <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
-                                                <path d="M4 17v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2 -2v-2"></path>
-                                                <path d="M7 9l5 -5l5 5"></path>
-                                                <path d="M12 4l0 12"></path>
-                                            </svg>
-                                        </label>
-                                        <input type="button" class="btn link-secondary" style="text-decoration: none;" value="<?php echo (isset($updata["avatar"]) && !empty($updata["avatar"])) ? $updata["avatar"] : 'Importer une image' ?>" id="importbutton" onclick="document.getElementById('fileToUpload').click();" />
-                                    </div>
-                                <?php
-                                }
-                                ?>
-
-                                <?php
-                                if (isset($error["avatar"]) && !empty($error["avatar"])) {
-                                    echo "<p style = 'color:red; font-size:12px;'>" . $error["avatar"] . "</p>";
-                                }
-                                ?>
-
-                                <?php
-                                if ($data['avatar'] == 'null') {
-                                ?>
-                                    <div class="col-md mt-3">
-                                        <a href="#" class="btn link-warning" data-bs-toggle="modal" data-bs-target="#modal-warning1" style="text-decoration: none;" name="submit">Mettre à jour Avatar</a>
+                                    <div class="col-md mt-2">
+                                        <button type="submit" name="avatar_deletion" class="btn link-danger" style="text-decoration: none;">
+                                            Supprimer
+                                        </button>
                                     </div>
                                 <?php
                                 }
                                 ?>
 
                             </div>
-
-                            <?php
-                            if ($data['avatar'] != 'null') {
-                            ?>
-                                <div class="row mt-3 text-center">
-                                    <div class="col-md mb-1">
-                                        <a href="#" class="btn link-warning" data-bs-toggle="modal" data-bs-target="#modal-warning1" style="text-decoration: none;">Mettre à jour Avatar</a>
-                                    </div>
-
-                                    <div class="col-md"><button type="submit" name="avatar_deletion" class="btn link-danger" style="text-decoration: none;">
-                                            Retirer Avatar
-                                        </button></div>
-                                </div>
-                            <?php
-                            }
-                            ?>
 
                             <div class="modal modal-blur fade" id="modal-warning1" data-bs-backdrop='static' tabindex="-1" role="dialog" aria-hidden="true">
                                 <div class="modal-dialog modal-sm modal-dialog-centered" role="document">
@@ -503,7 +470,15 @@ include 'app/common/agents/1stpart.php';
                             </div>
                         </form>
 
-                        <h3 class="mt-3">-> Section Dangereuse</h3>
+                        <h3 class="mt-3">
+                            Section Dangereuse
+                            <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                                <path d="M12 3a12 12 0 0 0 8.5 3a12 12 0 0 1 -8.5 15a12 12 0 0 1 -8.5 -15a12 12 0 0 0 8.5 -3"></path>
+                                <path d="M12 11m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0"></path>
+                                <path d="M12 12l0 2.5"></path>
+                            </svg>
+                        </h3>
 
                         <div class="row">
 

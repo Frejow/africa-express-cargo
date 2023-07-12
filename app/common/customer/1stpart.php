@@ -129,6 +129,37 @@ $_SESSION['customer_current_url'] = "{$_SERVER['REQUEST_SCHEME']}://{$_SERVER['H
         }
 
         #preview img {
+            max-width: 7rem;
+            max-height: 7rem;
+            width: auto;
+            height: auto;
+            border-radius: 4px;
+            filter: blur(1.5px);
+        }
+
+        #_preview {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            align-items: center;
+        }
+
+        #_preview img {
+            margin: 2px;
+            max-width: 300px;
+            max-height: 300px;
+            width: auto;
+            height: auto;
+        }
+
+        #previews {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            align-items: center;
+        }
+
+        #previews img {
             margin: 2px;
             max-width: 250px;
             max-height: 250px;

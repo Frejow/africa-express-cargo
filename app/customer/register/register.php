@@ -25,15 +25,15 @@ if ((isset($repass) && !empty($repass) && strlen($pass) >= 8 && $repass != $pass
 }
 
 if (filter_var($mail, FILTER_VALIDATE_EMAIL)) {
-    if (checkExistFieldEntry('mail', $mail)) {
+    if (checkFieldEntry('user', 'mail', $mail)) {
         $errors = "L'adresse email " . $mail . " est déjà associé à un compte.";
     }
     
-    if (checkExistFieldEntry('user_name', $pseudo) && !checkExistFieldEntry('mail', $mail)) {
+    if (checkFieldEntry('user', 'user_name', $pseudo) && !checkFieldEntry('user', 'mail', $mail)) {
         $errors = "Le nom d'utilisateur " . $pseudo . " a déjà été pris.";
     }
     
-    if (checkExistFieldEntry('phone_number', $tel) && !checkExistFieldEntry('user_name', $pseudo) && !checkExistFieldEntry('mail', $mail)) {
+    if (checkFieldEntry('user', 'phone_number', $tel) && !checkFieldEntry('user', 'user_name', $pseudo) && !checkFieldEntry('user', 'mail', $mail)) {
         $errors = "Le numéro " . $tel . " appartient à un de nos utilisateur.";
     }
 }

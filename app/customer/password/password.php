@@ -10,7 +10,7 @@ if (empty($mail)) {
     
 } else {
 
-    if (!checkExistFieldEntry('mail', $mail)) {
+    if (!checkFieldEntry('user', 'mail', $mail)) {
 
         $errors = $mail . " n'est associé à aucun compte. Vérifier votre saisie et réessayer.";
 
@@ -20,7 +20,7 @@ if (empty($mail)) {
 
 if (empty($errors)){
 
-    if (checkExistFieldEntry('mail', $mail)) {
+    if (checkFieldEntry('user', 'mail', $mail)) {
 
         $user_id = getUserId($mail)["id"];
 

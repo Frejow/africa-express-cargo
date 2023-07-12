@@ -21,7 +21,7 @@ Exemple : C:\wamp64\www\africa-express-cargo. Ma constante PROJECT aura comme va
 
 - Configurer les variables d'environnements MAIL_ADDRESS, MAIL_PASSWORD dans le fichier .env à la racine du projet en spécifiant les informations de l'émetteur des mails dans l'application.
 
-- Configurer la variable d'environnement ANONYMOUS_USER dans le fichier .env à la racine du projet en spécifiant l'ID d'un compte utilisateur à définir comme utilisateur anonyme. A cet utilisateur sera associé tous les colis ou groupes de colis sans destinataire connu.
+- Configurer la variable d'environnement ANONYMOUS_ID dans le fichier .env à la racine du projet en spécifiant l'ID d'un compte utilisateur à définir comme utilisateur anonyme. A cet utilisateur sera associé tous les colis ou groupes de colis sans destinataire connu.
 
 - Lancer le projet avec la commande : php -S localhost:8081
 

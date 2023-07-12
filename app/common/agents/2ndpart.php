@@ -310,18 +310,69 @@
     // DropzoneJS Demo Code End
 </script>
 
-<!--file import-->
+<!--profile pic import-->
 
 <script>
     function updateButtonLabel() {
         var fileInput = document.getElementById('fileToUpload');
         var fileName = fileInput.value.split('\\').pop();
         var importButton = document.getElementById('importbutton');
+        var profileBlock1 = document.getElementById("pBlock1");
+        var profileBlock2 = document.getElementById("pBlock2");
+        var fileBlock = document.getElementById("fileBlock");
+        var submissionBlock = document.getElementById("submissionBlock");
+
         importButton.value = fileName;
+
+        if (fileName.length !== 0) {
+            profileBlock1.style.display = "block";
+            profileBlock2.style.display = "none";
+            fileBlock.style.display = "none";
+            submissionBlock.style.display = "block";
+        }
+        previewImage(fileInput.files);
+    }
+    function previewImage(files) {
+        var preview = document.getElementById('preview');
+        preview.innerHTML = "";
+        for (var i = 0; i < files.length && i < 1; i++) {
+            var reader = new FileReader();
+            reader.onload = function(event) {
+                var img = document.createElement('img');
+                img.src = event.target.result;
+                preview.appendChild(img);
+            }
+            reader.readAsDataURL(files[i]);
+        }
     }
 </script>
 
-<!--file import multiple-->
+<!--file import-->
+
+<script>
+    function updatebuttonlabel() {
+        var fileInput = document.getElementById('filetoupload');
+        var fileName = fileInput.value.split('\\').pop();
+        var importButton = document.getElementById('import_button');
+        importButton.value = fileName;
+        previewimage(fileInput.files);
+    }
+    function previewimage(files) {
+        var preview = document.getElementById('_preview');
+        preview.innerHTML = "";
+        for (var i = 0; i < files.length && i < 1; i++) {
+            var reader = new FileReader();
+            reader.onload = function(event) {
+                var img = document.createElement('img');
+                img.src = event.target.result;
+                preview.appendChild(img);
+            }
+            reader.readAsDataURL(files[i]);
+        }
+    }
+</script>
+
+<!--files import-->
 
 <script>
     function updatebuttonLabel() {
@@ -337,7 +388,7 @@
     }
 
     function previewImages(files) {
-        var preview = document.getElementById('preview');
+        var preview = document.getElementById('previews');
         preview.innerHTML = "";
         for (var i = 0; i < files.length && i < 3; i++) {
             var reader = new FileReader();
@@ -398,7 +449,7 @@
         var block1 = document.getElementById("block1");
         var block2 = document.getElementById("block2");
 
-        if (selection.value === '<?= ANONYMOUS_USER ?>') {
+        if (selection.value === "<?= ANONYMOUS_ID ?>") {
             block1.style.display = "block";
             block2.style.display = "none";
         } else {

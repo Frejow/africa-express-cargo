@@ -41,7 +41,7 @@ if (isset($_SESSION["data"]) && !empty($_SESSION["data"])) {
                                 <label for="selection" class="form-label"> <?= !empty($updata["customerSelect"]) ? "Client" : "Client [ Laissez ce champs tel quel s'il s'agit d'un colis sans destinataire ]" ?> </label>
                                 <div class="">
                                     <select class="form-select select2bs4" id="selection" onchange="updateBlockVisibility()" name="customerSelect" data-placeholder="Laissez ce champs vide s'il s'agit d'un colis sans destinataire" style="width: 100%;">
-                                        <option value="<?= ANONYMOUS_USER ?>">Sans destinataire</option>
+                                        <option value="<?= ANONYMOUS_ID ?>">Sans destinataire</option>
                                         <?php
                                         $customersListing = selectFieldListing('user', 'CUSTOMER');
                                         if (!empty($customersListing)) {
@@ -243,52 +243,73 @@ if (isset($_SESSION["data"]) && !empty($_SESSION["data"])) {
                                     ?>
                                 </div>
                             </div>
-                            <div style="<?php echo (!empty($updata["customerSelect"]) && $updata["customerSelect"] == ANONYMOUS_USER) ? "display: block;" : "display: none;" ?>" id="block1">
+                            <div style="<?php echo (!empty($updata["customerSelect"]) && $updata["customerSelect"] == ANONYMOUS_ID) ? "display: block;" : "" ?>" id="block1">
                                 <div class="row mb-3">
-                                    <div class="col">
+                                    <div class="col-lg-6">
                                         <div class="">
-                                            <label for="pack_weight" class="form-label">Nombre ( Nombre de KG/CBM/PCS ) <span class="text-danger">[ Requis ]</span></label>
-                                            <input type="number" id="pack_weight" class="form-control" name="pack_weight" value="<?php echo (!empty($updata["pack_weight"])) ? $updata["pack_weight"] : "0" ?>" placeholder="Nombre de KG/CBM/PCS">
+                                            <label for="packweight" class="form-label">Nombre ( Nombre de KG/CBM/PCS ) <span class="text-danger">[ Requis ]</span></label>
+                                            <input type="text" id="packweight" class="form-control" name="packweight" value="<?php echo (!empty($updata["packweight"])) ? $updata["packweight"] : "" ?>" placeholder="Nombre de KG/CBM/PCS">
                                         </div>
+                                        <?php
+                                        if (isset($error["packweight"]) && !empty($error["packweight"])) {
+                                            echo "<p style = 'color:red; font-size:13px;'>" . $error["packweight"] . "</p>";
+                                        }
+                                        ?>
                                     </div>
-                                    <?php
-                                    if (isset($error["pack_weight"]) && !empty($error["pack_weight"])) {
-                                        echo "<p style = 'color:red; font-size:13px;'>" . $error["pack_weight"] . "</p>";
-                                    }
-                                    ?>
+                                    <div class="col-lg-6">
+                                        <div class="">
+                                            <label for="_shipping" class="form-label">Envoi <span class="text-danger">[ Requis ]</span></label>
+                                            <div class="mb-3">
+                                                <select class="form-select" name="_shipping" id="_shipping">
+                                                    <?php
+                                                        $shipping_listing = selectFieldListing('shipping_type') ;
+                                                        if (!empty($shipping_listing)) {
+                                                            foreach ($shipping_listing as $key => $shipping) {
+                                                        
+                                                    ?>
+                                                    <option <?php echo (!empty($updata["_shipping"]) && $updata["_shipping"] == $shipping['id'] . '&' . $shipping['name']) ? "selected" : "" ?> value="<?= $shipping['id'] . '&' . $shipping['name'] ?>"><?= !empty($shipping['name']) ? $shipping['name'] : '' ?></option>
+                                                    <?php
+                                                            }
+                                                        }
+                                                    ?>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <?php
+                                        if (!empty($error["_shipping"])) {
+                                            echo "<p style = 'color:red; font-size:13px;'>" . $error["_shipping"] . "</p>";
+                                        }
+                                        ?>
+                                    </div>
                                 </div>
                                 <div class="row">
-                                    <div class="col-lg-6">
-                                        <div class="mb-3">
-                                            <label class="form-label" for="pack_shiptype">Type d'Envoi <span class="text-danger">[ Requis ]</span></label>
-                                            <select type="text" class="form-select" name="pack_shiptype" id="pack_shiptype" value="">
-                                                <option value="Aérien">Aérien</option>
-                                                <option value="Maritime">Maritime</option>
-                                            </select>
-                                        </div>
+                                    <div class="card-body text-center">
+                                        <h3 class="card-title"></h3>
+
+                                        <p class="text-muted"> Poids Maximum : 2Mo. Extensions autorisées [ PNG/JPG/JPEG/GIF ]</p>
+
+                                        <label for="import_button">
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                                <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                                                <path d="M4 17v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2 -2v-2"></path>
+                                                <path d="M7 9l5 -5l5 5"></path>
+                                                <path d="M12 4l0 12"></path>
+                                            </svg>
+                                        </label>
+                                        <input type="file" accept=".png,.jpg,.jpeg,.gif" name="filetoupload" id="filetoupload" style="display: none;" onchange="updatebuttonlabel()">
+                                        <input type="button" style="width: auto;" class="mb-2 btn <?= isset($updata["images"]) ? 'btn-danger' : 'link-warning' ?>" 
+                                        value="<?php echo (!empty($updata["images"])) ? $updata["images"][$key] : "IMAGE" ?>" id="import_button" onclick="document.getElementById('filetoupload').click();"/>
+
                                         <?php
-                                        if (isset($error["pack_shiptype"]) && !empty($error["pack_shiptype"])) {
-                                            echo "<p style = 'color:red; font-size:13px;'>" . $error["pack_shiptype"] . "</p>";
+                                        if (!empty($error["images"])) {
+                                            echo "<p style = 'color:red; font-size:13px;'>" . $error["images"] . "</p>";
                                         }
                                         ?>
-                                    </div>
-                                    <div class="col-lg-6">
-                                        <div class="mb-3">
-                                            <label class="form-label" for="pack_status">Statut <span class="text-danger">[ Requis ]</span></label>
-                                            <select type="text" class="form-select" name="pack_status" placeholder="" id="pack_status" value="">
-                                                <option value="Entrepôt Bénin">Entrepôt Bénin</option>
-                                                <option value="Entrepôt Chine">Entrepôt Chine</option>
-                                            </select>
-                                        </div>
-                                        <?php
-                                        if (isset($error["pack_status"]) && !empty($error["pack_status"])) {
-                                            echo "<p style = 'color:red; font-size:13px;'>" . $error["pack_status"] . "</p>";
-                                        }
-                                        ?>
+                                        <div style="display: flex;" id="_preview"></div>
                                     </div>
                                 </div>
                             </div>
-                            <div style="<?php echo (!empty($updata["customerSelect"]) && $updata["customerSelect"] != ANONYMOUS_USER) ? "display: block;" : "display: none;" ?>" id="block2">
+                            <div style="<?php echo (!empty($updata["customerSelect"]) && $updata["customerSelect"] != ANONYMOUS_ID) ? "display: block;" : "display: none;" ?>" id="block2">
                                 <div class="row mb-3">
                                     <div class="col-lg-4">
                                         <div class="">
@@ -365,7 +386,7 @@ if (isset($_SESSION["data"]) && !empty($_SESSION["data"])) {
                                             }
                                         }
                                         ?>
-                                        <div style="display: flex;" id="preview"></div>
+                                        <div style="display: flex;" id="previews"></div>
                                     </div>
                                 </div>
                             </div>

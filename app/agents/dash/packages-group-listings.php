@@ -319,7 +319,7 @@ $rows = countRowsInTable($table, $_SESSION['type'], null);
                                                     </span>
                                                 </td>
                                                 <?php
-                                                if ($package["user_id"] ==  ANONYMOUS_USER) {
+                                                if ($package["user_id"] ==  ANONYMOUS_ID) {
                                                 ?>
                                                     <td class="text-end">
                                                         <span class="">

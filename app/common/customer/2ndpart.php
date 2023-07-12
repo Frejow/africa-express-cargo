@@ -147,16 +147,14 @@ if (isset($packages_ingrouplistings) && !empty($packages_ingrouplistings)) {
         if ($('.swalDefaultSuccess').length) {
             Toast.fire({
                 icon: 'success',
-                title: 'Succès',
-                text: '<?= $msg ?>'
+                title: '<?= $msg ?>'
             });
         }
 
         if ($('.swalDefaultError').length) {
             Toast.fire({
                 icon: 'error',
-                title: 'Erreur',
-                text: '<?= $msg ?>'
+                title: '<?= $msg ?>'
             });
         }
     });
@@ -408,18 +406,69 @@ if (isset($packages_ingrouplistings) && !empty($packages_ingrouplistings)) {
     // DropzoneJS Demo Code End
 </script>
 
-<!--file import-->
+<!--profile pic import-->
 
 <script>
     function updateButtonLabel() {
         var fileInput = document.getElementById('fileToUpload');
         var fileName = fileInput.value.split('\\').pop();
         var importButton = document.getElementById('importbutton');
+        var profileBlock1 = document.getElementById("pBlock1");
+        var profileBlock2 = document.getElementById("pBlock2");
+        var fileBlock = document.getElementById("fileBlock");
+        var submissionBlock = document.getElementById("submissionBlock");
+
         importButton.value = fileName;
+
+        if (fileName.length !== 0) {
+            profileBlock1.style.display = "block";
+            profileBlock2.style.display = "none";
+            fileBlock.style.display = "none";
+            submissionBlock.style.display = "block";
+        }
+        previewImage(fileInput.files);
+    }
+    function previewImage(files) {
+        var preview = document.getElementById('preview');
+        preview.innerHTML = "";
+        for (var i = 0; i < files.length && i < 1; i++) {
+            var reader = new FileReader();
+            reader.onload = function(event) {
+                var img = document.createElement('img');
+                img.src = event.target.result;
+                preview.appendChild(img);
+            }
+            reader.readAsDataURL(files[i]);
+        }
     }
 </script>
 
-<!--file import multiple-->
+<!--file import-->
+
+<script>
+    function updatebuttonlabel() {
+        var fileInput = document.getElementById('filetoupload');
+        var fileName = fileInput.value.split('\\').pop();
+        var importButton = document.getElementById('import_button');
+        importButton.value = fileName;
+        previewimage(fileInput.files);
+    }
+    function previewimage(files) {
+        var preview = document.getElementById('_preview');
+        preview.innerHTML = "";
+        for (var i = 0; i < files.length && i < 1; i++) {
+            var reader = new FileReader();
+            reader.onload = function(event) {
+                var img = document.createElement('img');
+                img.src = event.target.result;
+                preview.appendChild(img);
+            }
+            reader.readAsDataURL(files[i]);
+        }
+    }
+</script>
+
+<!--files import-->
 
 <script>
     function updatebuttonLabel() {
@@ -435,7 +484,7 @@ if (isset($packages_ingrouplistings) && !empty($packages_ingrouplistings)) {
     }
 
     function previewImages(files) {
-        var preview = document.getElementById('preview');
+        var preview = document.getElementById('previews');
         preview.innerHTML = "";
         for (var i = 0; i < files.length && i < 3; i++) {
             var reader = new FileReader();
@@ -471,6 +520,101 @@ if (isset($packages_ingrouplistings) && !empty($packages_ingrouplistings)) {
             if (value) {
                 $('#myForm').submit();
             }
+        });
+    });
+</script>
+
+<!--select options to submit form-->
+
+<script>
+    $(document).ready(function() {
+        $('#mySelect3 option').click(function() {
+            var value = $(this).data('value');
+            if (value) {
+                $('#myForm').submit();
+            }
+        });
+    });
+</script>
+
+<!--Display block for package addition-->
+
+<script>
+    function updateBlockVisibility() {
+        var selection = document.getElementById("selection");
+        var block1 = document.getElementById("block1");
+        var block2 = document.getElementById("block2");
+
+        if (selection.value === "<?= ANONYMOUS_ID ?>") {
+            block1.style.display = "block";
+            block2.style.display = "none";
+        } else {
+            block1.style.display = "none";
+            block2.style.display = "block";
+        }
+
+        updateBlockVisibility();
+    }
+</script>
+
+<!--Display block for insurance billing-->
+
+<script>
+    function insuranceBlockVisibility() {
+        var radio = document.getElementById("radio");
+        var insuranceBlock = document.getElementById("insuranceBlock");
+
+        if (radio.checked) {
+            insuranceBlock.style.display = "block";
+        } else {
+            insuranceBlock.style.display = "none";
+        }
+
+        insuranceBlockVisibility();
+    }
+</script>
+
+<!--Display block for -->
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        var selectElement = document.getElementById('products');
+        var insurBlock = document.getElementById('insurance');
+
+        selectElement.addEventListener('change', function() {
+            var selectedOption = selectElement.options[selectElement.selectedIndex];
+            var targetBlockId = selectedOption.getAttribute('data-target');
+
+            if (targetBlockId === 'insurance') {
+                insurBlock.style.display = 'block';
+            } else {
+                insurBlock.style.display = 'none';
+            }
+        });
+    });
+</script>
+
+<!-- Checkboxes -->
+
+<script>
+    window.addEventListener("DOMContentLoaded", function() {
+        var checkAll = document.getElementById("check-all");
+        var checkboxes = document.querySelectorAll(".ischecked");
+
+        checkAll.addEventListener("change", function() {
+            var isChecked = checkAll.checked;
+
+            checkboxes.forEach(function(checkbox) {
+                checkbox.checked = isChecked;
+            });
+        });
+
+        checkboxes.forEach(function(checkbox) {
+            checkbox.addEventListener("change", function() {
+                if (checkbox.checked && checkAll.checked) {
+                    checkAll.checked = false;
+                }
+            });
         });
     });
 </script>
