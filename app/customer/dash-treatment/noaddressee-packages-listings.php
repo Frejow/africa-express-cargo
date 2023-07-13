@@ -2,16 +2,24 @@
 
 extract($_POST);
 
-//die(var_dump($tracking_number));
-
 if (!empty($package_claiming_id) && !empty($tracking_number)) {
 
     if (checkFieldEntry('package', 'id', $package_claiming_id, 'tracking_number', secure(strtoupper($tracking_number)))) {
         
-        if (updatePackageImagesTable($package_claiming_id) && assocPackageToOwner($package_claiming_id, $data['id'])) {
-            
-            $_SESSION['success_msg'] = 'Vérification réussie. Consultez les informations du colis à la section Mes Colis.';
+        if (deleteImgInPackageImagesTable($package_claiming_id) && assocPackageToOwner($package_claiming_id, $data['id'])) {
 
+            $rootpath = $_SERVER['DOCUMENT_ROOT'] . '/africa-express-cargo/public/images/uploads';
+
+            $defaultfolder = $rootpath . '/PACKAGES_WITHOUT_ADDRESSEES' . '/packages/' . secure(strtoupper($tracking_number));
+
+            $newfolder = $rootpath . '/' . $data['user_name'] . '/packages/';
+
+            if (rename($defaultfolder, $newfolder . basename($defaultfolder))) {
+
+                $_SESSION['success_msg'] = 'Vérification réussie. Consultez les informations du colis à la section Mes Colis.';
+
+            }
+            
         } else {
             
             $_SESSION['error_msg'] = 'Une erreur est survenue. Réessayer.';

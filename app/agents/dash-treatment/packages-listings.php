@@ -1,20 +1,21 @@
 <?php
 
+extract($_POST);
+
 //Pagination
 
-if (isset($_POST['previous'])) {
-    //die (var_dump($_SESSION['previous_page']));
+if (!empty($previous)) {
 
-    $_SESSION['previous_page'] = $_POST['previous'];
+    $_SESSION['previous_page'] = $previous;
 
     header("location:". redirect($_SESSION['theme'], PROJECT.'agents/dash/packages-listings'));
 }
 
-if (isset($_POST['next'])) {
+if (!empty($next)) {
     
-    $_SESSION['next_page'] = $_POST['next'];
+    $_SESSION['next_page'] = $next;
 
-    if (isset($_SESSION['next_page'])) {
+    if (!empty($_SESSION['next_page'])) {
 
         header("location:". redirect($_SESSION['theme'], PROJECT.'agents/dash/packages-listings'));
 
@@ -27,22 +28,17 @@ if (isset($_POST['next'])) {
 
 //Filter Status
 
-if (isset($_POST['statusSelect']) && !empty($_POST['statusSelect'])) {
+if (!empty($statusSelect)) {
 
-    //die (var_dump($_POST['statusSelect']));
-    //$_SESSION['actual_page'] = $_SESSION['page'];
-
-    if ($_SESSION['status'] == $_POST['statusSelect']) {
+    if ($_SESSION['status'] == $statusSelect) {
 
         header("location:". redirect($_SESSION['theme'], PROJECT.'agents/dash/packages-listings'));
 
     } else {
 
-        //$_SESSION['actual_page'] = $_SESSION['page'];
+        $_SESSION['selected_status'] = $statusSelect;
 
-        $_SESSION['selected_status'] = $_POST['statusSelect'];
-
-        if (isset($_SESSION['selected_status'])) {
+        if (!empty($_SESSION['selected_status'])) {
 
             header("location:". redirect($_SESSION['theme'], PROJECT.'agents/dash/packages-listings'));
 
@@ -57,17 +53,17 @@ if (isset($_POST['statusSelect']) && !empty($_POST['statusSelect'])) {
 
 //Filter Package
 
-if (!empty($_POST['packagesType'])) {
+if (!empty($packagesType)) {
 
-    if ($_SESSION['type'] == $_POST['packagesType']) {
+    if ($_SESSION['type'] == $packagesType) {
 
         header("location:". redirect($_SESSION['theme'], PROJECT.'agents/dash/packages-listings'));
 
     } else {
 
-        $_SESSION['packages_type'] = $_POST['packagesType'];
+        $_SESSION['packages_type'] = $packagesType;
 
-        if (isset($_SESSION['packages_type'])) {
+        if (!empty($_SESSION['packages_type'])) {
 
             header("location:". redirect($_SESSION['theme'], PROJECT.'agents/dash/packages-listings'));
 
@@ -82,16 +78,16 @@ if (!empty($_POST['packagesType'])) {
 
 //Research
 
-if (isset($_POST['search']) && !empty($_POST['search'])) {
-    //die ('dedans');
-    $_SESSION['research'] = secure($_POST['search']);
+if (!empty($search)) {
+    
+    $_SESSION['research'] = secure($search);
 
-    if (isset($_SESSION['research'])) {
+    if (!empty($_SESSION['research'])) {
 
         header("location:". redirect($_SESSION['theme'], PROJECT.'agents/dash/packages-listings'));
 
     }
-//die ('dedans');
+
 } else {
 
     header("location:". redirect($_SESSION['theme'], PROJECT.'agents/dash/packages-listings'));
@@ -104,10 +100,10 @@ if (isset($_POST['search']) && !empty($_POST['search'])) {
 
 //Entries
 
-if (isset($_POST['select'])) {
+if (!empty($select)) {
 
     
-    if ($_SESSION['rows_per_page'] == $_POST['select']) {
+    if ($_SESSION['rows_per_page'] == $select) {
 
         header("location:". redirect($_SESSION['theme'], PROJECT.'agents/dash/packages-listings'));
 
@@ -115,7 +111,7 @@ if (isset($_POST['select'])) {
 
         $_SESSION['actual_page'] = $_SESSION['page'];
 
-        $_SESSION['selected_rows_per_page'] = $_POST['select'];
+        $_SESSION['selected_rows_per_page'] = $select;
 
         header("location:". redirect($_SESSION['theme'], PROJECT.'agents/dash/packages-listings'));
         
@@ -129,7 +125,12 @@ if (isset($_POST['select'])) {
 
 //Package edition
 
+if (!empty($edit_package)) {
 
+    $_SESSION['package_id'] = $edit_package;
+    header("location:". redirect($_SESSION['theme'], PROJECT.'agents/dash/edit-packages'));
+    
+}
 
 //Package edition
 

@@ -240,7 +240,7 @@ $rows = countRowsInTable($table, $_SESSION['type'], null);
                                 </thead>
                                 <tbody class="text-center">
                                     <?php
-                                    if (isset($packages_listings) && !empty($packages_listings)) {
+                                    if (!empty($packages_listings)) {
 
                                         $n = 0; //Cette variable stocke le nombre de lignes affiché lorsque la table "package" ne contient logiquement pas de colis. Donc $n restera 0
                                         $m = 0; //Cette variable stocke le numéro de page en cours d'affichage.
@@ -424,9 +424,9 @@ $rows = countRowsInTable($table, $_SESSION['type'], null);
                                                 ?>
                                                     <td class="text-end">
                                                         <span class="">
-                                                            <a class="btn-link link-warning" href='<?= redirect($_SESSION['theme'], PROJECT . 'agents/dash/edit-packages') ?>'>
+                                                            <button type="submit" name="edit_package" value="<?= $package['id'] ?>" class="btn-link link-warning">
                                                                 Modifier
-                                                            </a>
+                                                            </button>
                                                         </span>
                                                     </td>
                                                 <?php

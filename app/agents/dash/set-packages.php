@@ -1,9 +1,5 @@
 <?php include 'app/common/agents/1stpart.php';
 
-//$productsListing = selectFieldListing('product_type');
-//die(var_dump(json_encode($productsListing)));
-//die(var_dump($_SERVER));
-
 $error = [];
 
 if (isset($_SESSION["set_pack_errors"]) && !empty($_SESSION["set_pack_errors"])) {
@@ -14,7 +10,7 @@ $updata = [];
 
 if (isset($_SESSION["data"]) && !empty($_SESSION["data"])) {
     $updata = json_decode($_SESSION["data"], true);
-} //die(var_dump($updata));
+}
 ?>
 
 <form action="<?= redirect($_SESSION['theme'], PROJECT . 'agents/dash-treatment/set-packages') ?>" method="post" enctype="multipart/form-data" class="mt-3">
@@ -286,7 +282,7 @@ if (isset($_SESSION["data"]) && !empty($_SESSION["data"])) {
                                     <div class="card-body text-center">
                                         <h3 class="card-title"></h3>
 
-                                        <p class="text-muted"> Poids Maximum : 2Mo. Extensions autorisées [ PNG/JPG/JPEG/GIF ]</p>
+                                        <p class="text-muted"> Poids Maximum : 2Mo. Extensions autorisées [ PNG/JPG/JPEG/GIF ] <span class="text-danger">[ Requis ]</span></p>
 
                                         <label for="import_button">
                                             <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">

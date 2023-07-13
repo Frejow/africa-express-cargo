@@ -52,6 +52,7 @@ function secure($data): string
 {
     $data = trim($data);
     $data = strip_tags($data);
+    $data = htmlspecialchars($data);
     return stripslashes($data);
 }
 
@@ -259,7 +260,7 @@ function databaseLogin(): object
  * 
  * @return bool The result.
  */
-function checkFieldEntry(string $table, string $fieldtype, string $fieldentry, $additionalfieldtype=null, $additionalfieldentry=null): bool
+function checkFieldEntry(string $table, string $fieldtype, string $fieldentry, $additionalfieldtype = null, $additionalfieldentry = null): bool
 {
 
     $exist_fieldentry = false;
@@ -267,7 +268,7 @@ function checkFieldEntry(string $table, string $fieldtype, string $fieldentry, $
     $database = databaseLogin();
 
     if (is_null($additionalfieldtype) && is_null($additionalfieldentry)) {
-        $request = "SELECT * FROM ". $table ." WHERE " . $fieldtype . "=:fieldtype and is_deleted = :is_deleted";
+        $request = "SELECT * FROM " . $table . " WHERE " . $fieldtype . "=:fieldtype and is_deleted = :is_deleted";
 
         $request_prepare = $database->prepare($request);
 
@@ -276,7 +277,7 @@ function checkFieldEntry(string $table, string $fieldtype, string $fieldentry, $
             'is_deleted' => 0
         ]);
     } else {
-        $request = "SELECT * FROM ". $table ." WHERE " . $fieldtype . "=:fieldtype and " . $additionalfieldtype . "=:additionalfieldtype and is_deleted = :is_deleted";
+        $request = "SELECT * FROM " . $table . " WHERE " . $fieldtype . "=:fieldtype and " . $additionalfieldtype . "=:additionalfieldtype and is_deleted = :is_deleted";
 
         $request_prepare = $database->prepare($request);
 
@@ -1222,12 +1223,13 @@ function getPackageImages(int $package_id): array
 
     $database = databaseLogin();
 
-    $request = "SELECT images FROM packages_images WHERE package_id=:package_id";
+    $request = "SELECT images FROM packages_images WHERE package_id=:package_id and is_deleted=:is_deleted";
 
     $request_prepare = $database->prepare($request);
 
     $request_execution = $request_prepare->execute([
-        'package_id' => $package_id
+        'package_id' => $package_id,
+        'is_deleted' => 0
     ]);
 
     if ($request_execution) {
@@ -1399,7 +1401,7 @@ function listings(string $table, int $page, int $rows_per_page, string $status, 
 
         if ($status === 'Tout Afficher' && $search === 'UNDEFINED') {
 
-            $request = "SELECT * FROM " . $table . " WHERE user_id <> ". ANONYMOUS_ID ." AND is_deleted = :is_deleted ORDER BY id DESC LIMIT " . $rows_per_page . " OFFSET " . ($page - 1) * $rows_per_page;
+            $request = "SELECT * FROM " . $table . " WHERE user_id <> " . ANONYMOUS_ID . " AND is_deleted = :is_deleted ORDER BY id DESC LIMIT " . $rows_per_page . " OFFSET " . ($page - 1) * $rows_per_page;
 
             $request_prepare = $database->prepare($request);
 
@@ -1408,7 +1410,7 @@ function listings(string $table, int $page, int $rows_per_page, string $status, 
             ]);
         } elseif ($status !== 'Tout Afficher' && $search === 'UNDEFINED') {
 
-            $request = "SELECT * FROM " . $table . " WHERE user_id <> ". ANONYMOUS_ID ." AND status = :status AND is_deleted = :is_deleted ORDER BY id DESC LIMIT " . $rows_per_page . " OFFSET " . ($page - 1) * $rows_per_page;
+            $request = "SELECT * FROM " . $table . " WHERE user_id <> " . ANONYMOUS_ID . " AND status = :status AND is_deleted = :is_deleted ORDER BY id DESC LIMIT " . $rows_per_page . " OFFSET " . ($page - 1) * $rows_per_page;
 
             $request_prepare = $database->prepare($request);
 
@@ -1418,7 +1420,7 @@ function listings(string $table, int $page, int $rows_per_page, string $status, 
             ]);
         } elseif ($status === 'Tout Afficher' && $search !== 'UNDEFINED') {
 
-            $request = "SELECT * FROM " . $table . " WHERE user_id <> ". ANONYMOUS_ID ." AND is_deleted = :is_deleted AND ";
+            $request = "SELECT * FROM " . $table . " WHERE user_id <> " . ANONYMOUS_ID . " AND is_deleted = :is_deleted AND ";
 
             $search_terms_array = str_split($search);
 
@@ -1439,7 +1441,7 @@ function listings(string $table, int $page, int $rows_per_page, string $status, 
             ]);
         } elseif ($status !== 'Tout Afficher' && $search !== 'UNDEFINED') {
 
-            $request = "SELECT * FROM " . $table . " WHERE user_id <> ". ANONYMOUS_ID ." AND is_deleted = :is_deleted AND ";
+            $request = "SELECT * FROM " . $table . " WHERE user_id <> " . ANONYMOUS_ID . " AND is_deleted = :is_deleted AND ";
 
             $search_terms_array = str_split($search);
 
@@ -1464,7 +1466,7 @@ function listings(string $table, int $page, int $rows_per_page, string $status, 
 
         if ($status === 'Tout Afficher' && $search === 'UNDEFINED') {
 
-            $request = "SELECT * FROM " . $table . " WHERE user_id = ". ANONYMOUS_ID ." AND is_deleted = :is_deleted ORDER BY id DESC LIMIT " . $rows_per_page . " OFFSET " . ($page - 1) * $rows_per_page;
+            $request = "SELECT * FROM " . $table . " WHERE user_id = " . ANONYMOUS_ID . " AND is_deleted = :is_deleted ORDER BY id DESC LIMIT " . $rows_per_page . " OFFSET " . ($page - 1) * $rows_per_page;
 
             $request_prepare = $database->prepare($request);
 
@@ -1473,7 +1475,7 @@ function listings(string $table, int $page, int $rows_per_page, string $status, 
             ]);
         } elseif ($status !== 'Tout Afficher' && $search === 'UNDEFINED') {
 
-            $request = "SELECT * FROM " . $table . " WHERE user_id = ". ANONYMOUS_ID ." AND status = :status AND is_deleted = :is_deleted ORDER BY id DESC LIMIT " . $rows_per_page . " OFFSET " . ($page - 1) * $rows_per_page;
+            $request = "SELECT * FROM " . $table . " WHERE user_id = " . ANONYMOUS_ID . " AND status = :status AND is_deleted = :is_deleted ORDER BY id DESC LIMIT " . $rows_per_page . " OFFSET " . ($page - 1) * $rows_per_page;
 
             $request_prepare = $database->prepare($request);
 
@@ -1483,7 +1485,7 @@ function listings(string $table, int $page, int $rows_per_page, string $status, 
             ]);
         } elseif ($status === 'Tout Afficher' && $search !== 'UNDEFINED') {
 
-            $request = "SELECT * FROM " . $table . " WHERE user_id = ". ANONYMOUS_ID ." AND is_deleted = :is_deleted AND ";
+            $request = "SELECT * FROM " . $table . " WHERE user_id = " . ANONYMOUS_ID . " AND is_deleted = :is_deleted AND ";
 
             $search_terms_array = str_split($search);
 
@@ -1504,7 +1506,7 @@ function listings(string $table, int $page, int $rows_per_page, string $status, 
             ]);
         } elseif ($status !== 'Tout Afficher' && $search !== 'UNDEFINED') {
 
-            $request = "SELECT * FROM " . $table . " WHERE user_id = ". ANONYMOUS_ID ." AND is_deleted = :is_deleted AND ";
+            $request = "SELECT * FROM " . $table . " WHERE user_id = " . ANONYMOUS_ID . " AND is_deleted = :is_deleted AND ";
 
             $search_terms_array = str_split($search);
 
@@ -1581,7 +1583,7 @@ function countRowsInTable(string $table, $packages_type = null, $user_id = null,
         );
     } elseif (is_null($user_id) && ($packages_type == 'Colis avec destinataire' || $packages_type == 'Groupes de colis clients')) {
 
-        $request = "SELECT COUNT(*) FROM " . $table . " WHERE user_id <> ". ANONYMOUS_ID ." AND is_deleted = :is_deleted";
+        $request = "SELECT COUNT(*) FROM " . $table . " WHERE user_id <> " . ANONYMOUS_ID . " AND is_deleted = :is_deleted";
 
         $request_prepare = $database->prepare($request);
 
@@ -1592,7 +1594,7 @@ function countRowsInTable(string $table, $packages_type = null, $user_id = null,
         );
     } elseif (is_null($user_id) && ($packages_type == 'Colis sans destinataire' || $packages_type == 'Groupes de colis expédition')) {
 
-        $request = "SELECT COUNT(*) FROM " . $table . " WHERE user_id = ". ANONYMOUS_ID ." AND is_deleted = :is_deleted";
+        $request = "SELECT COUNT(*) FROM " . $table . " WHERE user_id = " . ANONYMOUS_ID . " AND is_deleted = :is_deleted";
 
         $request_prepare = $database->prepare($request);
 
@@ -2535,7 +2537,7 @@ function addPackge(
 
 /** Get no addressee packages images
  * 
- * @param int $package_id
+ * @param int $user_id
  * 
  * @return array $getNoAddresseePackagesImages.
  */
@@ -2567,17 +2569,17 @@ function getNoAddresseePackagesImages(int $user_id): array
     return $getNoAddresseePackagesImages;
 }
 
-/** Update packages images table
+/** Delete image in package images table
  * 
  * @param int $package_id.
  * 
  * @return bool The result.
  */
-function updatePackageImagesTable(int $package_id): bool
+function deleteImgInPackageImagesTable(int $package_id): bool
 {
     date_default_timezone_set("Africa/Lagos");
 
-    $updatePackageImagesTable = false;
+    $deleteImgInPackageImagesTable = false;
 
     $database = databaseLogin();
 
@@ -2595,16 +2597,16 @@ function updatePackageImagesTable(int $package_id): bool
 
     if ($request_execution) {
 
-        $updatePackageImagesTable = true;
+        $deleteImgInPackageImagesTable = true;
     }
 
-    return $updatePackageImagesTable;
+    return $deleteImgInPackageImagesTable;
 }
 
 /** Update user_id in package table
  * 
  * @param int $package_id.
- * * @param int $user_id.
+ * @param int $user_id.
  * 
  * @return bool The result.
  */
@@ -2634,4 +2636,100 @@ function assocPackageToOwner(int $package_id, int $user_id): bool
     }
 
     return $assocPackageToOwner;
+}
+
+/** Get information about the package to edit.
+ * 
+ * @param int $package_id
+ * 
+ * @return array $getPackageToEdit.
+ */
+function getPackageToEdit(int $package_id): array
+{
+    $getPackageToEdit = [];
+
+    $database = databaseLogin();
+
+    $request = "SELECT * FROM package WHERE id = :id and is_active = :is_active and is_deleted = :is_deleted";
+
+    $request_prepare = $database->prepare($request);
+
+    $request_execution = $request_prepare->execute([
+        'id' => $package_id,
+        'is_active' => 1,
+        'is_deleted' => 0
+    ]);
+
+    if ($request_execution) {
+
+        $data = $request_prepare->fetch(PDO::FETCH_ASSOC);
+
+        if (!empty($data) && is_array($data)) {
+
+            $getPackageToEdit = $data;
+        }
+    }
+    return $getPackageToEdit;
+}
+
+/** Update package table
+ * 
+ * @param int $package_id.
+ * 
+ * @return bool The result.
+ */
+function updatePackageTable(
+    int    $package_id,
+    string $tracking_number,
+    int    $package_units_number,
+    string $worth,
+    string $description,
+    string $net_weight,
+    string $volumetric_weight,
+    int    $shipping_unit_cost,
+    string $shipping_cost,
+    string $product_type,
+    string $shipping_type,
+    string $status,
+    int    $user_id,
+    int    $product_type_id,
+    int    $shipping_type_id
+): bool {
+    date_default_timezone_set("Africa/Lagos");
+
+    $updatePackageTable = false;
+
+    $database = databaseLogin();
+
+    $request = "UPDATE package SET tracking_number = :tracking_number, package_units_number = :package_units_number, worth = :worth, description = :description, net_weight = :net_weight, volumetric_weight = :volumetric_weight, shipping_unit_cost = :shipping_unit_cost, shipping_cost = :shipping_cost, product_type = :product_type, shipping_type = :shipping_type, status = :status, user_id = :user_id, product_type_id = :product_type_id, shipping_type_id = :shipping_type_id, updated_on= :updated_on WHERE id = :package_id";
+
+    $request_prepare = $database->prepare($request);
+
+    $request_execution = $request_prepare->execute(
+        [
+            'package_id'  => $package_id,
+            'tracking_number' => $tracking_number,
+            'package_units_number' => $package_units_number,
+            'worth' => $worth,
+            'description' => $description,
+            'net_weight' => $net_weight,
+            'volumetric_weight' => $volumetric_weight,
+            'shipping_unit_cost' => $shipping_unit_cost,
+            'shipping_cost' => $shipping_cost,
+            'product_type' => $product_type,
+            'shipping_type' => $shipping_type,
+            'status' => $status,
+            'user_id' => $user_id,
+            'product_type_id' => $product_type_id,
+            'shipping_type_id' => $shipping_type_id,
+            'updated_on' => date('Y-m-d H:i:s')
+        ]
+    );
+
+    if ($request_execution) {
+
+        $updatePackageTable = true;
+    }
+
+    return $updatePackageTable;
 }
