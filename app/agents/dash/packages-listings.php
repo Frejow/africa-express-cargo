@@ -434,9 +434,9 @@ $rows = countRowsInTable($table, $_SESSION['type'], null);
                                                 ?>
                                                     <td class="text-end">
                                                         <span class="">
-                                                            <a class="btn-link link-warning" href="<?= redirect($_SESSION['theme'], PROJECT . 'agents/dash/update-packages') ?>">
+                                                            <button type="submit" name="update_package" value="<?= $package['id'] ?>" class="btn-link link-warning">
                                                                 Mettre à jour
-                                                            </a>
+                                                            </button>
                                                         </span>
                                                     </td>
                                                 <?php

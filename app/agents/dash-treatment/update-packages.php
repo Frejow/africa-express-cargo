@@ -9,8 +9,6 @@ $package_id = $_SESSION['package_id'];
 
 $package_to_edit = getPackageToEdit($package_id);
 
-$package_img = getPackageImages($package_id);
-
 if ($package_to_edit['package_units_number'] != 0) {
     $unit = 'pcs';
     $quantity = $package_to_edit['package_units_number'];
@@ -24,50 +22,22 @@ if ($package_to_edit['package_units_number'] != 0) {
 
 extract($_POST);
 
-if (!empty($pack_trackN)) {
+if (!empty($status)) {
 
-    if ($pack_trackN != $package_to_edit['tracking_number']) {
-
-        if (!checkingThirdParam('package', 'tracking_number', secure(strtoupper($pack_trackN)))) {
-
-            $newdata['pack_trackN'] = secure(strtoupper($pack_trackN));
-
-        } else {
-    
-            $error['pack_trackN'] = 'Ce numéro de suivi appartient déjà à un colis. Vérifier votre saisie.';
-        }
+    if ($status != $package_to_edit['status']) {
+        $newdata['status'] = secure($status);
     } else {
-
-        $newdata['pack_trackN'] = $package_to_edit['tracking_number'];
+        $newdata['status'] = $package_to_edit['status'];
     }
 
-    $updata['pack_trackN'] = secure($pack_trackN);
+    $updata['status'] = secure($status);
 
 } else {
 
-    $error['pack_trackN'] = 'Champs requis.';
+    $error['status'] = 'Champs requis.';
 
     if (empty($_SESSION['error_msg'])) {
-        $_SESSION['error_msg'] = 'Erreur. Champs Numéro de suivi soumis vide.';
-    }
-}
-
-if (!empty($pack_descp)) {
-
-    if ($pack_descp != $package_to_edit['description']) {
-        $newdata['pack_descp'] = secure($pack_descp);
-    } else {
-        $newdata['pack_descp'] = $package_to_edit['description'];
-    }
-
-    $updata['pack_descp'] = secure($pack_descp);
-
-} else {
-
-    $error['pack_descp'] = 'Champs requis.';
-
-    if (empty($_SESSION['error_msg'])) {
-        $_SESSION['error_msg'] = 'Erreur. Champs Description soumis vide.';
+        $_SESSION['error_msg'] = 'Erreur. Champs Statut soumis vide.';
     }
 }
 
@@ -353,144 +323,6 @@ if (!empty($_shipping)) {
 
 $newdata['pack_cost'] = '-';
 
-if (!empty($_FILES["filetoupload"])) {
-
-    if (!empty($newdata['pack_trackN'])) {
-
-        $newdata['images'] = [];
-
-        if ($_FILES["filetoupload"]['error'] == 0) {
-
-            if ($_FILES["filetoupload"]["size"] <= 2000000) {
-
-                $file_name = $_FILES["filetoupload"]["name"];
-
-                $file_info = pathinfo($file_name);
-
-                $file_ext = $file_info["extension"];
-
-                $allowed_ext = ["png", "jpg", "jpeg", "gif"];
-
-                if (in_array(strtolower($file_ext), $allowed_ext)) {
-
-                    $rootpath = $_SERVER['DOCUMENT_ROOT'] . '/africa-express-cargo/public/images/uploads';
-
-                    $prevfolder = $rootpath . '/PACKAGES_WITHOUT_ADDRESSEES' . '/packages/' . $package_to_edit['tracking_number'];
-
-                    $newfolder = $rootpath . '/PACKAGES_WITHOUT_ADDRESSEES' . '/packages/' . $newdata['pack_trackN'];
-
-                    if (!is_dir($newfolder)) {
-
-                        mkdir($newfolder, 0700, true);
-                    }
-
-                    move_uploaded_file($_FILES['filetoupload']['tmp_name'], $newfolder . '/' . basename($_FILES['filetoupload']['name']));
-
-                    $newdata["images"] = PROJECT . 'public/images/uploads/PACKAGES_WITHOUT_ADDRESSEES' . '/packages/' . $newdata['pack_trackN'] . '/' . basename($_FILES['filetoupload']['name']);
-
-                    if (!empty($error['images'])) {
-                        deleteDir($newfolder);
-                    }
-                } else {
-
-                    $rootpath = $_SERVER['DOCUMENT_ROOT'] . '/africa-express-cargo/public/images/uploads';
-
-                    $newfolder = $rootpath . '/PACKAGES_WITHOUT_ADDRESSEES' . '/packages/' . $newdata['pack_trackN'];
-
-                    if (is_dir($newfolder)) {
-
-                        deleteDir($newfolder);
-
-                        $error["images"] = "L'extension du fichier " . $file_name . " n'est pas pris en compte. <br> Extensions autorisées [ PNG/JPG/JPEG/GIF ]";
-
-                        $updata['images'] = $file_name;
-
-                        if (empty($_SESSION['error_msg'])) {
-                            $_SESSION['error_msg'] = 'Erreur niveau extension de fichier(s). Extensions autorisées [ PNG/JPG/JPEG/GIF ]';
-                        }
-                    } else {
-
-                        $error["images"] = "L'extension du fichier " . $file_name . " n'est pas pris en compte. <br> Extensions autorisées [ PNG/JPG/JPEG/GIF ]";
-
-                        $updata['images'] = $file_name;
-
-                        if (empty($_SESSION['error_msg'])) {
-                            $_SESSION['error_msg'] = 'Erreur niveau extension de fichier(s). Extensions autorisées [ PNG/JPG/JPEG/GIF ]';
-                        }
-                    }
-                }
-            } else {
-
-                $file_name = $_FILES["filetoupload"]["name"];
-
-                $rootpath = $_SERVER['DOCUMENT_ROOT'] . '/africa-express-cargo/public/images/uploads';
-
-                $newfolder = $rootpath . '/PACKAGES_WITHOUT_ADDRESSEES' . '/packages/' . $newdata['pack_trackN'];
-
-                if (is_dir($newfolder)) {
-
-                    deleteDir($newfolder);
-
-                    $error["images"] = "Le fichier " . $file_name . " est trop lourd. Poids maximum autorisé : 2mo";
-
-                    $updata['images'] = $file_name;
-
-                    if (empty($_SESSION['error_msg'])) {
-                        $_SESSION['error_msg'] = 'Erreur niveau poids de fichier. Poids maximum autorisé : 2mo';
-                    }
-                } else {
-
-                    $error["images"] = "Le fichier " . $file_name . " est trop lourd. Poids maximum autorisé : 2mo";
-
-                    $updata['images'] = $file_name;
-
-                    if (empty($_SESSION['error_msg'])) {
-                        $_SESSION['error_msg'] = 'Erreur niveau poids de fichier. Poids maximum autorisé : 2mo';
-                    }
-                }
-            }
-        } elseif ($_FILES["filetoupload"]['error'] == 4) {
-
-            $newdata['images'] = [];
-
-            if ($newdata['pack_trackN'] != $package_to_edit['tracking_number']) {
-
-                $rootpath = $_SERVER['DOCUMENT_ROOT'] . '/africa-express-cargo/public/images/uploads';
-
-                $prevfolder = $rootpath . '/PACKAGES_WITHOUT_ADDRESSEES' . '/packages/' . $package_to_edit['tracking_number'];
-
-                $newfolder = $rootpath . '/PACKAGES_WITHOUT_ADDRESSEES' . '/packages/' . $newdata['pack_trackN'];
-
-                rename($prevfolder, $newfolder);
-                    
-            }
-
-        } else {
-
-            $updata['images'][0] = 'IMPORTER UNE IMAGE [POIDS MAXIMUM: 2Mo]';
-
-            $_SESSION['data'] = json_encode($updata);
-
-            $_SESSION['error_msg'] = 'Une erreur est survenue avec votre fichier. Réessayer.';
-
-            header("location:" . redirect($_SESSION['theme'], PROJECT . 'agents/dash/edit-packages'));
-
-            exit;
-        }
-    } else {
-        $error['images'] = '';
-
-        if (empty($_SESSION['error_msg'])) {
-
-            $_SESSION['error_msg'] = 'Erreur. Veuillez bien remplir les champs précédents celui pour importation.';
-        }
-    }
-} else {
-
-    $newdata['images'] = [];
-}
-
-
 if (!empty($unit_bill)) {
     $newdata['shipping_unit_cost'] = $unit_bill;
 }
@@ -511,155 +343,64 @@ if (empty($error)) {
 
     if (!empty($_POST)) {
         if (
-            !empty($newdata['pack_trackN']) && !empty($newdata['pack_cost']) && !empty($newdata['pack_descp']) && !empty($newdata['shipping_unit_cost']) && !empty($newdata['shipping_cost'])
+            !empty($newdata['status']) && !empty($newdata['pack_cost']) && !empty($newdata['shipping_unit_cost']) && !empty($newdata['shipping_cost'])
             && !empty($newdata['productSelectName']) && !empty($newdata['shipping_type']) && !empty($newdata['productSelectId']) && !empty($newdata['shipping_type_id'])
         ) {
             if (updatePackageTable(
                 $package_id,
-                $newdata['pack_trackN'],
+                $package_to_edit['tracking_number'],
                 $newdata['pack_pcs'],
                 $newdata['pack_cost'],
-                $newdata['pack_descp'],
+                $package_to_edit['description'],
                 $newdata['pack_netWeight'],
                 $newdata['pack_metricWeight'],
                 $newdata['shipping_unit_cost'],
                 $newdata['shipping_cost'],
                 $newdata['productSelectName'],
                 $newdata['shipping_type'],
-                'Entrepôt Bénin',
-                ANONYMOUS_ID,
+                $newdata['status'],
+                $package_to_edit['user_id'],
                 $newdata['productSelectId'],
                 $newdata['shipping_type_id']
             )) {
 
-                if (!empty($newdata['images'])) {
+                $_SESSION['success_msg'] = 'Mise à jour effectuée avec succès';
 
-                    if (is_dir($prevfolder) && $prevfolder != $newfolder) {
-                        deleteDir($prevfolder);
-                    }
-
-                    deleteImgInPackageImagesTable($package_id);
-
-                    if (!addImagesForPackage(getPackageId($newdata['pack_trackN'])['id'], $newdata['images'], ANONYMOUS_ID)) {
-
-                        $rootpath = $_SERVER['DOCUMENT_ROOT'] . '/africa-express-cargo/public/images/uploads';
-
-                        $newfolder = $rootpath . '/PACKAGES_WITHOUT_ADDRESSEES' . '/packages/' . $newdata['pack_trackN'];
-
-                        if (is_dir($newfolder)) {
-
-                            deleteDir($newfolder);
-                        }
-
-                        $_SESSION['error_msg'] = 'Une erreur est survenue. Réessayer. Si cela persiste, contactez-nous.';
-
-                        $_SESSION['data'] = json_encode($updata);
-
-                        header("location:" . redirect($_SESSION['theme'], PROJECT . 'agents/dash/edit-packages'));
-
-                        exit;
-                    } else {
-                        $_SESSION['imgs_insertion'] = 'Done';
-                    }
-
-                    if (isset($_SESSION['imgs_insertion'])) {
-
-                        $_SESSION['success_msg'] = 'Modification effectuée avec succès';
-
-                        header("location:" . redirect($_SESSION['theme'], PROJECT . 'agents/dash/packages-listings'));
-                    } else {
-
-                        $rootpath = $_SERVER['DOCUMENT_ROOT'] . '/africa-express-cargo/public/images/uploads';
-
-                        $newfolder = $rootpath . '/PACKAGES_WITHOUT_ADDRESSEES' . '/packages/' . $newdata['pack_trackN'];
-
-                        if (is_dir($newfolder)) {
-
-                            deleteDir($newfolder);
-                        }
-
-                        $_SESSION['error_msg'] = 'Une erreur est survenue. Réessayer. Si cela persiste, contactez-nous.';
-
-                        $_SESSION['data'] = json_encode($updata);
-
-                        header("location:" . redirect($_SESSION['theme'], PROJECT . 'agents/dash/edit-packages'));
-
-                        exit;
-                    }
-                } else {
-
-                    $_SESSION['success_msg'] = 'Modification effectuée avec succès';
-
-                    header("location:" . redirect($_SESSION['theme'], PROJECT . 'agents/dash/packages-listings'));
-                }
+                header("location:" . redirect($_SESSION['theme'], PROJECT . 'agents/dash/packages-listings'));
+                
             } else {
-
-                $rootpath = $_SERVER['DOCUMENT_ROOT'] . '/africa-express-cargo/public/images/uploads';
-
-                $newfolder = $rootpath . '/PACKAGES_WITHOUT_ADDRESSEES' . '/packages/' . $newdata['pack_trackN'];
-
-                if (is_dir($newfolder)) {
-
-                    deleteDir($newfolder);
-                }
 
                 $_SESSION['error_msg'] = 'Une erreur est survenue. Réessayer. Si cela persiste, contactez-nous.';
 
                 $_SESSION['data'] = json_encode($updata);
 
-                header("location:" . redirect($_SESSION['theme'], PROJECT . 'agents/dash/edit-packages'));
+                header("location:" . redirect($_SESSION['theme'], PROJECT . 'agents/dash/update-packages'));
 
                 exit;
             }
         } else {
 
-            $rootpath = $_SERVER['DOCUMENT_ROOT'] . '/africa-express-cargo/public/images/uploads';
-
-            $newfolder = $rootpath . '/PACKAGES_WITHOUT_ADDRESSEES' . '/packages/' . $newdata['pack_trackN'];
-
-            if (is_dir($newfolder)) {
-
-                deleteDir($newfolder);
-            }
-
             $_SESSION['data'] = json_encode($updata);
 
             $_SESSION['error_msg'] = 'Une erreur est survenue. Une action inattendue bloque le processus. Réessayer. Contactez nous si cela persiste.';
 
-            header("location:" . redirect($_SESSION['theme'], PROJECT . 'agents/dash/edit-packages'));
+            header("location:" . redirect($_SESSION['theme'], PROJECT . 'agents/dash/update-packages'));
 
             exit;
         }
     } else {
 
-        $rootpath = $_SERVER['DOCUMENT_ROOT'] . '/africa-express-cargo/public/images/uploads';
-
-        $newfolder = $rootpath . '/PACKAGES_WITHOUT_ADDRESSEES' . '/packages/' . $newdata['pack_trackN'];
-
-        if (is_dir($newfolder)) {
-
-            deleteDir($newfolder);
-        }
-
         $_SESSION['error_msg'] = 'Une erreur est survenue. Cause probable : Importation de fichier lourd et dépassant la limite autorisée (Poids Max: 2Mo). Réessayer en respectant la limite autorisée. Contactez nous si cela persiste.';
 
-        header("location:" . redirect($_SESSION['theme'], PROJECT . 'agents/dash/edit-packages'));
+        header("location:" . redirect($_SESSION['theme'], PROJECT . 'agents/dash/update-packages'));
 
         exit;
     }
 } elseif (!empty($error)) {
 
-    $rootpath = $_SERVER['DOCUMENT_ROOT'] . '/africa-express-cargo/public/images/uploads';
-
-    $newfolder = $rootpath . '/PACKAGES_WITHOUT_ADDRESSEES' . '/packages/' . $newdata['pack_trackN'];
-
-    if (is_dir($newfolder)) {
-        deleteDir($newfolder);
-    }
-
     $_SESSION['data'] = json_encode($updata);
 
     $_SESSION['set_pack_errors'] = $error;
 
-    header("location:" . redirect($_SESSION['theme'], PROJECT . 'agents/dash/edit-packages'));
+    header("location:" . redirect($_SESSION['theme'], PROJECT . 'agents/dash/update-packages'));
 }

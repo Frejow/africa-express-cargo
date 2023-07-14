@@ -129,7 +129,7 @@ if (!empty($edit_package)) {
 
     $_SESSION['package_id'] = $edit_package;
     header("location:". redirect($_SESSION['theme'], PROJECT.'agents/dash/edit-packages'));
-    
+
 }
 
 //Package edition
@@ -138,7 +138,12 @@ if (!empty($edit_package)) {
 
 //Package updating
 
+if (!empty($update_package)) {
 
+    $_SESSION['package_id'] = $update_package;
+    header("location:". redirect($_SESSION['theme'], PROJECT.'agents/dash/update-packages'));
+    
+}
 
 //Package updating
 
