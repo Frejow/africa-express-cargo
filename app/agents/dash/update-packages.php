@@ -14,7 +14,7 @@ if (isset($_SESSION["data"]) && !empty($_SESSION["data"])) {
 
 $package_id = $_SESSION['package_id'];
 
-$package_to_edit = getPackageToEdit($package_id);
+$package_to_edit = getPackage($package_id);
 
 $product = getProduct($package_to_edit['product_type_id']);
 

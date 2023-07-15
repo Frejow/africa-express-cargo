@@ -7,7 +7,7 @@ $_SESSION['set_pack_errors'] = [];
 
 $package_id = $_SESSION['package_id'];
 
-$package_to_edit = getPackageToEdit($package_id);
+$package_to_edit = getPackage($package_id);
 
 $package_img = getPackageImages($package_id);
 

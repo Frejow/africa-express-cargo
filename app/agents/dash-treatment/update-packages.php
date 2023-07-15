@@ -1,37 +1,37 @@
 <?php
 
 $newdata = [];
+$to_notif = [];
 $error = [];
 $updata = [];
 $_SESSION['set_pack_errors'] = [];
 
 $package_id = $_SESSION['package_id'];
 
-$package_to_edit = getPackageToEdit($package_id);
+$package_to_update = getPackage($package_id);
 
-if ($package_to_edit['package_units_number'] != 0) {
+if ($package_to_update['package_units_number'] != 0) {
     $unit = 'pcs';
-    $quantity = $package_to_edit['package_units_number'];
-} elseif ($package_to_edit['net_weight'] != 0) {
+    $quantity = $package_to_update['package_units_number'];
+} elseif ($package_to_update['net_weight'] != 0) {
     $unit = 'kg';
-    $quantity = $package_to_edit['net_weight'];
-} elseif ($package_to_edit['volumetric_weight'] != 0) {
+    $quantity = $package_to_update['net_weight'];
+} elseif ($package_to_update['volumetric_weight'] != 0) {
     $unit = 'cbm';
-    $quantity = $package_to_edit['volumetric_weight'];
+    $quantity = $package_to_update['volumetric_weight'];
 }
 
 extract($_POST);
 
 if (!empty($status)) {
 
-    if ($status != $package_to_edit['status']) {
+    if ($status != $package_to_update['status']) {
         $newdata['status'] = secure($status);
     } else {
-        $newdata['status'] = $package_to_edit['status'];
+        $newdata['status'] = $package_to_update['status'];
     }
 
     $updata['status'] = secure($status);
-
 } else {
 
     $error['status'] = 'Champs requis.';
@@ -43,7 +43,7 @@ if (!empty($status)) {
 
 if (!empty($productSelect)) {
 
-    if (($package_to_edit['product_type_id'] . '&' . $package_to_edit['product_type'] != $productSelect) || ($package_to_edit['product_type_id'] . '&' . $package_to_edit['product_type'] . '&insurance' != $productSelect)) {
+    if (($package_to_update['product_type_id'] . '&' . $package_to_update['product_type'] != $productSelect) || ($package_to_update['product_type_id'] . '&' . $package_to_update['product_type'] . '&insurance' != $productSelect)) {
 
         if (!empty(explode('&', $productSelect)[2])) {
             $newdata['productSelectId'] = secure(explode('&', $productSelect)[0]);
@@ -53,15 +53,13 @@ if (!empty($productSelect)) {
             $newdata['productSelectId'] = secure(explode('&', $productSelect)[0]);
             $newdata['productSelectName'] = secure(explode('&', $productSelect)[1]);
         }
-
     } else {
 
-        $newdata['productSelectId'] = $package_to_edit['product_type_id'];
-        $newdata['productSelectName'] = $package_to_edit['product_type'];
+        $newdata['productSelectId'] = $package_to_update['product_type_id'];
+        $newdata['productSelectName'] = $package_to_update['product_type'];
     }
 
     $updata['productSelect'] = secure($productSelect);
-
 } else {
 
     $error['productSelect'] = 'Champs requis.';
@@ -78,9 +76,8 @@ if (!empty($pack_unit)) {
     } else {
         $newdata['pack_unit'] = $unit;
     }
-    
-    $updata['pack_unit'] = secure($pack_unit);
 
+    $updata['pack_unit'] = secure($pack_unit);
 } else {
 
     $error['pack_unit'] = 'Veuillez sélectionner une unité parmi celles proposées.';
@@ -155,7 +152,6 @@ if (!empty($pack_insur)) {
             }
         }
     }
-
 } else {
 
     if (!empty($updata['insurance'])) {
@@ -302,16 +298,15 @@ if (!empty($packweight)) {
 if (!empty($_shipping)) {
     $updata['_shipping'] = secure($_shipping);
 
-    if (($package_to_edit['shipping_type_id'] . '&' . $package_to_edit['shipping_type'] != $_shipping)) {
+    if (($package_to_update['shipping_type_id'] . '&' . $package_to_update['shipping_type'] != $_shipping)) {
         if (!empty(explode('&', $_shipping)[1])) {
             $newdata['shipping_type_id'] = secure(explode('&', $_shipping)[0]);
             $newdata['shipping_type'] = secure(explode('&', $_shipping)[1]);
         }
     } else {
-        $newdata['shipping_type_id'] = $package_to_edit['shipping_type_id'];
-        $newdata['shipping_type'] = $package_to_edit['shipping_type'];
+        $newdata['shipping_type_id'] = $package_to_update['shipping_type_id'];
+        $newdata['shipping_type'] = $package_to_update['shipping_type'];
     }
-    
 } else {
 
     $error['_shipping'] = 'Champs requis.';
@@ -337,8 +332,6 @@ if (!empty($unit_bill) && !empty($newdata['pack_netWeight']) && $newdata['pack_n
     $newdata['shipping_cost'] = 0;
 }
 
-//die(var_dump($newdata['shipping_type_id']));
-
 if (empty($error)) {
 
     if (!empty($_POST)) {
@@ -346,12 +339,112 @@ if (empty($error)) {
             !empty($newdata['status']) && !empty($newdata['pack_cost']) && !empty($newdata['shipping_unit_cost']) && !empty($newdata['shipping_cost'])
             && !empty($newdata['productSelectName']) && !empty($newdata['shipping_type']) && !empty($newdata['productSelectId']) && !empty($newdata['shipping_type_id'])
         ) {
+
+            if ($package_to_update['status'] != $newdata['status']) {
+                $to_notif['Statut'] = $package_to_update['status'];
+            }
+            if ($package_to_update['product_type'] != $newdata['productSelectName']) {
+                $to_notif['Type de produit'] = $package_to_update['product_type'];
+            }
+            if ($package_to_update['package_units_number'] != $newdata['pack_pcs']) {
+                if ($package_to_update['package_units_number'] != 0) {
+                    $to_notif['Nombre de Pièces (PCS)'] = $package_to_update['package_units_number'];
+                } else {
+                    $to_notif['Nombre de Pièces (PCS)'] = '-';
+                }
+            }
+            if ($package_to_update['net_weight'] != $newdata['pack_netWeight']) {
+                if ($package_to_update['net_weight'] != 0) {
+                    $to_notif['Poids Net (KG)'] = $package_to_update['net_weight'];
+                } else {
+                    $to_notif['Poids Net (KG)'] = '-';
+                }
+            }
+            if ($package_to_update['volumetric_weight'] != $newdata['pack_metricWeight']) {
+                if ($package_to_update['volumetric_weight'] != 0) {
+                    $to_notif['Poids Volumétrique (CBM)'] = $package_to_update['volumetric_weight'];
+                } else {
+                    $to_notif['Poids Volumétrique (CBM)'] = '-';
+                }
+            }
+            if ($package_to_update['shipping_unit_cost'] != $newdata['shipping_unit_cost']) {
+                if ($package_to_update['shipping_unit_cost'] != 0) {
+                    $to_notif['Coût Unitaire Expédition (FCFA)'] = $package_to_update['shipping_unit_cost'];
+                } else {
+                    $to_notif['Coût Unitaire Expédition (FCFA)'] = '-';
+                }
+            }
+            if ($package_to_update['shipping_cost'] != $newdata['shipping_cost']) {
+                if ($package_to_update['shipping_cost'] != 0) {
+                    $to_notif['Coût Total Expédition (FCFA)'] = $package_to_update['shipping_cost'];
+                } else {
+                    $to_notif['Coût Total Expédition (FCFA)'] = '-';
+                }
+            }
+            if ($package_to_update['shipping_type'] != $newdata['shipping_type']) {
+                $to_notif['Type d\'Envoi'] = $package_to_update['shipping_type'];
+            }
+
+            if (!empty($to_notif)) {
+
+                $message = 'Colis ' . $package_to_update['tracking_number'] . ' ( ' . $package_to_update['description'] . ' ) ' . '<br>';
+
+                foreach ($to_notif as $key => $value) {
+                    if ($key == 'Statut') {
+                        $message .= '<strong>' . $key . '</strong>' . '<br>' . '<del>' . $value . '</del>' . ' => ' . $newdata['status'] . '<br>';
+                    }
+                    if ($key == 'Type de produit') {
+                        $message .= '<strong>' . $key . '</strong>' . '<br>' . '<del>' . $value . '</del>' . ' => ' . $newdata['productSelectName'] . '<br>';
+                    }
+                    if ($key == 'Nombre de Pièces (PCS)') {
+                        if ($newdata['pack_pcs'] != 0) {
+                            $message .= '<strong>' . $key . '</strong>' . '<br>' . '<del>' . $value . '</del>' . ' => ' . $newdata['pack_pcs'] . '<br>';
+                        } else {
+                            $message .= '<strong>' . $key . '</strong>' . '<br>' . '<del>' . $value . '</del>' . ' => ' . '-' . '<br>';
+                        }
+                    }
+                    if ($key == 'Poids Net (KG)') {
+                        if ($newdata['pack_netWeight'] != 0) {
+                            $message .= '<strong>' . $key . '</strong>' . '<br>' . '<del>' . $value . '</del>' . ' => ' . $newdata['pack_netWeight'] . '<br>';
+                        } else {
+                            $message .= '<strong>' . $key . '</strong>' . '<br>' . '<del>' . $value . '</del>' . ' => ' . '-' . '<br>';
+                        }
+                    }
+                    if ($key == 'Poids Volumétrique (CBM)') {
+                        if ($newdata['pack_metricWeight'] != 0) {
+                            $message .= '<strong>' . $key . '</strong>' . '<br>' . '<del>' . $value . '</del>' . ' => ' . $newdata['pack_metricWeight'] . '<br>';
+                        } else {
+                            $message .= '<strong>' . $key . '</strong>' . '<br>' . '<del>' . $value . '</del>' . ' => ' . '-' . '<br>';
+                        }
+                    }
+                    if ($key == 'Coût Unitaire Expédition (FCFA)') {
+                        if ($newdata['shipping_unit_cost'] != 0) {
+                            $message .= '<strong>' . $key . '</strong>' . '<br>' . '<del>' . $value . '</del>' . ' => ' . $newdata['shipping_unit_cost'] . '<br>';
+                        } else {
+                            $message .= '<strong>' . $key . '</strong>' . '<br>' . '<del>' . $value . '</del>' . ' => ' . '-' . '<br>';
+                        }
+                    }
+                    if ($key == 'Coût Total Expédition (FCFA)') {
+                        if ($newdata['shipping_cost'] != 0) {
+                            $message .= '<strong>' . $key . '</strong>' . '<br>' . '<del>' . $value . '</del>' . ' => ' . $newdata['shipping_cost'] . '<br>';
+                        } else {
+                            $message .= '<strong>' . $key . '</strong>' . '<br>' . '<del>' . $value . '</del>' . ' => ' . '-' . '<br>';
+                        }
+                    }
+                    if ($key == 'Type d\'Envoi') {
+                        $message .= '<strong>' . $key . '</strong>' . '<br>' . '<del>' . $value . '</del>' . ' => ' . $newdata['shipping_type'] . '<br>';
+                    }
+                }
+
+                insertNotifications('Mise à jour Colis', $message, $package_to_update['user_id'], $package_to_update['id']);
+            }
+
             if (updatePackageTable(
                 $package_id,
-                $package_to_edit['tracking_number'],
+                $package_to_update['tracking_number'],
                 $newdata['pack_pcs'],
                 $newdata['pack_cost'],
-                $package_to_edit['description'],
+                $package_to_update['description'],
                 $newdata['pack_netWeight'],
                 $newdata['pack_metricWeight'],
                 $newdata['shipping_unit_cost'],
@@ -359,7 +452,7 @@ if (empty($error)) {
                 $newdata['productSelectName'],
                 $newdata['shipping_type'],
                 $newdata['status'],
-                $package_to_edit['user_id'],
+                $package_to_update['user_id'],
                 $newdata['productSelectId'],
                 $newdata['shipping_type_id']
             )) {
@@ -367,7 +460,6 @@ if (empty($error)) {
                 $_SESSION['success_msg'] = 'Mise à jour effectuée avec succès';
 
                 header("location:" . redirect($_SESSION['theme'], PROJECT . 'agents/dash/packages-listings'));
-                
             } else {
 
                 $_SESSION['error_msg'] = 'Une erreur est survenue. Réessayer. Si cela persiste, contactez-nous.';

@@ -2638,15 +2638,15 @@ function assocPackageToOwner(int $package_id, int $user_id): bool
     return $assocPackageToOwner;
 }
 
-/** Get information about the package to edit.
+/** Get information about the package.
  * 
  * @param int $package_id
  * 
- * @return array $getPackageToEdit.
+ * @return array $getPackage.
  */
-function getPackageToEdit(int $package_id): array
+function getPackage(int $package_id): array
 {
-    $getPackageToEdit = [];
+    $getPackage = [];
 
     $database = databaseLogin();
 
@@ -2666,10 +2666,10 @@ function getPackageToEdit(int $package_id): array
 
         if (!empty($data) && is_array($data)) {
 
-            $getPackageToEdit = $data;
+            $getPackage = $data;
         }
     }
-    return $getPackageToEdit;
+    return $getPackage;
 }
 
 /** Update package table
@@ -2732,4 +2732,74 @@ function updatePackageTable(
     }
 
     return $updatePackageTable;
+}
+
+/** Notification insertion
+ * 
+ * @param string $type Notification type.
+ * @param string $message The message.
+ * @param int $package_id The package id.
+ * @param int $user_id The user id.
+ * 
+ * @return bool The result.
+ */
+function insertNotifications(string $type, string $message, int $user_id, int $package_id = null): bool
+{
+
+    $insertNotifications = false;
+
+    $database = databaseLogin();
+
+    $request = "INSERT INTO notifications (type, message, package_id, user_id) VALUES (:type, :message, :package_id, :user_id)";
+
+    $request_prepare = $database->prepare($request);
+
+    $request_execution = $request_prepare->execute(
+        [
+            'type' => $type,
+            'message' => $message,
+            'user_id' => $user_id,
+            'package_id' => $package_id
+        ]
+    );
+
+    if ($request_execution) {
+        $insertNotifications = true;
+    }
+
+    return $insertNotifications;
+}
+
+/** Get notifications.
+ * 
+ * @param int $user_id
+ * 
+ * @return array $getNotifications.
+ */
+function getNotifications(int $user_id): array
+{
+    $getNotifications = [];
+
+    $database = databaseLogin();
+
+    $request = "SELECT * FROM notifications WHERE user_id = :user_id and is_active = :is_active and is_deleted = :is_deleted";
+
+    $request_prepare = $database->prepare($request);
+
+    $request_execution = $request_prepare->execute([
+        'user_id' => $user_id,
+        'is_active' => 1,
+        'is_deleted' => 0
+    ]);
+
+    if ($request_execution) {
+
+        $data = $request_prepare->fetchAll(PDO::FETCH_ASSOC);
+
+        if (!empty($data) && is_array($data)) {
+
+            $getNotifications = $data;
+        }
+    }
+    return $getNotifications;
 }
