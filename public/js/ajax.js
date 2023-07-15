@@ -212,4 +212,28 @@ $(document).ready(function() {
         });
     });
 
+    $('.delete-icon').on('click', function(event) {
+        event.preventDefault();
+    
+        var notificationId = $(this).data('notification-id');
+        var notificationClass = $(this).closest('.list-group-item').data('notification-class');
+
+        $(this).tooltip('dispose');
+    
+        $.ajax({
+            type: 'POST',
+            url: '../dash-treatment/notifications',
+            data: { id: notificationId },
+            success: function() {
+                // Suppression de la notification du DOM avec animation
+                $('.' + notificationClass).slideUp(300, function() {
+                    $(this).remove();
+                });
+            },
+            error: function() {
+                alert('Une erreur s\'est produite lors de la suppression de la notification.');
+            }
+        });
+    });    
+
 });

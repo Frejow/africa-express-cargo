@@ -2782,13 +2782,12 @@ function getNotifications(int $user_id): array
 
     $database = databaseLogin();
 
-    $request = "SELECT * FROM notifications WHERE user_id = :user_id and is_active = :is_active and is_deleted = :is_deleted";
+    $request = "SELECT * FROM notifications WHERE user_id = :user_id and is_deleted = :is_deleted ORDER BY id DESC";
 
     $request_prepare = $database->prepare($request);
 
     $request_execution = $request_prepare->execute([
         'user_id' => $user_id,
-        'is_active' => 1,
         'is_deleted' => 0
     ]);
 
@@ -2802,4 +2801,105 @@ function getNotifications(int $user_id): array
         }
     }
     return $getNotifications;
+}
+
+/** Get active notifications.
+ * 
+ * @param int $user_id
+ * 
+ * @return array $getActiveNotifications.
+ */
+function getActiveNotifications(int $user_id): array
+{
+    $getActiveNotifications = [];
+
+    $database = databaseLogin();
+
+    $request = "SELECT * FROM notifications WHERE user_id = :user_id and is_active = :is_active ORDER BY id DESC";
+
+    $request_prepare = $database->prepare($request);
+
+    $request_execution = $request_prepare->execute([
+        'user_id' => $user_id,
+        'is_active' => 1
+    ]);
+
+    if ($request_execution) {
+
+        $data = $request_prepare->fetchAll(PDO::FETCH_ASSOC);
+
+        if (!empty($data) && is_array($data)) {
+
+            $getActiveNotifications = $data;
+        }
+    }
+    return $getActiveNotifications;
+}
+
+/** Notifications deactivation
+ * 
+ * @param int $user_id The user id.
+ * 
+ * @return bool The result.
+ */
+function deactivatedNotifications(int $user_id): bool
+{
+    date_default_timezone_set("Africa/Lagos");
+
+    $deactivatedNotifications = false;
+
+    $database = databaseLogin();
+
+    $request = "UPDATE notifications SET is_active = :is_active, updated_at= :updated_at WHERE user_id = :user_id";
+
+    $request_prepare = $database->prepare($request);
+
+    $request_execution = $request_prepare->execute(
+        [
+            'user_id'  => $user_id,
+            'is_active' => 0,
+            'updated_at' => date('Y-m-d H:i:s')
+        ]
+    );
+
+    if ($request_execution) {
+
+        $deactivatedNotifications = true;
+    }
+
+    return $deactivatedNotifications;
+}
+
+/** Delete notification
+ * 
+ * @param int $notification_id.
+ * 
+ * @return bool The result.
+ */
+function deleteNotification(int $notification_id): bool
+{
+    date_default_timezone_set("Africa/Lagos");
+
+    $deleteNotification = false;
+
+    $database = databaseLogin();
+
+    $request = "UPDATE notifications SET is_deleted = :is_deleted, updated_at= :updated_at WHERE id = :notification_id";
+
+    $request_prepare = $database->prepare($request);
+
+    $request_execution = $request_prepare->execute(
+        [
+            'notification_id'  => $notification_id,
+            'is_deleted' => 1,
+            'updated_at' => date('Y-m-d H:i:s')
+        ]
+    );
+
+    if ($request_execution) {
+
+        $deleteNotification = true;
+    }
+
+    return $deleteNotification;
 }

@@ -428,6 +428,7 @@ if (isset($packages_ingrouplistings) && !empty($packages_ingrouplistings)) {
         }
         previewImage(fileInput.files);
     }
+
     function previewImage(files) {
         var preview = document.getElementById('preview');
         preview.innerHTML = "";
@@ -453,6 +454,7 @@ if (isset($packages_ingrouplistings) && !empty($packages_ingrouplistings)) {
         importButton.value = fileName;
         previewimage(fileInput.files);
     }
+
     function previewimage(files) {
         var preview = document.getElementById('_preview');
         preview.innerHTML = "";
@@ -618,6 +620,26 @@ if (isset($packages_ingrouplistings) && !empty($packages_ingrouplistings)) {
         });
     });
 </script>
+
+<!-- Notifications -->
+
+<script>
+    var elements = document.getElementsByClassName("notification");
+    var elementsArray = Array.from(elements);
+
+    for (var i = 0; i < elementsArray.length; i++) {
+        elementsArray[i].addEventListener("click", function() {
+            for (var j = 0; j < elementsArray.length; j++) {
+                elementsArray[j].classList.remove("notification", "text-danger", "badge-blink");
+            }
+        });
+    }
+
+    if (elementsArray.length === 0) {
+        var deactivate = '<?php echo deactivatedNotifications($data['id']); ?>';
+    }
+</script>
+
 
 </body>
 

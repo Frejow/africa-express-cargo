@@ -1,6 +1,37 @@
 <?php
 //Récupération de l'url de la page
 $_SESSION['customer_current_url'] = "{$_SERVER['REQUEST_SCHEME']}://{$_SERVER['HTTP_HOST']}{$_SERVER['REQUEST_URI']}";
+
+$notifications = getNotifications($data['id']);
+$activeNotifications = getActiveNotifications($data['id']);
+
+/*
+$dom = new DOMDocument();
+$dom->loadHTMLFile(__FILE__);
+
+$xpath = new DOMXPath($dom);
+$elements = $xpath->query('//span[contains(@class, "notification")]');
+
+if ($elements->length > 0) {
+    foreach ($elements as $element) {
+        $classAttribute = $element->getAttribute('class');
+
+        $classesToCheck = array('text-danger', 'badge-blink');
+
+        $classList = explode(' ', $classAttribute);
+        $classesPresent = array_intersect($classesToCheck, $classList);
+
+        if (!empty($classesPresent)) {
+            echo "Les classes suivantes sont présentes : " . implode(', ', $classesPresent);
+        } else {
+            echo "Aucune des classes spécifiées n'est présente.";
+        }
+    }
+} else {
+    echo "Aucun élément avec la classe 'notification' n'a été trouvé.";
+}
+*/
+
 ?>
 <!doctype html>
 <html lang="fr">
@@ -77,6 +108,7 @@ $_SESSION['customer_current_url'] = "{$_SERVER['REQUEST_SCHEME']}://{$_SERVER['H
     <link href='<?= PROJECT ?>public/datatables-bs4/css/dataTables.bootstrap4.css' rel="stylesheet">
     <link href='<?= PROJECT ?>public/sweetalert2-theme-bootstrap-4/bootstrap-4.min.css' rel="stylesheet" type="text/css">
     <script src='<?= PROJECT ?>public/js/jquery/jquery-3.6.3.min.js'></script>
+    <script src='<?= PROJECT ?>public/js/ajax.js'></script>
 
     <style>
         @import url('https://rsms.me/inter/inter.css');
@@ -256,13 +288,15 @@ $_SESSION['customer_current_url'] = "{$_SERVER['REQUEST_SCHEME']}://{$_SERVER['H
                             </svg>
                         </a>
                         <div class="nav-item dropdown d-none d-md-flex me-3">
-                            <a href="#" class="nav-link px-0" data-bs-toggle="dropdown" tabindex="-1" aria-label="Show notifications">
+                            <a href="#" class="nav-link px-0" data-bs-auto-close="false" data-bs-toggle="dropdown" tabindex="-1" aria-label="Show notifications">
                                 <!-- Download SVG icon from http://tabler-icons.io/i/bell -->
-                                <svg xmlns="http://www.w3.org/2000/svg" class="icon text-danger badge-blink" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-                                    <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-                                    <path d="M10 5a2 2 0 0 1 4 0a7 7 0 0 1 4 6v3a4 4 0 0 0 2 3h-16a4 4 0 0 0 2 -3v-3a7 7 0 0 1 4 -6" />
-                                    <path d="M9 17v1a3 3 0 0 0 6 0v-1" />
-                                </svg>
+                                <span class="<?php echo(!empty($notifications) && !empty($activeNotifications)) ? 'notification text-danger badge-blink' : '' ?>">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                        <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                                        <path d="M10 5a2 2 0 0 1 4 0a7 7 0 0 1 4 6v3a4 4 0 0 0 2 3h-16a4 4 0 0 0 2 -3v-3a7 7 0 0 1 4 -6" />
+                                        <path d="M9 17v1a3 3 0 0 0 6 0v-1" />
+                                    </svg>
+                                </span>
                                 <!--<span class="badge bg-red badge-blink"></span>-->
                             </a>
                             <div class="dropdown-menu dropdown-menu-arrow dropdown-menu-end dropdown-menu-card" style="max-height: 350px; overflow-y: auto; overflow-x: hidden;">
@@ -273,14 +307,13 @@ $_SESSION['customer_current_url'] = "{$_SERVER['REQUEST_SCHEME']}://{$_SERVER['H
 
                                     <div class="list-group scrollable list-group-flush list-group-hoverable">
                                         <?php
-                                        $notifications = getNotifications($data['id']);
                                         if (!empty($notifications)) {
                                             foreach ($notifications as $key => $notification) {
 
                                         ?>
-                                                <div class="list-group-item">
+                                                <div class="list-group-item <?= 'notification'.$notification['id'] ?> <?= $notification['is_active'] == 1 ? 'bg-orange-lt' : '' ?>" data-notification-class="<?= 'notification'.$notification['id'] ?>">
                                                     <div class="row align-items-center">
-                                                        <div class="col-auto"><span class="status-dot status-dot-animated bg-secondary d-block"></span></div>
+                                                        <div class="col-auto"><span class="status-dot <?= $notification['is_active'] == 1 ? 'status-dot-animated' : '' ?> bg-secondary d-block"></span></div>
                                                         <div class="col text-truncate">
                                                             <a href="#" class="text-body d-block"><?= $notification['type'] ?></a>
                                                             <div class="d-block text-muted text-truncate mt-n1">
@@ -288,7 +321,7 @@ $_SESSION['customer_current_url'] = "{$_SERVER['REQUEST_SCHEME']}://{$_SERVER['H
                                                             </div>
                                                         </div>
                                                         <div class="col-auto">
-                                                            <a href="#" class="list-group-item-actions" title="Supprimer" data-bs-toggle="tooltip" data-bs-placement="left">
+                                                            <a href="#" class="list-group-item-actions delete-icon" data-notification-id="<?= $notification['id'] ?>" title="Supprimer" data-bs-toggle="tooltip" data-bs-placement="left">
                                                                 <svg xmlns="http://www.w3.org/2000/svg" class="icon text-danger" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
                                                                     <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
                                                                     <path d="M4 7h16"></path>
@@ -336,12 +369,14 @@ $_SESSION['customer_current_url'] = "{$_SERVER['REQUEST_SCHEME']}://{$_SERVER['H
                         <ul class="navbar-nav">
                             <li class="nav-item d-lg-none <?= $params[2] == 'notifications' ? 'active' : '' ?>">
                                 <a class="nav-link" href="<?= redirect($_SESSION['theme'], PROJECT . 'customer/dash/notifications') ?>">
-                                    <span class="nav-link-icon d-md-none d-lg-inline-block text-danger badge-blink"><!-- Download SVG icon from http://tabler-icons.io/i/checkbox -->
-                                        <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-                                            <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-                                            <path d="M10 5a2 2 0 0 1 4 0a7 7 0 0 1 4 6v3a4 4 0 0 0 2 3h-16a4 4 0 0 0 2 -3v-3a7 7 0 0 1 4 -6" />
-                                            <path d="M9 17v1a3 3 0 0 0 6 0v-1" />
-                                        </svg>
+                                    <span class="nav-link-icon d-md-none d-lg-inline-block">
+                                        <span class="<?php echo(!empty($notifications) && !empty($activeNotifications)) ? 'notification text-danger badge-blink' : '' ?>">
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                                <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                                                <path d="M10 5a2 2 0 0 1 4 0a7 7 0 0 1 4 6v3a4 4 0 0 0 2 3h-16a4 4 0 0 0 2 -3v-3a7 7 0 0 1 4 -6" />
+                                                <path d="M9 17v1a3 3 0 0 0 6 0v-1" />
+                                            </svg>
+                                        </span>
                                     </span>
                                     <span class="nav-link-title">
                                         Notifications
