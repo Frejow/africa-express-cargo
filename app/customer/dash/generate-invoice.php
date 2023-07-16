@@ -79,7 +79,7 @@ $packages_listings = listings($table, $_SESSION['page'], $_SESSION['rows_per_pag
                 <div class="col-12 text-center col-lg-auto ms-auto d-print-none">
                     <h3>Tous les Colis Livrer et Confirmer</h3>
                     <p class="text-muted">Cocher le ou les colis dont vous voulez générer la facture et cliquez sur le bouton "Générer"</p>
-                    <button type="submit" name="generate" class="btn text-white ms-auto btn-warning">
+                    <button type="submit" name="generate" value="generate" class="btn text-white ms-auto btn-warning">
                         Générer
                     </button>
                 </div>
