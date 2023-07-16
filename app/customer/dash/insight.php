@@ -4,7 +4,13 @@
 
 $invoice_id = $_SESSION['invoice_id'];
 
-$invoice = getInvoice($invoice_id);
+$invoices = getInvoices();
+
+foreach ($invoices as $key => $Invoice) {
+    if ($Invoice['id'] = $invoice_id) {
+        $invoice = $Invoice;
+    }
+}
 
 $packages_linked_to_this_invoice = getAllPackagesLinkedToInvoice($invoice_id);
 
@@ -53,7 +59,7 @@ if (!empty($invoice) && !empty($packages_linked_to_this_invoice)) {
                 <h3 class="card-title"><?= date("d/m/Y", strtotime(explode(' ', $invoice['created_at'])[0])) ?></h3>
             </div>
 
-            <div class="text-center"><img src="<?= PROJECT . "public/images/aec_lightlogo.png" ?>" alt=""></div>
+            <div class="text-center"><img src="<?= PROJECT . "public/images/a_e_c_l.png" ?>" width="125" height="50" alt=""></div>
 
             <div class="card-body">
                 <div class="row">
@@ -130,7 +136,7 @@ if (!empty($invoice) && !empty($packages_linked_to_this_invoice)) {
                         </tr>
                     </table>
                 </div>
-                <div class="text-end"><img src="<?= PROJECT . "public/images/stamp.jpg" ?>" width="150" height="75" alt=""></div>
+                <div class="text-end"><img src="<?= PROJECT . "public/images/stamp.png" ?>" width="150" height="75" alt=""></div>
 
                 <p class="text-muted text-center mt-5">Merci d'avoir choisi Africa Express Cargo. Au plaisir de vous servir de nouveau !</p>
             </div>

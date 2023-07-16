@@ -3136,31 +3136,29 @@ function getAllPackagesLinkedToInvoice(int $invoice_id): array
     return $getAllPackagesLinkedToInvoice;
 }
 
-/** Get specific invoice.
+/** Get all invoices.
  * 
- * @param int $invoice_id
  * 
  * @return array $getInvoice.
  */
-function getInvoice(int $invoice_id): array
+function getInvoices(): array
 {
     $getInvoice = [];
 
     $database = databaseLogin();
 
-    $request = "SELECT * FROM invoices WHERE id = :invoice_id and is_active = :is_active and is_deleted = :is_deleted";
+    $request = "SELECT * FROM invoices WHERE is_active = :is_active and is_deleted = :is_deleted";
 
     $request_prepare = $database->prepare($request);
 
     $request_execution = $request_prepare->execute([
-        'invoice_id' => $invoice_id,
         'is_active' => 1,
         'is_deleted' => 0
     ]);
 
     if ($request_execution) {
 
-        $data = $request_prepare->fetch(PDO::FETCH_ASSOC);
+        $data = $request_prepare->fetchAll(PDO::FETCH_ASSOC);
 
         if (!empty($data) && is_array($data)) {
 

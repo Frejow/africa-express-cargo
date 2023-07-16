@@ -5,8 +5,15 @@ $_SESSION['customer_current_url'] = "{$_SERVER['REQUEST_SCHEME']}://{$_SERVER['H
 $notifications = getNotifications($data['id']);
 $activeNotifications = getActiveNotifications($data['id']);
 
-$invoice_id = $_SESSION['invoice_id'];
-$invoice = getInvoice($invoice_id);
+$invoices = getInvoices();
+
+if (!empty($_SESSION['invoice_id'])) {
+    foreach ($invoices as $key => $Invoice) {
+        if ($Invoice['id'] = $_SESSION['invoice_id']) {
+            $invoice = $Invoice;
+        }
+    }
+}
 
 /*
 $dom = new DOMDocument();
