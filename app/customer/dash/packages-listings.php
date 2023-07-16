@@ -794,7 +794,7 @@ if (isset($packages_listings) && !empty($packages_listings)) {
                         </div><br>
                         <div class="row row-cols g-3">
                             <?php
-                            if (checkPackageIdInPackagesImagesTab($package["id"])) {
+                            if (checkPackageId('packages_images', 'package_id', $package["id"])) {
                                 $select_images = getPackageImages($package["id"]);
                                 if (!empty($select_images)) {
                                     foreach ($select_images as $_key => $value) {

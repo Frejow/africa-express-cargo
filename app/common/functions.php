@@ -1180,18 +1180,20 @@ function getPackageId(string $trackN): array
 
 /** Check package id in packages_images table
  * 
- * @param string $package_id Package id.
+ * @param string $table Table name.
+ * @param string $field_name Package id.
+ * @param int $package_id Package id.
  * 
  * @return bool The result.
  */
-function checkPackageIdInPackagesImagesTab(string $package_id): bool
+function checkPackageId(string $table, string $field_name, int $package_id): bool
 {
 
     $package_id_found = false;
 
     $database = databaseLogin();
 
-    $request = "SELECT package_id FROM packages_images WHERE package_id = :package_id";
+    $request = "SELECT ".$field_name." FROM ".$table." WHERE ".$field_name." = :package_id";
 
     $request_prepare = $database->prepare($request);
 
@@ -1276,7 +1278,6 @@ function listings(string $table, int $page, int $rows_per_page, string $status, 
                 'is_deleted' => 0,
             ]);
         } elseif ($status !== 'Tout Afficher' && $search === 'UNDEFINED') {
-
             $request = "SELECT * FROM " . $table . " WHERE user_id = :user_id and status = :status and is_deleted = :is_deleted ORDER BY id DESC LIMIT " . $rows_per_page . " OFFSET " . ($page - 1) * $rows_per_page;
 
             $request_prepare = $database->prepare($request);
@@ -2037,9 +2038,9 @@ function othListings(string $table, int $page, int $rows_per_page, string $searc
 
     $database = databaseLogin();
 
-    if (is_null($profile)) {
+    if (is_null($profile)  && is_null($cnctdprofile_id)) {
 
-        if ($orderBy === 'Par défaut' && $search === 'UNDEFINED') {
+        if (($orderBy === 'Par défaut') && $search === 'UNDEFINED') {
 
             $request = "SELECT * FROM " . $table . " WHERE is_deleted = :is_deleted ORDER BY id DESC LIMIT " . $rows_per_page . " OFFSET " . ($page - 1) * $rows_per_page;
 
@@ -2048,7 +2049,7 @@ function othListings(string $table, int $page, int $rows_per_page, string $searc
             $request_execution = $request_prepare->execute([
                 'is_deleted' => 0,
             ]);
-        } elseif ($orderBy === 'Par défaut' && $search !== 'UNDEFINED') {
+        } elseif (($orderBy === 'Par défaut') && $search !== 'UNDEFINED') {
 
             $request = "SELECT * FROM " . $table . " WHERE is_deleted = :is_deleted AND ";
 
@@ -2325,6 +2326,70 @@ function othListings(string $table, int $page, int $rows_per_page, string $searc
 
             $request_execution = $request_prepare->execute([
                 'profile' => $profile,
+                'is_deleted' => 0,
+            ]);
+        }
+    } 
+    //invoices
+    elseif (is_null($profile) && !is_null($cnctdprofile_id)) {
+        if ($orderBy === 'Plus récentes' && $search === 'UNDEFINED') {
+
+            $request = "SELECT * FROM " . $table . " WHERE user_id = " . $cnctdprofile_id . " and is_deleted = :is_deleted ORDER BY id DESC LIMIT " . $rows_per_page . " OFFSET " . ($page - 1) * $rows_per_page;
+
+            $request_prepare = $database->prepare($request);
+
+            $request_execution = $request_prepare->execute([
+                'is_deleted' => 0,
+            ]);
+        } elseif ($orderBy === 'Plus récentes' && $search !== 'UNDEFINED') {
+
+            $request = "SELECT * FROM " . $table . " WHERE user_id = " . $cnctdprofile_id . " and is_deleted = :is_deleted AND ";
+
+            $search_terms_array = str_split($search);
+
+            $search_terms_count = count($search_terms_array);
+
+            for ($i = 0; $i < $search_terms_count; $i++) {
+                $request .= $researchBy . " LIKE '%" . $search_terms_array[$i] . "%'";
+                if ($i != $search_terms_count - 1) {
+                    $request .= " AND ";
+                }
+            }
+            $request .= " ORDER BY id DESC LIMIT " . $rows_per_page . " OFFSET " . ($page - 1) * $rows_per_page;
+
+            $request_prepare = $database->prepare($request);
+
+            $request_execution = $request_prepare->execute([
+                'is_deleted' => 0,
+            ]);
+        } elseif ($orderBy === 'Plus anciennes' && $search === 'UNDEFINED') {
+
+            $request = "SELECT * FROM " . $table . " WHERE user_id = " . $cnctdprofile_id . " and is_deleted = :is_deleted ORDER BY id ASC LIMIT " . $rows_per_page . " OFFSET " . ($page - 1) * $rows_per_page;
+
+            $request_prepare = $database->prepare($request);
+
+            $request_execution = $request_prepare->execute([
+                'is_deleted' => 0,
+            ]);
+        } elseif ($orderBy === 'Plus anciennes' && $search !== 'UNDEFINED') {
+
+            $request = "SELECT * FROM " . $table . " WHERE user_id = " . $cnctdprofile_id . " and is_deleted = :is_deleted AND ";
+
+            $search_terms_array = str_split($search);
+
+            $search_terms_count = count($search_terms_array);
+
+            for ($i = 0; $i < $search_terms_count; $i++) {
+                $request .= $researchBy . " LIKE '%" . $search_terms_array[$i] . "%'";
+                if ($i != $search_terms_count - 1) {
+                    $request .= " AND ";
+                }
+            }
+            $request .= " ORDER BY id ASC LIMIT " . $rows_per_page . " OFFSET " . ($page - 1) * $rows_per_page;
+
+            $request_prepare = $database->prepare($request);
+
+            $request_execution = $request_prepare->execute([
                 'is_deleted' => 0,
             ]);
         }
@@ -2902,4 +2967,205 @@ function deleteNotification(int $notification_id): bool
     }
 
     return $deleteNotification;
+}
+
+/** Invoices insertion
+ * 
+ * @param string $invoice_number The invoice number.
+ * @param int $user_id The user id.
+ * 
+ * @return bool The result.
+ */
+function insertInvoice(string $invoice_number, int $user_id): bool
+{
+
+    $insertInvoice = false;
+
+    $database = databaseLogin();
+
+    $request = "INSERT INTO invoices (invoices_number, user_id) VALUES (:invoice_number, :user_id)";
+
+    $request_prepare = $database->prepare($request);
+
+    $request_execution = $request_prepare->execute(
+        [
+            'invoice_number' => $invoice_number,
+            'user_id' => $user_id,
+        ]
+    );
+
+    if ($request_execution) {
+        $insertInvoice = true;
+    }
+
+    return $insertInvoice;
+}
+
+/** Get invoice ID.
+ * 
+ * @param string $invoice_number
+ * 
+ * @return array $getNotifications.
+ */
+function getInvoiceId(string $invoice_number): array
+{
+    $getInvoiceId = [];
+
+    $database = databaseLogin();
+
+    $request = "SELECT * FROM invoices WHERE invoices_number = :invoice_number and is_deleted = :is_deleted ORDER BY id DESC";
+
+    $request_prepare = $database->prepare($request);
+
+    $request_execution = $request_prepare->execute([
+        'invoice_number' => $invoice_number,
+        'is_deleted' => 0
+    ]);
+
+    if ($request_execution) {
+
+        $data = $request_prepare->fetch(PDO::FETCH_ASSOC);
+
+        if (!empty($data) && is_array($data)) {
+
+            $getInvoiceId = $data;
+        }
+    }
+    return $getInvoiceId;
+}
+
+/** Linked package to invoice
+ * 
+ * @param int $package_to_linked_id Packages group id.
+ * @param string $invoice_id Package tracking number.
+ * 
+ * @return bool The result.
+ */
+function linkedPackageToInvoice(int $package_to_linked_id, string $invoice_id): bool
+{
+    date_default_timezone_set("Africa/Lagos");
+
+    $linkedPackageToInvoice = false;
+
+    $database = databaseLogin();
+
+    $request = "UPDATE package SET invoice_id = :invoice_id, updated_on= :updated_on WHERE id = :package_to_linked_id";
+
+    $request_prepare = $database->prepare($request);
+
+    $request_execution = $request_prepare->execute(
+        [
+            'package_to_linked_id'  => $package_to_linked_id,
+            'invoice_id' => $invoice_id,
+            'updated_on' => date('Y-m-d H:i:s')
+        ]
+    );
+
+    if ($request_execution) {
+
+        $linkedPackageToInvoice = true;
+    }
+
+    return $linkedPackageToInvoice;
+}
+
+/** Delete invoice
+ * 
+ * @param int $invoice_id.
+ * 
+ * @return bool The result.
+ */
+function deleteInvoice(int $invoice_id): bool
+{
+    date_default_timezone_set("Africa/Lagos");
+
+    $deleteInvoice = false;
+
+    $database = databaseLogin();
+
+    $request = "UPDATE invoices SET is_deleted = :is_deleted, updated_at= :updated_at WHERE id = :invoice_id";
+
+    $request_prepare = $database->prepare($request);
+
+    $request_execution = $request_prepare->execute(
+        [
+            'invoice_id'  => $invoice_id,
+            'is_deleted' => 1,
+            'updated_at' => date('Y-m-d H:i:s')
+        ]
+    );
+
+    if ($request_execution) {
+
+        $deleteInvoice = true;
+    }
+
+    return $deleteInvoice;
+}
+
+/** Get all packages linked to an invoice
+ * 
+ * @param int $invoice_id Invoice id.
+ * 
+ * @return array $getAllPackagesLinkedToInvoice All packages concerned.
+ */
+function getAllPackagesLinkedToInvoice(int $invoice_id): array
+{
+    $getAllPackagesLinkedToInvoice = [];
+
+    $database = databaseLogin();
+
+    $request = "SELECT * FROM package WHERE invoice_id = :invoice_id and is_deleted = :is_deleted ORDER BY id DESC";
+
+    $request_prepare = $database->prepare($request);
+
+    $request_execution = $request_prepare->execute([
+        'invoice_id' => $invoice_id,
+        'is_deleted' => 0
+    ]);
+
+    if ($request_execution) {
+
+        $data = $request_prepare->fetchAll(PDO::FETCH_ASSOC);
+
+        if (!empty($data) && is_array($data)) {
+
+            $getAllPackagesLinkedToInvoice = $data;
+        }
+    }
+    return $getAllPackagesLinkedToInvoice;
+}
+
+/** Get specific invoice.
+ * 
+ * @param int $invoice_id
+ * 
+ * @return array $getInvoice.
+ */
+function getInvoice(int $invoice_id): array
+{
+    $getInvoice = [];
+
+    $database = databaseLogin();
+
+    $request = "SELECT * FROM invoices WHERE id = :invoice_id and is_active = :is_active and is_deleted = :is_deleted";
+
+    $request_prepare = $database->prepare($request);
+
+    $request_execution = $request_prepare->execute([
+        'invoice_id' => $invoice_id,
+        'is_active' => 1,
+        'is_deleted' => 0
+    ]);
+
+    if ($request_execution) {
+
+        $data = $request_prepare->fetch(PDO::FETCH_ASSOC);
+
+        if (!empty($data) && is_array($data)) {
+
+            $getInvoice = $data;
+        }
+    }
+    return $getInvoice;
 }

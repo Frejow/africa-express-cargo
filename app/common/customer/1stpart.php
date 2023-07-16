@@ -5,6 +5,9 @@ $_SESSION['customer_current_url'] = "{$_SERVER['REQUEST_SCHEME']}://{$_SERVER['H
 $notifications = getNotifications($data['id']);
 $activeNotifications = getActiveNotifications($data['id']);
 
+$invoice_id = $_SESSION['invoice_id'];
+$invoice = getInvoice($invoice_id);
+
 /*
 $dom = new DOMDocument();
 $dom->loadHTMLFile(__FILE__);
@@ -87,6 +90,16 @@ if ($elements->length > 0) {
                 break;
             case "invoices":
                 echo "<title>Mes Factures</title>";
+                break;
+            case "generate-invoice":
+                echo "<title>Générer facture</title>";
+                break;
+            case "insight":
+                if (!empty($invoice)) {
+                    echo '<title>Facture N°' . $invoice['invoices_number'] . '</title>';
+                } else {
+                    echo "<title>Aperçu</title>";
+                }
                 break;
             default:
                 echo "<title>Erreur 404</title>";
@@ -236,6 +249,21 @@ if ($elements->length > 0) {
             max-width: 250px;
             max-height: 250px;
         }
+
+        @media print {
+            @page {
+                margin: 0;
+            }
+
+            body {
+                margin: 0;
+            }
+
+            header,
+            footer {
+                display: none;
+            }
+        }
     </style>
 </head>
 
@@ -290,7 +318,7 @@ if ($elements->length > 0) {
                         <div class="nav-item dropdown d-none d-md-flex me-3">
                             <a href="#" class="nav-link px-0" data-bs-auto-close="false" data-bs-toggle="dropdown" tabindex="-1" aria-label="Show notifications">
                                 <!-- Download SVG icon from http://tabler-icons.io/i/bell -->
-                                <span class="<?php echo(!empty($notifications) && !empty($activeNotifications)) ? 'notification text-danger badge-blink' : '' ?>">
+                                <span class="<?php echo (!empty($notifications) && !empty($activeNotifications)) ? 'notification text-danger badge-blink' : '' ?>">
                                     <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
                                         <path stroke="none" d="M0 0h24v24H0z" fill="none" />
                                         <path d="M10 5a2 2 0 0 1 4 0a7 7 0 0 1 4 6v3a4 4 0 0 0 2 3h-16a4 4 0 0 0 2 -3v-3a7 7 0 0 1 4 -6" />
@@ -311,11 +339,11 @@ if ($elements->length > 0) {
                                             foreach ($notifications as $key => $notification) {
 
                                         ?>
-                                                <div class="list-group-item <?= 'notification'.$notification['id'] ?> <?= $notification['is_active'] == 1 ? 'bg-orange-lt' : '' ?>" data-notification-class="<?= 'notification'.$notification['id'] ?>">
+                                                <div class="list-group-item <?= 'notification' . $notification['id'] ?> <?= $notification['is_active'] == 1 ? 'bg-orange-lt' : '' ?>" data-notification-class="<?= 'notification' . $notification['id'] ?>">
                                                     <div class="row align-items-center">
                                                         <div class="col-auto"><span class="status-dot <?= $notification['is_active'] == 1 ? 'status-dot-animated' : '' ?> bg-secondary d-block"></span></div>
                                                         <div class="col text-truncate">
-                                                            <a href="#" class="text-body d-block"><?= $notification['type'] ?></a>
+                                                            <a href="#" class="text-body d-block"><?= $notification['type'] . ' [ ' . date("d/m/Y", strtotime(explode(' ', $notification['created_at'])[0]))  . ' ]' ?></a>
                                                             <div class="d-block text-muted text-truncate mt-n1">
                                                                 <?= $notification['message'] ?>
                                                             </div>
@@ -370,7 +398,7 @@ if ($elements->length > 0) {
                             <li class="nav-item d-lg-none <?= $params[2] == 'notifications' ? 'active' : '' ?>">
                                 <a class="nav-link" href="<?= redirect($_SESSION['theme'], PROJECT . 'customer/dash/notifications') ?>">
                                     <span class="nav-link-icon d-md-none d-lg-inline-block">
-                                        <span class="<?php echo(!empty($notifications) && !empty($activeNotifications)) ? 'notification text-danger badge-blink' : '' ?>">
+                                        <span class="<?php echo (!empty($notifications) && !empty($activeNotifications)) ? 'notification text-danger badge-blink' : '' ?>">
                                             <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
                                                 <path stroke="none" d="M0 0h24v24H0z" fill="none" />
                                                 <path d="M10 5a2 2 0 0 1 4 0a7 7 0 0 1 4 6v3a4 4 0 0 0 2 3h-16a4 4 0 0 0 2 -3v-3a7 7 0 0 1 4 -6" />
@@ -480,7 +508,12 @@ if ($elements->length > 0) {
                                     </span>
                                 </a>
                             </li>
-                            <li class="nav-item <?= $params[2] == 'invoices' ? 'active' : '' ?>">
+                            <li class="nav-item 
+                            <?php
+                            if ($params[2] == 'invoices' || $params[2] == 'generate-invoice') {
+                                echo 'active';
+                            }
+                            ?>">
                                 <a class="nav-link" href="<?= redirect($_SESSION['theme'], PROJECT . 'customer/dash/invoices') ?>">
                                     <span class="nav-link-icon d-md-none d-lg-inline-block"><!-- Download SVG icon from http://tabler-icons.io/i/checkbox -->
                                         <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
