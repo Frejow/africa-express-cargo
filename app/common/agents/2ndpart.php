@@ -441,6 +441,20 @@
     });
 </script>
 
+<!--select customer options to submit form-->
+
+<script>
+    $(document).ready(function() {
+        $('#mySelect4').on('select2:select', function (e) {
+            var value = e.params.data.element.dataset.value;
+            if (value) {
+                $('#myForm').append('<input type="hidden" name="customerSelect" value="' + value + '">');
+                $('#myForm').submit();
+            }
+        });
+    });
+</script>
+
 <!--Display block for package addition-->
 
 <script>

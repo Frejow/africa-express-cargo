@@ -1,4 +1,4 @@
-<?php include 'app/common/customer/1stpart.php'; ?>
+<?php include 'app/common/agents/1stpart.php'; ?>
 
 <?php
 
@@ -13,6 +13,8 @@ foreach ($invoices as $key => $Invoice) {
 }
 
 $user = '';
+
+$user = getUserById($invoice['user_id']); //die (var_dump($user));
 
 $packages_linked_to_this_invoice = getAllPackagesLinkedToInvoice($invoice_id);
 
@@ -81,9 +83,9 @@ if (!empty($invoice) && !empty($packages_linked_to_this_invoice)) {
                             </address>
                         </div>
                         <div class="col-6 text-end">
-                            <p class="h3"><?= strtoupper($data['name']) . ' ' . $data['first_names'] ?></p>
+                            <p class="h3"><?= strtoupper($user['name']) . ' ' . $user['first_names'] ?></p>
                             <address>
-                                <?= $data['mail'] ?>
+                                <?= $user['mail'] ?>
                             </address>
                         </div>
                         <div class="col-12 my-5">
@@ -174,5 +176,5 @@ if (!empty($invoice) && !empty($packages_linked_to_this_invoice)) {
 
 <?php
 }
-include 'app/common/customer/2ndpart.php';
+include 'app/common/agents/2ndpart.php';
 ?>

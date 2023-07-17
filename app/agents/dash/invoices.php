@@ -1,5 +1,5 @@
 <?php
-include 'app/common/customer/1stpart.php';
+include 'app/common/agents/1stpart.php';
 
 $table = "invoices";
 
@@ -39,14 +39,41 @@ if (isset($_SESSION['research']) && !empty($_SESSION['research'])) {
     $_SESSION['search'] = $_SESSION['research'];
 }
 
-$invoices_listings = othListings($table, $_SESSION['page'], $_SESSION['rows_per_page'], strtoupper($_SESSION['search']), $_SESSION['research_by'], $_SESSION['filter'], null, $data['id']);
+$invoices_listings = othListings($table, $_SESSION['page'], $_SESSION['rows_per_page'], strtoupper($_SESSION['search']), $_SESSION['research_by'], $_SESSION['filter'], null, null);
 
 $rows = countRowsInTable($table, null, $data['id']);
 
 ?>
 
-<form id="myForm" action="<?= redirect($_SESSION['theme'], PROJECT . 'customer/dash-treatment/invoices') ?>" method="post">
+<form id="myForm" action="<?= redirect($_SESSION['theme'], PROJECT . 'agents/dash-treatment/invoices') ?>" method="post">
     <div class="page-header d-print-none">
+        <div class="container-xl d-flex" style="justify-content: center;">
+            <div class="row g-2 align-items-center " style="flex-wrap: wrap;">
+                <!-- Page title actions -->
+                <div class="col-12 col-lg-auto ms-auto d-print-none">
+                    <div class="btn-list justify-content-center">
+                        <a href="<?= redirect($_SESSION['theme'], PROJECT . 'agents/dash/generate-invoice') ?>" class="btn d-none text-white d-sm-inline-block btn-warning">
+                            <!-- Download SVG icon from http://tabler-icons.io/i/plus -->
+                            <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                                <path d="M12 5l0 14" />
+                                <path d="M5 12l14 0" />
+                            </svg>
+                            Générer une nouvelle facture
+                        </a>
+                        <a href="<?= redirect($_SESSION['theme'], PROJECT . 'agents/dash/generate-invoice') ?>" class="btn d-sm-none text-white btn-warning">
+                            <!-- Download SVG icon from http://tabler-icons.io/i/plus -->
+                            <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                                <path d="M12 5l0 14" />
+                                <path d="M5 12l14 0" />
+                            </svg>
+                            Nouvelle facture
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
     <div class="page-body">
         <div class="container-xl text-center">
@@ -418,7 +445,7 @@ if (isset($invoices_listings) && !empty($invoices_listings)) {
 }
 ?>
 
-<?php include 'app/common/customer/2ndpart.php';
+<?php include 'app/common/agents/2ndpart.php';
 
 if (isset($_SESSION['next_page']) && $_SESSION['next_page'] == $_SESSION['page']) {
     unset($_SESSION['next_page']);

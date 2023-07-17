@@ -1,6 +1,17 @@
 <?php
 //Récupération de l'url de la page
 $_SESSION['agent_current_url'] = "{$_SERVER['REQUEST_SCHEME']}://{$_SERVER['HTTP_HOST']}{$_SERVER['REQUEST_URI']}";
+
+
+$invoices = getInvoices();
+
+if (!empty($_SESSION['invoice_id'])) {
+    foreach ($invoices as $key => $Invoice) {
+        if ($Invoice['id'] = $_SESSION['invoice_id']) {
+            $invoice = $Invoice;
+        }
+    }
+}
 ?>
 <!doctype html>
 <html lang="fr">
@@ -86,6 +97,19 @@ $_SESSION['agent_current_url'] = "{$_SERVER['REQUEST_SCHEME']}://{$_SERVER['HTTP
                 break;
             case "agents-listings":
                 echo "<title>Liste des agents</title>";
+                break;
+            case "invoices":
+                echo "<title>Factures</title>";
+                break;
+            case "generate-invoice":
+                echo "<title>Générer facture</title>";
+                break;
+            case "insight":
+                if (!empty($invoice)) {
+                    echo '<title>Facture N°' . $invoice['invoices_number'] . '</title>';
+                } else {
+                    echo "<title>Aperçu</title>";
+                }
                 break;
             default:
                 echo "<title>Erreur 404</title>";
@@ -269,9 +293,9 @@ $_SESSION['agent_current_url'] = "{$_SERVER['REQUEST_SCHEME']}://{$_SERVER['HTTP
                                 <path d="M3 12h1m8 -9v1m8 8h1m-9 8v1m-6.4 -15.4l.7 .7m12.1 -.7l-.7 .7m0 11.4l.7 .7m-12.1 -.7l-.7 .7" />
                             </svg>
                         </a>
+                        <!--
                         <div class="nav-item dropdown d-none d-md-flex me-3">
                             <a href="#" class="nav-link px-0" data-bs-toggle="dropdown" tabindex="-1" aria-label="Show notifications">
-                                <!-- Download SVG icon from http://tabler-icons.io/i/bell -->
                                 <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
                                     <path stroke="none" d="M0 0h24v24H0z" fill="none" />
                                     <path d="M10 5a2 2 0 0 1 4 0a7 7 0 0 1 4 6v3a4 4 0 0 0 2 3h-16a4 4 0 0 0 2 -3v-3a7 7 0 0 1 4 -6" />
@@ -296,7 +320,6 @@ $_SESSION['agent_current_url'] = "{$_SERVER['REQUEST_SCHEME']}://{$_SERVER['HTTP
                                                 </div>
                                                 <div class="col-auto">
                                                     <a href="#" class="list-group-item-actions">
-                                                        <!-- Download SVG icon from http://tabler-icons.io/i/star -->
                                                         <svg xmlns="http://www.w3.org/2000/svg" class="icon text-muted" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
                                                             <path stroke="none" d="M0 0h24v24H0z" fill="none" />
                                                             <path d="M12 17.75l-6.172 3.245l1.179 -6.873l-5 -4.867l6.9 -1l3.086 -6.253l3.086 6.253l6.9 1l-5 4.867l1.179 6.873z" />
@@ -316,7 +339,6 @@ $_SESSION['agent_current_url'] = "{$_SERVER['REQUEST_SCHEME']}://{$_SERVER['HTTP
                                                 </div>
                                                 <div class="col-auto">
                                                     <a href="#" class="list-group-item-actions show">
-                                                        <!-- Download SVG icon from http://tabler-icons.io/i/star -->
                                                         <svg xmlns="http://www.w3.org/2000/svg" class="icon text-yellow" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
                                                             <path stroke="none" d="M0 0h24v24H0z" fill="none" />
                                                             <path d="M12 17.75l-6.172 3.245l1.179 -6.873l-5 -4.867l6.9 -1l3.086 -6.253l3.086 6.253l6.9 1l-5 4.867l1.179 6.873z" />
@@ -336,7 +358,6 @@ $_SESSION['agent_current_url'] = "{$_SERVER['REQUEST_SCHEME']}://{$_SERVER['HTTP
                                                 </div>
                                                 <div class="col-auto">
                                                     <a href="#" class="list-group-item-actions">
-                                                        <!-- Download SVG icon from http://tabler-icons.io/i/star -->
                                                         <svg xmlns="http://www.w3.org/2000/svg" class="icon text-muted" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
                                                             <path stroke="none" d="M0 0h24v24H0z" fill="none" />
                                                             <path d="M12 17.75l-6.172 3.245l1.179 -6.873l-5 -4.867l6.9 -1l3.086 -6.253l3.086 6.253l6.9 1l-5 4.867l1.179 6.873z" />
@@ -356,7 +377,6 @@ $_SESSION['agent_current_url'] = "{$_SERVER['REQUEST_SCHEME']}://{$_SERVER['HTTP
                                                 </div>
                                                 <div class="col-auto">
                                                     <a href="#" class="list-group-item-actions">
-                                                        <!-- Download SVG icon from http://tabler-icons.io/i/star -->
                                                         <svg xmlns="http://www.w3.org/2000/svg" class="icon text-muted" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
                                                             <path stroke="none" d="M0 0h24v24H0z" fill="none" />
                                                             <path d="M12 17.75l-6.172 3.245l1.179 -6.873l-5 -4.867l6.9 -1l3.086 -6.253l3.086 6.253l6.9 1l-5 4.867l1.179 6.873z" />
@@ -369,6 +389,7 @@ $_SESSION['agent_current_url'] = "{$_SERVER['REQUEST_SCHEME']}://{$_SERVER['HTTP
                                 </div>
                             </div>
                         </div>
+                        -->
                     </div>
                     <div class="nav-item dropdown">
                         <a href="#" class="nav-link d-flex lh-1 text-reset p-0" data-bs-toggle="dropdown" aria-label="Open user menu">
@@ -490,6 +511,25 @@ $_SESSION['agent_current_url'] = "{$_SERVER['REQUEST_SCHEME']}://{$_SERVER['HTTP
                                 </span>
                                 <span class="nav-link-title">
                                     Type d'envoi
+                                </span>
+                            </a>
+                        </li>
+                        <li class="nav-item 
+                            <?php
+                            if ($params[2] == 'invoices' || $params[2] == 'generate-invoice') {
+                                echo 'active';
+                            }
+                            ?>
+                            ">
+                            <a class="nav-link" href="<?= redirect($_SESSION['theme'], PROJECT . 'agents/dash/invoices') ?>">
+                                <span class="nav-link-icon d-md-none d-lg-inline-block">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                        <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                                        <path d="M5 21v-16a2 2 0 0 1 2 -2h10a2 2 0 0 1 2 2v16l-3 -2l-2 2l-2 -2l-2 2l-2 -2l-3 2m4 -14h6m-6 4h6m-2 4h2"></path>
+                                    </svg>
+                                </span>
+                                <span class="nav-link-title">
+                                    Factures
                                 </span>
                             </a>
                         </li>

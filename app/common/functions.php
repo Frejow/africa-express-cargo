@@ -2131,6 +2131,68 @@ function othListings(string $table, int $page, int $rows_per_page, string $searc
                 'is_deleted' => 0,
             ]);
         }
+        //invoices
+        if ($orderBy === 'Plus récentes' && $search === 'UNDEFINED') {
+
+            $request = "SELECT * FROM " . $table . " WHERE is_deleted = :is_deleted ORDER BY id DESC LIMIT " . $rows_per_page . " OFFSET " . ($page - 1) * $rows_per_page;
+
+            $request_prepare = $database->prepare($request);
+
+            $request_execution = $request_prepare->execute([
+                'is_deleted' => 0,
+            ]);
+        } elseif ($orderBy === 'Plus récentes' && $search !== 'UNDEFINED') {
+
+            $request = "SELECT * FROM " . $table . " WHERE is_deleted = :is_deleted AND ";
+
+            $search_terms_array = str_split($search);
+
+            $search_terms_count = count($search_terms_array);
+
+            for ($i = 0; $i < $search_terms_count; $i++) {
+                $request .= $researchBy . " LIKE '%" . $search_terms_array[$i] . "%'";
+                if ($i != $search_terms_count - 1) {
+                    $request .= " AND ";
+                }
+            }
+            $request .= " ORDER BY id DESC LIMIT " . $rows_per_page . " OFFSET " . ($page - 1) * $rows_per_page;
+
+            $request_prepare = $database->prepare($request);
+
+            $request_execution = $request_prepare->execute([
+                'is_deleted' => 0,
+            ]);
+        } elseif ($orderBy === 'Plus anciennes' && $search === 'UNDEFINED') {
+
+            $request = "SELECT * FROM " . $table . " WHERE and is_deleted = :is_deleted ORDER BY id ASC LIMIT " . $rows_per_page . " OFFSET " . ($page - 1) * $rows_per_page;
+
+            $request_prepare = $database->prepare($request);
+
+            $request_execution = $request_prepare->execute([
+                'is_deleted' => 0,
+            ]);
+        } elseif ($orderBy === 'Plus anciennes' && $search !== 'UNDEFINED') {
+
+            $request = "SELECT * FROM " . $table . " WHERE and is_deleted = :is_deleted AND ";
+
+            $search_terms_array = str_split($search);
+
+            $search_terms_count = count($search_terms_array);
+
+            for ($i = 0; $i < $search_terms_count; $i++) {
+                $request .= $researchBy . " LIKE '%" . $search_terms_array[$i] . "%'";
+                if ($i != $search_terms_count - 1) {
+                    $request .= " AND ";
+                }
+            }
+            $request .= " ORDER BY id ASC LIMIT " . $rows_per_page . " OFFSET " . ($page - 1) * $rows_per_page;
+
+            $request_prepare = $database->prepare($request);
+
+            $request_execution = $request_prepare->execute([
+                'is_deleted' => 0,
+            ]);
+        }
     } elseif (!is_null($profile) && is_null($cnctdprofile_id)) {
 
         if ($orderBy === 'Par défaut' && $search === 'UNDEFINED') {
@@ -2973,17 +3035,18 @@ function deleteNotification(int $notification_id): bool
  * 
  * @param string $invoice_number The invoice number.
  * @param int $user_id The user id.
+ * @param string $payment_method.
  * 
  * @return bool The result.
  */
-function insertInvoice(string $invoice_number, int $user_id): bool
+function insertInvoice(string $invoice_number, int $user_id, string $payment_method): bool
 {
 
     $insertInvoice = false;
 
     $database = databaseLogin();
 
-    $request = "INSERT INTO invoices (invoices_number, user_id) VALUES (:invoice_number, :user_id)";
+    $request = "INSERT INTO invoices (invoices_number, user_id, payment_method) VALUES (:invoice_number, :user_id, :payment_method)";
 
     $request_prepare = $database->prepare($request);
 
@@ -2991,6 +3054,7 @@ function insertInvoice(string $invoice_number, int $user_id): bool
         [
             'invoice_number' => $invoice_number,
             'user_id' => $user_id,
+            'payment_method' => $payment_method
         ]
     );
 
@@ -3166,4 +3230,73 @@ function getInvoices(): array
         }
     }
     return $getInvoice;
+}
+
+/** Get user information's
+ * 
+ * @param int $id The user id.
+ * 
+ * @return array $getUserById Updated user information.
+ */
+function getUserById(int $id)
+{
+
+    $getUserById = [];
+
+    $database = databaseLogin();
+
+    $request = "SELECT * FROM user WHERE id=:id";
+
+    $request_prepare = $database->prepare($request);
+
+    $request_execution = $request_prepare->execute([
+        'id' => $id
+    ]);
+
+    if ($request_execution) {
+
+        $data = $request_prepare->fetch(PDO::FETCH_ASSOC);
+
+        if (!empty($data) && is_array($data)) {
+
+            $getUserById = $data;
+        }
+    }
+
+    return $getUserById;
+}
+
+/** Update package table
+ * 
+ * @param int $package_id.
+ * @param string $status.
+ * 
+ * @return bool The result.
+ */
+function updatePackageAfterInvoice(int $package_id, string $status): bool
+{
+    date_default_timezone_set("Africa/Lagos");
+
+    $updatePackageAfterInvoice = false;
+
+    $database = databaseLogin();
+
+    $request = "UPDATE package SET status = :status, updated_at= :updated_at WHERE id = :package_id";
+
+    $request_prepare = $database->prepare($request);
+
+    $request_execution = $request_prepare->execute(
+        [
+            'package_id'  => $package_id,
+            'status' => $status,
+            'updated_at' => date('Y-m-d H:i:s')
+        ]
+    );
+
+    if ($request_execution) {
+
+        $updatePackageAfterInvoice = true;
+    }
+
+    return $updatePackageAfterInvoice;
 }

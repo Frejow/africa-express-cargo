@@ -68,7 +68,6 @@ foreach ($product as $key => $prod) {
                                     <div class="mb-3">
                                         <label for="status" class="form-label">Statut <span class="text-danger">[ Requis ]</span></label>
                                         <select type="text" class="form-select" name="status" id="status">
-                                            <option <?php echo ((!empty($updata["status"]) && $updata["status"] == 'Livrer') || $package_to_edit['status'] == 'Livrer') ? "selected" : "" ?> value="Livrer"><span class="badge bg-success me-1"></span>Livrer</option>
                                             <option <?php echo ((!empty($updata["status"]) && $updata["status"] == 'Entrepôt Bénin') || $package_to_edit['status'] == 'Entrepôt Bénin') ? "selected" : "" ?> value="Entrepôt Bénin"><span class="badge bg-secondary me-1"></span>Entrepôt Bénin</option>
                                             <option <?php echo ((!empty($updata["status"]) && $updata["status"] == 'Entrepôt Chine') || $package_to_edit['status'] == 'Entrepôt Chine') ? "selected" : "" ?> value="Entrepôt Chine"><span class="badge bg-primary me-1"></span>Entrepôt Chine</option>
                                             <option <?php echo ((!empty($updata["status"]) && $updata["status"] == 'En transit') || $package_to_edit['status'] == 'En transit') ? "selected" : "" ?> value="En transit"><span class="badge bg-warning me-1"></span>En transit</option>

@@ -141,7 +141,7 @@ if (empty($_POST['generate'])) {
 
         if ($idchecked[sizeof($packages_to_linked_id) - 1] = 'Checked') {
 
-            if (insertInvoice($invoice_number, $data['id'])) {
+            if (insertInvoice($invoice_number, $data['id'], $payment_method)) {
 
                 $invoice_id = getInvoiceId($invoice_number);
 

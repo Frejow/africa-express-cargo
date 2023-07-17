@@ -140,8 +140,6 @@ $rows = countRowsInTable($table, $_SESSION['type'], null);
 
                         <div class="card-body border-bottom py-3">
 
-
-
                             <div class="row">
                                 <!-- 
                                     Bloc select de sélection des différentes valeurs proposées pour le nombre de colis à 
@@ -429,17 +427,19 @@ $rows = countRowsInTable($table, $_SESSION['type'], null);
                                                             </button>
                                                         </span>
                                                     </td>
-                                                <?php
+                                                    <?php
                                                 } else {
-                                                ?>
-                                                    <td class="text-end">
-                                                        <span class="">
-                                                            <button type="submit" name="update_package" value="<?= $package['id'] ?>" class="btn-link link-warning">
-                                                                Mettre à jour
-                                                            </button>
-                                                        </span>
-                                                    </td>
+                                                    if ($package['status'] != 'Livrer') {
+                                                    ?>
+                                                        <td class="text-end">
+                                                            <span class="">
+                                                                <button type="submit" name="update_package" value="<?= $package['id'] ?>" class="btn-link link-warning">
+                                                                    Mettre à jour
+                                                                </button>
+                                                            </span>
+                                                        </td>
                                                 <?php
+                                                    }
                                                 }
                                                 ?>
                                             </tr>
