@@ -148,3 +148,21 @@ if (!empty($update_package)) {
 //Package updating
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+//Insight
+
+if (!empty($_POST['insight'])) {
+
+    $_SESSION['invoice_id'] = $_POST['insight'];
+
+    header("location:". redirect($_SESSION['theme'], PROJECT.'agents/dash/insight'));
+
+} else {
+
+    header("location:". redirect($_SESSION['theme'], PROJECT.'agents/dash/invoices'));
+
+}
+
+//Insight
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

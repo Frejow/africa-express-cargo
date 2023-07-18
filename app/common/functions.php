@@ -3281,7 +3281,7 @@ function updatePackageAfterInvoice(int $package_id, string $status): bool
 
     $database = databaseLogin();
 
-    $request = "UPDATE package SET status = :status, updated_at= :updated_at WHERE id = :package_id";
+    $request = "UPDATE package SET status = :status, updated_on= :updated_on WHERE id = :package_id";
 
     $request_prepare = $database->prepare($request);
 
@@ -3289,7 +3289,7 @@ function updatePackageAfterInvoice(int $package_id, string $status): bool
         [
             'package_id'  => $package_id,
             'status' => $status,
-            'updated_at' => date('Y-m-d H:i:s')
+            'updated_on' => date('Y-m-d H:i:s')
         ]
     );
 

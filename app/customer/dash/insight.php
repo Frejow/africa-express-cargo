@@ -26,7 +26,7 @@ if (!empty($packages_linked_to_this_invoice)) {
     }
 }
 
-if ($invoice['payment_method'] = 'MOBILE MONEY') {
+if ($invoice['payment_method'] == 'MOBILE MONEY') {
     $tax = '1.03 %';
     $tax_amount = $sum * 0.0103;
     $sum_tax_in = $tax_amount + $sum;
@@ -128,7 +128,7 @@ if (!empty($invoice) && !empty($packages_linked_to_this_invoice)) {
                             }
                             ?>
                             <tr>
-                                <td colspan="4" class="strong text-end">Total HT</td>
+                                <td colspan="4" class="strong text-end">Total</td>
                                 <td class="text-end"><?= $sum . ' FCFA' ?></td>
                             </tr>
                             <?php

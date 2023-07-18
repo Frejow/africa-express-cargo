@@ -158,7 +158,7 @@ if (!empty($_SESSION["data"])) {
                         <div class="row g-2" style="flex-wrap: wrap;">
                             <!-- Page title actions -->
                             <div class="col-12 col-lg-auto ms-auto d-print-none">
-                                <button type="submit" name="generate" value="generate" class="btn text-white ms-auto btn-warning">
+                                <button type="submit" id="generateButton" name="generate" value="generate" class="btn text-white ms-auto btn-warning">
                                     Générer
                                 </button>
                             </div>
@@ -174,7 +174,7 @@ if (!empty($_SESSION["data"])) {
                                     d'une des options. Ce script se base sur l'id du champs select et l'id du formulaire
                                     pour envoyer la valeur correspondante au fichier de traiment du formulaire.
                                 -->
-                                    <div class="col-lg-4 col-xs mb-2 text-muted">
+                                    <div class="col-lg-6 col-xs mb-2 text-muted">
                                         Afficher
                                         <div class="mx-2 d-inline-block">
                                             <select class="form-select" name="select" id="mySelect">
@@ -194,7 +194,7 @@ if (!empty($_SESSION["data"])) {
                                     </div>
                                     <!--
                                     Bloc de la barre de recherche de colis par numéro de suivi.
-                                -->
+                                
                                     <div class="col-lg-4 col-xs mb-2 text-muted ms-auto" style="display: flex;">
                                         <div>
                                             <span>Rechercher</span>
@@ -211,13 +211,14 @@ if (!empty($_SESSION["data"])) {
                                             </svg>
                                         </button>
                                     </div>
+                                    -->
                                     <!-- 
                                     Bloc select de sélection des différents statuts possibles suivant lesquels filtrer 
                                     l'affichage des colis. Ici un script Js facilite la soumission de la valeur à la 
                                     sélection d'une des options. Ce script se base sur l'id du champs select et l'id du 
                                     formulaire pour envoyer la valeur correspondante au fichier de traiment du formulaire.
                                 -->
-                                    <div class="col-lg-4 col-xs ms-auto text-muted">
+                                    <div class="col-lg-6 col-xs ms-auto text-muted">
                                         Statuts :
                                         <div class="ms-2 d-inline-block">
                                             <select class="form-select" name="statusSelect" id="mySelect2">
@@ -372,7 +373,7 @@ if (!empty($_SESSION["data"])) {
     <?php
     if (!empty($_SESSION['tax']) && !empty($_SESSION['packages_to_linked_id']) && !empty($_SESSION['customer'])) {
 
-        $tax = $_SESSION['tax'];
+        $tax = $_SESSION['tax']; 
         $customer = $_SESSION['customer'];
         $packages_to_linked_id = $_SESSION['packages_to_linked_id'];
         $get_packages = [];
@@ -393,7 +394,7 @@ if (!empty($_SESSION["data"])) {
             }
         }
 
-        if ($tax = '1.03 %') {
+        if ($tax == '1.03 %') {
             $tax_amount = $sum * 0.0103;
             $sum_tax_in = $tax_amount + $sum;
         }
@@ -411,7 +412,7 @@ if (!empty($_SESSION["data"])) {
                         </button>
                     </div>
                     <div class="col">
-                        <button type="submit" name="generate" value="cancel" class="btn btn-ghost-danger">
+                        <button type="submit" id="cancelButton" name="generate" value="cancel" onclick="cancelSubmission()" class="btn btn-ghost-danger">
                             Annuler
                         </button>
                     </div>

@@ -537,6 +537,40 @@
     });
 </script>
 
+<!-- not used yet -->
+
+<script>
+    function submitForm() {
+        // Récupérer les valeurs du bouton
+        var buttonName = document.getElementById("generateButton").getAttribute("name");
+        var buttonValue = document.getElementById("generateButton").getAttribute("value");
+
+        // Mettre à jour les champs cachés avec les valeurs du bouton
+        document.getElementById("generateName").value = buttonName;
+        document.getElementById("generateValue").value = buttonValue;
+
+        // Soumettre le formulaire
+        document.getElementById("myForm").submit();
+    }
+</script>
+
+<!-- not used yet -->
+
+<script>
+    function submitForm() {
+        // Récupérer les valeurs du bouton
+        var buttonName = document.getElementById("cancelButton").getAttribute("name");
+        var buttonValue = document.getElementById("cancelButton").getAttribute("value");
+
+        // Mettre à jour les champs cachés avec les valeurs du bouton
+        document.getElementById("cancelName").value = buttonName;
+        document.getElementById("cancelValue").value = buttonValue;
+
+        // Soumettre le formulaire
+        document.getElementById("myForm").submit();
+    }
+</script>
+
 <script src="<?= PROJECT ?>public/datatables/jquery.dataTables.js"></script>
 <script src="<?= PROJECT ?>public/datatables-bs4/js/dataTables.bootstrap4.js"></script>
 <script src="<?= PROJECT ?>public/datatables-buttons/js/dataTables.buttons.js"></script>

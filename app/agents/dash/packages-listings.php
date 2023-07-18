@@ -427,19 +427,30 @@ $rows = countRowsInTable($table, $_SESSION['type'], null);
                                                             </button>
                                                         </span>
                                                     </td>
-                                                    <?php
+                                                <?php
                                                 } else {
-                                                    if ($package['status'] != 'Livrer') {
-                                                    ?>
-                                                        <td class="text-end">
-                                                            <span class="">
+                                                ?>
+                                                    <td class="text-end">
+                                                        <span class="">
+                                                            <?php
+                                                            if ($package['status'] != 'Livrer') {
+                                                            ?>
                                                                 <button type="submit" name="update_package" value="<?= $package['id'] ?>" class="btn-link link-warning">
                                                                     Mettre à jour
                                                                 </button>
-                                                            </span>
-                                                        </td>
+                                                            <?php
+                                                            } else {
+                                                            ?>
+                                                                <button type="submit" name="insight" value="<?= $package['invoice_id'] ?>" class="btn-link link-primary">
+                                                                    Voir la facture
+                                                                </button>
+                                                            <?php
+                                                            }
+                                                            ?>
+                                                        </span>
+                                                    </td>
                                                 <?php
-                                                    }
+
                                                 }
                                                 ?>
                                             </tr>

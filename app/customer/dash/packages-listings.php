@@ -538,7 +538,7 @@ $rows = countRowsInTable($table, null, $data['id']);
                                                                 <path d="M9 12l2 2l4 -4" />
                                                             </svg>
 
-                                                            <h3>Vous confirmez avoir reçu tous les colis suivants :</h3>
+                                                            <h3>Vous confirmez avoir reçu tous ces colis ?</h3>
 
                                                         </div>
                                                         <div class="modal-footer">

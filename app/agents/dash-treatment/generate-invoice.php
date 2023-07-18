@@ -135,17 +135,19 @@ if (empty($_POST['generate'])) {
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-} elseif (!empty($_POST['generate']) && $_POST['generate'] == 'generate') {   
+} elseif (!empty($_POST['generate']) && $_POST['generate'] == 'generate') { 
     if (!empty($_POST['payment'])) {
 
         $updata['payment'] = $_POST['payment'];
 
         if ($_POST['payment'] == 'mobile money') {
+            //die;
 
             $tax = '1.03 %';
             $payment_method = 'MOBILE MONEY';
 
         } elseif ($_POST['payment'] == 'cash') {
+            //die ('ici');
 
             $tax = '1';
             $payment_method = 'CASH';
