@@ -24,11 +24,12 @@ if (isset($_GET['p']) && !empty($_GET['p'])) {
         }
         
     } else {
-
+        date_default_timezone_set("Africa/Lagos");
+        
         $token_created_at = getTokenDateInf($params[3], $params[4])['created'];
-        $token_updated_on = getTokenDateInf($params[3], $params[4])['updated_on'];
+        $expiration_date_time = date('Y-m-d H:i:s', strtotime($token_created_at . " +10 min"));;
 
-        if (dateToNumber($token_updated_on) - dateToNumber($token_created_at) < 1002) {
+        if ($token_created_at < $expiration_date_time) {
 
             include 'checking-failed.php';
 

@@ -208,7 +208,7 @@ $rows = countRowsInTable($table, null, $data['id']);
                                         <th></th>
                                         <th></th>
                                         <?php
-                                        if (!empty(checkDeliveredStatus()) && sizeof(checkDeliveredStatus()) > 1) {
+                                        if (!empty(checkDeliveredStatus($data['id'])) && sizeof(checkDeliveredStatus($data['id'])) > 1) {
                                         ?>
                                             <th>
                                                 <a class="btn-link link-success" href="#" data-bs-toggle="modal" data-bs-target="#confirmAllModal">

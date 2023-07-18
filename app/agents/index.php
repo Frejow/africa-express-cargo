@@ -14,17 +14,16 @@ if (isset(explode('?', $_SERVER['REQUEST_URI'])[1])) {
 }
 
 //Suppression des tokens après délai d'expiration de 10min
-date_default_timezone_set("Africa/Lagos");
-$current_date_time = date('Y-m-d H:i:s');
-//$tokens =  get_all_active_tokens();
+$tokens =  getAllActiveTokens();
 
 if (!empty($tokens)) {
 
     foreach ($tokens as $key => $value) {
 
-        $timegap = dateToNumber($current_date_time) - dateToNumber($value['created']);
+        date_default_timezone_set("Africa/Lagos");
+        $expiration_date_time = date('Y-m-d H:i:s', strtotime($value['created'] . " +10 min"));;
 
-        if ($timegap >= 1000) {
+        if ($value['created'] >= $expiration_date_time) {
 
             if ($value['type'] == 'ACCOUNT_VALIDATION') {
 

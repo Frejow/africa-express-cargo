@@ -187,19 +187,6 @@ function backDeletedAccount(int $id, string $mail): bool
     return $backDeletedAccount;
 }
 
-/** Convert a date to number
- * 
- * @param string $date The date to convert.
- * 
- * @return string $date The result after conversion.
- */
-function dateToNumber(string $date): string
-{
-    $date = str_replace("-", '', $date);
-    $date = str_replace(":", '', $date);
-    return str_replace(" ", '', $date);
-}
-
 /** Check user account connected
  * 
  * @return bool The result.
@@ -1944,21 +1931,23 @@ function updatePackageStatus(string $tracking_number, string $status): bool
 
 /** Check if there is atleast one active package with delivered status
  * 
+ * @param int $user_id
  * @return array The result.
  */
-function checkDeliveredStatus(): array
+function checkDeliveredStatus($user_id): array
 {
 
     $packageDelivered = [];
 
     $database = databaseLogin();
 
-    $request = "SELECT * FROM package WHERE status = :status and is_deleted = :is_deleted";
+    $request = "SELECT * FROM package WHERE status = :status and user_id = :user_id and is_deleted = :is_deleted";
 
     $request_prepare = $database->prepare($request);
 
     $request_execution = $request_prepare->execute([
         'status' => 'Livrer',
+        'user_id' => $user_id,
         'is_deleted' => 0
     ]);
 
