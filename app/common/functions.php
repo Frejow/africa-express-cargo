@@ -2153,7 +2153,7 @@ function othListings(string $table, int $page, int $rows_per_page, string $searc
             ]);
         } elseif ($orderBy === 'Plus anciennes' && $search === 'UNDEFINED') {
 
-            $request = "SELECT * FROM " . $table . " WHERE and is_deleted = :is_deleted ORDER BY id ASC LIMIT " . $rows_per_page . " OFFSET " . ($page - 1) * $rows_per_page;
+            $request = "SELECT * FROM " . $table . " WHERE is_deleted = :is_deleted ORDER BY id ASC LIMIT " . $rows_per_page . " OFFSET " . ($page - 1) * $rows_per_page;
 
             $request_prepare = $database->prepare($request);
 
@@ -2162,7 +2162,7 @@ function othListings(string $table, int $page, int $rows_per_page, string $searc
             ]);
         } elseif ($orderBy === 'Plus anciennes' && $search !== 'UNDEFINED') {
 
-            $request = "SELECT * FROM " . $table . " WHERE and is_deleted = :is_deleted AND ";
+            $request = "SELECT * FROM " . $table . " WHERE is_deleted = :is_deleted AND ";
 
             $search_terms_array = str_split($search);
 

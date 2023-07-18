@@ -254,6 +254,20 @@ if (empty($_POST['generate'])) {
 
         if ($linked[sizeof($_SESSION['packages_to_linked_id']) - 1] = 'Done') {
 
+            $message = 'Colis reçus :' . '<br>';
+
+            foreach ($_SESSION['packages_to_linked_id'] as $key => $package_to_linked_id) {
+
+                $package_tracking_number = getPackage($package_to_linked_id)['tracking_number'];
+
+                $message .= '<strong>' . $package_tracking_number. '</strong>' . '<br>';
+
+            }
+
+            $message .= 'Facture N°'.$_SESSION['invoice_number'];
+
+            insertNotifications('Nouvelle Facture', $message, $_SESSION['user_id'], null);
+
             $_SESSION['success_msg'] = 'Facture générée avec succès.';
 
             unset($_SESSION['data'], $_SESSION['tax'], $_SESSION['packages_to_linked_id'], $_SESSION['customer'], $_SESSION['payment_method'], $_SESSION['user_id'], $_SESSION['invoice_number']);
