@@ -18,9 +18,11 @@ if (!empty($tokens)) {
     foreach ($tokens as $key => $value) {
 
         date_default_timezone_set("Africa/Lagos");
-        $expiration_date_time = date('Y-m-d H:i:s', strtotime($value['created'] . " +10 min"));;
+        
+        $created_date_time = new DateTime($value['created']);
+        $expiration_date_time = new DateTime(date('Y-m-d H:i:s', strtotime($value['created'] . " +10 min")));
 
-        if ($value['created'] >= $expiration_date_time) {
+        if ($created_date_time >= $expiration_date_time) {
 
             if ($value['type'] == 'ACCOUNT_VALIDATION') {
 

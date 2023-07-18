@@ -26,8 +26,8 @@ if (isset($_GET['p']) && !empty($_GET['p'])) {
     } else {
         date_default_timezone_set("Africa/Lagos");
         
-        $token_created_at = getTokenDateInf($params[3], $params[4])['created'];
-        $expiration_date_time = date('Y-m-d H:i:s', strtotime($token_created_at . " +10 min"));;
+        $token_created_at = new DateTime(getTokenDateInf($params[3], $params[4])['created']);
+        $expiration_date_time = new DateTime(date('Y-m-d H:i:s', strtotime($token_created_at . " +10 min")));
 
         if ($token_created_at < $expiration_date_time) {
 
