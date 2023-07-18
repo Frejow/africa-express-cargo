@@ -169,7 +169,7 @@ $rows = countRowsInTable($table, null, $data['id']);
                                                 <td class="">
                                                     <span></span>
 
-                                                    <?= !empty($invoice["created_at"]) ? $invoice["created_at"] : '-' ?>
+                                                    <?= !empty($invoice["created_at"]) ? date("d/m/Y h:i:s", strtotime($invoice['created_at'])) : '-' ?>
                                                 </td>
                                                 <td class="text-end">
                                                     <span class="">

@@ -41,7 +41,7 @@ if (isset($_SESSION['research']) && !empty($_SESSION['research'])) {
 
 $invoices_listings = othListings($table, $_SESSION['page'], $_SESSION['rows_per_page'], strtoupper($_SESSION['search']), $_SESSION['research_by'], $_SESSION['filter'], null, null);
 
-$rows = countRowsInTable($table, null, $data['id']);
+$rows = countRowsInTable($table);
 
 ?>
 
@@ -196,7 +196,7 @@ $rows = countRowsInTable($table, null, $data['id']);
                                                 <td class="">
                                                     <span></span>
 
-                                                    <?= !empty($invoice["created_at"]) ? $invoice["created_at"] : '-' ?>
+                                                    <?= !empty($invoice["created_at"]) ? date("d/m/Y h:i:s", strtotime($invoice['created_at'])) : '-' ?>
                                                 </td>
                                                 <td class="text-end">
                                                     <span class="">

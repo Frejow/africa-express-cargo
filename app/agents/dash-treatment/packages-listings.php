@@ -157,9 +157,9 @@ if (!empty($_POST['insight'])) {
 
     header("location:". redirect($_SESSION['theme'], PROJECT.'agents/dash/insight'));
 
-} else {
+} elseif (empty($_POST['insight'])) {
 
-    header("location:". redirect($_SESSION['theme'], PROJECT.'agents/dash/invoices'));
+    header("location:". redirect($_SESSION['theme'], PROJECT.'agents/dash/packages-listings'));
 
 }
 
