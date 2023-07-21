@@ -350,7 +350,7 @@ if ($elements->length > 0) {
                                                     <div class="row align-items-center">
                                                         <div class="col-auto"><span class="status-dot <?= $notification['is_active'] == 1 ? 'status-dot-animated' : '' ?> bg-secondary d-block"></span></div>
                                                         <div class="col text-truncate">
-                                                            <span class="text-body d-block"><?= $notification['type'] . ' [ ' . date("d/m/Y h:i", strtotime($notification['created_at']))  . ' ]' ?></span>
+                                                            <span class="text-body d-block"><?= $notification['type'] . ' [ ' . date("d/m/Y H:i", strtotime($notification['created_at']))  . ' ]' ?></span>
                                                             <div class="d-block text-muted text-truncate mt-n1">
                                                                 <?= $notification['message'] ?>
                                                             </div>

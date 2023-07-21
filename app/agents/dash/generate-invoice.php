@@ -631,7 +631,7 @@ if (isset($_SESSION['next_page']) && $_SESSION['next_page'] == $_SESSION['page']
     unset($_SESSION['actual_page']);
 }
 
-unset($_SESSION['research']);
+unset($_SESSION['research'], $_SESSION['selected_customer'], $_SESSION["data"], $_SESSION["generate_invoice_errors"]);
 //unset($_SESSION['tax'], $_SESSION['packages_to_linked_id'], $_SESSION['customer'], $_SESSION['payment_method'], $_SESSION['user_id'], $_SESSION['invoice_number']);
 
 ?>
