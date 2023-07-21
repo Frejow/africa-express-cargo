@@ -135,7 +135,8 @@ if (empty($_POST['generate'])) {
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-} elseif (!empty($_POST['generate']) && $_POST['generate'] == 'generate') { 
+}
+elseif (!empty($_POST['generate']) && $_POST['generate'] == 'generate') {
     if (!empty($_POST['payment'])) {
 
         $updata['payment'] = $_POST['payment'];
@@ -168,7 +169,8 @@ if (empty($_POST['generate'])) {
             exit;
         }
 
-    } elseif (empty($_POST['payment'])) {
+    }
+    elseif (empty($_POST['payment'])) {
 
         $error['payment'] = 'Veuillez cocher une option.';
 
@@ -182,18 +184,26 @@ if (empty($_POST['generate'])) {
         exit;
     }
 
-    if (!isset($_SESSION['m'])) {
-        $n = 0;
-    } else {
-        $n = $_SESSION['m'];
+    $invoices = getInvoices();
+    if (empty($invoices)) {
+        $n = 1;
+    }
+    else {
+        //The last invoice number | Format -> AEC/000$n/YEAR
+        $l_invoice_number = $invoices[sizeof($invoices)-1]['invoices_number'];
+        //Explode $l_invoice_number to get the second index (000$n)
+        $secondIndex = explode('/', $l_invoice_number)[1];
+        //Trim all the firsts zero to get $n for the last invoice
+        $n = ltrim($secondIndex, '0');
+        //Increment $n to get the value of the next $n for this invoice
+        $n += 1;
     }
 
     if (!empty($_POST['checkboxes'])) {
 
         $packages_to_linked_id = $_POST['checkboxes'];
 
-        $_SESSION['m'] = $n + 1;
-        $invoice_number = 'AEC/' . '000' . $_SESSION['m'] . '/' . date('y');
+        $invoice_number = 'AEC/' . '000' . $n . '/' . date('y');
 
         $idchecked = [];
         $linked_and_updated = [];
